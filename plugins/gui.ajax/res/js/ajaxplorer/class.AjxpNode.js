@@ -218,6 +218,14 @@ Class.create("AjxpNode", {
 		return this._isLeaf;
 	},
 	/**
+	 * Is this node a hidden file
+	 */
+	isHidden : function(){
+		if (!!this._metadata.get("is_file") == true){
+			return /^\./.test(this._metadata.get("text"))
+		}
+	},
+	/**
 	 * @returns String
 	 */
 	getPath : function(){
