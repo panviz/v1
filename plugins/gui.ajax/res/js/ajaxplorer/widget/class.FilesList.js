@@ -927,6 +927,7 @@ Class.create("FilesList", SelectableElements, {
 		for (var i = 0; i < children.length ; i++) 
 		{
 			var child = children[i];
+			if (child.isHidden()){continue}
 			var newItem;
 			if(this._displayMode == "list") {
 				newItem = this.ajxpNodeToTableRow(child);
