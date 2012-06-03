@@ -1,39 +1,23 @@
 /*
- * Copyright 2007-2011 Charles du Jeu <contact (at) cdujeu.me>
- * This file is part of AjaXplorer.
- *
- * AjaXplorer is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * AjaXplorer is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
- *
- * The latest code can be found at <http://www.ajaxplorer.info/>.
+ * Description
  */
 Class.create("AjxpCkEditor", TextEditor, {
 
-	initialize: function($super, oFormObject)
+	initialize : function($super, oFormObject, options)
 	{
-		$super(oFormObject);
+		$super(oFormObject, options);
 		this.editorConfig = {
-			resize_enabled:false,
-			toolbar : "Ajxp",
-			filebrowserBrowseUrl : 'index.php?external_selector_type=ckeditor',
+			resize_enabled: false,
+			toolbar: "Ajxp",
+			filebrowserBrowseUrl: 'index.php?external_selector_type=ckeditor',
 			// IF YOU KNOW THE RELATIVE PATH OF THE IMAGES (BETWEEN REPOSITORY ROOT AND REAL FILE)
-			// YOU CAN PASS IT WITH THE relative_path PARAMETER. FOR EXAMPLE : 
-			//filebrowserBrowseUrl : 'index.php?external_selector_type=ckeditor&relative_path=files',
-			filebrowserImageBrowseUrl : 'index.php?external_selector_type=ckeditor',
-			filebrowserFlashBrowseUrl : 'index.php?external_selector_type=ckeditor',
-			language : ajaxplorer.currentLanguage,
-			fullPage : true,
-			toolbar_Ajxp : [
+			// YOU CAN PASS IT WITH THE relative_path PARAMETER. FOR EXAMPLE: 
+			//filebrowserBrowseUrl: 'index.php?external_selector_type=ckeditor&relative_path=files',
+			filebrowserImageBrowseUrl: 'index.php?external_selector_type=ckeditor',
+			filebrowserFlashBrowseUrl: 'index.php?external_selector_type=ckeditor',
+			language: ajaxplorer.currentLanguage,
+			fullPage: true,
+			toolbar_Ajxp: [
 				['Source','Preview','Templates'],
 			    ['Undo','Redo','-', 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Print', 'SpellChecker', 'Scayt'],
 			    ['Find','Replace','-','SelectAll','RemoveFormat'],
@@ -54,17 +38,17 @@ Class.create("AjxpCkEditor", TextEditor, {
 		
 		if(window.ajxpMobile){
 			this.editorConfig = {
-				resize_enabled:false,
-				toolbar : "Ajxp",
-				filebrowserBrowseUrl : 'index.php?external_selector_type=ckeditor',
+				resize_enabled: false,
+				toolbar: "Ajxp",
+				filebrowserBrowseUrl: 'index.php?external_selector_type=ckeditor',
 				// IF YOU KNOW THE RELATIVE PATH OF THE IMAGES (BETWEEN REPOSITORY ROOT AND REAL FILE)
-				// YOU CAN PASS IT WITH THE relative_path PARAMETER. FOR EXAMPLE : 
-				//filebrowserBrowseUrl : 'index.php?external_selector_type=ckeditor&relative_path=files',
-				filebrowserImageBrowseUrl : 'index.php?external_selector_type=ckeditor',
-				filebrowserFlashBrowseUrl : 'index.php?external_selector_type=ckeditor',
-				language : ajaxplorer.currentLanguage,
-				fullPage : true,
-				toolbar_Ajxp : [
+				// YOU CAN PASS IT WITH THE relative_path PARAMETER. FOR EXAMPLE: 
+				//filebrowserBrowseUrl: 'index.php?external_selector_type=ckeditor&relative_path=files',
+				filebrowserImageBrowseUrl: 'index.php?external_selector_type=ckeditor',
+				filebrowserFlashBrowseUrl: 'index.php?external_selector_type=ckeditor',
+				language: ajaxplorer.currentLanguage,
+				fullPage: true,
+				toolbar_Ajxp: [
 				    ['Bold','Italic','Underline', '-', 'NumberedList','BulletedList'],
 				    ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock']
 				]
@@ -88,10 +72,10 @@ Class.create("AjxpCkEditor", TextEditor, {
 		this.textareaContainer.appendChild(this.textarea);
 		fitHeightToBottom(this.textareaContainer, $(modal.elementName));
 		this.reloadEditor('content');
-		this.element.observe("editor:close", function(){
+		this.element.observe("view:close", function(){
 			CKEDITOR.instances.content.destroy();
 		});		
-		this.element.observe("editor:resize", function(event){
+		this.element.observe("view:resize", function(event){
 			this.resizeEditor();
 		}.bind(this));
 		var destroy = function(){
@@ -107,10 +91,10 @@ Class.create("AjxpCkEditor", TextEditor, {
 				this.bindCkEditorEvents();								
 			}.bind(this), 100);
 		}
-		this.element.observe("editor:enterFS", destroy.bind(this));
-		this.element.observe("editor:enterFSend", reInit.bind(this));
-		this.element.observe("editor:exitFS", destroy.bind(this));
-		this.element.observe("editor:exitFSend", reInit.bind(this));
+		this.element.observe("view:enterFS", destroy.bind(this));
+		this.element.observe("view:enterFSend", reInit.bind(this));
+		this.element.observe("view:exitFS", destroy.bind(this));
+		this.element.observe("view:exitFSend", reInit.bind(this));
 		// LOAD FILE NOW
 		window.setTimeout(this.resizeEditor.bind(this), 400);
 		this.loadFileContent(fileName);	
@@ -168,7 +152,7 @@ Class.create("AjxpCkEditor", TextEditor, {
 	},
 	
 	resizeEditor : function(){
-		var width = this.contentMainContainer.getWidth()-(Prototype.Browser.IE?0:12);		
+		var width = this.contentMainContainer.getWidth()-(Prototype.Browser.IE ? 0 : 12);		
 		var height = this.contentMainContainer.getHeight();
 		if(CKEDITOR.instances.content){
 			CKEDITOR.instances.content.resize(width,height);
@@ -189,6 +173,4 @@ Class.create("AjxpCkEditor", TextEditor, {
 		this.removeOnLoad(this.textareaContainer);
 		this.setModified(false);
 	}
-
-	
 });

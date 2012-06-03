@@ -1,43 +1,23 @@
-/*
- * Copyright 2007-2011 Charles du Jeu <contact (at) cdujeu.me>
- * This file is part of AjaXplorer.
- *
- * AjaXplorer is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * AjaXplorer is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
- *
- * The latest code can be found at <http://www.ajaxplorer.info/>.
- */
-Class.create("OLViewer", AbstractEditor, {
+Class.create("OLViewer", View, {
 
 	initialize: function($super, oFormObject)
 	{
 		$super(oFormObject);
 		this.actions.get("downloadFileButton").observe('click', function(){
 			if(!this.currentFile) return;		
-			ajaxplorer.triggerDownload(ajxpBootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+this.currentFile);
+			ajaxplorer.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+this.currentFile);
 			return false;
 		}.bind(this));
-		this.element.observe('editor:enterFS', function(){this.fullScreenMode = true;}.bind(this) );
+		this.element.observe('view:enterFS', function(){this.fullScreenMode = true;}.bind(this) );
 	},
-	
 	
 	open : function($super, userSelection){
 		$super(userSelection);
 		var ajxpNode = userSelection.getUniqueNode();
 		this.updateTitle(getBaseName(ajxpNode.getPath()));
-		this.mapDiv = new Element('div', {id:'openlayer_map', style:'width:100%'});
+		this.mapDiv = new Element('div', {id: 'openlayer_map', style: 'width:100%'});
 		this.contentMainContainer = this.mapDiv;
-		this.initFilterBar((ajxpNode.getAjxpMime()=='wms_layer'?true:false));
+		this.initFilterBar(ajxpNode.getAjxpMime() == 'wms_layer');
 		this.element.insert(this.mapDiv);
 		fitHeightToBottom($(this.mapDiv), $(modal.elementName));
         
@@ -50,7 +30,7 @@ Class.create("OLViewer", AbstractEditor, {
         }));		
 		this.olMap.addControl(new OpenLayers.Control.Navigation());
 		this.olMap.addControl(new OpenLayers.Control.ScaleLine());
-		this.olMap.addControl(new OpenLayers.Control.MousePosition({element:this.element.down('span[id="location"]'), numDigits:4}));
+		this.olMap.addControl(new OpenLayers.Control.MousePosition({element: this.element.down('span[id="location"]'), numDigits: 4}));
 	},
 			
 	resize : function ($super, size){
@@ -66,8 +46,8 @@ Class.create("OLViewer", AbstractEditor, {
 	initFilterBar : function(wmsFiltersActive){
 		var bar = this.element.down('div.filter');
 		var button = this.element.down('div#filterButton');
-		bar.select('select').invoke('setStyle', {width:'80px',height:'18px',fontSize:'11px',marginRight:'5px',border:'1px solid #AAAAAA'});
-		bar.select('input').invoke('setStyle', {height:'18px',fontSize:'11px',border:'1px solid #AAAAAA',backgroundImage:'url('+ajxpResourcesFolder+'"/images/locationBg.gif")', backgroundPosition:'left top', backgroundRepeat:'no-repeat'});
+		bar.select('select').invoke('setStyle', {width: '80px',height: '18px',fontSize: '11px',marginRight: '5px',border: '1px solid #AAAAAA'});
+		bar.select('input').invoke('setStyle', {height: '18px',fontSize: '11px',border: '1px solid #AAAAAA',backgroundImage: 'url('+ajxpResourcesFolder+'"/images/locationBg.gif")', backgroundPosition: 'left top', backgroundRepeat: 'no-repeat'});
 		bar.hide();
 		this.filterBar = bar;
 		button.observe("click", function(e){
@@ -88,17 +68,17 @@ Class.create("OLViewer", AbstractEditor, {
 		}.bind(this) );
 		if(!wmsFiltersActive){
 			bar.down('#wms_filters').hide();
-			bar.setStyle({textAlign:'right'});
+			bar.setStyle({textAlign: 'right'});
 			return;
 		}
 		bar.down('select#antialiasSelector').observe('change', function(e){
-			this.layers.invoke('mergeNewParams', {format_options:'antialias:' + e.findElement().getValue()});
+			this.layers.invoke('mergeNewParams', {format_options: 'antialias:' + e.findElement().getValue()});
 		}.bind(this) );
 		bar.down('select#imageFormatSelector').observe('change', function(e){
-			this.layers.invoke('mergeNewParams', {format:e.findElement().getValue()});
+			this.layers.invoke('mergeNewParams', {format: e.findElement().getValue()});
 		}.bind(this) );
 		bar.down('select#imageStyleSelector').observe('change', function(e){
-			this.layers.invoke('mergeNewParams', {format:e.findElement().getValue()});
+			this.layers.invoke('mergeNewParams', {format: e.findElement().getValue()});
 		}.bind(this) );
 		
 		bar.down('img#submitFilter').observe('click', function(e){
@@ -119,19 +99,19 @@ Class.create("OLViewer", AbstractEditor, {
 			return;
 		}
 		this.layers.each(function(layer){
-			selector.insert(new Element('option', {value:layer.name}).update(layer.name));
+			selector.insert(new Element('option', {value: layer.name}).update(layer.name));
 		});
 	},
 	
 	toggleFilterBar : function(){
 		if(this.filterBarShown){
-			new Effect.BlindUp(this.filterBar, {duration:0.1,scaleMode:'contents',afterFinish : function(){
+			new Effect.BlindUp(this.filterBar, {duration: 0.1,scaleMode: 'contents',afterFinish : function(){
 				fitHeightToBottom($(this.mapDiv), $(modal.elementName));
 				this.resize();			
 			}.bind(this) });
 			this.filterBarShown = false;
 		}else{
-			new Effect.BlindDown(this.filterBar, {duration:0.1,scaleMode:'contents',afterFinish : function(){
+			new Effect.BlindDown(this.filterBar, {duration: 0.1,scaleMode: 'contents',afterFinish : function(){
 				fitHeightToBottom($(this.mapDiv), $(modal.elementName));
 				this.resize();			
 			}.bind(this) });
@@ -169,11 +149,11 @@ Class.create("OLViewer", AbstractEditor, {
 		var layersDefinitions;
 		if(metadata.get('ajxp_mime') == 'wms_layer'){			
 			layersDefinitions = $A([
-				{type:'WMS',tile:true,wms_url:metadata.get('wms_url'),name:metadata.get('name'),style:metadata.get('style')}
+				{type: 'WMS',tile: true,wms_url: metadata.get('wms_url'),name: metadata.get('name'),style: metadata.get('style')}
 				]);
 			if(dualTileMode){
 				layersDefinitions.push({
-					type:'WMS',tile:false,wms_url:metadata.get('wms_url'),name:metadata.get('name'),style:metadata.get('style')
+					type: 'WMS',tile: false,wms_url: metadata.get('wms_url'),name: metadata.get('name'),style: metadata.get('style')
 				});
 			}
 		}else{
@@ -201,7 +181,7 @@ Class.create("OLViewer", AbstractEditor, {
         }
         	
         // Check Google layer
-        var mapsFound = (window.google && window.google.maps?true:false);
+        var mapsFound = (window.google && !!window.google.maps);
         var googleRejected = false;
         layersDefinitions.each(function(definition){        	
         	if(definition.type=='Google'){
@@ -216,13 +196,13 @@ Class.create("OLViewer", AbstractEditor, {
 		if(googleRejected){
 			var remainingLength = layersDefinitions.size();
 			if(!remainingLength){ // Switch to OSM by default.
-				layersDefinitions.push({type:'OSM'});
+				layersDefinitions.push({type: 'OSM'});
 				meta_srs = 'EPSG:4326';
 			}
 		}
 		
 		
-        var options = {projection:meta_srs}
+        var options = {projection: meta_srs}
         if(meta_bound){
         	options.maxExtent = meta_bound;
         	options.maxResolution =  1245.650390625;
@@ -245,10 +225,10 @@ Class.create("OLViewer", AbstractEditor, {
 	        		title = "Tiled";
 	        		layerDef.tiled = true;
 	        		if(meta_bound) layerDef.tilesOrigin = map.maxExtent.left + ',' + map.maxExtent.bottom;
-	                options = {buffer:0,displayOutsideMaxExtent:true};	        		
+	                options = {buffer: 0,displayOutsideMaxExtent: true};	        		
         		}else{
         			title = "Single Tile";
-        			options = {singleTile:true, ratio:1};
+        			options = {singleTile: true, ratio: 1};
         		}
         		layer = new OpenLayers.Layer.WMS(title, layerUrl, layerDef, layerOpt);
         	}else if(definition.type == 'OSM'){
@@ -306,29 +286,28 @@ Class.create("OLViewer", AbstractEditor, {
 			
 			map.setCenter(projectedCenter, 10);
 		}		
-		return {MAP: map, LAYERS:layers};
+		return {MAP: map, LAYERS: layers};
 	},		
 	
 	getPreview : function(ajxpNode, rich){		
 		if(rich){
 			
 			var metadata = ajxpNode.getMetadata();			
-			var div = new Element('div', {id:"ol_map", style:"width:100%;height:200px;"});
+			var div = new Element('div', {id: "ol_map", style: "width:100%;height:200px;"});
 			div.resizePreviewElement = function(dimensionObject){
 				// do nothing;
-				div.setStyle({height:'200px'});
+				div.setStyle({height: '200px'});
 				if(div.initialized) return;				
 				OLViewer.prototype.createOLMap(ajxpNode, 'ol_map', true);
 				div.initialized = true;
 			}
 			return div;
 		}else{
-			return new Element('img', {src:resolveImageSource(ajxpNode.getIcon(),'/images/mimes/ICON_SIZE',64)});
+			return new Element('img', {src: resolveImageSource(ajxpNode.getIcon(),'/images/mimes/ICON_SIZE',64)});
 		}
 	},
 	
 	getThumbnailSource : function(ajxpNode){
 		return resolveImageSource(ajxpNode.getIcon(),'/images/mimes/ICON_SIZE',64);
 	}
-	
 });

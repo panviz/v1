@@ -1,36 +1,19 @@
 /*
- * Copyright 2007-2011 Charles du Jeu <contact (at) cdujeu.me>
- * This file is part of AjaXplorer.
- *
- * AjaXplorer is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * AjaXplorer is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
- *
- * The latest code can be found at <http://www.ajaxplorer.info/>.
+ * Description
  */
 window.SM2_DEFER = true;
 if(!window.soundManager && ajaxplorer.findEditorById("editor.soundmanager")){
     var conn = new Connexion();
-    conn._libUrl = (ajxpBootstrap.parameters.get('SERVER_PREFIX_URI')?ajxpBootstrap.parameters.get('SERVER_PREFIX_URI'):'')+'plugins/editor.soundmanager/sm/';
+    conn._libUrl = (bootstrap.parameters.get('SERVER_PREFIX_URI') ? bootstrap.parameters.get('SERVER_PREFIX_URI') : '')+'plugins/editor.soundmanager/sm/';
     conn.loadLibrary('360-player/script/berniecode-animator.js');
     conn.loadLibrary('script/soundmanager2-nodebug-jsmin.js', function(){
         window.soundManager = new SoundManager('plugins/editor.soundmanager/sm/swf/');
-        window.soundManager.url = (ajxpBootstrap.parameters.get('SERVER_PREFIX_URI')?ajxpBootstrap.parameters.get('SERVER_PREFIX_URI'):'')+'plugins/editor.soundmanager/sm/swf/';
+        window.soundManager.url = (bootstrap.parameters.get('SERVER_PREFIX_URI') ? bootstrap.parameters.get('SERVER_PREFIX_URI') : '')+'plugins/editor.soundmanager/sm/swf/';
         if(ajaxplorer && ajaxplorer.user && ajaxplorer.user.getPreference("soundmanager.volume") !== undefined){
             soundManager.defaultOptions.volume = ajaxplorer.user.getPreference("soundmanager.volume");
         }
         conn.loadLibrary('360-player/script/360player.js', function(){
-
-            window.threeSixtyPlayer.config.scaleFont = (navigator.userAgent.match(/msie/i)?false:true);
+            window.threeSixtyPlayer.config.scaleFont = !!(navigator.userAgent.match(/msie/i));
             window.threeSixtyPlayer.config.showHMSTime = true;
             window.threeSixtyPlayer.config.useWaveformData = true;
             window.threeSixtyPlayer.config.useEQData = true;
@@ -63,7 +46,7 @@ if(!window.soundManager && ajaxplorer.findEditorById("editor.soundmanager")){
                         });
                         var index = links.indexOf(finishingPlayer);
                         if(index < links.length-1 ){
-                            window.threeSixtyPlayer.handleClick({'target':links[index+1].down("a.sm2_link")});
+                            window.threeSixtyPlayer.handleClick({'target': links[index+1].down("a.sm2_link")});
                         }
                         if(finishingPlayer.up('.ajxpNodeProvider')){
                             finishingPlayer.up('.ajxpNodeProvider').removeClassName("SMNodePlaying");
@@ -123,9 +106,9 @@ function hookToFilesList(){
         $A(fList.getItems()).each(function(row){
             if(!row.ajxpNode || row.ajxpNode.getAjxpMime() != "mp3") return;
             addVolumeButton();
-            var url = ajxpBootstrap.parameters.get('ajxpServerAccess')+'&get_action=audio_proxy&file='+base64_encode(row.ajxpNode.getPath())+ '&fake=extension.mp3';
-            var player = new Element("div", {className:"ui360 ui360-micro"}).update(new Element("a", {href:url}).update(""));
-            row.down("span#ajxp_label").setStyle({backgroundImage:'none'}).insert({top:player});
+            var url = bootstrap.parameters.get('ajxpServerAccess')+'&get_action=audio_proxy&file='+base64_encode(row.ajxpNode.getPath())+ '&fake=extension.mp3';
+            var player = new Element("div", {className: "ui360 ui360-micro"}).update(new Element("a", {href: url}).update(""));
+            row.down("span#ajxp_label").setStyle({backgroundImage: 'none'}).insert({top: player});
             threeSixtyPlayer.config.items = [player];
             threeSixtyPlayer.init();
         });
@@ -166,7 +149,7 @@ function addVolumeButton(){
         false,
         false
     )
-    volumeButton.down("img").src = (ajxpBootstrap.parameters.get('SERVER_PREFIX_URI')?ajxpBootstrap.parameters.get('SERVER_PREFIX_URI'):'')+"plugins/editor.soundmanager/kmixdocked.png";
+    volumeButton.down("img").src = (bootstrap.parameters.get('SERVER_PREFIX_URI')?bootstrap.parameters.get('SERVER_PREFIX_URI'):'')+"plugins/editor.soundmanager/kmixdocked.png";
     locBar.bmButton.insert({before:volumeButton});
     new SliderInput(volumeButton, {
         range : $R(0, 100),
@@ -175,7 +158,7 @@ function addVolumeButton(){
         topOffset:-1,
         anchorActiveClass: 'volume_slider_active',
         onSlide : function(value){
-            volumeButton.down("img").src = (ajxpBootstrap.parameters.get('SERVER_PREFIX_URI')?ajxpBootstrap.parameters.get('SERVER_PREFIX_URI'):'')+"plugins/editor.soundmanager/kmixdocked"+(parseInt(value)==0?"-muted":"")+".png";
+            volumeButton.down("img").src = (bootstrap.parameters.get('SERVER_PREFIX_URI')?bootstrap.parameters.get('SERVER_PREFIX_URI'):'')+"plugins/editor.soundmanager/kmixdocked"+(parseInt(value)==0?"-muted":"")+".png";
             soundManager.defaultOptions.volume = parseInt(value);
             soundManager.soundIDs.each(function(el){ soundManager.setVolume(el,parseInt(value)); });
         }.bind(this),
@@ -188,7 +171,7 @@ function addVolumeButton(){
     locBar.resize();
 }
 
-Class.create("SMPlayer", AbstractEditor, {
+Class.create("SMPlayer", View, {
 
 	fullscreenMode: false,
 	
@@ -201,7 +184,7 @@ Class.create("SMPlayer", AbstractEditor, {
             return im;
         }
         addVolumeButton();
-        var url = ajxpBootstrap.parameters.get('ajxpServerAccess')+'&get_action=audio_proxy&file='+base64_encode(ajxpNode.getPath());
+        var url = bootstrap.parameters.get('ajxpServerAccess')+'&get_action=audio_proxy&file='+base64_encode(ajxpNode.getPath());
         if(rich){
             url += '&rich_preview=true&fake=extension.mp3';
         }else{

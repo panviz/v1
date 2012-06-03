@@ -1,4 +1,0 @@
-MyWeb
-=====
-
-Ajaxplorer based

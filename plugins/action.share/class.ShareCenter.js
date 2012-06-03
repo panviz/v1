@@ -101,7 +101,7 @@ Class.create("ShareCenter", {
         }
         var submitFunc = function(oForm){
             if($('new_shared_user').value){
-                if( !$('shared_pass').value || $('shared_pass').value.length < ajxpBootstrap.parameters.get('password_min_length')){
+                if( !$('shared_pass').value || $('shared_pass').value.length < bootstrap.parameters.get('password_min_length')){
                     alert(MessageHash[378]);
                     return false;
                 }
@@ -137,7 +137,7 @@ Class.create("ShareCenter", {
             closeFunc(oForm);
             return false;
         }.bind(this);
-        if(window.ajxpBootstrap.parameters.get("usersEditable") == false){
+        if(window.bootstrap.parameters.get("usersEditable") == false){
             ajaxplorer.displayMessage('ERROR', MessageHash[394]);
         }else{
             modal.showDialogForm('Get', 'share_folder_form', loadFunc, submitFunc, closeFunc);

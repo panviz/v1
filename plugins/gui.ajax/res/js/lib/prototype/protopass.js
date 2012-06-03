@@ -51,8 +51,8 @@ var Protopass = Class.create({
         		this.options.messages[key] = window.MessageHash[keys[key]];
         	}        	
         }
-        if(window.ajxpBootstrap && window.ajxpBootstrap.parameters.get('password_min_length')){
-        	this.options.minchar = window.ajxpBootstrap.parameters.get('password_min_length');
+        if(window.bootstrap && window.bootstrap.parameters.get('password_min_length')){
+        	this.options.minchar = window.bootstrap.parameters.get('password_min_length');
         }
         Object.extend(this.options, options || { });
         var ins = {};

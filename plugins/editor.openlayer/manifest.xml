@@ -16,8 +16,8 @@
 				window.OpenLayersLoading = true;
 				if(Prototype.Browser.IE) window.originalEvent = window.Event;
 				var script = new Element('script', {
-					src:(ajxpBootstrap.parameters.get('SERVER_PREFIX_URI')?ajxpBootstrap.parameters.get('SERVER_PREFIX_URI'):'')+"plugins/editor.openlayer/openlayer/OpenLayers.js",
-					type:"text/javascript"}
+					src: (bootstrap.parameters.get('SERVER_PREFIX_URI')?bootstrap.parameters.get('SERVER_PREFIX_URI'): '')+"plugins/editor.openlayer/openlayer/OpenLayers.js",
+					type: "text/javascript"}
 				);
 				if(Prototype.Browser.IE){
 					script.attachEvent("onreadystatechange", function(){
@@ -33,14 +33,14 @@
 	</processing>	
 	<clientForm id="openlayer_box"><![CDATA[
 		<div id="openlayer_box" action="ol_view" box_width="80%" box_height="90%" box_padding="0">
-			<div class="action_bar" style="border-bottom:1px solid #DDDDDD;position:relative;">
-				<div id="filterButton" style="cursor:pointer;-moz-border-radius:3px 3px 0 0;border-radius:3px 3px 0 0;background-color:#FFF8D1;border:1px solid #CCCCCC;padding:1px 5px;border-bottom:0px;position: absolute;right: 8px;bottom: 0px;"><b>AJXP_MESSAGE[openlayer.2]</b> <img width="10" height="6" border="0" src="AJXP_THEME_FOLDER/images/arrow_down.png" align="top" style="margin-left:3px;margin-top:5px"></div>
-				<div style="padding-top: 1px; padding-right: 5px; font-size:11px;position: absolute;bottom: 1px;right: 77px;height: 16px;">
+			<div class="action_bar" style="border-bottom:1px solid #DDDDDD; position:relative; ">
+				<div id="filterButton" style="cursor:pointer; -moz-border-radius:3px 3px 0 0; border-radius:3px 3px 0 0; background-color:#FFF8D1; border:1px solid #CCCCCC; padding:1px 5px; border-bottom:0px; position: absolute; right: 8px; bottom: 0px; "><b>AJXP_MESSAGE[openlayer.2]</b> <img width="10" height="6" border="0" src="AJXP_THEME_FOLDER/images/arrow_down.png" align="top" style="margin-left:3px; margin-top:5px"></div>
+				<div style="padding-top: 1px; padding-right: 5px; font-size:11px; position:absolute; bottom:1px; right:77px; height:16px;">
 					<b>AJXP_MESSAGE[openlayer.3] :</b> <span id="location"></span>
 				</div>
 				<a href="#" onclick="return false;" id="downloadFileButton"><img width="22" height="22" src="AJXP_THEME_FOLDER/images/actions/22/download_manager.png" alt="AJXP_MESSAGE[88]" border="0"><br><span message_id="88">AJXP_MESSAGE[88]</span></a>
 			</div>
-			<div class="filter" style="background-color:#FFF8D1;border-bottom:1px solid #CCCCCC;padding:3px 5px;font-size:11px; font-family:Trebuchet MS;">
+			<div class="filter" style="background-color:#FFF8D1; border-bottom:1px solid #CCCCCC; padding:3px 5px; font-size:11px; font-family:Trebuchet MS;">
                 <a>AJXP_MESSAGE[openlayer.4]:</a>
                 <select id="layerSelector" style="width:110px !important;"></select>
                 <span id="wms_filters">

@@ -1,4 +1,5 @@
+data/
 plugins/gui.ajax/res/js/ajaxplorer.js
 plugins/gui.ajax/res/themes/umbra/css/allz.css
 plugins/gui.ajax/res/themes/oxygen/css/allz.css
-data/
+plugins/editor.ckeditor/ckeditor

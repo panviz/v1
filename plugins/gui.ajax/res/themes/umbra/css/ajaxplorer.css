@@ -946,9 +946,9 @@ a.carousel-control img{
 	/*margin-top:20px !important;*/
 }
 
-#content_pane{
-    margin: 20px;
-    margin-top:17px;
+.view, #content_pane{
+    margin: 10px;
+    margin-top:12px;
     -webkit-box-shadow:0 0 5px #aaaaaa;
     -moz-box-shadow:0 0 5px #aaaaaa;
     box-shadow:0 0 5px #aaaaaa;

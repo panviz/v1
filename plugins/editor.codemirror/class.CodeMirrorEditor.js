@@ -1,27 +1,11 @@
 /*
- * Copyright 2007-2011 Charles du Jeu <contact (at) cdujeu.me>
- * This file is part of AjaXplorer.
- *
- * AjaXplorer is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * AjaXplorer is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
- *
- * The latest code can be found at <http://www.ajaxplorer.info/>.
+ * Ajaxplorer wrapper for CodeMirror
  */
 Class.create("CodeMirrorEditor", AbstractEditor, {
 
-	initialize: function($super, oFormObject)
+	initialize : function($super, element, options)
 	{
-		$super(oFormObject);
+		$super(element, options);
 		
 		this.textWrapping = false;
 		this.lineNumbers = true;
@@ -39,7 +23,7 @@ Class.create("CodeMirrorEditor", AbstractEditor, {
 		}
 		this.actions.get("downloadFileButton").observe('click', function(){
 			if(!this.currentFile) return;		
-			ajaxplorer.triggerDownload(ajxpBootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+this.currentFile);
+			ajaxplorer.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+this.currentFile);
 			return false;
 		}.bind(this));
 	
@@ -102,7 +86,6 @@ Class.create("CodeMirrorEditor", AbstractEditor, {
 		$$('link[href="plugins/editor.codemirror/css/linenumbers-py.css"]').invoke('remove');
 		
 	},
-	
 	
 	open : function($super, userSelection){
 		$super(userSelection);
@@ -172,11 +155,11 @@ Class.create("CodeMirrorEditor", AbstractEditor, {
 			break;
 		}
 		this.options = 	{
-			path:path + 'js/',
-			parserfile:parserFile,
-			stylesheet:styleSheet,
-			parserConfig:parserConfig,
-			onChange : function(){ 				
+			path: path + 'js/',
+			parserfile: parserFile,
+			stylesheet: styleSheet,
+			parserConfig: parserConfig,
+			onChange: function(){ 				
 				this.updateHistoryButtons();
 				var sizes = this.codeMirror.historySize();
 				if(sizes.undo){
@@ -192,23 +175,23 @@ Class.create("CodeMirrorEditor", AbstractEditor, {
 			this.loadFileContent(fileName);
 		}.bind(this));
 		
-		this.element.observe("editor:enterFS", function(e){
+		this.element.observe("view:enterFS", function(e){
 			this.currentCode = this.codeMirror.getCode();
             this.goingToFullScreen = true;
 			this.destroyCodeMirror();
 		}.bind(this) );
 
-		this.element.observe("editor:enterFSend", function(e){
+		this.element.observe("view:enterFSend", function(e){
 			this.initCodeMirror(true);
 			this.codeMirror.setLineNumbers(this.codeMirror.lineNumbers);
 		}.bind(this) );
 
-		this.element.observe("editor:exitFS", function(e){
+		this.element.observe("view:exitFS", function(e){
 			this.currentCode = this.codeMirror.getCode();
 			this.destroyCodeMirror();
 		}.bind(this) );
 
-		this.element.observe("editor:exitFSend", function(e){
+		this.element.observe("view:exitFSend", function(e){
 			this.initCodeMirror();
 			this.codeMirror.setLineNumbers(this.codeMirror.lineNumbers);
             this.goingToFullScreen = false;
@@ -221,7 +204,7 @@ Class.create("CodeMirrorEditor", AbstractEditor, {
 			//attachMobileScroll(this.textarea, "vertical");
 		}
 
-        this.element.observe("editor:resize", function(event){
+        this.element.observe("view:resize", function(event){
             if(this.goingToFullScreen) return;
             fitHeightToBottom($(this.contentMainContainer), $(modal.elementName));
             fitHeightToBottom($(this.element), $(modal.elementName));
@@ -229,8 +212,8 @@ Class.create("CodeMirrorEditor", AbstractEditor, {
         }.bind(this));
 	},
 	
-	updateHistoryButtons: function(){
-		var sizes = $H({undo:0,redo:0});
+	updateHistoryButtons : function(){
+		var sizes = $H({undo: 0,redo: 0});
 		if(this.codeMirror){
 			try{
 				sizes = $H(this.codeMirror.historySize());
@@ -238,7 +221,7 @@ Class.create("CodeMirrorEditor", AbstractEditor, {
 		}
 		var actions = this.actions;
 		sizes.each(function(pair){
-			actions.get(pair.key+"Button")[(pair.value?'removeClassName':'addClassName')]('disabled');
+			actions.get(pair.key+"Button")[(pair.value ? 'removeClassName' : 'addClassName')]('disabled');
 		});
 	},
 	
@@ -248,7 +231,7 @@ Class.create("CodeMirrorEditor", AbstractEditor, {
 		this.options.textWrapping = this.textWrapping;
 		this.options.lineNumbers = this.lineNumbers;
 
-		this.options.onLoad = onLoad? onLoad : function(mirror){
+		this.options.onLoad = onLoad ? onLoad : function(mirror){
 			if(this.currentCode){
 				var mod = this.isModified;
 				mirror.setCode(this.currentCode);
@@ -260,7 +243,7 @@ Class.create("CodeMirrorEditor", AbstractEditor, {
 		
 		this.codeMirror = new CodeMirror(function(iFrame){
 				this.contentMainContainer = iFrame;
-				this.element.insert({bottom:iFrame});
+				this.element.insert({bottom: iFrame});
 				if(fsMode){
 					fitHeightToBottom($(this.contentMainContainer));
 				}else{
@@ -312,7 +295,7 @@ Class.create("CodeMirrorEditor", AbstractEditor, {
 	
 	parseXml : function(transport){
 		if(parseInt(transport.responseText).toString() == transport.responseText){
-			alert("Cannot write the file to disk (Error code : "+transport.responseText+")");
+			alert("Cannot write the file to disk (Error code: "+transport.responseText+")");
 		}else{
 			this.setModified(false);
 		}
@@ -325,6 +308,5 @@ Class.create("CodeMirrorEditor", AbstractEditor, {
 		this.codeMirror.clearHistory();
 		this.updateHistoryButtons();
 		this.removeOnLoad(this.contentMainContainer);
-		
 	}
 });

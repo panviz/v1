@@ -158,9 +158,9 @@
 				<clientCallback prepareModal="true" dialogOpenForm="switch_language_form" dialogOkButtonOnly="false" dialogSkipButtons="false">
 					<dialogOnOpen><![CDATA[
 					    if(ajaxplorer.user) var userLang = ajaxplorer.user.getPreference("lang");
-						if(!userLang) userLang = window.ajxpBootstrap.parameters.get("currentLanguage");
+						if(!userLang) userLang = window.bootstrap.parameters.get("currentLanguage");
 						var selector = $(oForm).select('select[id="language_selector"]')[0];
-						var languages = $H(window.ajxpBootstrap.parameters.get("availableLanguages"));
+						var languages = $H(window.bootstrap.parameters.get("availableLanguages"));
 						languages.each(function(pair){
 							var option = new Element('option', {value:pair.key,id:'lang_'+pair.key});
 							option.update(pair.value);
@@ -189,7 +189,7 @@
                             var selector = $(oForm).select('select[id="language_selector"]')[0];
                             var value = selector.getValue();
                             ajaxplorer.loadI18NMessages(value);
-                            window.ajxpBootstrap.parameters.set("currentLanguage", value);
+                            window.bootstrap.parameters.set("currentLanguage", value);
                         }
 					]]></dialogOnComplete>
 					<dialogOnCancel><![CDATA[]]></dialogOnCancel>

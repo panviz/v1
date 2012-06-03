@@ -531,7 +531,7 @@ ConfigEditor = Class.create({
 	changePassword: function(){
 		var newPass = $('new_pass');
 		var newPassConf = $('new_pass_confirm');
-		if(newPass.value == '' || newPass.value.length < window.ajxpBootstrap.parameters.get("password_min_length")){
+		if(newPass.value == '' || newPass.value.length < window.bootstrap.parameters.get("password_min_length")){
 			this.displayMessage('ERROR', MessageHash[378]);
 			return;
 		}
@@ -562,7 +562,7 @@ ConfigEditor = Class.create({
 			ajaxplorer.displayMessage("ERROR", MessageHash['ajxp_conf.39']);
 			return false;
 		}
-		if(pass.value.length < window.ajxpBootstrap.parameters.get("password_min_length")){
+		if(pass.value.length < window.bootstrap.parameters.get("password_min_length")){
 			ajaxplorer.displayMessage("ERROR", MessageHash[378]);
 			return false;
 		}

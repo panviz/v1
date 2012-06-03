@@ -337,7 +337,7 @@ Class.create("SQLEditor", {
 	
 	changeModifiedStatus : function(bModified){
 		this.modified = bModified;
-		var crtTitle = modal.dialogTitle.select('span.titleString')[0];
+		var crtTitle = modal.title.select('span.titleString')[0];
 		if(this.modified){
 			this.saveButton.removeClassName('disabled');
 			if(crtTitle.innerHTML.charAt(crtTitle.innerHTML.length - 1) != "*"){

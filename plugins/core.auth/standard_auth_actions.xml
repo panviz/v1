@@ -18,9 +18,9 @@
 					}else{
 						modal.showDialogForm('Log In', ($('login_form')?'login_form':'login_form_dynamic'), 
 						function(oForm){
-						    if(ajxpBootstrap.parameters.get("customWording")){
+						    if(bootstrap.parameters.get("customWording")){
                                 var ttSt = $("generic_dialog_box").down("span.titleString");
-                                ttSt.innerHTML = ttSt.innerHTML.replace("AjaXplorer", ajxpBootstrap.parameters.get("customWording").title );
+                                ttSt.innerHTML = ttSt.innerHTML.replace("AjaXplorer", bootstrap.parameters.get("customWording").title );
 						    }
 							ajaxplorer.loadSeedOrCaptcha(oForm.down('#login_seed'), oForm.down('img#captcha_image'), oForm.down('div.dialogLegend'), 'before');
 							if(Prototype.Browser.IE && !Modernizr.borderradius && !oForm.down('input[type="text"]').key_enter_attached){
@@ -116,7 +116,7 @@
 						var passSeed = null;
 						if($('user_change_ownpass1') && $('user_change_ownpass1').value && $('user_change_ownpass2').value)
 						{
-							if($('user_change_ownpass1').value.length < window.ajxpBootstrap.parameters.get("password_min_length")){
+							if($('user_change_ownpass1').value.length < window.bootstrap.parameters.get("password_min_length")){
 								alert(MessageHash[378]);
 								return false;
 							}

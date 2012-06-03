@@ -1,21 +1,5 @@
 /*
- * Copyright 2007-2011 Charles du Jeu <contact (at) cdujeu.me>
- * This file is part of AjaXplorer.
- *
- * AjaXplorer is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * AjaXplorer is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
- *
- * The latest code can be found at <http://www.ajaxplorer.info/>.
+ * Description
  */
 Class.create("IMagickPreviewer", Diaporama, {
 
@@ -24,7 +8,7 @@ Class.create("IMagickPreviewer", Diaporama, {
 	initialize: function($super, oFormObject)
 	{
 		$super(oFormObject);
-		this.baseUrl = ajxpBootstrap.parameters.get('ajxpServerAccess')+"&get_action=get_extracted_page&file=";
+		this.baseUrl = bootstrap.parameters.get('ajxpServerAccess')+"&get_action=get_extracted_page&file=";
 		// Override onload for the text
 		this.jsImage.onload = function(){
 			this.jsImageLoading = false;
@@ -49,7 +33,7 @@ Class.create("IMagickPreviewer", Diaporama, {
 	{
 		this.downloadButton.onclick = function(){
 			if(!this.currentFile) return;		
-			ajaxplorer.triggerDownload(ajxpBootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+userSelection.getUniqueFileName());
+			ajaxplorer.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+userSelection.getUniqueFileName());
 			return false;
 		}.bind(this);
 				
@@ -66,7 +50,7 @@ Class.create("IMagickPreviewer", Diaporama, {
 			this.sizes = new Hash();			
 			for(var i=0;i<result.length;i++){
 				this.items.push(result[i].file);
-				this.sizes.set(result[i].file, {height:result[i].height, width:result[i].width});
+				this.sizes.set(result[i].file, {height: result[i].height, width: result[i].width});
 			}
 			if(this.items.length){				
 				this.currentFile = this.items[0];
@@ -76,7 +60,7 @@ Class.create("IMagickPreviewer", Diaporama, {
 				this.updateButtons();			
 				
 				var tItems = this.items;
-				this.element.observe("editor:close", function(){					
+				this.element.observe("view:close", function(){					
 					var connexion = new Connexion();
 					connexion.addParameter("get_action", "delete_imagick_data");
 					var prefix = tItems[0].replace("-0.jpg", "").replace(".jpg", "");
@@ -93,14 +77,14 @@ Class.create("IMagickPreviewer", Diaporama, {
 						
 	getPreview : function(ajxpNode){
 		var img = new Element('img', {
-			src:IMagickPreviewer.prototype.getThumbnailSource(ajxpNode), 
-			style:'border:1px solid #676965;',
-            align:'absmiddle'
+			src: IMagickPreviewer.prototype.getThumbnailSource(ajxpNode), 
+			style: 'border:1px solid #676965;',
+            align: 'absmiddle'
 		});
 		img.resizePreviewElement = function(dimensionObject){			
 			var imgDim = {
-				width:21, 
-				height:29
+				width: 21, 
+				height: 29
 			};
 			var styleObj = fitRectangleToDimension(imgDim, dimensionObject);
 			img.setStyle(styleObj);
@@ -125,6 +109,4 @@ Class.create("IMagickPreviewer", Diaporama, {
 		removeLightboxFromElement(this.imgContainer);
 		this.loading = false;
 	}
-	
-	
 });

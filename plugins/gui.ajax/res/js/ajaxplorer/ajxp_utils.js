@@ -1,21 +1,4 @@
 /*
- * Copyright 2007-2011 Charles du Jeu <contact (at) cdujeu.me>
- * This file is part of AjaXplorer.
- *
- * AjaXplorer is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * AjaXplorer is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
- *
- * The latest code can be found at <http://www.ajaxplorer.info/>.
  * Description : Various functions used statically very often.
  */
 function getBaseName(fileName)
@@ -60,28 +43,28 @@ function addImageLibrary(aliasName, aliasPath){
 function resolveImageSource(src, defaultPath, size){
 	if(!src) return "";
 	if(!window.AjxpImageLibraries || src.indexOf("/")==-1){
-		return ajxpResourcesFolder + (defaultPath?(size?defaultPath.replace("ICON_SIZE", size):defaultPath):'')+ '/' +  src;
+		return ajxpResourcesFolder + (defaultPath?(size?defaultPath.replace("ICON_SIZE", size): defaultPath): '')+ '/' +  src;
 	}
 	var radic = src.substring(0,src.indexOf("/"));
 	if(window.AjxpImageLibraries[radic]){
 		var src = src.replace(radic, window.AjxpImageLibraries[radic]);
-        if(ajxpBootstrap.parameters.get("SERVER_PREFIX_URI")){
-            src = ajxpBootstrap.parameters.get("SERVER_PREFIX_URI") + src;
+        if(bootstrap.parameters.get("SERVER_PREFIX_URI")){
+            src = bootstrap.parameters.get("SERVER_PREFIX_URI") + src;
         }
-		return (size?src.replace("ICON_SIZE", size):src);
+		return (size ? src.replace("ICON_SIZE", size) : src);
 	}else{
-		return ajxpResourcesFolder + (defaultPath?(size?defaultPath.replace("ICON_SIZE", size):defaultPath):'')+ '/' +  src;
+		return ajxpResourcesFolder + (defaultPath ? (size ? defaultPath.replace("ICON_SIZE", size) : defaultPath) : '')+ '/' +  src;
 	}
 }
 
 function simpleButton(id, cssClass, messageId, messageTitle, iconSrc, iconSize, hoverClass, callback, skipIconResolution, addArrow){
-	var button = new Element("div", {id:id, className:cssClass});
+	var button = new Element("div", {id: id, className: cssClass});
 	var img = new Element("img", {
-		src:(skipIconResolution?iconSrc:resolveImageSource(iconSrc, '/images/actions/ICON_SIZE', iconSize)), 
-		width:iconSize,
-		height:iconSize,
-		title:MessageHash[messageTitle],
-		ajxp_message_title:MessageHash[messageTitle]
+		src: (skipIconResolution ? iconSrc : resolveImageSource(iconSrc, '/images/actions/ICON_SIZE', iconSize)), 
+		width: iconSize,
+		height: iconSize,
+		title: MessageHash[messageTitle],
+		ajxp_message_title: MessageHash[messageTitle]
 	});
 	button.update(img);
 	if(hoverClass){
@@ -93,12 +76,12 @@ function simpleButton(id, cssClass, messageId, messageTitle, iconSrc, iconSize, 
 	}
 	button.setSrc = function(src){img.src=src;};
     if(addArrow){
-        button.setStyle({position:'relative'});
+        button.setStyle({position: 'relative'});
         var arrowImg = new Element('img', {
             src: resolveImageSource('arrow_down.png', '/images'),
-            width:10,
-            height:6,
-            className:'simple_button_arrow'
+            width: 10,
+            height: 6,
+            className: 'simple_button_arrow'
         });
         button.insert(arrowImg);
     }
@@ -115,19 +98,19 @@ function roundSize(filesize, size_unit){
 
 function formatDate(dateObject, format){
 	if(!format) format = MessageHash["date_format"];
-	format = format.replace("d", (dateObject.getDate()<10?'0'+dateObject.getDate():dateObject.getDate()));
+	format = format.replace("d", (dateObject.getDate()<10 ? '0'+dateObject.getDate() : dateObject.getDate()));
 	format = format.replace("D", dateObject.getDay());
 	format = format.replace("Y", dateObject.getFullYear());
 	format = format.replace("y", dateObject.getYear());
 	var month = dateObject.getMonth() + 1;
-	format = format.replace("m", (month<10?'0'+month:month));
-	format = format.replace("H", (dateObject.getHours()<10?'0':'')+dateObject.getHours());
+	format = format.replace("m", (month<10 ? '0'+month: month));
+	format = format.replace("H", (dateObject.getHours()<10 ? '0' : '')+dateObject.getHours());
 	// Support 12 hour format compatibility
 	format = format.replace("h", (dateObject.getHours() % 12 || 12));
 	format = format.replace("p", (dateObject.getHours() < 12 ? "am" : "pm"));
 	format = format.replace("P", (dateObject.getHours() < 12 ? "AM" : "PM"));	
-	format = format.replace("i", (dateObject.getMinutes()<10?'0':'')+dateObject.getMinutes());
-	format = format.replace("s", (dateObject.getSeconds()<10?'0':'')+dateObject.getSeconds());
+	format = format.replace("i", (dateObject.getMinutes()<10 ? '0' : '')+dateObject.getMinutes());
+	format = format.replace("s", (dateObject.getSeconds()<10 ? '0' : '')+dateObject.getSeconds());
 	return format;
 }
 
@@ -142,10 +125,10 @@ function parseUrl(data) {
     		if(results[i].match(e)){
 		        matches.push({url: RegExp['$&'],
 		                protocol: RegExp.$2,
-		                host:RegExp.$4,
-		                path:RegExp.$5,
-		                file:RegExp.$7,
-		                hash:RegExp.$8});		
+		                host: RegExp.$4,
+		                path: RegExp.$5,
+		                file: RegExp.$7,
+		                hash: RegExp.$8});		
     		}
     	}
     }
@@ -154,7 +137,7 @@ function parseUrl(data) {
 
 
 function storeRememberData(user, pass){
-	setAjxpCookie('remember', {user:user,pass:pass});
+	setAjxpCookie('remember', {user: user,pass: pass});
 }
 
 function retrieveRememberData(){
@@ -175,12 +158,12 @@ function setAjxpCookie(name, value){
 }
 
 function getAjxpCookie(name){
-	var cookieJar = new CookieJar({path: '/',secure:true});
+	var cookieJar = new CookieJar({path: '/',secure: true});
 	return cookieJar.get('ajxp_'+name);	
 }
 
 function deleteAjxpCookie(name){
-	var cookieJar = new CookieJar({path: '/',secure:true});
+	var cookieJar = new CookieJar({path: '/',secure: true});
 	cookieJar.remove('ajxp_'+name);	
 }
 
@@ -254,16 +237,16 @@ function enableTextSelection(element){
 
 function testStringWidth(text){
 	if(!$('string_tester')){
-		$$('body')[0].insert(new Element('div',{id:'string_tester'}));
-		$('string_tester').setStyle({fontFamily:'Trebuchet MS',fontSize:'11px',position:'absolute',visibility:'hidden',height:'auto',width:'auto',whiteSpace:'nowrap'});
+		$$('body')[0].insert(new Element('div',{id: 'string_tester'}));
+		$('string_tester').setStyle({fontFamily: 'Trebuchet MS',fontSize: '11px',position: 'absolute',visibility: 'hidden',height: 'auto',width: 'auto',whiteSpace: 'nowrap'});
 	}
 	$('string_tester').update(text);
-	return $('string_tester').getWidth() + (Prototype.Browser.IE?20:0);
+	return $('string_tester').getWidth() + (Prototype.Browser.IE ? 20 : 0);
 }
 
 function fitRectangleToDimension(rectDim, targetDim){
-    var defaultMarginTop = (targetDim.marginTop?targetDim.marginTop:(targetDim.margin?targetDim.margin:0));
-    var defaultMarginBottom = (targetDim.marginBottom?targetDim.marginBottom:(targetDim.margin?targetDim.margin:0));
+    var defaultMarginTop = (targetDim.marginTop ? targetDim.marginTop : (targetDim.margin ? targetDim.margin : 0));
+    var defaultMarginBottom = (targetDim.marginBottom ? targetDim.marginBottom : (targetDim.margin ? targetDim.margin : 0));
 	//var defaultMargin = targetDim.margin || 0;
 	if(rectDim.width >= rectDim.height)
 	{				
@@ -287,7 +270,7 @@ function fitRectangleToDimension(rectDim, targetDim){
         mT = defaultMarginTop;
         mB = defaultMarginBottom;
 	}
-	return styleObj = {width:tW+'px', height:tH+'px', marginTop:mT+'px', marginBottom:mB+'px'};	
+	return styleObj = {width: tW+'px', height: tH+'px', marginTop: mT+'px', marginBottom: mB+'px'};	
 }
 
 function fitHeightToBottom(element, parentElement, addMarginBottom, listen)
@@ -325,7 +308,7 @@ function fitHeightToBottom(element, parentElement, addMarginBottom, listen)
 		}
 		var mrg = parseInt(element.getStyle('marginBottom')) ||0;		
 		var brd = parseInt(element.getStyle('borderWidth'))||0;
-		var pad = (parseInt((parentElement!=window?parentElement.getStyle('paddingBottom'):0))||0);		
+		var pad = (parseInt((parentElement!=window ? parentElement.getStyle('paddingBottom') : 0))||0);		
 		var margin=0;
 		if(parentElement!=window){
 			margin = parseInt(parentElement.getStyle('borderBottomWidth')||0) + parseInt(parentElement.getStyle('borderTopWidth')||0);
@@ -335,7 +318,7 @@ function fitHeightToBottom(element, parentElement, addMarginBottom, listen)
 			margin += childPadding;
 		}
 		if(!margin) margin = 0;
-		element.setStyle({height:(Math.max(0,wh-top-mrg-brd-pad-margin-addMarginBottom))+'px'});
+		element.setStyle({height: (Math.max(0,wh-top-mrg-brd-pad-margin-addMarginBottom))+'px'});
 		if(element.ajxpPaneObject && listen){
 			element.ajxpPaneObject.resize();
 		}
@@ -377,8 +360,8 @@ function loadXPathReplacer(){
 	if(document.createExpression) return;
 	var conn = new Connexion();
 	conn._libUrl = false;
-	if(ajxpBootstrap.parameters.get('SERVER_PREFIX_URI')){
-		conn._libUrl = ajxpBootstrap.parameters.get('SERVER_PREFIX_URI');
+	if(bootstrap.parameters.get('SERVER_PREFIX_URI')){
+		conn._libUrl = bootstrap.parameters.get('SERVER_PREFIX_URI');
 	}
 	conn.loadLibrary('plugins/gui.ajax/res/js/lib/xpath/javascript-xpath-cmp.js');	
 }
@@ -406,7 +389,7 @@ function XPathSelectSingleNode(element, query){
 		if(!document.createExpression) loadXPathReplacer();
 		query = document.createExpression(query, null);
 		var result = query.evaluate(element, 7, null);
-		return (result.snapshotLength?result.snapshotItem(0):null);
+		return (result.snapshotLength?result.snapshotItem(0): null);
 	}
 	
 	var xpe = window.__xpe;
@@ -523,15 +506,15 @@ function ajxpCorners(oElement, cornersString)
 	if(br || bl)
 	{
 		var botDiv = new Element('div');
-		botDiv.setStyle({marginTop:'-5px', zoom:1, width:'100%'});
-		botDiv.innerHTML = (bl?'<div style="overflow: hidden; width: 5px; background-color: rgb(255, 255, 255); height: 5px; float: left;background-image:url('+ajxpResourcesFolder+'/images/corners/5px_bl.gif);"></div>':'')+(br?'<div style="border-style: none; overflow: hidden; float: right; background-color: rgb(255, 255, 255); height: 5px; width: 5px;background-image:url('+ajxpResourcesFolder+'/images/corners/5px_br.gif);"></div>':'');
+		botDiv.setStyle({marginTop: '-5px', zoom: 1, width: '100%'});
+		botDiv.innerHTML = (bl ? '<div style="overflow:hidden; width:5px; background-color:rgb(255, 255, 255); height:5px; float:left; background-image:url('+ajxpResourcesFolder+'/images/corners/5px_bl.gif);"></div>' : '')+(br ? '<div style="border-style: none; overflow: hidden; float: right; background-color: rgb(255, 255, 255); height: 5px; width: 5px;background-image:url('+ajxpResourcesFolder+'/images/corners/5px_br.gif);"></div>' : '');
 		oElement.appendChild(botDiv);
 	}
 	if(tr || tl)
 	{
 		var topDiv = new Element('div');
-		topDiv.setStyle({marginBottom:'-5px', zoom:1, width:'100%'});
-		topDiv.innerHTML = (tl?'<div style="overflow: hidden; width: 5px; background-color: rgb(255, 255, 255); height: 5px; float: left;background-image:url('+ajxpResourcesFolder+'/images/corners/5px_tl.gif);"></div>':'')+(tr?'<div style="border-style: none; overflow: hidden; float: right; background-color: rgb(255, 255, 255); height: 5px; width: 5px;background-image:url('+ajxpResourcesFolder+'/images/corners/5px_tr.gif);"></div>':'');
+		topDiv.setStyle({marginBottom: '-5px', zoom: 1, width: '100%'});
+		topDiv.innerHTML = (tl ? '<div style="overflow:hidden; width:5px; background-color:rgb(255, 255, 255); height:5px; float:left; background-image:url('+ajxpResourcesFolder+'/images/corners/5px_tl.gif);"></div>' : '')+(tr ? '<div style="border-style: none; overflow: hidden; float: right; background-color: rgb(255, 255, 255); height: 5px; width: 5px;background-image:url('+ajxpResourcesFolder+'/images/corners/5px_tr.gif);"></div>' : '');
 		if(oElement.firstChild)
 		{
 			oElement.insertBefore(topDiv, oElement.firstChild);

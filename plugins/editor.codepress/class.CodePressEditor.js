@@ -1,29 +1,12 @@
 /*
- * Copyright 2007-2011 Charles du Jeu <contact (at) cdujeu.me>
- * This file is part of AjaXplorer.
- *
- * AjaXplorer is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * AjaXplorer is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
- *
- * The latest code can be found at <http://www.ajaxplorer.info/>.
+ * Description
  */
 Class.create("CodePressEditor", TextEditor, {
 
-	initialize: function($super, oFormObject)
+	initialize : function($super, oFormObject)
 	{
 		$super(oFormObject);
 	},
-	
 	
 	open : function($super, userSelection){
 		this.userSelection = userSelection;
@@ -43,18 +26,18 @@ Class.create("CodePressEditor", TextEditor, {
 		//$(this.textarea).addClassName('linenumbers-on');
 		this.currentUseCp = true;
 		this.contentMainContainer = this.textarea.parentNode;
-		this.element.observe("editor:resize", function(event){
+		this.element.observe("view:resize", function(event){
 			var cpIframe = $(this.contentMainContainer).select('iframe')[0];
 			if(!cpIframe) return;
 			if(event.memo && Object.isNumber(event.memo)){
-				cpIframe.setStyle({height:event.memo});
+				cpIframe.setStyle({height: event.memo});
 			}else{
 				cpIframe.setStyle({width:'100%'});
 				fitHeightToBottom(cpIframe, this.element);
 			}
 		}.bind(this));
-		this.element.observe("editor:enterFS", function(e){this.textarea.value = this.element.select('iframe')[0].getCode();}.bind(this) );
-		this.element.observe("editor:exitFS", function(e){this.textarea.value = this.element.select('iframe')[0].getCode();}.bind(this) );
+		this.element.observe("view:enterFS", function(e){this.textarea.value = this.element.select('iframe')[0].getCode();}.bind(this) );
+		this.element.observe("view:exitFS", function(e){this.textarea.value = this.element.select('iframe')[0].getCode();}.bind(this) );
 		this.textarea.setStyle({width:'100%'});	
 		this.textarea.setAttribute('wrap', 'off');	
 		this.element.appendChild(this.textareaContainer);
@@ -88,7 +71,7 @@ Class.create("CodePressEditor", TextEditor, {
 		this.cpCodeObject = code;
 		this.textarea.parentNode.insertBefore(code, this.textarea);
 		this.contentMainContainer = this.textarea.parentNode;
-		this.element.observe("editor:close", function(){
+		this.element.observe("view:close", function(){
 			this.cpCodeObject.close();
 			modal.clearContent(modal.dialogContent);		
 		}, this );			
@@ -108,6 +91,4 @@ Class.create("CodePressEditor", TextEditor, {
 		else if (fileName.search("\.css$") > -1) return "css";
 		else return "";	
 	}
-
-	
 });

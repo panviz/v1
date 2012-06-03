@@ -1,0 +1,10 @@
+	Function
+Name in json format is separated with " : ", ex: "_handler : function(){"
+Declaration: opening curly brace should be on the first string
+Next function is separated with new line
+
+";" is obligitary for new string
+Event namespaces are separated with semicolon; words - with underscore e.g.: "ajaxplorer:context_changed"
+Json object name and property are separated with ": " like in natural language
+Style declaration is separated with semicolon only, ex: "display:none"
+Ternal operator is separated with preceding and following whitespaces, ex: (value == value1) ? true : false

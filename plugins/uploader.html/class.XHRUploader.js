@@ -1,21 +1,4 @@
 /*
- * Copyright 2007-2011 Charles du Jeu <contact (at) cdujeu.me>
- * This file is part of AjaXplorer.
- *
- * AjaXplorer is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * AjaXplorer is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
- *
- * The latest code can be found at <http://www.ajaxplorer.info/>.
  * Description : Class for simple XHR multiple upload, HTML5 only
  */
 Class.create("XHRUploader", {
@@ -508,7 +491,7 @@ Class.create("XHRUploader", {
 	initializeXHR : function(item, queryStringParam){
 
 		var xhr = new XMLHttpRequest(); 	  
-		var uri = ajxpBootstrap.parameters.get('ajxpServerAccess')+"&get_action=upload&xhr_uploader=true&dir="+encodeURIComponent(this.crtContext.getContextNode().getPath());
+		var uri = bootstrap.parameters.get('ajxpServerAccess')+"&get_action=upload&xhr_uploader=true&dir="+encodeURIComponent(this.crtContext.getContextNode().getPath());
 		if(queryStringParam){
 			uri += '&' + queryStringParam;
 		}
@@ -652,7 +635,7 @@ Class.create("XHRUploader", {
         	item.statusText.update('[error]');        	
         };
         
-        var url = ajxpBootstrap.parameters.get('ajxpServerAccess')+"&get_action=upload&xhr_uploader=true&input_stream=true&dir="+encodeURIComponent(this.crtContext.getContextNode().getPath());
+        var url = bootstrap.parameters.get('ajxpServerAccess')+"&get_action=upload&xhr_uploader=true&input_stream=true&dir="+encodeURIComponent(this.crtContext.getContextNode().getPath());
         if(auto_rename){
         	url += '&auto_rename=true';
         }
@@ -668,7 +651,6 @@ Class.create("XHRUploader", {
         
         item.xhr = xhr;
 	},
-	
 	
 	sendFileChunked : 
 		(window.Blob? 
