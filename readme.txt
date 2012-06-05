@@ -13,47 +13,8 @@ Modal and View should implement one Interface with methods: ?
 	prepareHeader
 	title
 	clearContent
-Editor
-	move control buttons to main toolbar
-Ajaxplorer
-	open hidden default file ".txt" in View on context changed event
 FileList
 	make a Table inherited from View
 +	don't show hidden files
-Tree Control
-Change DataModel and AjxpNodes to universal Item and its Collections(Selection)
 Server
 	create file on 'save' if missing
-
-			Notes
-DEBUG OPTIONS - bootstrap_context.php
-window.
-	ajaxplorer
-	content_pane -> FilesList klass
-
-Ajaxplorer.klass
-	initExtension					//load extension configuration from manifest.xml
-	initAjxpWidgets 				//initialization GUI method
-		window[ajxpId] = compRegistry[i-1];	//window will contain access to all GUI components classes
-	guiCompRegistry 				//array of GUI components
-	guiActions 						//Hash
-	contextMenu						//Proto.Menu
-	actionBar						//ActionsManager
-	getUserSelection()				//AjxpDataModel
-	getContextNode()				//AjxpNode (current path)
-	getContextHolder()				//AjxpDataModel - contains current selection, path, repo
-
-ActionsManager.klass
-	actions							//Action.klass
-
-Action.ls
-
-InfoPanel							//Details for file
-
-AjxpNode
-	getPath()						//
-
-editor.text TextEditor.klass		//
-
-FilesList
-	fill							//fill table with rows
