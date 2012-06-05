@@ -91,7 +91,4 @@ spl_autoload_register('AjaXplorer_autoload');
 
 AJXP_Utils::safeIniSet("session.cookie_httponly", 1);
 //AJXP_Utils::safeIniSet("session.cookie_path", "/ajaxplorer");
-
-
-
 ?>

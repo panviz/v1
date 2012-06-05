@@ -155,7 +155,6 @@ Class.create("View", AjxpPane, {
 	 */
 	_initGUI : function(sFormId, fOnLoad, fOnComplete, fOnCancel, bOkButtonOnly, skipButtons)
 	{
-		this.clearContent(this.content);
 		this.createTitleSpans();
 		var newForm;
 		if($(sFormId).tagName == 'FORM') // WE PASSED A PREFETCHED HIDDEN FORM
@@ -443,6 +442,7 @@ Class.create("View", AjxpPane, {
 	 */
 	open : function(userSelection){
 		this.userSelection = userSelection;
+		this.clearContent();
 	},
 	/**
 	 * Change editor status
@@ -603,9 +603,9 @@ Class.create("View", AjxpPane, {
 	 * Clear all content
 	 * @param object HTMLElement The current form
 	 */
-	clearContent: function(content){
+	clearContent: function(){
 		//TODO should delete only textarea, not entire form
-		content.innerHtml = "";
+		this.content.innerHtml = "";
 	},
 	/**
 	 * Creates the title label depending on the "modified" status

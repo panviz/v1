@@ -7,13 +7,13 @@ Class.create("TextEditor", View, {
 	{
 		$super(oFormObject, options);
 		if(!ajaxplorer.user || ajaxplorer.user.canWrite()){
-			this.canWrite = true;
+			this.writable = true;
 			this.actions.get("saveButton").observe('click', function(){
 				this.saveFile();
 				return false;
 			}.bind(this));		
 		}else{
-			this.canWrite = false;
+			this.writable = false;
 			this.actions.get("saveButton").hide();
 		}
 		this.actions.get("downloadFileButton").observe('click', function(){
@@ -21,28 +21,26 @@ Class.create("TextEditor", View, {
 			ajaxplorer.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+this.currentFile);
 			return false;
 		}.bind(this));
-	},
-	
-	
-	open : function($super, userSelection){
-		$super(userSelection);
-		var fileName = userSelection.getUniqueFileName();
-		var textarea;
 		this.textareaContainer = document.createElement('div');
 		this.textarea = $(document.createElement('textarea'));
-		this.textarea.name =  this.textarea.id = 'content';
-		this.textarea.addClassName('dialogFocus');
+		this.textarea.name = this.textarea.id = 'content';
 		this.textarea.addClassName('editor');
-		this.currentUseCp = false;
+		this.textarea.addClassName('dialogFocus');
 		this.contentMainContainer = this.textarea;
 		this.textarea.setStyle({width: '100%'});	
 		this.textarea.setAttribute('wrap', 'off');	
-		if(!this.canWrite){
+		if(!this.writable){
 			this.textarea.readOnly = true;
 		}
 		this.element.appendChild(this.textareaContainer);
 		this.textareaContainer.appendChild(this.textarea);
-		fitHeightToBottom($(this.textarea), $(modal.elementName));
+	},
+	
+	open : function($super, userSelection){
+		$super(userSelection);
+		var fileName = userSelection.getUniqueFileName();
+		//TODO set focus
+		fitHeightToBottom($(this.textarea), this.element);
 		// LOAD FILE NOW
 		this.loadFileContent(fileName);
 		if(window.ajxpMobile){
@@ -57,6 +55,7 @@ Class.create("TextEditor", View, {
 		connexion.addParameter('get_action', 'get_content');
 		connexion.addParameter('file', fileName);	
 		connexion.onComplete = function(transp){
+			//TODO doesn't called on missing file
 			this.parseTxt(transp);
 			this.updateTitle(getBaseName(fileName));
 		}.bind(this);
@@ -95,12 +94,16 @@ Class.create("TextEditor", View, {
 	
 	parseTxt : function(transport){	
 		this.textarea.value = transport.responseText;
-		if(this.canWrite){
+		if(this.writable){
 			var contentObserver = function(el, value){
 				this.setModified(true);
 			}.bind(this);
 			new Form.Element.Observer(this.textarea, 0.2, contentObserver);
 		}
 		this.removeOnLoad(this.textareaContainer);
+	},
+
+	clearContent : function(){
+		this.textarea.innerHTML = '';
 	}
 });

@@ -14,16 +14,16 @@ Modal and View should implement one Interface with methods: ?
 	title
 	clearContent
 Editor
-	create file on 'save' if missing
 	move control buttons to main toolbar
 Ajaxplorer
 	open hidden default file ".txt" in View on context changed event
 FileList
-	make a Table view
+	make a Table inherited from View
 +	don't show hidden files
 Tree Control
-	clicking selected node leads in opening default file in View if not already (fire "context changed" event?)
-
+Change DataModel and AjxpNodes to universal Item and its Collections(Selection)
+Server
+	create file on 'save' if missing
 
 			Notes
 DEBUG OPTIONS - bootstrap_context.php

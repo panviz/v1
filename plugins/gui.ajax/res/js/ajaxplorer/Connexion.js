@@ -23,6 +23,9 @@ Class.create("Connexion", {
 	 */
 	addParameter : function (paramName, paramValue){
 		this._parameters.set(paramName, paramValue);	
+		if(paramName == "file" && this._parameters.get("get_action") == "get_content"){
+			this._baseUrl = this._baseUrl.replace("index.php", "get_content")
+		}
 	},
 	
 	/**

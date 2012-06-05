@@ -4,10 +4,10 @@
 Class.create("AjxpDataModel", {
 
 	_currentRep: undefined, 
-	_bEmpty: undefined,
-	_bUnique: false,
-	_bFile: false,
-	_bDir: false,
+	_isEmpty: undefined,
+	_isUnique: false,
+	_isFile: false,
+	_isDir: false,
 	_isRecycle: false,
 	
 	_pendingContextPath: null, 
@@ -22,7 +22,7 @@ Class.create("AjxpDataModel", {
 	initialize : function(){
 		this._currentRep = '/';
 		this._selectedNodes = $A([]);
-		this._bEmpty = true;
+		this._isEmpty = true;
 	},
 	
 	/**
@@ -242,16 +242,16 @@ Class.create("AjxpDataModel", {
 			this._selectionSource = source;
 		}
 		this._selectedNodes = $A(ajxpDataNodes);
-		this._bEmpty = !!(ajxpDataNodes && ajxpDataNodes.length);
-		this._bFile = this._bDir = this._isRecycle = false;
-		if(!this._bEmpty)
+		this._isEmpty = !(ajxpDataNodes && ajxpDataNodes.length);
+		this._isFile = this._isDir = this._isRecycle = false;
+		if(!this._isEmpty)
 		{
-			this._bUnique = !!(ajxpDataNodes.length == 1);
+			this._isUnique = !!(ajxpDataNodes.length == 1);
 			for(var i=0; i<ajxpDataNodes.length; i++)
 			{
 				var selectedNode = ajxpDataNodes[i];
-				if(selectedNode.isLeaf()) this._bFile = true;
-				else this._bDir = true;
+				if(selectedNode.isLeaf()) this._isFile = true;
+				else this._isDir = true;
 				if(selectedNode.isRecycle()) this._isRecycle = true;
 			}
 		}
@@ -301,7 +301,7 @@ Class.create("AjxpDataModel", {
 	 * @returns Boolean
 	 */
 	isUnique : function (){
-		return this._bUnique;
+		return this._isUnique;
 	},
 	
 	/**
@@ -310,7 +310,7 @@ Class.create("AjxpDataModel", {
 	 * @returns Boolean
 	 */
 	hasFile : function (){
-		return this._bFile;
+		return this._isFile;
 	},
 	
 	/**
@@ -318,7 +318,7 @@ Class.create("AjxpDataModel", {
 	 * @returns Boolean
 	 */
 	hasDir : function (){
-		return this._bDir;
+		return this._isDir;
 	},
 			
 	/**
