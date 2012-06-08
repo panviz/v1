@@ -1,6 +1,6 @@
 /**
  * Main BootLoader.
- * Defaults params for constructor should be {} and content.php?get_action=get_boot_conf
+ * Defaults params for constructor should be settings.json
  */
 Class.create("Bootstrap", {
 	/**

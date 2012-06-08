@@ -7,6 +7,7 @@ module.exports = function(app){
 	
 	//  Load Root
 	app.get('/', root.index);
+	app.get('/settings.json*', root.settings);
 
 	app.all('/index.php', function(request, response){
 		var proxy = http.createClient(3000, request.headers[host])
@@ -25,7 +26,7 @@ module.exports = function(app){
 		});
 		proxy.on('error', function(err) {
 			console.log(err.toString() + " on request to " + host);
-			return action_notfound(response, "Requested resource ("+request.url+") is not accessible on host \""+host+"\"");
+			response.render('404');
 		});
 		
 		request.addListener('data', function(chunk) {
@@ -36,9 +37,3 @@ module.exports = function(app){
 		});
 	});
 };
-
-function action_notfound(response, msg){
-	response.writeHead(404);
-	response.write(msg);
-	response.end();
-}

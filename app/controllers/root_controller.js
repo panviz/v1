@@ -10,3 +10,7 @@ module.exports = function (_app) {
 controller.index = function(req, res, next){
     res.render('index.ejs');
 }
+
+controller.settings = function(req, res, next){
+    res.send(settings);
+}

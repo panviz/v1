@@ -1,5 +1,6 @@
 const express   = require('express')
     , expose    = require('express-expose');
+settings = require('./settings.js');
 
 module.exports = function(app){
 
@@ -16,12 +17,15 @@ module.exports = function(app){
 	//  Add template engine
 	app.configure(function(){
 	this
-	  .set('views', __dirname + '/../app/views')
-	  .set('view engine', 'ejs')
-	  .use('/plugins', express.static(__dirname + '/../plugins'))
+		.set('views', __dirname + '/../app/views')
+		.helpers(require('../app/helpers/application_helper'))
+		.set('view engine', 'ejs')
+		.use('/plugins', express.static(__dirname + '/../plugins'))
 	});
 
-	app.set('version', '0.1.6');
+	app.set('version', '0.0.1');
+	app.set('THEME_PATH', 'plugins/gui.ajax/res/themes/umbra/');
+	app.set('GUI_JS_PATH', 'plugins/gui.ajax/res/js/');
 
 	return app;
 }

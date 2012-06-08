@@ -1,3 +1,19 @@
-<html>
-	Layout:
-<html>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Graph</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="icon" type="image/x-png" href="AJXP_THEME_FOLDER/images/html-folder.png">
+		<%- link_tag(app.set("THEME_PATH") + 'css/list.txt') %>
+		<%- include_tag(app.set("GUI_JS_PATH") + 'boot_list.txt') %>
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" marginheight="0" marginwidth="0" leftmargin="0" topmargin="0"  style="overflow:hidden;">		
+	<div id="ajxp_desktop" ajxpClass="AjxpPane" ajxpOptions='{"fit": "height","fitParent": "window","fitMarginBottom": "$(\"optional_bottom_div\").getHeight()"}'></div>
+		<script type="text/javascript">
+			var ajaxplorer, startParameters = {"BOOTER_URL":"settings.json","MAIN_ELEMENT":"ajxp_desktop","EXT_REP":"\/"}, MessageHash={};
+			window.bootstrap = new Bootstrap(startParameters);
+		</script>
+		<%- body %>
+	</body>
+</html>
