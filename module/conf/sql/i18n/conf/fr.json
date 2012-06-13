@@ -1,0 +1,8 @@
+{
+"DB Storage" : "Configuration DB",
+"Stores the conf data in an SQL database." : "Les données de configuration sont stockées dans une base de données",
+"Connexion" : "Connexion",
+"The Database Connexion" : "Connexion à la base de données, tableau DIBI.",
+"Users Tmp Folder" : "Répertoire temporaire",
+"The folder in which all temporary files will be stored" : "Répertoire pour stocker les données temporaires des users."
+}

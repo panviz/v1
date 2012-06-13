@@ -1,9 +1,0 @@
-lib/prototype/prototype.js
-lib/prototype/prototype.livepipe.js
-lib/prototype/prototype.oo.js
-lib/modernizr/modernizr.min.js
-lib/prototype/jsProgressBarHandler.js
-ajaxplorer/Connexion.js
-lib/md5/md5.js
-ajaxplorer/ajxp_utils.js
-ajaxplorer/Bootstrap.js

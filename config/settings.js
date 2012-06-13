@@ -1,4 +1,4 @@
-module.exports =
+module.exports = 
 {
 	"ajxpResourcesFolder" : "plugins\/gui.ajax\/res",
 	"ajxpServerAccess" : "index.php",
@@ -839,7 +839,7 @@ module.exports =
 		"index.lucene.9" : "Cannot find index for current repository! You should trigger the indexation of the data first!"
 	},
 	"password_min_length" : "8",
-	"SECURE_TOKEN" : "fdde2f302fe532626091e9fe0518a0dd",
+	"SECURE_TOKEN" : "92ec48f8e2b904e4d48e1452f4fb2c52",
 	"streaming_supported" : "true",
 	"theme" : "umbra"
 }

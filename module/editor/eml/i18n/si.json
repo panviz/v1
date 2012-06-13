@@ -1,0 +1,16 @@
+{
+"name" : "Pregledovalnik e-pošte",
+"title" : "Pregledovalnik elektronskih sporočil",
+"1" : "Od",
+"2" : "Za",
+"3" : "Zadeva",
+"4"	: "Datum",
+"5" : "Priloge",
+"6" : "Prenesi e-pošto",
+"7" : "Priloga %s je bila uspešno kopirana v %s",
+"8" : "Ciljne datoteke ni bilo mogoče odpreti!",
+"9" : "Priloge ni bilo mogoče najti!",
+"10" : "Prenesi ",
+"11" : "Kopiraj prilogo na strežnik",
+"12" : "Kk"
+}

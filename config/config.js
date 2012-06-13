@@ -1,6 +1,7 @@
 const express   = require('express')
     , expose    = require('express-expose');
 settings = require('./settings.js');
+registry = require('./registry.js');
 
 module.exports = function(app){
 
@@ -24,8 +25,8 @@ module.exports = function(app){
 	});
 
 	app.set('version', '0.0.1');
-	app.set('THEME_PATH', 'plugins/gui.ajax/res/themes/umbra/');
-	app.set('GUI_JS_PATH', 'plugins/gui.ajax/res/js/');
+	app.set('THEME_PATH', 'plugins/ui/main/themes/mybase/');
+	app.set('GUI_JS_PATH', 'plugins/ui/main/js/');
 
 	return app;
 }

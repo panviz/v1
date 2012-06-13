@@ -14,3 +14,7 @@ controller.index = function(req, res, next){
 controller.settings = function(req, res, next){
     res.send(settings);
 }
+
+controller.registry = function(req, res, next){
+    res.send(registry);
+}

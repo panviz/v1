@@ -1,3 +1,5 @@
+	Directories
+Name collection in Singular form
 	Function
 Name in json format is separated with " : ", ex: "_handler : function(){"
 Declaration: opening curly brace should be on the first string

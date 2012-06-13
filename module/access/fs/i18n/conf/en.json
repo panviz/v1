@@ -1,0 +1,16 @@
+{
+"File System (Standard)" : "File System (Standard)",
+"The most standard access to a filesystem located on the server." : "The most standard access to a filesystem located on the server.",
+"Path" : "Path",
+"Real path to the root folder on the server" : "Real path to the root folder on the server",
+"Create" : "Create",
+"Create folder if it does not exists" : "Create folder if it does not exists",
+"File Creation Mask" : "File Creation Mask",
+"Optionnaly apply a chmod operation. Value must be numeric, like 0777, 0644, etc." : "Optionnaly apply a chmod operation. Value must be numeric, like 0777, 0644, etc.",
+"Purge Days" : "Purge Days",
+"Option to purge documents after a given number of days. This require a manual set up of a CRON task. Leave to 0 if you don't wan't to use this feature." : "Option to purge documents after a given number of days. This require a manual set up of a CRON task. Leave to 0 if you don't wan't to use this feature.",
+"Real Size Probing" : "Real Size Probing",
+"Use system command line to get the filesize instead of php built-in function (fixes the 2Go limitation)" : "Use system command line to get the filesize instead of php built-in function (fixes the 2Go limitation)",
+"X-SendFile Active" : "X-SendFile Active",
+"Delegates all download operations to the webserver using the X-SendFile header. Warning, this is an external module to install for Apache. Module is active by default in Lighttpd. Warning, you have to manually add the folders where files will be downloaded in the module configuration (XSendFilePath directive)" : "Delegates all download operations to the webserver using the X-SendFile header. Warning, this is an external module to install for Apache. Module is active by default in Lighttpd. Warning, you have to manually add the folders where files will be downloaded in the module configuration (XSendFilePath directive)"
+}

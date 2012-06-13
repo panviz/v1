@@ -1,0 +1,8 @@
+{
+"SMB Authentification" : "Authentification Samba",
+"Authenticate user by directly connecting to an SMB share" : "Négociation avec un serveur Samba",
+"Repository" : "Dépôt",
+"Id of the repository to use for testing connexion" : "Id du dépôt définissant les informations de connexion samba",
+"Admin user" : "Utilisateur admin",
+"The ID of an existing admin for Ajaxplorer (using conf.serial)" : "Id d'un utilisateur ayant les droits d'administration."
+}
