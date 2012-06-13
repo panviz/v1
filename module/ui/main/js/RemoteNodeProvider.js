@@ -1,9 +1,9 @@
 /**
- * Implementation of the IAjxpNodeProvider interface based on a remote server access.
+ * Implementation of the INodeProvider interface based on a remote server access.
  * Default for all repositories.
  */
 Class.create("RemoteNodeProvider", {
-	__implements : "IAjxpNodeProvider",
+	__implements : "INodeProvider",
 	/**
 	 * Constructor
 	 */
@@ -19,7 +19,7 @@ Class.create("RemoteNodeProvider", {
 	},
 	/**
 	 * Load a node
-	 * @param node AjxpNode
+	 * @param node Node
 	 * @param nodeCallback Function On node loaded
 	 * @param childCallback Function On child added
 	 */
@@ -49,8 +49,8 @@ Class.create("RemoteNodeProvider", {
 		conn.sendAsync();
 	},
 	/**
-	 * Parse the answer and create AjxpNodes
-	 * @param origNode AjxpNode
+	 * Parse the answer and create Nodes
+	 * @param origNode Node
 	 * @param transport Ajax.Response
 	 * @param nodeCallback Function
 	 * @param childCallback Function
@@ -59,7 +59,7 @@ Class.create("RemoteNodeProvider", {
 		if(!transport.responseXML || !transport.responseXML.documentElement) return;
 		var rootNode = transport.responseXML.documentElement;
 		var children = rootNode.childNodes;
-		var contextNode = this.parseAjxpNode(rootNode);
+		var contextNode = this.parseNode(rootNode);
 		origNode.replaceBy(contextNode);
 		
 		// CHECK FOR MESSAGE OR ERRORS
@@ -92,7 +92,7 @@ Class.create("RemoteNodeProvider", {
 		// NOW PARSE CHILDREN
 		var children = XPathSelectNodes(rootNode, "tree");
 		children.each(function(childNode){
-			var child = this.parseAjxpNode(childNode);
+			var child = this.parseNode(childNode);
 			origNode.addChild(child);
 			if(childCallback){
 				childCallback(child);
@@ -104,12 +104,12 @@ Class.create("RemoteNodeProvider", {
 		}
 	},
 	/**
-	 * Parses XML Node and create AjxpNode
+	 * Parses XML Node and create Node
 	 * @param xmlNode XMLNode
-	 * @returns AjxpNode
+	 * @returns Node
 	 */
-	parseAjxpNode : function(xmlNode){
-		var node = new AjxpNode(
+	parseNode : function(xmlNode){
+		var node = new Node(
 			xmlNode.getAttribute('filename'), 
 			(xmlNode.getAttribute('is_file') == "1" || xmlNode.getAttribute('is_file') == "true"), 
 			xmlNode.getAttribute('text'),

@@ -1,13 +1,12 @@
 module.exports = 
 {
-	"ajxpResourcesFolder" : "plugins\/gui.ajax\/res",
-	"ajxpServerAccess" : "index.php",
+	"ajxpResourcesFolder" : "module\/ui\/main",
 	"zipEnabled" : true,
 	"multipleFilesDownloadEnabled" : true,
 	"customWording" : {
 		"welcomeMessage" : "",
 		"title" : "AjaXplorer",
-		"icon" : "plugins\/gui.ajax\/AjxpLogo250.png",
+		"icon" : "module\/ui\/main\/Logo250.png",
 		"iconWidth" : "250px",
 		"iconHeight" : "50px",
 		"iconOnly" : true,
@@ -841,5 +840,5 @@ module.exports =
 	"password_min_length" : "8",
 	"SECURE_TOKEN" : "92ec48f8e2b904e4d48e1452f4fb2c52",
 	"streaming_supported" : "true",
-	"theme" : "umbra"
+	"theme" : "mybase"
 }

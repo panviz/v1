@@ -144,7 +144,7 @@ Class.create("ActionsManager", {
 	},
 	
 	/**
-	 * DEPRECATED, use getActionsForAjxpWidget instead!
+	 * DEPRECATED, use getActionsForWidget instead!
 	 * @returns $A()
 	 */
 	getInfoPanelActions : function(){
@@ -162,7 +162,7 @@ Class.create("ActionsManager", {
 	 * @param widgetId String
 	 * @returns $A()
 	 */
-	getActionsForAjxpWidget : function(ajxpClassName, widgetId){
+	getActionsForWidget : function(ajxpClassName, widgetId){
 		var actions = $A([]);
 		this.actions.each(function(pair){
 			var action = pair.value;
@@ -504,10 +504,10 @@ Class.create("ActionsManager", {
 		
 		if(ajaxplorer && ajaxplorer.getContextNode()){ 
 			var crtNode = ajaxplorer.getContextNode();
-			crtRecycle = (crtNode.getAjxpMime() == "ajxp_recycle");
-			crtInZip = crtNode.hasAjxpMimeInBranch("ajxp_browsable_archive");
+			crtRecycle = (crtNode.getMime() == "ajxp_recycle");
+			crtInZip = crtNode.hasMimeInBranch("ajxp_browsable_archive");
 			crtIsRoot = crtNode.isRoot();
-			crtMime = crtNode.getAjxpMime();			
+			crtMime = crtNode.getMime();			
 		}	
 		this.actions.each(function(pair){			
 			pair.value.fireContextChange(this.usersEnabled, 

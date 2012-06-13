@@ -1,7 +1,7 @@
 /**
  * The tree object. Encapsulate the webfx tree.
  */
-Class.create("FoldersTree", AjxpPane, {
+Class.create("FoldersTree", Pane, {
 	
 	__implements : ["IFocusable", "IContextMenuable"],
 
@@ -46,7 +46,7 @@ Class.create("FoldersTree", AjxpPane, {
 		};
 		
 		var filter = this.createFilter();
-		var fakeRootNode = new AjxpNode("/", true, MessageHash[391], "folder.png");
+		var fakeRootNode = new Node("/", true, MessageHash[391], "folder.png");
 		fakeRootNode._isLoaded = true;
 		this.tree = new AJXPTree(fakeRootNode,  action, filter);		
 				
@@ -57,7 +57,7 @@ Class.create("FoldersTree", AjxpPane, {
 			Event.stop(e);
 		}.bind(this.tree));
 
-		AjxpDroppables.add(this.tree.id);
+		Droppables.add(this.tree.id);
 		if(!this.tree.open && !this.tree.loading) {
 			this.tree.toggle();		
 		}
@@ -79,7 +79,7 @@ Class.create("FoldersTree", AjxpPane, {
 
         var rootNodeObs = function(event){
 			var ajxpRootNode = event.memo;
-			this.tree.setAjxpRootNode(ajxpRootNode);
+			this.tree.setRootNode(ajxpRootNode);
 			this.changeRootLabel(ajxpRootNode.getLabel(), ajxpRootNode.getIcon());
 		}.bind(this);
 		document.observe("ajaxplorer:root_node_changed", rootNodeObs);
@@ -127,13 +127,13 @@ Class.create("FoldersTree", AjxpPane, {
 		var z = (displayOptions.indexOf("z") > -1);
 		var f = (displayOptions.indexOf("f") > -1);
 		var filter = function(ajxpNode){
-			return (((d && !ajxpNode.isLeaf()) || (f && ajxpNode.isLeaf()) || (z && (ajxpNode.getAjxpMime()=="zip" || ajxpNode.getAjxpMime()=="ajxp_browsable_archive"))) && (ajxpNode.getParent().getAjxpMime() != "ajxp_recycle"));
+			return (((d && !ajxpNode.isLeaf()) || (f && ajxpNode.isLeaf()) || (z && (ajxpNode.getMime()=="zip" || ajxpNode.getMime()=="ajxp_browsable_archive"))) && (ajxpNode.getParent().getMime() != "ajxp_recycle"));
 		};
 		return filter;		
 	},
 	
 	/**
-	 * Focus implementation of IAjxpWidget
+	 * Focus implementation of IWidget
 	 */
 	focus: function(){
 		if(webFXTreeHandler.selected)
@@ -145,7 +145,7 @@ Class.create("FoldersTree", AjxpPane, {
 	},
 	
 	/**
-	 * Blur implementation of IAjxpWidget
+	 * Blur implementation of IWidget
 	 */
 	blur: function(){
 		if(webFXTreeHandler.selected)
@@ -157,7 +157,7 @@ Class.create("FoldersTree", AjxpPane, {
 	},
 		
 	/**
-	 * Resize implementation of IAjxpWidget
+	 * Resize implementation of IWidget
 	 */
 	resize : function(){
 		fitHeightToBottom(this.treeContainer, null);
@@ -168,7 +168,7 @@ Class.create("FoldersTree", AjxpPane, {
 	},
 	
 	/**
-	 * ShowElement implementation of IAjxpWidget
+	 * ShowElement implementation of IWidget
 	 */
 	showElement : function(show){
 		if (show) this.treeContainer.show();

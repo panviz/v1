@@ -1,7 +1,7 @@
 /**
  * A dynamic panel displaying details on the current selection. Works with Templates.
  */
-Class.create("InfoPanel", AjxpPane, {
+Class.create("InfoPanel", Pane, {
 
 	/**
 	 * Constructor
@@ -88,7 +88,7 @@ Class.create("InfoPanel", AjxpPane, {
 	 */
 	update : function(objectOrEvent){
 		if(!this.htmlElement) return;
-        if(objectOrEvent.__className && objectOrEvent.__className == "AjxpNode"){
+        if(objectOrEvent.__className && objectOrEvent.__className == "Node"){
             var passedNode = objectOrEvent;
         }
         var userSelection = ajaxplorer.getUserSelection();
@@ -162,7 +162,7 @@ Class.create("InfoPanel", AjxpPane, {
 		if(uniqNode) isFile = uniqNode.isLeaf();
 		this.evalTemplateForMime((isFile ? 'generic_file' : 'generic_dir'), uniqNode);
 		
-		var extension = getAjxpMimeType(uniqNode);
+		var extension = getMimeType(uniqNode);
 		if(extension != "" && this.registeredMimes.get(extension)){
 			this.evalTemplateForMime(extension, uniqNode);
 		}
@@ -210,7 +210,7 @@ Class.create("InfoPanel", AjxpPane, {
 	/**
 	 * Find template and evaluate it
 	 * @param mimeType String
-	 * @param fileNode AjxpNode
+	 * @param fileNode Node
 	 * @param tArgs Object
 	 */
 	evalTemplateForMime : function(mimeType, fileNode, tArgs){
@@ -301,7 +301,7 @@ Class.create("InfoPanel", AjxpPane, {
 	 */
 	addActions : function(selectionType){
         if(this.options.skipActions) return;
-		var actions = ajaxplorer.actionBar.getActionsForAjxpWidget("InfoPanel", this.htmlElement.id);
+		var actions = ajaxplorer.actionBar.getActionsForWidget("InfoPanel", this.htmlElement.id);
 		if(!actions.length) return;
 		var actionString = '<div class="panelHeader infoPanelGroup">'+MessageHash[5]+'</div><div class="infoPanelActions">';
 		var count = 0;
@@ -318,12 +318,12 @@ Class.create("InfoPanel", AjxpPane, {
 	},
 	/**
 	 * Use editors extensions to find a preview element for the current node
-	 * @param ajxpNode AjxpNode
+	 * @param ajxpNode Node
 	 * @param getTemplateElement Boolean If true, will return a fake div that can be inserted in template and replaced later
 	 * @returns String
 	 */
 	getPreviewElement : function(ajxpNode, getTemplateElement){
-		var editors = ajaxplorer.findEditorsForMime(ajxpNode.getAjxpMime(), true);
+		var editors = ajaxplorer.findEditorsForMime(ajxpNode.getMime(), true);
 		if(editors && editors.length)
 		{
 			ajaxplorer.loadEditorResources(editors[0].resourcesManager);

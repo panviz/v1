@@ -54,7 +54,7 @@ Class.create("Repository", {
 			this.label = MessageHash[391];
 		}
 		this.id = id;
-		this.icon = ajxpResourcesFolder+'/images/actions/16/network-wired.png';
+		this.icon = ajxpResourcesFolder+'/image/actions/16/network-wired.png';
 		this.resourcesManager = new ResourcesManager();
 		if(xmlDef) this.loadFromXml(xmlDef);
 	},
@@ -141,7 +141,7 @@ Class.create("Repository", {
 	},
 
     getOverlay : function(){
-        return (this.getOwner() ? resolveImageSource("shared.png", "/images/overlays/ICON_SIZE", 8) : "");
+        return (this.getOwner() ? resolveImageSource("shared.png", "/image/overlays/ICON_SIZE", 8) : "");
     },
 	
 	/**

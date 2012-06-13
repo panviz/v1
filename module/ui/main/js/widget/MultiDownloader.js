@@ -37,7 +37,7 @@
 
 		var new_row_button = new Element('a');
 		new_row_button.href= this.downloadUrl + fileName;		
-		new_row_button.insert('<img src="'+ajxpResourcesFolder+'/images/actions/16/download_manager.png" height="16" width="16" align="absmiddle" border="0"> '+(label ? label : getBaseName(fileName)));
+		new_row_button.insert('<img src="'+ajxpResourcesFolder+'/image/actions/16/download_manager.png" height="16" width="16" align="absmiddle" border="0"> '+(label ? label : getBaseName(fileName)));
 
 		new_row_button.multidownloader = this;
 		
@@ -76,7 +76,7 @@
 		if(this.loading) return;
 		addLightboxMarkupToElement(this.list_target);
 		var img = new Element('img', {
-			src : ajxpResourcesFolder+'/images/loadingImage.gif'
+			src : ajxpResourcesFolder+'/image/loadingImage.gif'
 		});
 		var overlay = $(this.list_target).down("#element_overlay");
 		overlay.insert(img);

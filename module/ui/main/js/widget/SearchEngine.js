@@ -1,7 +1,7 @@
 /**
  * The Search Engine abstraction.
  */
-Class.create("SearchEngine", AjxpPane, {
+Class.create("SearchEngine", Pane, {
 
 	/**
 	 * @var HTMLElement
@@ -296,7 +296,7 @@ Class.create("SearchEngine", AjxpPane, {
 	/**
 	 * Add a result to the list - Highlight search term
 	 * @param folderName String
-	 * @param ajxpNode AjxpNode
+	 * @param ajxpNode Node
 	 * @param metaFound String
 	 */
 	addResult : function(folderName, ajxpNode, metaFound){
@@ -369,7 +369,7 @@ Class.create("SearchEngine", AjxpPane, {
 	},
 	/**
 	 * Get a folder content and searches its children 
-	 * Should reference the IAjxpNodeProvider instead!! Still a "ls" here!
+	 * Should reference the INodeProvider instead!! Still a "ls" here!
 	 * @param currentFolder String
 	 */
 	searchFolderContent : function(currentFolder){
@@ -419,7 +419,7 @@ Class.create("SearchEngine", AjxpPane, {
 			{
 				if (nodes[i].tagName == "tree") 
 				{
-					var node = this.parseAjxpNode(nodes[i]);					
+					var node = this.parseNode(nodes[i]);					
 					this._searchNode(node, currentFolder);
 					if(!node.isLeaf())
 					{
@@ -444,7 +444,7 @@ Class.create("SearchEngine", AjxpPane, {
 		{
 			if (nodes[i].tagName == "tree") 
 			{
-				var ajxpNode = this.parseAjxpNode(nodes[i]);
+				var ajxpNode = this.parseNode(nodes[i]);
                 if(this.hasMetaSearch()){
                     var searchCols = this.getSearchColumns();
                     var added = false;
@@ -489,12 +489,12 @@ Class.create("SearchEngine", AjxpPane, {
 		}
 	},
 	/**
-	 * Parses an XMLNode and create an AjxpNode
+	 * Parses an XMLNode and create an Node
 	 * @param xmlNode XMLNode
-	 * @returns AjxpNode
+	 * @returns Node
 	 */
-	parseAjxpNode : function(xmlNode){
-		var node = new AjxpNode(
+	parseNode : function(xmlNode){
+		var node = new Node(
 			xmlNode.getAttribute('filename'), 
 			(xmlNode.getAttribute('is_file') == "1" || xmlNode.getAttribute('is_file') == "true"), 
 			xmlNode.getAttribute('text'),

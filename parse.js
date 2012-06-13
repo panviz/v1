@@ -40,10 +40,20 @@ var xml2Json = function(files){
 
 var test = function(files){
 	files.forEach(function(file){
-		if (file.match(/Ajxp.*\.js$/g)) {
+		if (file.match(/\.js/g)) {
+			var data = '';
 			var filename = path + '/module/' + file;
-			console.log(filename)
-			fs.renameSync(filename, filename.replace(/Ajxp/,''));
+			var f = new wrench.LineReader(filename);
+			while(f.hasNextLine()) {
+				var line = f.getNextLine();
+				var exp = /ajaxplorer:/;
+				if (line.match(exp)){
+					console.log(filename)
+					line = line.replace(exp, 'application:');
+				}
+				data += line;
+			}
+			fs.writeFileSync(filename, data);
 		}
 	})
 }

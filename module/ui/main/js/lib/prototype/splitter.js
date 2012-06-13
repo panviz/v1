@@ -32,7 +32,7 @@
  * @return jQuery
  * @author Dave Methvin (dave.methvin@gmail.com)
  */
-Class.create("Splitter", AjxpPane, {
+Class.create("Splitter", Pane, {
 
     __implements: ["IActionProvider"],
 

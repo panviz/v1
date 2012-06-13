@@ -1,7 +1,7 @@
 /**
  * Show/Edit Item in embedded window
  */
-Class.create("View", AjxpPane, {
+Class.create("View", Pane, {
 	
 	__implements : ["IFocusable", "IContextMenuable"],
 
@@ -281,20 +281,20 @@ Class.create("View", AjxpPane, {
 		var currentDir = ajaxplorer.getContextNode().getPath();
 		if (currentDir != '/'){currentDir += "/"};
 		var defaultFileName = currentDir + '.' + this.mime;
-		var defaultFile = new AjxpNode(defaultFileName);
+		var defaultFile = new Node(defaultFileName);
 		//TODO add 3d parameter selectionSource
 		//add default file to selection within current context
 		ajaxplorer.updateContextData(null, [defaultFile]); 
 		this.open(ajaxplorer.getUserSelection());		
 	},
 	/**
-	 * Implementation of the IAjxpWidget methods
+	 * Implementation of the IWidget methods
 	 */
 	getDomNode : function(){
 		return this.element;
 	},
 	/**
-	 * Implementation of the IAjxpWidget methods
+	 * Implementation of the IWidget methods
 	 */
 	destroy : function(){
         this._clearObservers();
@@ -438,7 +438,7 @@ Class.create("View", AjxpPane, {
 	
 	/**
 	 * Open note in new context
-	 * @param userSelection AjxpDataModel the data model
+	 * @param userSelection DataModel the data model
 	 */
 	open : function(userSelection){
 		this.userSelection = userSelection;
@@ -567,7 +567,7 @@ Class.create("View", AjxpPane, {
 	/**
 	 * TODO move somewhere?
 	 * Called by the other components to create a preview (thumbnail) of a given node
-	 * @param ajxpNode AjxpNode The node to display
+	 * @param ajxpNode Node The node to display
 	 * @param rich Boolean whether to display a rich content (flash, video, etc...) or not (image)
 	 * @returns Element
 	 */
@@ -593,7 +593,7 @@ Class.create("View", AjxpPane, {
 	/**
 	 * TODO move somewhere?
 	 * Gets the standard thumbnail source for previewing the node
-	 * @param ajxpNode AjxpNode
+	 * @param ajxpNode Node
 	 * @returns String
 	 */
 	getThumbnailSource : function(ajxpNode){

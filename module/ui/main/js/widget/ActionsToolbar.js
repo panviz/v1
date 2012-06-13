@@ -2,7 +2,7 @@
  * Toolbar to display actions buttons
  */
 Class.create("ActionsToolbar", {
-	__implements : "IAjxpWidget",
+	__implements : "IWidget",
 	/**
 	 * Constructor
 	 * @param oElement Element The dom node
@@ -496,7 +496,7 @@ Class.create("ActionsToolbar", {
 		}
 	},
 	/**
-	 * IAjxpWidget Implementation. Empty.
+	 * IWidget Implementation. Empty.
 	 * @param show Boolean
 	 */
 	showElement : function(show){}	

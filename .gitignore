@@ -1,4 +1,5 @@
 data/
+config/registry.xml
 module/ui/main/js/all.js
 module/ui/main/themes/mybase/css/all.css
 module/ui/main/themes/manager/css/all.css

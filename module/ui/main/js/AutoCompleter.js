@@ -2,7 +2,7 @@
  * Encapsulation of the Prototype Autocompleter for AjaXplorer purposes.
  * Should be ported for local provides
  */
-Class.create("AjxpAutocompleter", Autocompleter.Base, {
+Class.create("Autocompleter", Autocompleter.Base, {
   /**
    * Constructor
    * @param element HTMLElement

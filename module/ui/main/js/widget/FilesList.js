@@ -4,7 +4,7 @@
  */
 Class.create("FilesList", SelectableElements, {
 	
-	__implements : ["IAjxpWidget", "IFocusable", "IContextMenuable", "IActionProvider"],
+	__implements : ["IWidget", "IFocusable", "IContextMenuable", "IActionProvider"],
 
     __allObservers : $A(),
 	/**
@@ -136,14 +136,14 @@ Class.create("FilesList", SelectableElements, {
     },
 
 	/**
-	 * Implementation of the IAjxpWidget methods
+	 * Implementation of the IWidget methods
 	 */
 	getDomNode : function(){
 		return this.htmlElement;
 	},
 	
 	/**
-	 * Implementation of the IAjxpWidget methods
+	 * Implementation of the IWidget methods
 	 */
 	destroy : function(){
         this._clearObservers();
@@ -471,7 +471,7 @@ Class.create("FilesList", SelectableElements, {
 					ajaxplorer.user.savePreference("columns_size");
 				}.bind(this), 2000);				
 			}.bind(this) );
-			this._sortableTable = new AjxpSortable(oElement, this.getVisibleSortTypes(), $('selectable_div_header'));
+			this._sortableTable = new Sortable(oElement, this.getVisibleSortTypes(), $('selectable_div_header'));
 			this._sortableTable.onsort = function(){
 				this.redistributeBackgrounds();
 				var ctxt = ajaxplorer.getContextNode();
@@ -831,7 +831,7 @@ Class.create("FilesList", SelectableElements, {
 		
 	/**
 	 * Populates the list with the children of the passed contextNode
-	 * @param contextNode AjxpNode
+	 * @param contextNode Node
 	 */
 	fill : function(contextNode){
 		this.imagesHash = new Hash();
@@ -839,28 +839,28 @@ Class.create("FilesList", SelectableElements, {
 			this.protoMenu.removeElements('.ajxp_draggable');
 			this.protoMenu.removeElements('#selectable_div');
 		}
-		for(var i = 0; i< AllAjxpDroppables.length;i++){
-			var el = AllAjxpDroppables[i];
+		for(var i = 0; i< AllDroppables.length;i++){
+			var el = AllDroppables[i];
 			if(this.isItem(el)){
-				Droppables.remove(AllAjxpDroppables[i]);
-				delete(AllAjxpDroppables[i]);
+				Droppables.remove(AllDroppables[i]);
+				delete(AllDroppables[i]);
 			}
 		}
-		for(i = 0;i< AllAjxpDraggables.length;i++){
-			if(AllAjxpDraggables[i] && AllAjxpDraggables[i].element && this.isItem(AllAjxpDraggables[i].element)){
-                if(AllAjxpDraggables[i].element.IMAGE_ELEMENT){
+		for(i = 0;i< AllDraggables.length;i++){
+			if(AllDraggables[i] && AllDraggables[i].element && this.isItem(AllDraggables[i].element)){
+                if(AllDraggables[i].element.IMAGE_ELEMENT){
                     try{
-                        if(AllAjxpDraggables[i].element.IMAGE_ELEMENT.destroyElement){
-                            AllAjxpDraggables[i].element.IMAGE_ELEMENT.destroyElement();
+                        if(AllDraggables[i].element.IMAGE_ELEMENT.destroyElement){
+                            AllDraggables[i].element.IMAGE_ELEMENT.destroyElement();
                         }
-                        AllAjxpDraggables[i].element.IMAGE_ELEMENT = null;
-                        delete AllAjxpDraggables[i].element.IMAGE_ELEMENT;
+                        AllDraggables[i].element.IMAGE_ELEMENT = null;
+                        delete AllDraggables[i].element.IMAGE_ELEMENT;
                     }catch(e){}
                 }
-				Element.remove(AllAjxpDraggables[i].element);
+				Element.remove(AllDraggables[i].element);
 			}			
 		}
-		AllAjxpDraggables = $A([]);
+		AllDraggables = $A([]);
 				
 		var items = this.getSelectedItems();
 		var setItemSelected = this.setItemSelected.bind(this);
@@ -1059,7 +1059,7 @@ Class.create("FilesList", SelectableElements, {
 	
 	/**
 	 * Populate a node as a TR element
-	 * @param ajxpNode AjxpNode
+	 * @param ajxpNode Node
 	 * @returns HTMLElement
 	 */
 	ajxpNodeToTableRow : function(ajxpNode){		
@@ -1140,8 +1140,8 @@ Class.create("FilesList", SelectableElements, {
 				
 				// Defer Drag'n'drop assignation for performances
 				window.setTimeout(function(){
-					if(ajxpNode.getAjxpMime() != "ajxp_recycle"){
-						var newDrag = new AjxpDraggable(
+					if(ajxpNode.getMime() != "ajxp_recycle"){
+						var newDrag = new Draggable(
 							innerSpan, 
 							{
 								revert: true,
@@ -1156,7 +1156,7 @@ Class.create("FilesList", SelectableElements, {
 					}
 					if(!ajxpNode.isLeaf())
 					{
-						AjxpDroppables.add(innerSpan);
+						Droppables.add(innerSpan);
 					}
 				}.bind(this), 500);
 				
@@ -1221,7 +1221,7 @@ Class.create("FilesList", SelectableElements, {
 	
 	/**
 	 * Populates a node as a thumbnail div
-	 * @param ajxpNode AjxpNode
+	 * @param ajxpNode Node
 	 * @returns HTMLElement
 	 */
 	ajxpNodeToDiv : function(ajxpNode){
@@ -1229,7 +1229,7 @@ Class.create("FilesList", SelectableElements, {
 		var metadata = ajxpNode.getMetadata();
 				
 		var innerSpan = new Element('span', {style: "cursor:default;"});
-		var editors = ajaxplorer.findEditorsForMime((ajxpNode.isLeaf() ? ajxpNode.getAjxpMime() : "mime_folder"), true);
+		var editors = ajaxplorer.findEditorsForMime((ajxpNode.isLeaf() ? ajxpNode.getMime() : "mime_folder"), true);
 		var textNode = ajxpNode.getLabel();
 		var img = View.prototype.getPreview(ajxpNode);
 		var label = new Element('div', {
@@ -1314,7 +1314,7 @@ Class.create("FilesList", SelectableElements, {
 		// Defer Drag'n'drop assignation for performances
 		if(!ajxpNode.isRecycle()){
 			window.setTimeout(function(){
-				var newDrag = new AjxpDraggable(newRow, {
+				var newDrag = new Draggable(newRow, {
 					revert: true,
 					ghosting: true,
 					scroll: ($('tree_container') ? 'tree_container' : null),
@@ -1324,7 +1324,7 @@ Class.create("FilesList", SelectableElements, {
 		}
 		if(!ajxpNode.isLeaf())
 		{
-			AjxpDroppables.add(newRow);
+			Droppables.add(newRow);
 		}		
 		return newRow;
 	},
@@ -1530,7 +1530,7 @@ Class.create("FilesList", SelectableElements, {
 	 */
 	fireDblClick : function (e) 
 	{
-		if(ajaxplorer.getContextNode().getAjxpMime() == "ajxp_recycle")
+		if(ajaxplorer.getContextNode().getMime() == "ajxp_recycle")
 		{
 			return; // DO NOTHING IN RECYCLE BIN
 		}

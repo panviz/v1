@@ -17,9 +17,9 @@
     "registry_contributions": {
       "client_configs": {
         "template_part": {
-          "theme": "umbra",
+          "theme": "mybase",
           "ajxpId": "sidebar_splitter",
-          "ajxpClass": "AjxpPane",
+          "ajxpClass": "Pane",
           "ajxpOptions": "{\"fit\":\"height\",\"fake\":\"option\"}",
           "$t": "<div id=\"folderPane\" ajxpClass=\"FoldersTree\" ajxpOptions='{\"display\":\"dz\",\"replaceScroller\":true}' ajxpPaneHeader=\"363\" ajxpPaneIcon=\"view_tree.png\" style=\"margin:20px;\"></div><style>#sidebar_splitter{padding-bottom:20px;background-color:#A0C0A4;}</style>"
         }
@@ -61,7 +61,7 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var path;if(window.actionArguments && window.actionArguments.length>0){path = window.actionArguments[0];if(Object.isString(path)){path = new AjxpNode(path,false,getBaseName(path));}}else{userSelection = ajaxplorer.getUserSelection();if(userSelection && userSelection.isUnique() && (userSelection.hasDir() || userSelection.hasMime([\"zip\"]))){path = userSelection.getUniqueNode();}}if(path){ajaxplorer.updateContextData(path);}"
+                "$t": "var path;if(window.actionArguments && window.actionArguments.length>0){path = window.actionArguments[0];if(Object.isString(path)){path = new Node(path,false,getBaseName(path));}}else{userSelection = ajaxplorer.getUserSelection();if(userSelection && userSelection.isUnique() && (userSelection.hasDir() || userSelection.hasMime([\"zip\"]))){path = userSelection.getUniqueNode();}}if(path){ajaxplorer.updateContextData(path);}"
               },
               "serverCallback": {
                 "methodName": "switchAction"
@@ -247,7 +247,7 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var onLoad = function(oForm){$(oForm).down('span[id=\"delete_message\"]').update(MessageHash['ajxp_shared.11']);$(oForm).down('input[name=\"ajxp_mime\"]').value = ajaxplorer.getUserSelection().getUniqueNode().getAjxpMime();};modal.showDialogForm('Delete', 'delete_shared_form', onLoad, function(){var oForm = modal.getForm();ajaxplorer.getUserSelection().updateFormOrUrl(oForm);ajaxplorer.actionBar.submitForm(oForm);hideLightBox(true);return false;});"
+                "$t": "var onLoad = function(oForm){$(oForm).down('span[id=\"delete_message\"]').update(MessageHash['ajxp_shared.11']);$(oForm).down('input[name=\"ajxp_mime\"]').value = ajaxplorer.getUserSelection().getUniqueNode().getMime();};modal.showDialogForm('Delete', 'delete_shared_form', onLoad, function(){var oForm = modal.getForm();ajaxplorer.getUserSelection().updateFormOrUrl(oForm);ajaxplorer.actionBar.submitForm(oForm);hideLightBox(true);return false;});"
               },
               "clientForm": {
                 "id": "delete_shared_form",

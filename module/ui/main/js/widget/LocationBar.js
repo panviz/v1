@@ -2,7 +2,7 @@
  * Container for location components, go to parent, refresh.
  */
 Class.create("LocationBar", {
-	__implements : ["IAjxpWidget", "IFocusable"],
+	__implements : ["IWidget", "IFocusable"],
 	_defaultGotoIcon : 'media-playback-start.png',
 	_reloadGotoIcon : 'reload.png',
 	_modified : false,
@@ -112,7 +112,7 @@ Class.create("LocationBar", {
 				this.submitPath();
 			}
 		}.bind(this) };
-		this.autoComp = new AjxpAutocompleter(this.currentPath, "autocomplete_choices", null, autoCompOptions);
+		this.autoComp = new Autocompleter(this.currentPath, "autocomplete_choices", null, autoCompOptions);
 		this.currentPath.observe("keydown", function(event){
 			if(event.keyCode == 9) return false;
 			if(!this._modified && (this._beforeModified != this.currentPath.getValue())){
@@ -161,13 +161,13 @@ Class.create("LocationBar", {
 		}else{
 			var url = this.currentPath.value.stripScripts();
 			if(url == '') return false;	
-			var node = new AjxpNode(url, false);
+			var node = new Node(url, false);
 			var parts = url.split("##");
 			if(parts.length == 2){
 				var data = new Hash();
 				data.set("new_page", parts[1]);
 				url = parts[0];
-				node = new AjxpNode(url);
+				node = new Node(url);
 				node.getMetadata().set("paginationData", data);
 			}
 			// Manually entered, stat path before calling
@@ -182,12 +182,12 @@ Class.create("LocationBar", {
 	},
 	/**
 	 * Observer for node change
-	 * @param newNode AjxpNode
+	 * @param newNode Node
 	 */
 	updateLocationBar: function (newNode)
 	{
 		if(Object.isString(newNode)){
-			newNode = new AjxpNode(newNode);
+			newNode = new Node(newNode);
 		}
 		var newPath = newNode.getPath();
 		if(newNode.getMetadata().get('paginationData')){
@@ -241,14 +241,14 @@ Class.create("LocationBar", {
 	},
 	
 	/**
-	 * Implementation of the IAjxpWidget methods
+	 * Implementation of the IWidget methods
 	 */	
 	getDomNode : function(){
 		return this.element;
 	},
 	
 	/**
-	 * Implementation of the IAjxpWidget methods
+	 * Implementation of the IWidget methods
 	 */	
 	destroy : function(){
 		this.element = null;

@@ -1,7 +1,7 @@
 /*
- * Description : AjxpPane interface
+ * Description : Pane interface
  */
-Interface.create("IAjxpWidget", {		
+Interface.create("IWidget", {		
 	resize : function(){},
 	showElement : function(show){},
 	getDomNode : function(){},

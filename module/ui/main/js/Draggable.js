@@ -12,14 +12,14 @@ document.observe("ajaxplorer:loaded", function(){
 		}
 	}});	
 });
-var AllAjxpDraggables = $A([]);
-var AllAjxpDroppables = $A([]);
+var AllDraggables = $A([]);
+var AllDroppables = $A([]);
 Event.observe(window, "unload", function(){
 	Draggables.removeObserver(timerClearObserver);
-	AllAjxpDraggables.each(function(el){
+	AllDraggables.each(function(el){
 		el.destroy();
 	});
-	AllAjxpDroppables.each(function(el){
+	AllDroppables.each(function(el){
 		Droppables.remove(el);
 	});
 });
@@ -27,7 +27,7 @@ Event.observe(window, "unload", function(){
 /**
  * AjaXplorer encapsulation of the Prototype Draggable
  */
-Class.create("AjxpDraggable", Draggable, {
+Class.create("Draggable", Draggable, {
 	/**
 	 * Constructor
 	 * @param $super klass Reference to superclass
@@ -48,7 +48,7 @@ Class.create("AjxpDraggable", Draggable, {
 		this.options.delay = (Prototype.Browser.IE?350:200);
 		this.component = component;
 		this.componentType = componentType;
-		AllAjxpDraggables.push(this);
+		AllDraggables.push(this);
 	},
 	
 	/**
@@ -381,7 +381,7 @@ Class.create("AjxpDraggable", Draggable, {
 			
 });
 
-var AjxpDroppables = {
+var Droppables = {
 
 	options : 
 	{
@@ -422,6 +422,6 @@ var AjxpDroppables = {
 
 	add: function(element){
 		Droppables.add(element, this.options);
-		AllAjxpDroppables.push($(element));
+		AllDroppables.push($(element));
 	}	
 };

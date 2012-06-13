@@ -5,7 +5,7 @@ Class.create("PropertyPanel", {
 
 	/**
 	 * Constructor
-	 * @param userSelection AjxpDataModel
+	 * @param userSelection DataModel
 	 * @param htmlElement HTMLElement
 	 */
 	initialize: function(userSelection, htmlElement){

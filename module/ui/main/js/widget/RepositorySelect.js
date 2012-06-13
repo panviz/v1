@@ -2,7 +2,7 @@
  * A selector for displaying repository list. Will hook to ajaxplorer:repository_list_refreshed.
  */
 Class.create("RepositorySelect", {
-	__implements: "IAjxpWidget",
+	__implements: "IWidget",
 	_defaultString: 'No Repository',
 	_defaultIcon: 'network-wired.png',
 	/**
@@ -20,14 +20,14 @@ Class.create("RepositorySelect", {
 	},
 	
 	/**
-	 * Implementation of the IAjxpWidget methods
+	 * Implementation of the IWidget methods
 	 */	
 	getDomNode : function(){
 		return this.element;
 	},
 	
 	/**
-	 * Implementation of the IAjxpWidget methods
+	 * Implementation of the IWidget methods
 	 */	
 	destroy : function(){
 		this.element = null;
@@ -135,7 +135,7 @@ Class.create("RepositorySelect", {
         }
 
         var menuItems = $A();
-        var otherActions = ajaxplorer.actionBar.getActionsForAjxpWidget("RepositorySelect", this.element.id).each(function(otherAction){
+        var otherActions = ajaxplorer.actionBar.getActionsForWidget("RepositorySelect", this.element.id).each(function(otherAction){
             menuItems.push({
                 name: otherAction.getKeyedText(),
                 alt: otherAction.options.title,

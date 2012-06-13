@@ -54,21 +54,21 @@ Class.create("Connexion", {
      * Show a small loader
      */
     showLoader : function(){
-        if(!$('AjxpConnexion-loader') && window.bootstrap.parameters.get("theme")){
+        if(!$('Connexion-loader') && window.bootstrap.parameters.get("theme")){
             var img = new Element("img", {
-                src: ajxpResourcesFolder+"/images/ajxp-connexion-loader.gif",
-                id: 'AjxpConnexion-loader',
+                src: ajxpResourcesFolder+"/image/connexion-loader.gif",
+                id: 'Connexion-loader',
                 style: 'position:absolute; top:2px; right:2px; z-index:40000; display:none;'});
             $$('body')[0].insert(img);
         }
-        if($('AjxpConnexion-loader')) $('AjxpConnexion-loader').show();
+        if($('Connexion-loader')) $('Connexion-loader').show();
     },
 
     /**
      * Hide a small loader
      */
     hideLoader : function(){
-        if($('AjxpConnexion-loader'))$('AjxpConnexion-loader').hide();
+        if($('Connexion-loader'))$('Connexion-loader').hide();
     },
 
 	/**

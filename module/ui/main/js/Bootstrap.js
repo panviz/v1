@@ -23,7 +23,7 @@ Class.create("Bootstrap", {
 		}		
 		Event.observe(document, 'dom:loaded', this._onDomLoaded.bind(this));
 		document.observe('ajaxplorer:actions_loaded', this._onActionsLoaded.bind(this));
-		document.observe('ajaxplorer:loaded', this._onAjaxplorerLoaded.bind(this));
+		document.observe('ajaxplorer:loaded', this._onApplicationLoaded.bind(this));
 	},
 	/**
 	 * Real loading action
@@ -65,7 +65,7 @@ Class.create("Bootstrap", {
 		window.zipEnabled = this.parameters.get("zipEnabled");
 		window.multipleFilesDownloadEnabled = this.parameters.get("multipleFilesDownloadEnabled");
 		document.fire("ajaxplorer:boot_loaded");
-		window.ajaxplorer = new Ajaxplorer(this.parameters.get("EXT_REP")||"", this.parameters.get("usersEnabled"), this.parameters.get("loggedUser"));
+		window.ajaxplorer = new Application(this.parameters.get("EXT_REP")||"", this.parameters.get("usersEnabled"), this.parameters.get("loggedUser"));
 		if(this.parameters.get("currentLanguage")){
 			window.ajaxplorer.currentLanguage = this.parameters.get("currentLanguage");
 		}
@@ -78,13 +78,13 @@ Class.create("Bootstrap", {
 	 */
 	detectBaseParameters : function(){
 		$$('script').each(function(scriptTag){
-			if(scriptTag.src.match("/js/ajaxplorer_boot") || scriptTag.src.match("/js/ajaxplorer/Bootstrap.js")){
-				if(scriptTag.src.match("/js/ajaxplorer_boot")){
+			if(scriptTag.src.match("/js/boot") || scriptTag.src.match("/js/Bootstrap.js")){
+				if(scriptTag.src.match("/js/boot")){
 					this.parameters.set("debugMode", false);
 				}else{
 					this.parameters.set("debugMode", true);
 				}
-                var src = scriptTag.src.replace('/js/ajaxplorer/Bootstrap.js','').replace('/js/ajaxplorer_boot.js', '').replace('/js/ajaxplorer_boot_protolegacy.js', '');
+                var src = scriptTag.src.replace('/js/Bootstrap.js','').replace('/js/boot.js', '').replace('/js/boot_protolegacy.js', '');
                 if(src.indexOf("?")!=-1) src = src.split("?")[0];
 				this.parameters.set("ajxpResourcesFolder", src);
 			}
@@ -118,7 +118,7 @@ Class.create("Bootstrap", {
 			var customWording = this.parameters.get("customWording");
 			html+='	<div id="progressBox" class="dialogBox" style="width: 320px;display:block; top:30%; z-index:2002; left:40%; position:absolute; background-color:#fff; padding:0;">';
 			html+='	<div align="left" class="dialogContent" style="color:#676965; font-family:Trebuchet MS,sans-serif; font-size:11px; font-weight:normal; left:10px; padding:10px;">';
-			var icon = customWording.icon || ajxpResourcesFolder+'/images/ICON.png';
+			var icon = customWording.icon || ajxpResourcesFolder+'/image/ICON.png';
 			var title = customWording.title || "AjaXplorer";
 			var iconWidth = customWording.iconWidth || '35px';
 			var fontSize = customWording.titleFontSize || '35px';
@@ -150,8 +150,8 @@ Class.create("Bootstrap", {
 			animate		: true,										// Animate the progress? - default: true
 			showText	: false,									// show text with percentage in next to the progressbar? - default : true
 			width		: 154,										// Width of the progressbar - don't forget to adjust your image too!!!
-			boxImage	: window.ajxpResourcesFolder+'/images/progress_box.gif',			// boxImage : image around the progress bar
-			barImage	: window.ajxpResourcesFolder+'/images/progress_bar.gif',	// Image to use in the progressbar. Can be an array of images too.
+			boxImage	: window.ajxpResourcesFolder+'/image/progress_box.gif',			// boxImage : image around the progress bar
+			barImage	: window.ajxpResourcesFolder+'/image/progress_bar.gif',	// Image to use in the progressbar. Can be an array of images too.
 			height		: 11,										// Height of the progressbar - don't forget to adjust your image too!!!
 			onTick		: function(pbObj) { 
 				if(pbObj.getPercentage() == 100){
@@ -290,7 +290,7 @@ Class.create("Bootstrap", {
 			ajaxplorer.actionBar.defaultActions.set("file", "ext_select");
 		}
 	},
-	_onAjaxplorerLoaded : function(){
+	_onApplicationLoaded : function(){
 		debugger
 		this.insertAnalytics();
 		if(this.parameters.get("SELECTOR_DATA")){

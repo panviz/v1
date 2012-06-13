@@ -174,7 +174,7 @@ Class.create("Action", {
 		var crtIsRecycle = arguments[2];
 		var crtInZip = arguments[3];
 		var crtIsRoot = arguments[4];
-		var crtAjxpMime = arguments[5] || '';
+		var crtMime = arguments[5] || '';
 		if(this.options.listeners["contextChange"]){
 			window.listenerContext = this;
 			this.options.listeners["contextChange"].evalScripts();			
@@ -200,7 +200,7 @@ Class.create("Action", {
 			return this.hideForContext();
 		}
 		if(this.context.allowedMimes.length){
-			if( !this.context.allowedMimes.include("*") && !this.context.allowedMimes.include(crtAjxpMime)){
+			if( !this.context.allowedMimes.include("*") && !this.context.allowedMimes.include(crtMime)){
 				return this.hideForContext();
 			}
 		}

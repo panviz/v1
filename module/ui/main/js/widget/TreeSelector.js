@@ -18,7 +18,7 @@ Class.create("TreeSelector", {
 	},
 	/**
 	 * Load the tree data
-	 * @param rootNode AjxpNode
+	 * @param rootNode Node
 	 */
 	load : function(rootNode){
 		if(webFXTreeHandler && webFXTreeHandler.selected){
@@ -39,7 +39,7 @@ Class.create("TreeSelector", {
 			return (!ajxpNode.isLeaf());
 		};
 		if(!rootNode){
-			rootNode = new AjxpNode("/", false, MessageHash[373], "folder.png");
+			rootNode = new Node("/", false, MessageHash[373], "folder.png");
 		}
 		this.treeCopy = new AJXPTree(rootNode, this._nodeActionCallback, this._nodeFilter);							
 		this.treeContainer.update(this.treeCopy.toString());
@@ -48,7 +48,7 @@ Class.create("TreeSelector", {
 			Event.stop(e);
 		}.bind(this.treeCopy));
 		this.treeCopy.focus();
-		this.treeCopy.setAjxpRootNode(rootNode);
+		this.treeCopy.setRootNode(rootNode);
 		
 	},
 	/**
@@ -124,11 +124,11 @@ Class.create("TreeSelector", {
 	},
 	/**
 	 * Reload the root node of the tree
-	 * @param ajxpNode AjxpNode
+	 * @param ajxpNode Node
 	 */
-	resetAjxpRootNode : function(ajxpNode){
+	resetRootNode : function(ajxpNode){
 		this.treeCopy.ajxpNode.clear();
-		this.treeCopy.setAjxpRootNode(ajxpNode);		
+		this.treeCopy.setRootNode(ajxpNode);		
 		this.treeCopy.ajxpNode.load();
 	}
 });

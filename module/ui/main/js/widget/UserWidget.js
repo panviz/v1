@@ -2,7 +2,7 @@
  * Widget for users action, displayed on the right of the toolbar
  */
 Class.create("UserWidget", {
-	__implements : ["IAjxpWidget"],
+	__implements : ["IWidget"],
 	/**
 	 * Constructor
 	 * @param element HTMLElement
@@ -68,7 +68,7 @@ Class.create("UserWidget", {
 	updateActions : function(){
 										debugger
 		var menuItems = $A();
-		var actions = ajaxplorer.actionBar.getActionsForAjxpWidget("UserWidget", this.element.id).each(function(action){
+		var actions = ajaxplorer.actionBar.getActionsForWidget("UserWidget", this.element.id).each(function(action){
 			menuItems.push({
 				name: action.getKeyedText(),
 				alt: action.options.title,
@@ -123,14 +123,14 @@ Class.create("UserWidget", {
 		this.element.select(".user_widget_label").invoke((show ? 'show' : 'hide'));
 	},
 	/**
-	 * Implementation of the IAjxpWidget methods
+	 * Implementation of the IWidget methods
 	 */	
 	getDomNode : function(){
 		return this.element;
 	},
 	
 	/**
-	 * Implementation of the IAjxpWidget methods
+	 * Implementation of the IWidget methods
 	 */	
 	destroy : function(){
 		this.element.stopObserving("mouseover", this.mObs1 );

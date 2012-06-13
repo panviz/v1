@@ -20,7 +20,7 @@
 			this.addBookmarkObject = {
 				name: bmAction.getKeyedText(),
 				alt: bmAction.options.title,
-				image: ajxpResourcesFolder+'/images/actions/16/bookmark_add.png',
+				image: ajxpResourcesFolder+'/image/actions/16/bookmark_add.png',
 				callback: function(e){
 					var node = ajaxplorer.getContextNode();
                     node.getMetadata().set('ajxp_bookmarked', 'true');
@@ -48,7 +48,7 @@
 			var bookmark = {
 				name: childNodes[i].getAttribute('title'),
 				alt: childNodes[i].getAttribute('path'),
-				image: ajxpResourcesFolder+'/images/mimes/16/folder.png'
+				image: ajxpResourcesFolder+'/image/mimes/16/folder.png'
 			};
 			bookmark.callback = function(e){ajaxplorer.goTo(this.alt);}.bind(bookmark);
 			bookmark.moreActions = this.getContextActions(bookmark.alt, bookmark.name);
@@ -101,7 +101,7 @@
 		var removeAction = {
 				name: MessageHash[146],
 				alt: MessageHash[146],
-				image: ajxpResourcesFolder+'/images/actions/16/delete_bookmark.png',
+				image: ajxpResourcesFolder+'/image/actions/16/delete_bookmark.png',
 				disabled: false,
 				className: "edit",
 				callback: function(e){
@@ -112,7 +112,7 @@
 		var renameAction = {
 				name: MessageHash[6],
 				alt: MessageHash[6],
-				image: ajxpResourcesFolder+'/images/actions/16/applix.png',
+				image: ajxpResourcesFolder+'/image/actions/16/applix.png',
 				disabled: false,
 				className: "edit",
 				callback: function(e){
@@ -132,7 +132,7 @@
 	 */
 	toggleRenameForm : function(bmPath, bmTitle){
 		
-		modal.prepareHeader(MessageHash[225], ajxpResourcesFolder+'/images/actions/16/bookmark.png');
+		modal.prepareHeader(MessageHash[225], ajxpResourcesFolder+'/image/actions/16/bookmark.png');
 	 	var onLoad = function(newForm){
 	 		$(newForm).bm_path.value = bmPath;
 	 		$(newForm).bm_title.value = bmTitle;

@@ -5,5 +5,5 @@ js/lib/modernizr/modernizr.min.js
 js/lib/prototype/jsProgressBarHandler.js
 js/ajaxplorer/Connexion.js
 js/lib/md5/md5.js
-js/ajaxplorer/ajxp_utils.js
-js/ajaxplorer/Bootstrap.js
+js/utils.js
+js/Bootstrap.js

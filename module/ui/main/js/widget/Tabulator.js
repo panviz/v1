@@ -1,7 +1,7 @@
 /*
  * Description
  */
-Class.create("AjxpTabulator", AjxpPane, {
+Class.create("Tabulator", Pane, {
 	/**
 	 * Constructor
 	 * @param $super klass Superclass reference
@@ -47,7 +47,7 @@ Class.create("AjxpTabulator", AjxpPane, {
 	switchTabulator : function(tabId){
 		var toShow ;
 		this.tabulatorData.each(function(tabInfo){
-			var ajxpObject = this.getAndSetAjxpObject(tabInfo);
+			var ajxpObject = this.getAndSetObject(tabInfo);
 			if(tabInfo.id == tabId){				
 				tabInfo.headerElement.removeClassName("toggleInactive");
 				tabInfo.headerElement.select('img')[0].show();
@@ -74,25 +74,25 @@ Class.create("AjxpTabulator", AjxpPane, {
 	 */
 	resize : function(){
 		if(!this.selectedTabInfo) return;
-		var ajxpObject = this.getAndSetAjxpObject(this.selectedTabInfo);
+		var ajxpObject = this.getAndSetObject(this.selectedTabInfo);
 		if(ajxpObject){
 			ajxpObject.resize();
 		}
 	},
 	
 	/**
-	 * Implementation of the IAjxpWidget methods
+	 * Implementation of the IWidget methods
 	 */
 	getDomNode : function(){
 		return this.htmlElement;
 	},
 	
 	/**
-	 * Implementation of the IAjxpWidget methods
+	 * Implementation of the IWidget methods
 	 */
 	destroy : function(){
 		this.tabulatorData.each(function(tabInfo){
-			var ajxpObject = this.getAndSetAjxpObject(tabInfo);
+			var ajxpObject = this.getAndSetObject(tabInfo);
 			tabInfo.headerElement.stopObserving("click");
 			ajxpObject.destroy();
 		}.bind(this));
@@ -107,9 +107,9 @@ Class.create("AjxpTabulator", AjxpPane, {
 	/**
 	 * Getter/Setter of the Widget that will be attached to each tabInfo
 	 * @param tabInfo Object
-	 * @returns IAjxpWidget
+	 * @returns IWidget
 	 */
-	getAndSetAjxpObject : function(tabInfo){
+	getAndSetObject : function(tabInfo){
 		var ajxpObject = tabInfo.ajxpObject || null;
 		if($(tabInfo.element) && $(tabInfo.element).ajxpPaneObject && (!ajxpObject || ajxpObject != $(tabInfo.element).ajxpPaneObject) ){
 			ajxpObject = tabInfo.ajxpObject = $(tabInfo.element).ajxpPaneObject;

@@ -21,12 +21,12 @@ module.exports = function(app){
 		.set('views', __dirname + '/../app/views')
 		.helpers(require('../app/helpers/application_helper'))
 		.set('view engine', 'ejs')
-		.use('/plugins', express.static(__dirname + '/../plugins'))
+		.use('/module', express.static(__dirname + '/../module'))
 	});
 
 	app.set('version', '0.0.1');
-	app.set('THEME_PATH', 'plugins/ui/main/themes/mybase/');
-	app.set('GUI_JS_PATH', 'plugins/ui/main/js/');
+	app.set('THEME_PATH', 'module/ui/main/theme/mybase/');
+	app.set('GUI_JS_PATH', 'module/ui/main/js/');
 
 	return app;
 }

@@ -1,7 +1,7 @@
 /**
  * AjaXplorer Encapsulation of the Sortable Table
  */
-Class.create("AjxpSortable", SortableTable, {
+Class.create("Sortable", SortableTable, {
 
 	/**
 	 * Constructor
