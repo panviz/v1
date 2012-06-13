@@ -4,7 +4,7 @@
     "label": "CONF_MESSAGE[Serialized Configuration Storage]",
     "description": "CONF_MESSAGE[Stores the conf data as serialized PHP values on the filesystem.]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.application/ajxp_registry.xsd",
     "client_settings": {
       "resources": {
         "i18n": {
@@ -50,4 +50,3 @@
       }
     }
   }
-}

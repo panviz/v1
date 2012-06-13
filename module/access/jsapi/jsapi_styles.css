@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
  *
- * The latest code can be found at <http://www.ajaxplorer.info/>.
+ * The latest code can be found at <http://www.application.info/>.
  */
 span.jsapi_member{
 	font-weight: bold;
@@ -53,4 +53,3 @@ span.jsapi_commentfull{
 .selected-focus span.jsapi_commentfull{
 	display: block;
 	padding: 2px Opx;
-}

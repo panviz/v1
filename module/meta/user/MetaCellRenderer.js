@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
  *
- * The latest code can be found at <http://www.ajaxplorer.info/>.
+ * The latest code can be found at <http://www.application.info/>.
  * Description : Static class for renderers
  */
 Class.create("MetaCellRenderer", {	
@@ -177,7 +177,7 @@ Class.create("MetaCellRenderer", {
             if(div.saver.removerTimeout){
                 window.clearTimeout(div.saver.removerTimeout);
             }
-            var selectedNode = ajaxplorer.getUserSelection().getUniqueNode();
+            var selectedNode = application.getUserSelection().getUniqueNode();
             var conn = new Connexion();
             conn.setMethod("POST");
             conn.setParameters(new Hash({
@@ -187,9 +187,9 @@ Class.create("MetaCellRenderer", {
             conn.addParameter(id, div.textContent);
             conn.onComplete = function(){
                 div.saver.remove();
-                ajaxplorer.enableAllKeyBindings();
-                ajaxplorer.getContextHolder().setPendingSelection(selectedNode.getPath());
-                ajaxplorer.fireContextRefresh();
+                application.enableAllKeyBindings();
+                application.getContextHolder().setPendingSelection(selectedNode.getPath());
+                application.fireContextRefresh();
             };
             conn.sendAsync();
         });
@@ -198,14 +198,14 @@ Class.create("MetaCellRenderer", {
             var source = event.target;
             id = source.up("td").id.substring(3);
             source.insert({after:source.saver});
-            ajaxplorer.disableAllKeyBindings();
+            application.disableAllKeyBindings();
             window.setTimeout(function(){
                 document.observeOnce("click", function(clickEvent){
                     if(clickEvent.target != source) source.blur();
                 });
             }, 500);
         }).observe("blur", function(event){
-            ajaxplorer.enableAllKeyBindings();
+            application.enableAllKeyBindings();
             event.target.saver.removerTimeout = window.setTimeout(function(){
                 event.target.saver.remove();
             }, 500);
@@ -248,7 +248,7 @@ Class.create("MetaCellRenderer", {
 		cont.select('img').invoke('observe', 'click', function(event){
 			var note = Event.element(event).readAttribute('note');
 			window.setTimeout(function(){
-				var selectedNode = ajaxplorer.getUserSelection().getUniqueNode();
+				var selectedNode = application.getUserSelection().getUniqueNode();
 				var conn = new Connexion();
 				conn.setParameters(new Hash({
 					get_action : 'edit_user_meta',
@@ -263,8 +263,8 @@ Class.create("MetaCellRenderer", {
 					});
 				}
 				conn.onComplete = function(){
-					ajaxplorer.getContextHolder().setPendingSelection(selectedNode.getPath());
-					ajaxplorer.fireContextRefresh();
+					application.getContextHolder().setPendingSelection(selectedNode.getPath());
+					application.fireContextRefresh();
 					if(containingForm){
 						hideLightBox(true);
 					}
@@ -282,4 +282,3 @@ Class.create("MetaCellRenderer", {
 		cont.innerHTML = formElement.value;
 		formElement.replace(cont);
 	}
-});

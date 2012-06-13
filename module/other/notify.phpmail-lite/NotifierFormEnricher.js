@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
  *
- * The latest code can be found at <http://www.ajaxplorer.info/>.
+ * The latest code can be found at <http://www.application.info/>.
  *
  * This is the main configuration file for configuring the basic plugins the application
  * needs to run properly : an Authentication plugin, a Configuration plugin, and a Logger plugin.
@@ -23,21 +23,21 @@
 Class.create("NotifierFormEnricher", {
 
     initialize : function(){
-        var pConfigs = ajaxplorer.getPluginConfigs('notify');
+        var pConfigs = application.getPluginConfigs('notify');
         if(pConfigs && pConfigs.get('current_user_email')){
             this.currentUserEmail = pConfigs.get('current_user_email');
         }
-        document.observe("ajaxplorer:afterApply-share", function(){
+        document.observe("application:afterApply-share", function(){
             this.enrichShareFolderForm();
         }.bind(this));
     },
 
     enrichShareFolderForm : function(){
-        var formId = ajaxplorer.getUserSelection().getUniqueNode().isLeaf() ? "share_form" : "share_folder_form";
+        var formId = application.getUserSelection().getUniqueNode().isLeaf() ? "share_form" : "share_folder_form";
         if($(formId) && $(formId).down("fieldset#notification_fieldset")){
             $(formId).down("fieldset#notification_fieldset").remove();
         }
-        var ajxpNode = ajaxplorer.getUserSelection().getUniqueNode();
+        var ajxpNode = application.getUserSelection().getUniqueNode();
         if(ajxpNode.getMetadata().get("ajxp_shared")) {
             return;
         }
@@ -71,4 +71,3 @@ Class.create("NotifierFormEnricher", {
 
 if(!window.notifierTool){
     window.notifierTool = new NotifierFormEnricher();
-}

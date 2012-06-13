@@ -19,7 +19,7 @@
 					$('auth_source').insert(new Element("option", {value:pair.key}).update(pair.value));
 				});
 			}
-			ajaxplorer.loadSeedOrCaptcha(oForm.down('#login_seed'), oForm.down('img#captcha_image'), oForm.down('div.dialogLegend'), 'before');
+			application.loadSeedOrCaptcha(oForm.down('#login_seed'), oForm.down('img#captcha_image'), oForm.down('div.dialogLegend'), 'before');
 			if(Prototype.Browser.IE && !oForm.down('input[type="text"]').key_enter_attached){
 				oForm.select('input').invoke("observe", "keydown", function(event){
 					if(event.keyCode == Event.KEY_RETURN){
@@ -56,13 +56,13 @@
 				connexion.addParameter('captcha_code', oForm.captcha_code.value);
 			}
 			connexion.onComplete = function(transport){
-				ajaxplorer.actionBar.parseXmlMessage(transport.responseXML);
+				application.actionBar.parseXmlMessage(transport.responseXML);
 				if(XPathGetSingleNodeText(transport.responseXML.documentElement, "logging_result/@value") == "-4"){
-					ajaxplorer.loadSeedOrCaptcha(oForm.down('#login_seed'), oForm.down('img#captcha_image'), oForm.down('div.dialogLegend'), 'before');
+					application.loadSeedOrCaptcha(oForm.down('#login_seed'), oForm.down('img#captcha_image'), oForm.down('div.dialogLegend'), 'before');
 				}
 			};
 			connexion.setMethod('put');
-			document.observeOnce("ajaxplorer:user_logged", function(){
+			document.observeOnce("application:user_logged", function(){
 		        if($('logging_string') && $('logging_string').down('i')){
 		            var ht = $('logging_string').down('i').innerHTML;
 		            var exp = ht.split(userIdSeparator);
@@ -77,4 +77,3 @@
 			return false;				
 		});
 	}
-]]></clientCallback>

@@ -58,27 +58,27 @@ Class.create("DataModel", {
 					this.requireContextChange(ajxpNode);
 				}.bind(this));
 				firstFake.observeOnce("error", function(message){
-					ajaxplorer.displayMessage("ERROR", message);
+					application.displayMessage("ERROR", message);
 					firstFake.notify("node_removed");
 					var parent = firstFake.getParent();
 					parent.removeChild(firstFake);
 					delete(firstFake);
 					this.requireContextChange(parent);
 				}.bind(this) );
-				document.fire("ajaxplorer:context_loading");
+				document.fire("application:context_loading");
 				firstFake.load(this._iNodeProvider);
 				return;
 			}
 		}		
 		ajxpNode.observeOnce("loaded", function(){
 			this.setContextNode(ajxpNode, true);			
-			document.fire("ajaxplorer:context_loaded");
+			document.fire("application:context_loaded");
 		}.bind(this));
 		ajxpNode.observeOnce("error", function(message){
-			ajaxplorer.displayMessage("ERROR", message);
-			document.fire("ajaxplorer:context_loaded");
+			application.displayMessage("ERROR", message);
+			document.fire("application:context_loaded");
 		}.bind(this));
-		document.fire("ajaxplorer:context_loading");
+		document.fire("application:context_loading");
 		try{
 			if(forceReload){
 				if(paginationPage){
@@ -89,7 +89,7 @@ Class.create("DataModel", {
 				ajxpNode.load(this._iNodeProvider);
 			}
 		}catch(e){
-			document.fire("ajaxplorer:context_loaded");
+			document.fire("application:context_loaded");
 		}
 	},
 	
@@ -103,7 +103,7 @@ Class.create("DataModel", {
 		this._rootNode.observe("child_added", function(c){
 				//console.log(c);
 		});
-		document.fire("ajaxplorer:root_node_changed", this._rootNode);
+		document.fire("application:root_node_changed", this._rootNode);
 		this.setContextNode(this._rootNode);
 	},
 	
@@ -126,7 +126,7 @@ Class.create("DataModel", {
 		}
 		this._contextNode = ajxpDataNode;
 		this._currentRep = ajxpDataNode.getPath();
-		document.fire("ajaxplorer:context_changed", ajxpDataNode);
+		document.fire("application:context_changed", ajxpDataNode);
 	},
 	
 	/**
@@ -192,7 +192,7 @@ Class.create("DataModel", {
 	nextNodeReloader : function(){
 		if(!this.queue.length) {
 			window.setTimeout(function(){
-				document.fire("ajaxplorer:context_changed", this._contextNode);
+				document.fire("application:context_changed", this._contextNode);
 			}.bind(this), 200);
 			return;
 		}
@@ -255,7 +255,7 @@ Class.create("DataModel", {
 				if(selectedNode.isRecycle()) this._isRecycle = true;
 			}
 		}
-		document.fire("ajaxplorer:selection_changed", this);	
+		document.fire("application:selection_changed", this);	
 	},
 	
 	/**

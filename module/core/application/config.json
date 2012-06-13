@@ -1,15 +1,15 @@
 {
   "ajxpcore": {
-    "id": "core.ajaxplorer",
+    "id": "core.application",
     "label": "Core Options",
     "description": "CONF_MESSAGE[Main container for core AjaXplorer settings (application title, sharing, webdav server config, etc...)]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.application/ajxp_registry.xsd",
     "client_settings": {
       "resources": {
         "i18n": {
           "namespace": "",
-          "path": "plugins/core.ajaxplorer/i18n"
+          "path": "plugins/core.application/i18n"
         }
       }
     },
@@ -48,7 +48,7 @@
           "group": "CONF_MESSAGE[Sharing]",
           "type": "string",
           "label": "CONF_MESSAGE[Download URL]",
-          "description": "CONF_MESSAGE[If not inferred directly from the current ajaxplorer URI plus the public download folder name, replace the public access URL here.]",
+          "description": "CONF_MESSAGE[If not inferred directly from the current application URI plus the public download folder name, replace the public access URL here.]",
           "mandatory": "false",
           "default": ""
         },
@@ -105,7 +105,7 @@
           "label": "CONF_MESSAGE[Shares URI]",
           "description": "CONF_MESSAGE[Common URI to access the shares. Please READ THE DOC to safely use this feature.]",
           "mandatory": "false",
-          "default": "/ajaxplorer/shares"
+          "default": "/application/shares"
         },
         {
           "name": "WEBDAV_BASEHOST",
@@ -173,4 +173,3 @@
       ]
     }
   }
-}

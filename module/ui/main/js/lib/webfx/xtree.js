@@ -72,7 +72,7 @@ var	webFXTreeConfig = {
 		zipRegexp		: new RegExp(/\.zip$/),
 		usePersistence	: false
 };
-Event.observe(document, 'ajaxplorer:boot_loaded', function(){
+Event.observe(document, 'application:boot_loaded', function(){
 	var resourcesFolder = window.ajxpResourcesFolder;
 	webFXTreeConfig.rootIcon        = resourcesFolder+'/images/foldericon.png';
 	webFXTreeConfig.openRootIcon    = resourcesFolder+'/images/openfoldericon.png';
@@ -254,7 +254,7 @@ WebFXTreeAbstractNode.prototype.add = function (node, bNoIdent) {
             }, 100);
         }
 	}
-    document.fire("ajaxplorer:tree_change");
+    document.fire("application:tree_change");
 	return node;
 };
 
@@ -382,7 +382,7 @@ WebFXTreeAbstractNode.prototype.doExpand = function() {
 	if (webFXTreeConfig.usePersistence) {
 		webFXTreeHandler.cookies.setCookie(this.id.substr(18,this.id.length - 18), '1');
 	}
-    document.fire("ajaxplorer:tree_change");
+    document.fire("application:tree_change");
 } ;
 
 WebFXTreeAbstractNode.prototype.doCollapse = function() {
@@ -394,7 +394,7 @@ WebFXTreeAbstractNode.prototype.doCollapse = function() {
 	if (webFXTreeConfig.usePersistence) {
 		webFXTreeHandler.cookies.setCookie(this.id.substr(18,this.id.length - 18), '0');
 	}
-    document.fire("ajaxplorer:tree_change");
+    document.fire("application:tree_change");
 } ;
 
 WebFXTreeAbstractNode.prototype.expandAll = function() {

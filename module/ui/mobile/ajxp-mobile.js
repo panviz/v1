@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
  *
- * The latest code can be found at <http://www.ajaxplorer.info/>.
+ * The latest code can be found at <http://www.application.info/>.
  */
 function getAjxpMobileActions(){
 	var mobileActions = $('mobile_actions_copy');
@@ -27,7 +27,7 @@ function getAjxpMobileActions(){
 	var act = mobileActions.select('a');
 	act[0].observe('click', function(e){
 		Event.stop(e);
-		$('info_container').down('.info_panel_title_span').update(ajaxplorer.getContextHolder().getUniqueNode().getLabel());
+		$('info_container').down('.info_panel_title_span').update(application.getContextHolder().getUniqueNode().getLabel());
 		$('info_container').show();
 		$('info_container').ajxpPaneObject.resize();
 		$('info_panel').select('.infoPanelActions a').each(function(action){
@@ -35,25 +35,25 @@ function getAjxpMobileActions(){
 		});
 	});
 	act[1].observe('click', function(e){		
-		ajaxplorer.actionBar.fireAction(act[1]._action);
+		application.actionBar.fireAction(act[1]._action);
 		Event.stop(e);
 	});
 	return mobileActions;
 }
 
 function initAjxpMobileActions(){
-	document.observe("ajaxplorer:selection_changed", function(e){
+	document.observe("application:selection_changed", function(e){
 		var list = e.memo._selectionSource;
 		if(!list) return;
 		var mobileActions = getAjxpMobileActions();
 		mobileActions.hide();
 		var items = list.getSelectedItems();
-		var node = ajaxplorer.getContextHolder().getUniqueNode();
+		var node = application.getContextHolder().getUniqueNode();
 		var a = mobileActions.select('a')[1];		
 		
 		if(node && node.isLeaf()){
 			//mobileActions.select('a')[1].hide();
-			var editors = ajaxplorer.findEditorsForMime(getAjxpMimeType(node));			
+			var editors = application.findEditorsForMime(getAjxpMimeType(node));			
 			if(editors.length){
 				a.show();
 				a._action = "open_with";
@@ -95,9 +95,8 @@ function initAjxpMobileActions(){
 	});				
 }
 
-document.observe("ajaxplorer:gui_loaded", function(){
+document.observe("application:gui_loaded", function(){
 	initAjxpMobileActions();
 	document.addEventListener("touchmove", function(event){
 		event.preventDefault();
 	});
-});

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
  *
- * The latest code can be found at <http://www.ajaxplorer.info/>.
+ * The latest code can be found at <http://www.application.info/>.
  */
 Class.create("SQLEditor", {
 
@@ -27,7 +27,7 @@ Class.create("SQLEditor", {
 	
 	
 	createEditor : function(){
-		var userSelection = ajaxplorer.getUserSelection();
+		var userSelection = application.getUserSelection();
 		if(userSelection.hasFile()){
 			this.createRecordEditor(userSelection);
 		}else{
@@ -36,14 +36,14 @@ Class.create("SQLEditor", {
 	},
 	
 	createRecordEditor: function(userSelection){
-		var tmpSelection = ajaxplorer.getUserSelection();
+		var tmpSelection = application.getUserSelection();
 		if(tmpSelection.getSelectionSource()){
 			this.currentColumns = tmpSelection.getSelectionSource().getColumnsDef();
 		}else{
 			this.currentColumns = [];
 		}
 		var columns = this.currentColumns;
-		var crtTableName = getBaseName(ajaxplorer.getContextNode().getPath());
+		var crtTableName = getBaseName(application.getContextNode().getPath());
 		this.oForm.insert(new Element('input', {type:'hidden',name:'table_name', value:crtTableName}));
 		var table = new Element('table', {width:'96%', className:'sqlRecordForm'});
 		var tBody = new Element('tbody');
@@ -139,7 +139,7 @@ Class.create("SQLEditor", {
 				el.setAttribute('name', 'ajxp_mysql_'+el.getAttribute('name'));
 			}
 		}.bind(this));
-		ajaxplorer.actionBar.submitForm(oForm, true);
+		application.actionBar.submitForm(oForm, true);
 		hideLightBox();
 	},
 	
@@ -147,7 +147,7 @@ Class.create("SQLEditor", {
 		if(!tableName){
 			this.displayReplicationChooser();			
 		}else{
-			var userSelection = ajaxplorer.getUserSelection();
+			var userSelection = application.getUserSelection();
 			if(userSelection.getSelectionSource()){
 				this.currentColumns = userSelection.getSelectionSource().getColumnsDef();
 			}else{
@@ -283,7 +283,7 @@ Class.create("SQLEditor", {
 			rows.each(function(row){
 				if(row.getAttribute('enabled')=='false') row.remove();
 			});
-			ajaxplorer.actionBar.submitForm(this.oForm);
+			application.actionBar.submitForm(this.oForm);
 			hideLightBox();
 			return false;			
 		}.bind(this);
@@ -298,7 +298,7 @@ Class.create("SQLEditor", {
 		parameters.set('current_table', currentTable);
 		var connexion = new Connexion();
 		connexion.setParameters(parameters);		
-		connexion.onComplete = function(transport){ajaxplorer.actionBar.parseXmlMessage(transport.responseXML);};
+		connexion.onComplete = function(transport){application.actionBar.parseXmlMessage(transport.responseXML);};
 		connexion.sendAsync();
 		hideLightBox();
 	},
@@ -316,7 +316,7 @@ Class.create("SQLEditor", {
 		});		
 		var connexion = new Connexion();
 		connexion.setParameters(params);		
-		connexion.onComplete = function(transport){ajaxplorer.actionBar.parseXmlMessage(transport.responseXML);};
+		connexion.onComplete = function(transport){application.actionBar.parseXmlMessage(transport.responseXML);};
 		connexion.sendAsync();
 		hideLightBox();		
 	},

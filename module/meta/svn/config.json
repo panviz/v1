@@ -4,7 +4,7 @@
     "label": "CONF_MESSAGE[Subversion Repository]",
     "description": "CONF_MESSAGE[Extract SVN informations (revision, change log, etc) if the repository is a Working-Copy, and SVN is available as a commandline.]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.application/ajxp_registry.xsd",
     "class_definition": {
       "filename": "plugins/meta.svn/class.SvnManager.php",
       "classname": "SvnManager"
@@ -117,7 +117,7 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var loadFunc = function(oForm){ajaxplorer.actionBar.svnLogger = new SVNLogger($(oForm));ajaxplorer.actionBar.svnLogger.open();};var closeFunc = function(){ajaxplorer.actionBar.svnLogger.close();hideLightBox();return false;};modal.showDialogForm('SVN', 'svnlog_box', loadFunc, closeFunc, null, true, true);"
+                "$t": "var loadFunc = function(oForm){application.actionBar.svnLogger = new SVNLogger($(oForm));application.actionBar.svnLogger.open();};var closeFunc = function(){application.actionBar.svnLogger.close();hideLightBox();return false;};modal.showDialogForm('SVN', 'svnlog_box', loadFunc, closeFunc, null, true, true);"
               },
               "clientForm": {
                 "id": "svnlog_box",
@@ -155,7 +155,7 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var loadFunc = function(oForm){ajaxplorer.actionBar.svnLogger = new SVNLogger($(oForm));ajaxplorer.actionBar.svnLogger.open(true);};var closeFunc = function(){ajaxplorer.actionBar.svnLogger.close();hideLightBox();return false;};modal.showDialogForm('SVN', 'svnlog_box', loadFunc, closeFunc, null, true, true);"
+                "$t": "var loadFunc = function(oForm){application.actionBar.svnLogger = new SVNLogger($(oForm));application.actionBar.svnLogger.open(true);};var closeFunc = function(){application.actionBar.svnLogger.close();hideLightBox();return false;};modal.showDialogForm('SVN', 'svnlog_box', loadFunc, closeFunc, null, true, true);"
               }
             }
           },
@@ -256,4 +256,3 @@
       }
     }
   }
-}

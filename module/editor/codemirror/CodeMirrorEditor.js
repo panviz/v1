@@ -11,7 +11,7 @@ Class.create("CodeMirrorEditor", AbstractEditor, {
 		this.lineNumbers = true;
 		this.indentSize = 2;		
 		
-		if(!ajaxplorer.user || ajaxplorer.user.canWrite()){
+		if(!application.user || application.user.canWrite()){
 			this.canWrite = true;
 			this.actions.get("saveButton").observe('click', function(){
 				this.saveFile();
@@ -23,7 +23,7 @@ Class.create("CodeMirrorEditor", AbstractEditor, {
 		}
 		this.actions.get("downloadFileButton").observe('click', function(){
 			if(!this.currentFile) return;		
-			ajaxplorer.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+this.currentFile);
+			application.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+this.currentFile);
 			return false;
 		}.bind(this));
 	

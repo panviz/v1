@@ -5,7 +5,7 @@
     "label": "CONF_MESSAGE[Simple Notification]",
     "description": "CONF_MESSAGE[Notification system (demonstrative)]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.application/ajxp_registry.xsd",
     "client_settings": {
       "icon": "plugins/access.mysql/resources/images/mysql_icon.png",
       "resources": {
@@ -94,4 +94,3 @@
       "classname": "PhpMailLiteNotifier"
     }
   }
-}

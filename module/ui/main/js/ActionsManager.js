@@ -1,5 +1,5 @@
 /**
- * Singleton class that manages all actions. Can be called directly using ajaxplorer.actionBar.
+ * Singleton class that manages all actions. Can be called directly using application.actionBar.
  */
 Class.create("ActionsManager", {
 	
@@ -18,19 +18,19 @@ Class.create("ActionsManager", {
 		this.actions = new Hash();
 		this.defaultActions = new Hash();
 		this.toolbars = new Hash();		
-		document.observe("ajaxplorer:context_changed", function(event){
+		document.observe("application:context_changed", function(event){
 			window.setTimeout(function(){
 				this.fireContextChange();
 			}.bind(this), 0);			
 		}.bind(this) );
 		
-		document.observe("ajaxplorer:selection_changed", function(event){
+		document.observe("application:selection_changed", function(event){
 			window.setTimeout(function(){
 				this.fireSelectionChange();
 			}.bind(this), 0);
 		}.bind(this) );
 		
-		document.observe("ajaxplorer:user_logged", function(event){
+		document.observe("application:user_logged", function(event){
 			if(event.memo && event.memo.getPreference){
 				this.setUser(event.memo);
 			}else{
@@ -47,11 +47,11 @@ Class.create("ActionsManager", {
 	setUser : function(oUser)
 	{	
 		this.oUser = oUser;
-		if(oUser != null && ajaxplorer  && oUser.id != 'guest' && oUser.getPreference('lang') != null 
+		if(oUser != null && application  && oUser.id != 'guest' && oUser.getPreference('lang') != null 
 			&& oUser.getPreference('lang') != "" 
-			&& oUser.getPreference('lang') != ajaxplorer.currentLanguage) 
+			&& oUser.getPreference('lang') != application.currentLanguage) 
 		{
-			ajaxplorer.loadI18NMessages(oUser.getPreference('lang'));
+			application.loadI18NMessages(oUser.getPreference('lang'));
 		}
 	},
 			
@@ -92,7 +92,7 @@ Class.create("ActionsManager", {
 			var isDefault = false;
 			if(actionsSelectorAtt == 'selectionContext'){
 				// set default in bold
-				var userSelection = ajaxplorer.getUserSelection();
+				var userSelection = application.getUserSelection();
 				if(!userSelection.isEmpty()){
 					var defaultAction = 'file';
 					if(userSelection.isUnique() && (userSelection.hasDir() || userSelection.hasMime(['ajxp_browsable_archive']))){
@@ -228,7 +228,7 @@ Class.create("ActionsManager", {
 	 */
 	fireActionByKey : function(event, keyName)
 	{	
-		if(this._registeredKeys.get(keyName) && !ajaxplorer.blockShortcuts)
+		if(this._registeredKeys.get(keyName) && !application.blockShortcuts)
 		{
 			if(this._registeredKeys.get(keyName).indexOf("::")!==false){
 				var parts = this._registeredKeys.get(keyName).split("::");
@@ -254,13 +254,13 @@ Class.create("ActionsManager", {
 			(copy && (!this.defaultActions.get('ctrldragndrop')||this.getDefaultAction('ctrldragndrop').deny))){
 			return;
 		}
-		if(fileName == null) fileNames = ajaxplorer.getUserSelection().getFileNames();
+		if(fileName == null) fileNames = application.getUserSelection().getFileNames();
 		else fileNames = [fileName];
 		if(destNodeName != null)
 		{
 			// Check that dest is not a child of the source
 			if(this.checkDestIsChildOfSource(fileNames, destNodeName)){
-				ajaxplorer.displayMessage('ERROR', MessageHash[202]);
+				application.displayMessage('ERROR', MessageHash[202]);
 				return;
 			}
 		}
@@ -268,13 +268,13 @@ Class.create("ActionsManager", {
         for(var i=0; i<fileNames.length;i++)
         {
             if(fileNames[i] == destDir){
-                if(destNodeName != null) ajaxplorer.displayMessage('ERROR', MessageHash[202]);
+                if(destNodeName != null) application.displayMessage('ERROR', MessageHash[202]);
                  return;
             }
         }
         // Check that dest is not the direct parent of source, ie current rep!
-        if(destDir == ajaxplorer.getContextNode().getPath()){
-            if(destNodeName != null) ajaxplorer.displayMessage('ERROR', MessageHash[203]);
+        if(destDir == application.getContextNode().getPath()){
+            if(destNodeName != null) application.displayMessage('ERROR', MessageHash[203]);
             return;
         }
 		var connexion = new Connexion();
@@ -291,7 +291,7 @@ Class.create("ActionsManager", {
 			}
 		}
 		connexion.addParameter('dest', destDir);
-		connexion.addParameter('dir', ajaxplorer.getContextNode().getPath());		
+		connexion.addParameter('dir', application.getContextNode().getPath());		
 		connexion.onComplete = function(transport){this.parseXmlMessage(transport.responseXML);}.bind(this);
 		connexion.sendAsync();
 	},
@@ -344,7 +344,7 @@ Class.create("ActionsManager", {
 			connexion.setMethod('POST');
 		}
 		$(formName).getElements().each(function(fElement){
-			// OPERA : ADDS 'http://www.yourdomain.com/ajaxplorer/' to the action attribute value
+			// OPERA : ADDS 'http://www.yourdomain.com/application/' to the action attribute value
 			var fValue = fElement.getValue();
 			if(fElement.name == 'get_action' && fValue.substr(0,4) == 'http'){			
 				fValue = getBaseName(fValue);
@@ -352,8 +352,8 @@ Class.create("ActionsManager", {
 			if(fElement.type == 'radio' && !fElement.checked) return;
 			connexion.addParameter(fElement.name, fValue);
 		});
-		if(ajaxplorer.getContextNode()){
-			connexion.addParameter('dir', ajaxplorer.getContextNode().getPath());
+		if(application.getContextNode()){
+			connexion.addParameter('dir', application.getContextNode().getPath());
 		}
 		if(completeCallback){
 			connexion.onComplete = completeCallback;
@@ -369,7 +369,7 @@ Class.create("ActionsManager", {
 	 */
 	parseXmlMessage : function(xmlResponse)
 	{
-		var messageBox = ajaxplorer.messageBox;
+		var messageBox = application.messageBox;
 		if(xmlResponse == null || xmlResponse.documentElement == null) return;
 		var childs = xmlResponse.documentElement.childNodes;	
 		
@@ -381,7 +381,7 @@ Class.create("ActionsManager", {
 			{
 				var messageTxt = "No message";
 				if(childs[i].firstChild) messageTxt = childs[i].firstChild.nodeValue;
-				ajaxplorer.displayMessage(childs[i].getAttribute('type'), messageTxt);
+				application.displayMessage(childs[i].getAttribute('type'), messageTxt);
 			}
 			else if(childs[i].tagName == "reload_instruction")
 			{
@@ -394,14 +394,14 @@ Class.create("ActionsManager", {
 					}else{
 						var file = childs[i].getAttribute('file');
 						if(file){
-							ajaxplorer.getContextHolder().setPendingSelection(file);
+							application.getContextHolder().setPendingSelection(file);
 						}
-						reloadNodes.push(ajaxplorer.getContextNode());
+						reloadNodes.push(application.getContextNode());
 					}
 				}
 				else if(obName == 'repository_list')
 				{
-					ajaxplorer.reloadRepositoriesList();
+					application.reloadRepositoriesList();
 				}
 			}
 			else if(childs[i].tagName == "logging_result")
@@ -425,7 +425,7 @@ Class.create("ActionsManager", {
 						var pass = childs[i].getAttribute('remember_pass');
 						storeRememberData(login, pass);
 					}
-					ajaxplorer.loadXmlRegistry();
+					application.loadXmlRegistry();
 				}
 				else if(result == '0' || result == '-1')
 				{
@@ -433,7 +433,7 @@ Class.create("ActionsManager", {
 				}
 				else if(result == '2')
 				{					
-					ajaxplorer.loadXmlRegistry();
+					application.loadXmlRegistry();
 				}
 				else if(result == '-2')
 				{
@@ -472,29 +472,29 @@ Class.create("ActionsManager", {
 
 		}
 		if(reloadNodes.length){
-			ajaxplorer.getContextHolder().multipleNodesReload(reloadNodes);
+			application.getContextHolder().multipleNodesReload(reloadNodes);
 		}
 	},
 	
 	/**
 	 * Spreads a selection change to all actions and to registered components 
-	 * by triggering ajaxplorer:actions_refreshed event.
+	 * by triggering application:actions_refreshed event.
 	 */
 	fireSelectionChange : function(){
 		var userSelection = null;
-		if (ajaxplorer && ajaxplorer.getUserSelection()){
-			userSelection = ajaxplorer.getUserSelection();
+		if (application && application.getUserSelection()){
+			userSelection = application.getUserSelection();
 			if(userSelection.isEmpty()) userSelection = null;
 		} 
 		this.actions.each(function(pair){
 			pair.value.fireSelectionChange(userSelection);
 		});		
-		document.fire("ajaxplorer:actions_refreshed");
+		document.fire("application:actions_refreshed");
 	},
 	
 	/**
 	 * Spreads a context change to all actions and to registered components 
-	 * by triggering ajaxplorer:actions_refreshed event.
+	 * by triggering application:actions_refreshed event.
 	 */
 	fireContextChange : function(){
 		var crtRecycle = false;
@@ -502,8 +502,8 @@ Class.create("ActionsManager", {
 		var crtIsRoot = false;
 		var crtMime;
 		
-		if(ajaxplorer && ajaxplorer.getContextNode()){ 
-			var crtNode = ajaxplorer.getContextNode();
+		if(application && application.getContextNode()){ 
+			var crtNode = application.getContextNode();
 			crtRecycle = (crtNode.getMime() == "ajxp_recycle");
 			crtInZip = crtNode.hasMimeInBranch("ajxp_browsable_archive");
 			crtIsRoot = crtNode.isRoot();
@@ -517,7 +517,7 @@ Class.create("ActionsManager", {
 									 crtIsRoot,
 									 crtMime);
 		}.bind(this));
-		document.fire("ajaxplorer:actions_refreshed");
+		document.fire("application:actions_refreshed");
 	},
 			
 	/**
@@ -538,13 +538,13 @@ Class.create("ActionsManager", {
 	loadActionsFromRegistry : function(registry){
 		this.removeActions();		
 		this.parseActions(registry);
-		if(ajaxplorer && ajaxplorer.guiActions){
-			ajaxplorer.guiActions.each(function(pair){
+		if(application && application.guiActions){
+			application.guiActions.each(function(pair){
 				var act = pair.value;
 				this.registerAction(act);
 			}.bind(this));
 		}
-		document.fire("ajaxplorer:actions_loaded", this.actions);
+		document.fire("application:actions_loaded", this.actions);
 		this.fireContextChange();
 		this.fireSelectionChange();		
 	},

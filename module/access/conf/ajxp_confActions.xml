@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<registry_contributions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:../core.ajaxplorer/ajxp_registry.xsd">
+<registry_contributions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:../core.application/ajxp_registry.xsd">
 	<actions>
 		<action name="ls" dirDefault="true">
 			<gui text="32" title="32" src="fileopen.png"
@@ -21,13 +21,13 @@
 						path = window.actionArguments[0];
 						if(Object.isString(path)){path = new AjxpNode(path,false,getBaseName(path));}
 					}else{
-						userSelection = ajaxplorer.getUserSelection();
+						userSelection = application.getUserSelection();
 						if(userSelection && userSelection.isUnique() && (userSelection.hasDir() || userSelection.hasMime(["zip"]))){
 							path = userSelection.getUniqueNode();
 						}
 					}
 					if(path){
-						ajaxplorer.updateContextData(path);
+						application.updateContextData(path);
 					}						
 					]]></clientCallback>
 				<serverCallback methodName="switchAction"></serverCallback>
@@ -55,20 +55,20 @@
 				<clientCallback prepareModal="true"><![CDATA[
 					var completeFunc = function(){
 						var oForm = modal.getForm();
-						if(!ajaxplorer.actionBar.configEditor){
-							ajaxplorer.actionBar.configEditor = new ConfigEditor(oForm);
+						if(!application.actionBar.configEditor){
+							application.actionBar.configEditor = new ConfigEditor(oForm);
 						}
-						ajaxplorer.actionBar.configEditor.setForm(oForm);
-						result = ajaxplorer.actionBar.configEditor.submitCreateUser();
+						application.actionBar.configEditor.setForm(oForm);
+						result = application.actionBar.configEditor.submitCreateUser();
 						if(result) hideLightBox();
 						return false;
 					};
 					var loadFunc = function(oForm){
-						if(!ajaxplorer.actionBar.configEditor){
-							ajaxplorer.actionBar.configEditor = new ConfigEditor(oForm);
+						if(!application.actionBar.configEditor){
+							application.actionBar.configEditor = new ConfigEditor(oForm);
 						}	
-						ajaxplorer.actionBar.configEditor.setForm(oForm);
-						ajaxplorer.actionBar.configEditor.loadCreateUserForm();
+						application.actionBar.configEditor.setForm(oForm);
+						application.actionBar.configEditor.loadCreateUserForm();
 						
 						new Protopass(oForm.down('input[name="new_user_pwd"]'), {
 							barContainer:$('pwd_strength_container'),
@@ -161,12 +161,12 @@
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
 					var loadFunc = function(oForm){
-						ajaxplorer.getUserSelection().updateFormOrUrl(oForm);
-						if(!ajaxplorer.actionBar.configEditor){
-							ajaxplorer.actionBar.configEditor = new ConfigEditor(oForm);
+						application.getUserSelection().updateFormOrUrl(oForm);
+						if(!application.actionBar.configEditor){
+							application.actionBar.configEditor = new ConfigEditor(oForm);
 						}
-						ajaxplorer.actionBar.configEditor.setForm(oForm);
-						ajaxplorer.actionBar.configEditor.initCreateRepoWizard(window.createRepoCmd);
+						application.actionBar.configEditor.setForm(oForm);
+						application.actionBar.configEditor.initCreateRepoWizard(window.createRepoCmd);
 					};				
 					modal.showDialogForm('Create Repository', 'create_repository_box', loadFunc, null, null, false, true);
 					]]></clientCallback>
@@ -213,12 +213,12 @@
 						conn.addParameter('repository_id', node.getMetadata().get('repository_id'));
 						conn.addParameter('newLabel', newValue);
 						conn.onComplete = function(transport){
-							ajaxplorer.actionBar.parseXmlMessage(transport.responseXML);
+							application.actionBar.parseXmlMessage(transport.responseXML);
 						};
 						conn.sendSync();
 					};
 
-					if(ajaxplorer.getUserSelection() && ajaxplorer.getUserSelection().getSelectionSource() && ajaxplorer.getUserSelection().getSelectionSource().switchCurrentLabelToEdition) {ajaxplorer.getUserSelection().getSelectionSource().switchCurrentLabelToEdition(callback);}
+					if(application.getUserSelection() && application.getUserSelection().getSelectionSource() && application.getUserSelection().getSelectionSource().switchCurrentLabelToEdition) {application.getUserSelection().getSelectionSource().switchCurrentLabelToEdition(callback);}
 					]]></clientCallback>
 				<serverCallback methodName="switchAction"></serverCallback>
 				</processing>
@@ -233,21 +233,21 @@
 			<rightsContext noUser="true" userLogged="only" read="true" write="true" adminOnly=""></rightsContext>
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
-					var userSelection =  ajaxplorer.getUserSelection();
+					var userSelection =  application.getUserSelection();
 					var loadFunc = function(oForm){
-						ajaxplorer.getUserSelection().updateFormOrUrl(oForm);
-						if(!ajaxplorer.actionBar.configEditor){
-							ajaxplorer.actionBar.configEditor = new ConfigEditor(oForm);
+						application.getUserSelection().updateFormOrUrl(oForm);
+						if(!application.actionBar.configEditor){
+							application.actionBar.configEditor = new ConfigEditor(oForm);
 						}						
-						ajaxplorer.actionBar.configEditor.setForm(oForm);
-						ajaxplorer.actionBar.configEditor.loadUsers(userSelection);
+						application.actionBar.configEditor.setForm(oForm);
+						application.actionBar.configEditor.loadUsers(userSelection);
 					};
 					modal.showDialogForm('Batch Edition', 'edit_config_box', loadFunc, function(){hideLightBox();}, null, true);					
 				]]></clientCallback>
 				<clientListener name="selectionChange"><![CDATA[
-				if(ajaxplorer){
-					var userSelection = ajaxplorer.getUserSelection();
-					var action = ajaxplorer.getActionBar().getActionByName("batch_users_roles");
+				if(application){
+					var userSelection = application.getUserSelection();
+					var action = application.getActionBar().getActionByName("batch_users_roles");
 					if(action){
 						if(userSelection.isUnique()){
 							action.selectionContext.dir = true;
@@ -272,36 +272,36 @@
 			<rightsContext noUser="true" userLogged="only" read="true" write="true" adminOnly=""></rightsContext>
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
-					var userSelection =  ajaxplorer.getUserSelection();
+					var userSelection =  application.getUserSelection();
 					var node = userSelection.getUniqueNode();
 					var meta = node.getMetadata();
 					var mime = meta.get("ajxp_mime");
 					if(mime == "user" || mime == "user_editable" || mime == "role"){
 						var loadFunc = function(oForm){
-							ajaxplorer.getUserSelection().updateFormOrUrl(oForm);
-							if(!ajaxplorer.actionBar.configEditor){
-								ajaxplorer.actionBar.configEditor = new ConfigEditor(oForm);
+							application.getUserSelection().updateFormOrUrl(oForm);
+							if(!application.actionBar.configEditor){
+								application.actionBar.configEditor = new ConfigEditor(oForm);
 							}						
-							ajaxplorer.actionBar.configEditor.setForm(oForm);
+							application.actionBar.configEditor.setForm(oForm);
 							if(mime == "role"){
-								ajaxplorer.actionBar.configEditor.loadRole(meta.get("text"));
+								application.actionBar.configEditor.loadRole(meta.get("text"));
 							}else{
-								ajaxplorer.actionBar.configEditor.loadUser(meta.get("text"));
+								application.actionBar.configEditor.loadUser(meta.get("text"));
 							}
 						};
 						modal.showDialogForm('Edit Online', 'edit_config_box', loadFunc, function(){hideLightBox();}, null, true);
 					}else if(mime == "ajxp_plugin"){
 						var loadFunc = function(oForm){
-							ajaxplorer.getUserSelection().updateFormOrUrl(oForm);
-							if(!ajaxplorer.actionBar.configEditor){
-								ajaxplorer.actionBar.configEditor = new ConfigEditor(oForm);
+							application.getUserSelection().updateFormOrUrl(oForm);
+							if(!application.actionBar.configEditor){
+								application.actionBar.configEditor = new ConfigEditor(oForm);
 							}						
-							ajaxplorer.actionBar.configEditor.setForm(oForm);
-							ajaxplorer.actionBar.configEditor.loadPluginConfig(node.getMetadata().get("plugin_id"));							
+							application.actionBar.configEditor.setForm(oForm);
+							application.actionBar.configEditor.loadPluginConfig(node.getMetadata().get("plugin_id"));							
 						};
 						var closeFunc = function(oForm){
 							var toSubmit = new Hash();
-							var configEditor = ajaxplorer.actionBar.configEditor;
+							var configEditor = application.actionBar.configEditor;
 							toSubmit.set("plugin_id", node.getMetadata().get("plugin_id"));
 							var missing = configEditor.formManager.serializeParametersInputs(oForm, toSubmit, 'DRIVER_OPTION_');
 							if(missing){
@@ -314,16 +314,16 @@
 						modal.showDialogForm('Edit Online', 'edit_repo_box', loadFunc, closeFunc);
 					}else{
 						var loadFunc = function(oForm){
-							ajaxplorer.getUserSelection().updateFormOrUrl(oForm);
-							if(!ajaxplorer.actionBar.configEditor){
-								ajaxplorer.actionBar.configEditor = new ConfigEditor(oForm);
+							application.getUserSelection().updateFormOrUrl(oForm);
+							if(!application.actionBar.configEditor){
+								application.actionBar.configEditor = new ConfigEditor(oForm);
 							}						
-							ajaxplorer.actionBar.configEditor.setForm(oForm);
-							ajaxplorer.actionBar.configEditor.loadRepository(meta.get("repository_id"));							
+							application.actionBar.configEditor.setForm(oForm);
+							application.actionBar.configEditor.loadRepository(meta.get("repository_id"));							
 						};
 						var closeFunc = function(){
 							var toSubmit = new Hash();
-							var configEditor = ajaxplorer.actionBar.configEditor;
+							var configEditor = application.actionBar.configEditor;
 							if(!configEditor.currentRepoWriteable){
 								hideLightBox();
 								return;
@@ -436,7 +436,7 @@
 			<rightsContext noUser="true" userLogged="only" read="true" write="true" adminOnly=""></rightsContext>
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
-					var userSelection =  ajaxplorer.getUserSelection();
+					var userSelection =  application.getUserSelection();
 					var node = userSelection.getUniqueNode();
 					var meta = node.getMetadata();
 					var deleteMessage, fieldName, fieldValue;
@@ -465,7 +465,7 @@
 					};
 					modal.showDialogForm('Delete', 'delete_config_form', onLoad, function(){
 						var oForm = modal.getForm();						
-						ajaxplorer.actionBar.submitForm(oForm);
+						application.actionBar.submitForm(oForm);
                         if (userSelection.isMultiple()) {
                            var i = 1; 
 	   		    	       var hidden = $(oForm).select('input[type="hidden"]')[0];
@@ -482,7 +482,7 @@
                                   	value = meta.get("text");
                                   }
                                   hidden.setAttribute("value", value);
-            					  ajaxplorer.actionBar.submitForm(oForm);
+            					  application.actionBar.submitForm(oForm);
                                   i++;
                               } catch (e) 
                               {
@@ -514,7 +514,7 @@
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
 					var onLoad = function(oForm){
-						var userSelection =  ajaxplorer.getUserSelection();
+						var userSelection =  application.getUserSelection();
 						var nodes = userSelection.getSelectedNodes();
 						var firstNode = userSelection.getUniqueNode();						
 		   		    	var copyDiv = $(oForm).select('textarea[id="text_copy"]')[0];

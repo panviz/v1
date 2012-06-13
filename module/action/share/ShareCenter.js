@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
  *
- * The latest code can be found at <http://www.ajaxplorer.info/>.
+ * The latest code can be found at <http://www.application.info/>.
  */
 Class.create("ShareCenter", {
 
     performShareAction : function(){
-        var userSelection = ajaxplorer.getUserSelection();
+        var userSelection = application.getUserSelection();
         if(userSelection.hasDir() && !userSelection.hasMime($A(['ajxp_browsable_archive']))){
             this.shareRepository(userSelection);
         }else{
@@ -54,7 +54,7 @@ Class.create("ShareCenter", {
                     "shared_users_autocomplete_choices",
                     ajxpServerAccessPath + "&get_action=share&sub_action=list_shared_users",
                     {
-                        minChars:ajaxplorer.getPluginConfigs("ajxp_plugin[@name='share']").get("SHARED_USERS_LIST_MINIMUM"),
+                        minChars:application.getPluginConfigs("ajxp_plugin[@name='share']").get("SHARED_USERS_LIST_MINIMUM"),
                         paramName:'value',
                         tokens:[',', '\n'],
                         frequency:0.1,
@@ -70,7 +70,7 @@ Class.create("ShareCenter", {
                     });
                 }
                 $('create_shared_user_anchor').observeOnce("click", function(){
-                    var pref = ajaxplorer.getPluginConfigs("ajxp_plugin[@name='share']").get("SHARED_USERS_TMP_PREFIX");
+                    var pref = application.getPluginConfigs("ajxp_plugin[@name='share']").get("SHARED_USERS_TMP_PREFIX");
                     if(pref){
                         $("new_shared_user").setValue(pref);
                     }
@@ -110,7 +110,7 @@ Class.create("ShareCenter", {
                 alert(MessageHash[349]);
                 return false;
             }
-            var userSelection = ajaxplorer.getUserSelection();
+            var userSelection = application.getUserSelection();
             var publicUrl = ajxpServerAccessPath+'&get_action=share&sub_action=delegate_repo';
             publicUrl = userSelection.updateFormOrUrl(null,publicUrl);
             var conn = new Connexion(publicUrl);
@@ -122,15 +122,15 @@ Class.create("ShareCenter", {
                 var response = parseInt(transport.responseText);
                 if(response == 200){
                     if(this._currentRepositoryId){
-                        ajaxplorer.displayMessage('SUCCESS', MessageHash['share_center.19']);
+                        application.displayMessage('SUCCESS', MessageHash['share_center.19']);
                     }else{
-                        ajaxplorer.displayMessage('SUCCESS', MessageHash['share_center.18']);
+                        application.displayMessage('SUCCESS', MessageHash['share_center.18']);
                     }
-                    ajaxplorer.fireContextRefresh();
+                    application.fireContextRefresh();
                     hideLightBox(true);
                 }else{
                     var messages = {100:349, 101:352, 102:350, 103:351};
-                    ajaxplorer.displayMessage('ERROR', MessageHash[messages[response]]);
+                    application.displayMessage('ERROR', MessageHash[messages[response]]);
                 }
             }.bind(this);
             conn.sendAsync();
@@ -138,7 +138,7 @@ Class.create("ShareCenter", {
             return false;
         }.bind(this);
         if(window.bootstrap.parameters.get("usersEditable") == false){
-            ajaxplorer.displayMessage('ERROR', MessageHash[394]);
+            application.displayMessage('ERROR', MessageHash[394]);
         }else{
             modal.showDialogForm('Get', 'share_folder_form', loadFunc, submitFunc, closeFunc);
         }
@@ -204,7 +204,7 @@ Class.create("ShareCenter", {
     },
 
     performUnshareAction : function(){
-        var userSelection = ajaxplorer.getUserSelection();
+        var userSelection = application.getUserSelection();
         modal.getForm().down("img#stop_sharing_indicator").src=window.ajxpResourcesFolder+"/images/autocompleter-loader.gif";
         var conn = new Connexion();
         conn.addParameter("get_action", "unshare");
@@ -217,7 +217,7 @@ Class.create("ShareCenter", {
             }
             oForm.down('div#unshare_button').stopObserving("click");
             hideLightBox(true);
-            ajaxplorer.fireContextRefresh();
+            application.fireContextRefresh();
         };
         conn.sendAsync();
     },
@@ -225,7 +225,7 @@ Class.create("ShareCenter", {
     resetDownloadCounterCallback : function(){
         var conn = new Connexion();
         conn.addParameter("get_action", "reset_counter");
-        conn.addParameter("file", ajaxplorer.getUserSelection().getUniqueNode().getPath());
+        conn.addParameter("file", application.getUserSelection().getUniqueNode().getPath());
         conn.onComplete = function(){
             modal.getForm().down('span#downloaded_times').update('0');
         };
@@ -233,7 +233,7 @@ Class.create("ShareCenter", {
     },
 
     generatePublicLinkCallback : function(){
-        var userSelection = ajaxplorer.getUserSelection();
+        var userSelection = application.getUserSelection();
         if(!userSelection.isUnique() || (userSelection.hasDir() && !userSelection.hasMime($A(['ajxp_browsable_archive'])))) return;
         var oForm = $(modal.getForm());
         oForm.down('img#generate_image').src = window.ajxpResourcesFolder+"/images/autocompleter-loader.gif";
@@ -262,7 +262,7 @@ Class.create("ShareCenter", {
                             cont.select();
                             modal.refreshDialogAppearance();
                             modal.setCloseAction(function(){
-                                ajaxplorer.fireContextRefresh();
+                                application.fireContextRefresh();
                             });
                         }
                     });

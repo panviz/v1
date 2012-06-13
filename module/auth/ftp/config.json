@@ -5,7 +5,7 @@
     "description": "CONF_MESSAGE[Authenticate user directly to an FTP server, and connect him to this server.]",
     "mixins": "authdriver_commons",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.application/ajxp_registry.xsd",
     "client_settings": {
       "resources": {
         "i18n": {
@@ -97,7 +97,7 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var loginRedirect = AJXP_LOGIN_REDIRECT;if(loginRedirect){document.location.href=loginRedirect;}else{modal.showDialogForm('Log In', 'ftp_login_form',function(oForm){ajaxplorer.loadSeedOrCaptcha(oForm.down('#login_seed'), oForm.down('img#captcha_image'), oForm.down('div.dialogLegend'), 'before');},function(){var oForm = modal.getForm();var connexion = new Connexion();connexion.addParameter(\"get_action\", \"set_ftp_data\");oForm.getElements().each(function(el){if(el.name != \"userid\" && el.name!=\"password\" && el.name != \"get_action\" && el.name!=\"login_seed\"){connexion.addParameter(el.name, el.getValue());}});connexion.onComplete = function(transport){ajaxplorer.actionBar.submitForm(oForm, true, function(transport){ajaxplorer.actionBar.parseXmlMessage(transport.responseXML);if(transport.responseXML && XPathGetSingleNodeText(transport.responseXML.documentElement, \"logging_result/@value\") == \"-4\"){ajaxplorer.loadSeedOrCaptcha(oForm.down('#login_seed'), oForm.down('img#captcha_image'), oForm.down('div.dialogLegend'), 'before');}});oForm.reset();};connexion.sendSync();return false;});}"
+                "$t": "var loginRedirect = AJXP_LOGIN_REDIRECT;if(loginRedirect){document.location.href=loginRedirect;}else{modal.showDialogForm('Log In', 'ftp_login_form',function(oForm){application.loadSeedOrCaptcha(oForm.down('#login_seed'), oForm.down('img#captcha_image'), oForm.down('div.dialogLegend'), 'before');},function(){var oForm = modal.getForm();var connexion = new Connexion();connexion.addParameter(\"get_action\", \"set_ftp_data\");oForm.getElements().each(function(el){if(el.name != \"userid\" && el.name!=\"password\" && el.name != \"get_action\" && el.name!=\"login_seed\"){connexion.addParameter(el.name, el.getValue());}});connexion.onComplete = function(transport){application.actionBar.submitForm(oForm, true, function(transport){application.actionBar.parseXmlMessage(transport.responseXML);if(transport.responseXML && XPathGetSingleNodeText(transport.responseXML.documentElement, \"logging_result/@value\") == \"-4\"){application.loadSeedOrCaptcha(oForm.down('#login_seed'), oForm.down('img#captcha_image'), oForm.down('div.dialogLegend'), 'before');}});oForm.reset();};connexion.sendSync();return false;});}"
               },
               "clientForm": {
                 "id": "ftp_login_form",
@@ -139,7 +139,7 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "false",
-                "$t": "clearRememberData();var connexion = new Connexion();connexion.addParameter('get_action', 'ftp_logout');connexion.onComplete = function(transport){ajaxplorer.actionBar.parseXmlMessage(transport.responseXML);};connexion.sendAsync();"
+                "$t": "clearRememberData();var connexion = new Connexion();connexion.addParameter('get_action', 'ftp_logout');connexion.onComplete = function(transport){application.actionBar.parseXmlMessage(transport.responseXML);};connexion.sendAsync();"
               },
               "serverCallback": {
                 "methodName": "logoutCallback"
@@ -155,4 +155,3 @@
       }
     }
   }
-}

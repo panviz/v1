@@ -4,7 +4,7 @@
     "label": "CONF_MESSAGE[Lucene Search Engine]",
     "description": "CONF_MESSAGE[Zend_Search_Lucene implementation to index all files and search a whole repository quickly.]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.application/ajxp_registry.xsd",
     "class_definition": {
       "filename": "plugins/index.lucene/class.AjxpLuceneIndexer.php",
       "classname": "AjxpLuceneIndexer"
@@ -142,7 +142,7 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "false",
-                "$t": "var crtDir = ajaxplorer.getContextNode().getPath();var bgManager = ajaxplorer.actionBar.bgManager;bgManager.queueAction(\"index\", new Hash({dir:crtDir}), \"Indexing current folder\");bgManager.next();"
+                "$t": "var crtDir = application.getContextNode().getPath();var bgManager = application.actionBar.bgManager;bgManager.queueAction(\"index\", new Hash({dir:crtDir}), \"Indexing current folder\");bgManager.next();"
               },
               "serverCallback": {
                 "methodName": "applyAction"
@@ -158,4 +158,3 @@
       }
     }
   }
-}

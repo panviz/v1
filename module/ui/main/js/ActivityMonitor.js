@@ -36,7 +36,7 @@ Class.create("ActivityMonitor", {
 		this._renewTime = serverSessionTime - this._renewMinutes*60;
 		this._lastActive = this.getNow();
 		var activityObserver = this.activityObserver.bind(this);
-		document.observe("ajaxplorer:user_logged", function(){
+		document.observe("application:user_logged", function(){
 			// Be sure not to multiply the setInterval
 			this._lastActive = this.getNow();
 			if(this.interval) window.clearInterval(this.interval);
@@ -44,14 +44,14 @@ Class.create("ActivityMonitor", {
 			$(document.body).stopObserving("keypress", activityObserver);
 			$(document.body).stopObserving("mouseover", activityObserver);
 			$(document.body).stopObserving("mousemove", activityObserver);
-			document.stopObserving("ajaxplorer:server_answer", activityObserver);
+			document.stopObserving("application:server_answer", activityObserver);
 			this._state = 'inactive';
-			if(ajaxplorer.user) {
+			if(application.user) {
 				this._state = 'active';
 				$(document.body).observe("keypress", activityObserver );
 				$(document.body).observe("mouseover", activityObserver );
 				$(document.body).observe("mousemove", activityObserver );
-				document.observe("ajaxplorer:server_answer", activityObserver );
+				document.observe("application:server_answer", activityObserver );
 				this.interval = window.setInterval(this.idleObserver.bind(this), 5000);
 				this.serverInterval = window.setInterval(this.serverObserver.bind(this), this._renewTime*1000);
 			}
@@ -99,7 +99,7 @@ Class.create("ActivityMonitor", {
 			this._state = 'active';
 			if(this.interval) window.clearInterval(this.interval);
 			if(this.serverInterval) window.clearInterval(this.serverInterval);
-			ajaxplorer.actionBar.fireDefaultAction("expire");
+			application.actionBar.fireDefaultAction("expire");
 			return;
 		}
 		if( idleTime >= this._warningTime ){

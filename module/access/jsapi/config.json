@@ -4,7 +4,7 @@
     "label": "CONF_MESSAGE[Javascript Api Browser]",
     "description": "CONF_MESSAGE[Browse AjaXplorer Javascript classes and interfaces. Helper for developpers, but also good demonstration of how Ajaxplorer data can be fed by something different than a remote server filesystem!]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.application/ajxp_registry.xsd",
     "client_settings": {
       "icon": "plugins/access.jsapi/admin.png",
       "resources": {
@@ -86,7 +86,7 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var path;if(window.actionArguments && window.actionArguments.length>0){path = window.actionArguments[0];if(Object.isString(path)){path = new AjxpNode(path,false,getBaseName(path));}}else{userSelection = ajaxplorer.getUserSelection();if(userSelection && userSelection.isUnique() && (userSelection.hasDir() || userSelection.hasMime(\"AJXP_MIMES_ZIP\".split(\",\")))){path = userSelection.getUniqueNode();}}if(path){ajaxplorer.updateContextData(path);}"
+                "$t": "var path;if(window.actionArguments && window.actionArguments.length>0){path = window.actionArguments[0];if(Object.isString(path)){path = new AjxpNode(path,false,getBaseName(path));}}else{userSelection = application.getUserSelection();if(userSelection && userSelection.isUnique() && (userSelection.hasDir() || userSelection.hasMime(\"AJXP_MIMES_ZIP\".split(\",\")))){path = userSelection.getUniqueNode();}}if(path){application.updateContextData(path);}"
               },
               "serverCallback": {
                 "methodName": "switchAction"

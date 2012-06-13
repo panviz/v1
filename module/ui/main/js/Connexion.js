@@ -128,27 +128,27 @@ Class.create("Connexion", {
 		}
 		if(message){
             if(message == "You are not allowed to access this resource.") message = tokenMessage;
-			if(ajaxplorer) ajaxplorer.displayMessage("ERROR", message);
+			if(application) application.displayMessage("ERROR", message);
 			else alert(message);
 		}
 		if(transport.responseXML && transport.responseXML.documentElement){
 			var authNode = XPathSelectSingleNode(transport.responseXML.documentElement, "require_auth");
-			if(authNode && ajaxplorer){
-				var root = ajaxplorer._contextHolder.getRootNode();
+			if(authNode && application){
+				var root = application._contextHolder.getRootNode();
 				if(root){
-					ajaxplorer._contextHolder.setContextNode(root);
+					application._contextHolder.setContextNode(root);
 					root.clear();
 				}
-				ajaxplorer.actionBar.fireAction('logout');
-				ajaxplorer.actionBar.fireAction('login');
+				application.actionBar.fireAction('logout');
+				application.actionBar.fireAction('login');
 			}
 			var messageNode = XPathSelectSingleNode(transport.responseXML.documentElement, "message");
 			if(messageNode){
 				var messageType = messageNode.getAttribute("type").toUpperCase();
 				var messageContent = getDomNodeText(messageNode);
                 if(messageContent == "You are not allowed to access this resource.") messageContent = tokenMessage;
-				if(ajaxplorer){
-					ajaxplorer.displayMessage(messageType, messageContent);
+				if(application){
+					application.displayMessage(messageType, messageContent);
 				}else{
 					if(messageType == "ERROR"){
 						alert(messageType+":"+messageContent);
@@ -159,7 +159,7 @@ Class.create("Connexion", {
 		if(this.onComplete){
 			this.onComplete(transport);
 		}
-		document.fire("ajaxplorer:server_answer");
+		document.fire("application:server_answer");
 	},
 	
 	/**
@@ -200,7 +200,7 @@ Class.create("Connexion", {
 						alert('error loading '+fileName+':'+e);
 					}
 				}
-				document.fire("ajaxplorer:server_answer");				
+				document.fire("application:server_answer");				
 			}
 		});	
 	}

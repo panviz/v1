@@ -12,7 +12,7 @@
     "label": "CONF_MESSAGE[External Window]",
     "description": "CONF_MESSAGE[Open file in a new browser window, thus using native browser capabilities.]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.application/ajxp_registry.xsd",
     "client_settings": {
       "resources": {
         "js": {
@@ -56,4 +56,3 @@
       }
     }
   }
-}

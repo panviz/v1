@@ -25,10 +25,10 @@ Class.create("UserWidget", {
 		
 		this.element.observe("mouseover", this.mObs1 );
 		this.element.observe("mouseout", this.mObs2 );		
-		document.observe("ajaxplorer:user_logged", this.uLoggedObs );
-		document.observe("ajaxplorer:actions_loaded", this.actLoaded );		
+		document.observe("application:user_logged", this.uLoggedObs );
+		document.observe("application:actions_loaded", this.actLoaded );		
 		if(Prototype.Browser.IE) {
-			document.observe("ajaxplorer:actions_refreshed", this.actLoaded );
+			document.observe("application:actions_refreshed", this.actLoaded );
 		}
 	},
 	/**
@@ -36,16 +36,16 @@ Class.create("UserWidget", {
 	 */
 	updateGui : function(){
 		var logging_string = "";
-		var oUser = ajaxplorer.user;		
+		var oUser = application.user;		
 		if(oUser != null) 
 		{
 			if(oUser.id != 'guest') 
 			{
 				logging_string = '<div class="user_widget_label"><ajxp:message ajxp_message_id="142">'+MessageHash[142]+'</ajxp:message><i ajxp_message_title_id="189" title="'+MessageHash[189]+'">'+ oUser.id+' </i></div><div class="inlineBarButtonLeft" style="-moz-border-radius: 0pt 5px 5px 0pt;border-radius: 0pt 5px 5px 0pt;border-left-style:none; border-width:1px;"><img width="16" height="16" style="height: 6px; width: 10px; margin-top: 9px; margin-left: 3px; margin-right: 3px;" ajxp_message_title="189" title="'+MessageHash[189]+'" src="'+ajxpResourcesFolder+'/images/arrow_down.png"></div>';
 				this.element.removeClassName('disabled');
-				if(oUser.getPreference('lang') != null && oUser.getPreference('lang') != "" && oUser.getPreference('lang') != ajaxplorer.currentLanguage)
+				if(oUser.getPreference('lang') != null && oUser.getPreference('lang') != "" && oUser.getPreference('lang') != application.currentLanguage)
 				{
-					ajaxplorer.loadI18NMessages(oUser.getPreference('lang'));
+					application.loadI18NMessages(oUser.getPreference('lang'));
 				}
 			}
 			else 
@@ -68,7 +68,7 @@ Class.create("UserWidget", {
 	updateActions : function(){
 										debugger
 		var menuItems = $A();
-		var actions = ajaxplorer.actionBar.getActionsForWidget("UserWidget", this.element.id).each(function(action){
+		var actions = application.actionBar.getActionsForWidget("UserWidget", this.element.id).each(function(action){
 			menuItems.push({
 				name: action.getKeyedText(),
 				alt: action.options.title,
@@ -135,10 +135,10 @@ Class.create("UserWidget", {
 	destroy : function(){
 		this.element.stopObserving("mouseover", this.mObs1 );
 		this.element.stopObserving("mouseout", this.mObs2 );		
-		document.stopObserving("ajaxplorer:user_logged", this.uLoggedObs );
-		document.stopObserving("ajaxplorer:actions_loaded", this.actLoaded );		
+		document.stopObserving("application:user_logged", this.uLoggedObs );
+		document.stopObserving("application:actions_loaded", this.actLoaded );		
 		if(Prototype.Browser.IE) {
-			document.stopObserving("ajaxplorer:actions_refreshed", this.actLoaded );
+			document.stopObserving("application:actions_refreshed", this.actLoaded );
 		}		
 		this.element = null;
 	}

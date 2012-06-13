@@ -10,11 +10,11 @@ Class.create("OtherEditorChooser", AbstractEditor, {
 
     /*
     Not used, reported in activeCondition
-    Dynamic patching of ajaxplorer findEditorsForMime, nice!
+    Dynamic patching of application findEditorsForMime, nice!
      */
     patchEditorLoader : function(){
-        var original = ajaxplorer.__proto__.findEditorsForMime;
-        ajaxplorer.__proto__.findEditorsForMime = function(mime, restrictToPreviewProviders){
+        var original = application.__proto__.findEditorsForMime;
+        application.__proto__.findEditorsForMime = function(mime, restrictToPreviewProviders){
             if(this.user && this.user.getPreference("gui_preferences", true) && this.user.getPreference("gui_preferences", true)["other_editor_extensions"]){
                 $H(this.user.getPreference("gui_preferences", true)["other_editor_extensions"]).each(function(pair){
                     var editor = this.getActiveExtensionByType("editor").detect(function(ed){
@@ -60,37 +60,37 @@ Class.create("OtherEditorChooser", AbstractEditor, {
 	selectEditor : function(event){
         Event.stop(event);
 		if(!event.target.editorData) return;
-		ajaxplorer.loadEditorResources(event.target.editorData.resourcesManager);
+		application.loadEditorResources(event.target.editorData.resourcesManager);
 		hideLightBox();
 		modal.openEditorDialog(event.target.editorData);
         this.createAssociation(event.target.currentMime, event.target.editorData.editorClass);
 	},
 
     createAssociation : function(mime, editorClassName){
-        var editor = ajaxplorer.getActiveExtensionByType("editor").detect(function(ed){
+        var editor = application.getActiveExtensionByType("editor").detect(function(ed){
             return ed.editorClass == editorClassName;
         });
         if(editor && !$A(editor.mimes).include(mime)){
             editor.mimes.push(mime);
-            if(ajaxplorer && ajaxplorer.user){
-                var guiPrefs = ajaxplorer.user.getPreference("gui_preferences", true) || {};
+            if(application && application.user){
+                var guiPrefs = application.user.getPreference("gui_preferences", true) || {};
                 var exts = guiPrefs["other_editor_extensions"] || {};
                 exts[mime] = editorClassName;
                 guiPrefs["other_editor_extensions"] = exts;
-                ajaxplorer.user.setPreference("gui_preferences", guiPrefs, true);
-                ajaxplorer.user.savePreference("gui_preferences");
+                application.user.setPreference("gui_preferences", guiPrefs, true);
+                application.user.savePreference("gui_preferences");
             }
         }
     },
 
     clearAssociations : function(mime){
         try{
-            var guiPrefs = ajaxplorer.user.getPreference("gui_preferences", true);
+            var guiPrefs = application.user.getPreference("gui_preferences", true);
             var assoc = guiPrefs["other_editor_extensions"];
         }catch(e){}
         if(assoc && assoc[mime]){
             var editorClassName = assoc[mime];
-            var editor = ajaxplorer.getActiveExtensionByType("editor").detect(function(ed){
+            var editor = application.getActiveExtensionByType("editor").detect(function(ed){
                 return ed.editorClass == editorClassName;
             });
             if(editor){
@@ -98,8 +98,8 @@ Class.create("OtherEditorChooser", AbstractEditor, {
             }
             delete assoc[mime];
             guiPrefs["other_editor_extensions"] = assoc;
-            ajaxplorer.user.setPreference("gui_preferences", guiPrefs, true);
-            ajaxplorer.user.savePreference("gui_preferences");
+            application.user.setPreference("gui_preferences", guiPrefs, true);
+            application.user.savePreference("gui_preferences");
         }
     },
 	
@@ -114,7 +114,7 @@ Class.create("OtherEditorChooser", AbstractEditor, {
 		if(this.user != null && !this.user.canWrite()){
 			checkWrite = true;
 		}
-		ajaxplorer.getActiveExtensionByType('editor').each(function(el){
+		application.getActiveExtensionByType('editor').each(function(el){
 			if(checkWrite && el.write) return;
 			if(!el.openable) return;
 			if(el.mimes.include(mime) || el.mimes.include('*')) return;

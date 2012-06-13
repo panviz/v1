@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
  *
- * The latest code can be found at <http://www.ajaxplorer.info/>.
+ * The latest code can be found at <http://www.application.info/>.
  */
 .ui360container{
     background-image: url("player_bg_icon.png");
@@ -56,4 +56,3 @@
 
 .volume_slider_active{
     background-color: rgba(255,255,255,0.7);
-}

@@ -5,7 +5,7 @@
     "description": "CONF_MESSAGE[This driver can access a remote FTP server]",
     "mixins": "credentials_consumer,filesystem_commons,slug_provider,template_provider",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.application/ajxp_registry.xsd",
     "client_settings": {
       "icon": "plugins/access.ftp/icon.png",
       "resources": {
@@ -76,7 +76,7 @@
           "name": "TMP_UPLOAD",
           "type": "string",
           "label": "CONF_MESSAGE[Temporary Folder]",
-          "description": "CONF_MESSAGE[Temporary folder on the local server used for file uploads. For the moment, it must be placed under your ajaxplorer folder and you must create it and set it writeable by Apache.]",
+          "description": "CONF_MESSAGE[Temporary folder on the local server used for file uploads. For the moment, it must be placed under your application folder and you must create it and set it writeable by Apache.]",
           "default": "/tmp",
           "mandatory": "true"
         },
@@ -85,7 +85,7 @@
           "name": "DYNAMIC_FTP",
           "type": "boolean",
           "label": "CONF_MESSAGE[Pass Ftp data through Auth driver]",
-          "description": "CONF_MESSAGE[In conjunction with a correctly configured auth.ftp driver, this allow to transform ajaxplorer into a simple netFtp client.]",
+          "description": "CONF_MESSAGE[In conjunction with a correctly configured auth.ftp driver, this allow to transform application into a simple netFtp client.]",
           "mandatory": "false",
           "default": "false"
         }
@@ -173,4 +173,3 @@
       "protocol": "ajxp.ftp"
     }
   }
-}

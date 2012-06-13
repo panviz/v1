@@ -4,7 +4,7 @@
     "label": "CONF_MESSAGE[iOS]",
     "description": "CONF_MESSAGE[Template for redirecting to iPhone application]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.application/ajxp_registry.xsd",
     "class_definition": {
       "filename": "plugins/gui.ios/class.IOSGuiPlugin.php",
       "classname": "IOSGuiPlugin"
@@ -16,7 +16,7 @@
           "label": "CONF_MESSAGE[iOS Application]",
           "name": "IOS_URL",
           "type": "string",
-          "default": "http://ajaxplorer.info/support/stores/ios.php",
+          "default": "http://application.info/support/stores/ios.php",
           "expose": "true"
         },
         {
@@ -24,7 +24,7 @@
           "label": "CONF_MESSAGE[Android App]",
           "name": "ANDROID_URL",
           "type": "string",
-          "default": "http://ajaxplorer.info/support/stores/android.php",
+          "default": "http://application.info/support/stores/android.php",
           "expose": "true"
         }
       ]
@@ -51,7 +51,7 @@
             "name": "main",
             "element": "ajxp_desktop",
             "position": "top",
-            "$t": "<div id=\"browser\" ajxpClass=\"AjxpPane\" ajxpOptions='{\"fit\":\"height\",\"fitParent\":\"ajxp_desktop\"}' style=\"text-align:center;font-size:1.1em; line-height:1.3em; font-family:Helvetica; background-color: white;\"><div style=\"width:90%;padding:10px; margin:0px auto;\" id=\"message-id-1\">Do you know that there is a dedicated iPhone/iPad application for AjaXplorer?</div><a id=\"ajxpserver-redir\" class=\"m-2\" style=\"width:70%; padding:10px; margin:10px auto; font-size:0.8em;\" href=\"#\">Yes I have it already, add this server to my AjaXplorer iOS remote servers</a><br><a id=\"appstore-redir\" class=\"m-2\" style=\"width:70%; padding:10px; margin:10px auto; font-size:0.8em;\" href=\"http://ajaxplorer.info/support/stores/ios.php\">No I don't have it, send me <br/>to App Store now</a><br><a id=\"skipios-redir\" class=\"m-2\" style=\"width:70%; padding:10px; margin:10px auto; font-size:0.8em;\" href=\"#\">I don't care, let me use <br/>the web version of AjaXplorer!</a><br></div>"
+            "$t": "<div id=\"browser\" ajxpClass=\"AjxpPane\" ajxpOptions='{\"fit\":\"height\",\"fitParent\":\"ajxp_desktop\"}' style=\"text-align:center;font-size:1.1em; line-height:1.3em; font-family:Helvetica; background-color: white;\"><div style=\"width:90%;padding:10px; margin:0px auto;\" id=\"message-id-1\">Do you know that there is a dedicated iPhone/iPad application for AjaXplorer?</div><a id=\"ajxpserver-redir\" class=\"m-2\" style=\"width:70%; padding:10px; margin:10px auto; font-size:0.8em;\" href=\"#\">Yes I have it already, add this server to my AjaXplorer iOS remote servers</a><br><a id=\"appstore-redir\" class=\"m-2\" style=\"width:70%; padding:10px; margin:10px auto; font-size:0.8em;\" href=\"http://application.info/support/stores/ios.php\">No I don't have it, send me <br/>to App Store now</a><br><a id=\"skipios-redir\" class=\"m-2\" style=\"width:70%; padding:10px; margin:10px auto; font-size:0.8em;\" href=\"#\">I don't care, let me use <br/>the web version of AjaXplorer!</a><br></div>"
           }
         ]
       },
@@ -73,4 +73,3 @@
       }
     }
   }
-}

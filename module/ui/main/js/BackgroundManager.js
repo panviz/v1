@@ -112,12 +112,12 @@ Class.create("BackgroundManager", {
 				if(name == "reload_node"){
                     if(delay){
                         window.setTimeout(function(){
-                            ajaxplorer.fireContextRefresh();
+                            application.fireContextRefresh();
                             this.next();
                         }.bind(this), delay*1000);
                         return;
                     }
-					 var dm = ajaxplorer.fireContextRefresh();
+					 var dm = application.fireContextRefresh();
                 }else if(name == "info_message"){
                     this.updatePanelMessage(messageId);
                 }else if(name == "javascript_instruction" && callback){

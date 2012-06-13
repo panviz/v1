@@ -27,9 +27,9 @@ Class.create("ActionsToolbar", {
         if(this.options.styles){
             this.buildActionBarStylingMenu();
             this.style = this.options.defaultStyle;
-            document.observe("ajaxplorer:user_logged", function(){
-                if(ajaxplorer.user && ajaxplorer.user.getPreference("action_bar_style")){
-                    this.style = ajaxplorer.user.getPreference("action_bar_style");
+            document.observe("application:user_logged", function(){
+                if(application.user && application.user.getPreference("action_bar_style")){
+                    this.style = application.user.getPreference("action_bar_style");
                 }else{
                     this.style = this.options.defaultStyle;
                 }
@@ -37,14 +37,14 @@ Class.create("ActionsToolbar", {
             }.bind(this));
         }
 		attachMobileScroll(oElement.id, "horizontal");
-		document.observe("ajaxplorer:actions_loaded", this.actionsLoaded.bind(this));
-		document.observe("ajaxplorer:actions_refreshed", this.refreshToolbarsSeparator.bind(this));
+		document.observe("application:actions_loaded", this.actionsLoaded.bind(this));
+		document.observe("application:actions_refreshed", this.refreshToolbarsSeparator.bind(this));
         this.componentConfigHandler = function(event){
             if(event.memo.className == "ActionsToolbar"){
                 this.parseComponentConfig(event.memo.classConfig.get('all'));
             }
         }.bind(this);
-        document.observe("ajaxplorer:component_config_changed", this.componentConfigHandler );
+        document.observe("application:component_config_changed", this.componentConfigHandler );
 
 	},
 	
@@ -73,7 +73,7 @@ Class.create("ActionsToolbar", {
     },
 	/**
 	 * Handler for actions_loaded event.
-	 * @param event Event ajaxplorer:actions_loaded
+	 * @param event Event application:actions_loaded
 	 */
 	actionsLoaded : function(event) {
 										debugger
@@ -391,9 +391,9 @@ Class.create("ActionsToolbar", {
                 }.bind(this));
             }
             if(parent.ajxpPaneObject) parent.ajxpPaneObject.resize();
-            if(ajaxplorer.user && !start){
-                ajaxplorer.user.setPreference("action_bar_style", style);
-                ajaxplorer.user.savePreference("action_bar_style");
+            if(application.user && !start){
+                application.user.setPreference("action_bar_style", style);
+                application.user.savePreference("action_bar_style");
             }
         }.bind(this);
 

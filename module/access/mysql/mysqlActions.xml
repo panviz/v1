@@ -21,13 +21,13 @@
 						path = window.actionArguments[0];
 						if(Object.isString(path)){path = new AjxpNode(path,false,getBaseName(path));}
 					}else{
-						userSelection = ajaxplorer.getUserSelection();
+						userSelection = application.getUserSelection();
 						if(userSelection && userSelection.isUnique() && (userSelection.hasDir() || userSelection.hasMime(["zip"]))){
 							path = userSelection.getUniqueNode();
 						}
 					}
 					if(path){
-						ajaxplorer.updateContextData(path);
+						application.updateContextData(path);
 					}						
 					]]></clientCallback>
 				<serverCallback methodName="switchAction"></serverCallback>
@@ -59,8 +59,8 @@
 				<clientCallback prepareModal="true"><![CDATA[					
 					var sTitle = MessageHash[187];
 					var loadFunc = function(oForm){
-						ajaxplorer.actionBar.sqlEditor = new SQLEditor(oForm);
-						ajaxplorer.actionBar.sqlEditor.createTableEditor();
+						application.actionBar.sqlEditor = new SQLEditor(oForm);
+						application.actionBar.sqlEditor.createTableEditor();
 					};
 					modal.showDialogForm('Create Table', 'mysql_edit_table', loadFunc, null, null, true, true);
 					]]></clientCallback>
@@ -77,11 +77,11 @@
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
 					var loadFunc = function(oForm){
-						ajaxplorer.actionBar.sqlEditor = new SQLEditor(oForm);
-						ajaxplorer.actionBar.sqlEditor.createRecordEditor();
+						application.actionBar.sqlEditor = new SQLEditor(oForm);
+						application.actionBar.sqlEditor.createRecordEditor();
 					};
 					var completeFunc = function(){
-						ajaxplorer.actionBar.sqlEditor.submitRecordForm();
+						application.actionBar.sqlEditor.submitRecordForm();
 						return false;
 					};
 					modal.showDialogForm('Add Record', 'mysql_edit_record', loadFunc, completeFunc, null);
@@ -99,11 +99,11 @@
 			<rightsContext noUser="true" userLogged="only" read="true" write="true" adminOnly=""></rightsContext>
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
-					var currentTable = ajaxplorer.getContextNode().getPath();
+					var currentTable = application.getContextNode().getPath();
 					var sTitle = MessageHash[187]+currentTable;
 					var loadFunc = function(oForm){
-						ajaxplorer.actionBar.sqlEditor = new SQLEditor(oForm);
-						ajaxplorer.actionBar.sqlEditor.createTableEditor(currentTable);
+						application.actionBar.sqlEditor = new SQLEditor(oForm);
+						application.actionBar.sqlEditor.createTableEditor(currentTable);
 					};
 					modal.showDialogForm('Edit Table Columns', 'mysql_edit_table', loadFunc, null, null, true, true);
 					]]></clientCallback>
@@ -208,13 +208,13 @@
 			<rightsContext noUser="true" userLogged="only" read="true" write="true" adminOnly=""></rightsContext>
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
-					var userSelection =  ajaxplorer.getUserSelection();					
+					var userSelection =  application.getUserSelection();					
 					var loadFunc = function(oForm){
-						ajaxplorer.actionBar.sqlEditor = new SQLEditor(oForm);
-						ajaxplorer.actionBar.sqlEditor.createRecordEditor(userSelection);
+						application.actionBar.sqlEditor = new SQLEditor(oForm);
+						application.actionBar.sqlEditor.createRecordEditor(userSelection);
 					};
 					var completeFunc = function(){
-						ajaxplorer.actionBar.sqlEditor.submitRecordForm();
+						application.actionBar.sqlEditor.submitRecordForm();
 						return false;
 					};					
 					modal.showDialogForm('Edit Online', 'mysql_edit_record', loadFunc, completeFunc, null);
@@ -242,8 +242,8 @@
 					};
 					modal.showDialogForm('Delete', 'delete_form', onLoad, function(){
 						var oForm = modal.getForm();
-						ajaxplorer.getUserSelection().updateFormOrUrl(oForm);
-						ajaxplorer.actionBar.submitForm(oForm);
+						application.getUserSelection().updateFormOrUrl(oForm);
+						application.actionBar.submitForm(oForm);
 						hideLightBox(true);
 						return false;
 					});
@@ -271,8 +271,8 @@
 					};
 					modal.showDialogForm('Delete', 'delete_record_form', onLoad, function(){
 						var oForm = modal.getForm();
-						ajaxplorer.getUserSelection().updateFormOrUrl(oForm);
-						ajaxplorer.actionBar.submitForm(oForm);
+						application.getUserSelection().updateFormOrUrl(oForm);
+						application.actionBar.submitForm(oForm);
 						hideLightBox(true);
 						return false;
 					});

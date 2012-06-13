@@ -11,26 +11,26 @@
 		this.currentCount = 0;	
 		this.bookmarks = $A([]);
 		this.createMenu();
-		document.observe("ajaxplorer:registry_loaded", function(event){
+		document.observe("application:registry_loaded", function(event){
 			this.parseXml(event.memo);
 		}.bind(this) );
-		document.observeOnce("ajaxplorer:actions_loaded", function(){
+		document.observeOnce("application:actions_loaded", function(){
 			debugger
-			var bmAction = ajaxplorer.actionBar.actions.get('bookmark');
+			var bmAction = application.actionBar.actions.get('bookmark');
 			this.addBookmarkObject = {
 				name: bmAction.getKeyedText(),
 				alt: bmAction.options.title,
 				image: ajxpResourcesFolder+'/image/actions/16/bookmark_add.png',
 				callback: function(e){
-					var node = ajaxplorer.getContextNode();
+					var node = application.getContextNode();
                     node.getMetadata().set('ajxp_bookmarked', 'true');
                     node.getMetadata().set('overlay_icon', 'bookmark.png');
 					this.addBookmark(node.getPath(), node.getLabel());
 				}.bind(this)
 			};		
 		}.bind(this));
-		document.observe("ajaxplorer:add_bookmark", function(){
-			var node = ajaxplorer.getContextNode();
+		document.observe("application:add_bookmark", function(){
+			var node = application.getContextNode();
 			this.addBookmark(node.getPath(), node.getLabel());
             node.getMetadata().set('ajxp_bookmarked', 'true');
             node.getMetadata().set('overlay_icon', 'bookmark.png');
@@ -50,7 +50,7 @@
 				alt: childNodes[i].getAttribute('path'),
 				image: ajxpResourcesFolder+'/image/mimes/16/folder.png'
 			};
-			bookmark.callback = function(e){ajaxplorer.goTo(this.alt);}.bind(bookmark);
+			bookmark.callback = function(e){application.goTo(this.alt);}.bind(bookmark);
 			bookmark.moreActions = this.getContextActions(bookmark.alt, bookmark.name);
 			this.bookmarks.push(bookmark);
 		}
@@ -154,11 +154,11 @@
 		actionsParameters.set('get_action', 'get_bookmarks');
 		connexion.setParameters(actionsParameters);
 		connexion.onComplete = function(transport){
-			document.observeOnce("ajaxplorer:registry_part_loaded", function(event){
+			document.observeOnce("application:registry_part_loaded", function(event){
 				if(event.memo != "user/bookmarks") return;
-				this.parseXml(ajaxplorer.getXmlRegistry());
+				this.parseXml(application.getXmlRegistry());
 			}.bind(this) );			
-			ajaxplorer.loadXmlRegistry(false, "user/bookmarks");
+			application.loadXmlRegistry(false, "user/bookmarks");
 			this.bmMenu.refreshList();
 			this.bmMenu.show();
 		}.bind(this);

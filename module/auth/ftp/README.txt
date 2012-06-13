@@ -23,7 +23,7 @@ $PLUGINS = array(
 			/* Id of the repository defined below */
 			"REPOSITORY_ID" => "dynamic_ftp",
 						
-			/* Existing admin in the sense of ajaxplorer admin, to avoid alert at startup */
+			/* Existing admin in the sense of application admin, to avoid alert at startup */
 			"ADMIN_USER"	=> "admin",
 			
 			/* If you want your use to connect any FTP they want, set this to TRUE */			
@@ -53,4 +53,3 @@ $REPOSITORIES["dynamic_ftp"] = array(
 		/* Set this to "rw", this will be the default rights for users */
 		"DEFAULT_RIGHTS" => "rw"	
 	)
-);

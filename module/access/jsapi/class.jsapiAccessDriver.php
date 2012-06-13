@@ -16,12 +16,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
  *
- * The latest code can be found at <http://www.ajaxplorer.info/>.
+ * The latest code can be found at <http://www.application.info/>.
  */
 defined('AJXP_EXEC') or die( 'Access not allowed');
 
 /**
- * @package info.ajaxplorer.plugins
+ * @package info.application.plugins
  * AJXP_Plugin to send a javascript source to the browser
  */
 class jsapiAccessDriver extends AbstractAccessDriver{
@@ -39,13 +39,13 @@ class jsapiAccessDriver extends AbstractAccessDriver{
 				// Locate the file class.ClassName.js
 				if($jsType == "class"){
 					$searchLocations = array(
-						CLIENT_RESOURCES_FOLDER."/js/ajaxplorer",
+						CLIENT_RESOURCES_FOLDER."/js/application",
 						CLIENT_RESOURCES_FOLDER."/js/lib",
 						AJXP_INSTALL_PATH."/plugins/"
 					);
 				}else if($jsType == "interface"){
 					$searchLocations = array(
-						CLIENT_RESOURCES_FOLDER."/js/ajaxplorer/interfaces",
+						CLIENT_RESOURCES_FOLDER."/js/application/interfaces",
 					);
 				}
 				foreach ($searchLocations as $location){
@@ -69,4 +69,3 @@ class jsapiAccessDriver extends AbstractAccessDriver{
 	}
 	
 }
-?>

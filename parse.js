@@ -4,6 +4,17 @@ var fs = require('fs'),
 		//parser = require('xml2json'),
 		path = process.cwd();
 
+var test = function(files){
+	var counter = 0;
+	files.forEach(function(file){
+		if (file.match(/ajaxplorer/gi)) {
+			var filename = path + '/module/' + file;
+			var f = new wrench.LineReader(filename);
+			console.log(counter + filename)
+		//fs.writeFileSync(filename, data);
+		}
+	})
+}
 var php2Json = function(files){
 	files.forEach(function(file){
 		if (file.match(/i18n.*\.php$/g)) {
@@ -38,22 +49,29 @@ var xml2Json = function(files){
 	})
 }
 
-var test = function(files){
+var replace = function(files){
+	var counter = 0;
 	files.forEach(function(file){
-		if (file.match(/\.js/g)) {
+		if (file.match(/\.js*|\.xml|\.css|\.txt|\.html/g)) {
+		  var	changed = false;
 			var data = '';
 			var filename = path + '/module/' + file;
 			var f = new wrench.LineReader(filename);
 			while(f.hasNextLine()) {
 				var line = f.getNextLine();
-				var exp = /ajaxplorer:/;
+				var exp = /ajaxplorer/;
 				if (line.match(exp)){
-					console.log(filename)
-					line = line.replace(exp, 'application:');
+					console.log("LINE: " + line);
+					line = line.replace(exp, 'application');
+					changed = true;
+					counter++
 				}
-				data += line;
+				data += (line +'\n');
 			}
-			fs.writeFileSync(filename, data);
+			if (changed){
+					console.log(counter + filename)
+				fs.writeFileSync(filename, data);
+			}
 		}
 	})
 }

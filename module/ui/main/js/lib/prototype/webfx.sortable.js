@@ -177,9 +177,9 @@ SortableTable = Class.create({
 	
 	onHeaderResize : function(headerCells){
 		/*
-		var data = ajaxplorer.user.getPreference("columns_size", true);
+		var data = application.user.getPreference("columns_size", true);
 		data = (data?new Hash(data):new Hash());
-		var repoData = data.get(ajaxplorer.user.getActiveRepository());
+		var repoData = data.get(application.user.getActiveRepository());
 		repoData = (repoData?new Hash(repoData):new Hash());
 		repoData.set('type', 'percent');
 
@@ -187,9 +187,9 @@ SortableTable = Class.create({
 		for(var k=0;k<headerCellsWidth.length;k++){
 			repoData.set(k, Math.round((headerCellsWidth[k]-10)/tableWidth*100));
 		}
-		data.set(ajaxplorer.user.getActiveRepository(), repoData);
-		ajaxplorer.user.setPreference("columns_size", data, true);
-		ajaxplorer.user.savePreference("columns_size");
+		data.set(application.user.getActiveRepository(), repoData);
+		application.user.setPreference("columns_size", data, true);
+		application.user.savePreference("columns_size");
 		*/
 	},
 

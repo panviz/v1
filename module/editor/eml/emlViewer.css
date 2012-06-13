@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
  *
- * The latest code can be found at <http://www.ajaxplorer.info/>.
+ * The latest code can be found at <http://www.application.info/>.
  */
 div#emlHeaderContainer{
 	background-color: #EEE;
@@ -90,5 +90,4 @@ div#treeSelectorCpContainer{
 	background-color: white;
 	top: 156px;
 	box-shadow: 1px 1px 4px #BBB;	
-}
 }

@@ -49,7 +49,7 @@
 			<rightsContext noUser="true" userLogged="only" read="true" write="false" adminOnly=""></rightsContext>			
 			<processing>
 				<clientCallback prepareModal="false"><![CDATA[
-					ajaxplorer.fireContextUp();
+					application.fireContextUp();
 					]]></clientCallback>
 			</processing>
 		</action>		
@@ -63,7 +63,7 @@
 			<rightsContext noUser="true" userLogged="only" read="true" write="false" adminOnly=""></rightsContext>
 			<processing>
 				<clientCallback prepareModal="false"><![CDATA[
-					ajaxplorer.fireContextRefresh();
+					application.fireContextRefresh();
 					]]></clientCallback>
 			</processing>
 		</action>
@@ -77,11 +77,11 @@
 			<rightsContext noUser="true" userLogged="only" read="true" write="false" adminOnly=""></rightsContext>
 			<processing>
 				<clientCallback prepareModal="false"><![CDATA[
-					var userSelection = ajaxplorer.getUserSelection();
+					var userSelection = application.getUserSelection();
 					if((userSelection.isUnique() && !userSelection.hasDir()))
 					{
 						var fileName = userSelection.getUniqueFileName();
-						var selectorData = ajaxplorer.actionBar.selectorData;
+						var selectorData = application.actionBar.selectorData;
 						if(selectorData.get('type') == "ckeditor"){
 							var ckData = selectorData.get('data');
 							if (ckData['CKEditorFuncNum']) {
@@ -108,7 +108,7 @@
 			<rightsContext noUser="true" userLogged="only" read="true" write="false" adminOnly=""></rightsContext>
 			<processing>
 				<clientCallback prepareModal="false"><![CDATA[
-					document.fire("ajaxplorer:add_bookmark");
+					document.fire("application:add_bookmark");
 					]]></clientCallback>
 			</processing>
 		</action>		

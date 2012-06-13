@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<registry_contributions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:../core.ajaxplorer/ajxp_registry.xsd">
+<registry_contributions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:../core.application/ajxp_registry.xsd">
 	<actions>
 		<action name="switch_repository">
 			<processing>
@@ -103,7 +103,7 @@
                             var conn = new Connexion();
                             conn.setParameters(params);
                             conn.onComplete = function(transport){
-                                ajaxplorer.actionBar.parseXmlMessage(transport.responseXML);
+                                application.actionBar.parseXmlMessage(transport.responseXML);
                             }
                             conn.sendAsync();
 					]]></dialogOnComplete>
@@ -157,7 +157,7 @@
 			<processing>
 				<clientCallback prepareModal="true" dialogOpenForm="switch_language_form" dialogOkButtonOnly="false" dialogSkipButtons="false">
 					<dialogOnOpen><![CDATA[
-					    if(ajaxplorer.user) var userLang = ajaxplorer.user.getPreference("lang");
+					    if(application.user) var userLang = application.user.getPreference("lang");
 						if(!userLang) userLang = window.bootstrap.parameters.get("currentLanguage");
 						var selector = $(oForm).select('select[id="language_selector"]')[0];
 						var languages = $H(window.bootstrap.parameters.get("availableLanguages"));
@@ -169,26 +169,26 @@
 						selector.setValue(userLang);		
 						selector.observe("change", function(){
 							var value = selector.getValue();
-							if(ajaxplorer.user){
-    							ajaxplorer.user.setPreference("lang", selector.getValue());
-	    						ajaxplorer.user.savePreference("lang");
+							if(application.user){
+    							application.user.setPreference("lang", selector.getValue());
+	    						application.user.savePreference("lang");
 	    					}
 						});
 					]]></dialogOnOpen>
 					<dialogOnComplete hideDialog="true"><![CDATA[
-                        if(ajaxplorer.user){
-                            var oUser = ajaxplorer.user;
+                        if(application.user){
+                            var oUser = application.user;
                             if(oUser.getPreference('lang') != null
                                 && oUser.getPreference('lang') != ""
-                                && oUser.getPreference('lang') != ajaxplorer.currentLanguage)
+                                && oUser.getPreference('lang') != application.currentLanguage)
                             {
-                                ajaxplorer.loadI18NMessages(oUser.getPreference('lang'));
-                                ajaxplorer.displayMessage('SUCCESS', MessageHash[241]);
+                                application.loadI18NMessages(oUser.getPreference('lang'));
+                                application.displayMessage('SUCCESS', MessageHash[241]);
                             }
                         }else{
                             var selector = $(oForm).select('select[id="language_selector"]')[0];
                             var value = selector.getValue();
-                            ajaxplorer.loadI18NMessages(value);
+                            application.loadI18NMessages(value);
                             window.bootstrap.parameters.set("currentLanguage", value);
                         }
 					]]></dialogOnComplete>
@@ -210,22 +210,22 @@
 			<processing>				
 				<clientCallback prepareModal="true" dialogOpenForm="webdav_pref_form" dialogOkButtonOnly="true" dialogSkipButtons="false">
 					<dialogOnOpen><![CDATA[
-					if(!ajaxplorer.user) return;					
+					if(!application.user) return;					
 					var cont = $('webdav_repo_list');
 					cont.update('');
 					var even = false;
 					var conn = new Connexion();
 					conn.setParameters(new Hash({get_action:'webdav_preferences'}));
 					conn.onComplete = function(transport){
-						ajaxplorer.webdavCurrentPreferences = transport.responseJSON;
-						$('webdav_activator').checked = ajaxplorer.webdavCurrentPreferences.webdav_active;
+						application.webdavCurrentPreferences = transport.responseJSON;
+						$('webdav_activator').checked = application.webdavCurrentPreferences.webdav_active;
 						if($('webdav_activator').checked) $('webdav_password_form').show(); 
 					};
 					conn.sendSync();
-					ajaxplorer.user.getRepositoriesList().each(function(pair){					
-						if(ajaxplorer.webdavCurrentPreferences.webdav_repositories[pair.key]){
+					application.user.getRepositoriesList().each(function(pair){					
+						if(application.webdavCurrentPreferences.webdav_repositories[pair.key]){
 							var div = new Element('div', {className:(even?'even':'')});
-							div.update('<span>'+pair.value.label+'</span><input readonly type="text" value="'+ ajaxplorer.webdavCurrentPreferences.webdav_repositories[pair.key] +'">' );				
+							div.update('<span>'+pair.value.label+'</span><input readonly type="text" value="'+ application.webdavCurrentPreferences.webdav_repositories[pair.key] +'">' );				
 							cont.insert(div);
 							even = !even;
 						}
@@ -240,13 +240,13 @@
 								activate:(checked?'true':'false')
 							}));
 							conn.onComplete = function(transport){
-								ajaxplorer.webdavCurrentPreferences = transport.responseJSON;
-								if(ajaxplorer.webdavCurrentPreferences.webdav_active) {
+								application.webdavCurrentPreferences = transport.responseJSON;
+								if(application.webdavCurrentPreferences.webdav_active) {
 									$('webdav_password_form').show();
-									ajaxplorer.displayMessage("SUCCESS", MessageHash[408]);
+									application.displayMessage("SUCCESS", MessageHash[408]);
 								}else {
 									$('webdav_password_form').hide();
-									ajaxplorer.displayMessage("SUCCESS", MessageHash[409]);									
+									application.displayMessage("SUCCESS", MessageHash[409]);									
 								}								
 							};
 							conn.sendAsync();
@@ -259,7 +259,7 @@
 								webdav_pass: $('webdav_password').value
 							}));
 							conn.onComplete = function(transport){
-								ajaxplorer.displayMessage("SUCCESS", MessageHash[410]);
+								application.displayMessage("SUCCESS", MessageHash[410]);
 							};
 							conn.sendAsync();
 						});

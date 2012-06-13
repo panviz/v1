@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
  *
- * The latest code can be found at <http://www.ajaxplorer.info/>.
+ * The latest code can be found at <http://www.application.info/>.
  * Description : A dynamic panel displaying details on the current selection. Works with Templates.
  */
 Class.create("JsSourceViewer", AjxpPane, {
@@ -46,9 +46,9 @@ Class.create("JsSourceViewer", AjxpPane, {
 		this.setContent(' // SELECT A CLASS TO DISPLAY ITS SOURCE CODE');
 		this.obs1 = this.update.bind(this);
 		this.obs2 = this.clearPanels.bind(this);
-		document.observe("ajaxplorer:actions_refreshed", this.obs1 );
-		document.observe("ajaxplorer:selection_changed", this.obs1 );
-		document.observe("ajaxplorer:user_logged", this.obs2 );
+		document.observe("application:actions_refreshed", this.obs1 );
+		document.observe("application:selection_changed", this.obs1 );
+		document.observe("application:user_logged", this.obs2 );
 		
 	},
 		
@@ -64,9 +64,9 @@ Class.create("JsSourceViewer", AjxpPane, {
 	},
 	
 	destroy : function(){
-		document.stopObserving("ajaxplorer:actions_refreshed", this.obs1 );
-		document.stopObserving("ajaxplorer:selection_changed", this.obs1 );
-		document.stopObserving("ajaxplorer:user_logged", this.obs2 );
+		document.stopObserving("application:actions_refreshed", this.obs1 );
+		document.stopObserving("application:selection_changed", this.obs1 );
+		document.stopObserving("application:user_logged", this.obs2 );
 		this.empty();
 		$A(this.htmlElement.childNodes).each(function(el){
 			if(el.remove)el.remove();
@@ -76,7 +76,7 @@ Class.create("JsSourceViewer", AjxpPane, {
 	
 	update : function(){
 		if(!this.htmlElement) return;
-		var userSelection = ajaxplorer.getUserSelection();
+		var userSelection = application.getUserSelection();
 		var contextNode = userSelection.getUniqueNode();
 		this.empty();
 		if(!contextNode) {
@@ -88,7 +88,7 @@ Class.create("JsSourceViewer", AjxpPane, {
 			var metadata = contextNode.getMetadata();
 			if(metadata.get("memberType") == "parent_method"){
 				var redirect = '/Classes/' + metadata.get("parentClass");
-				ajaxplorer.updateContextData(new AjxpNode(redirect, false, metadata.get("parentClass")));
+				application.updateContextData(new AjxpNode(redirect, false, metadata.get("parentClass")));
 				return;
 			}
 			var objectNode = contextNode.getParent();
