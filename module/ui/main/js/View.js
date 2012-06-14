@@ -59,16 +59,16 @@ Class.create("View", Pane, {
 		this.initActions();
 
 		//var loadingObs = this.setOnLoad.bind(this);
-		this._registerObserver(document, "application:context_changed", this._onContextChanged);
-		//this._registerObserver(document, "application:context_loading", loadingObs);
-		//this._registerObserver(document, "application:component_config_changed", _onComponentConfig);
-		//this._registerObserver(document, "application:selection_changed", _onSelectionChanged);
+		this._registerObserver(document, "app:context_changed", this._onContextChanged);
+		//this._registerObserver(document, "app:context_loading", loadingObs);
+		//this._registerObserver(document, "app:component_config_changed", _onComponentConfig);
+		//this._registerObserver(document, "app:selection_changed", _onSelectionChanged);
 
 		this.allDraggables = new Array();
 		this.allDroppables = new Array();		
 		
 		//var repoSwitchObserver = this.setOnLoad.bind(this);
-		//this._registerObserver(document, "application:trigger_repository_switch", repoSwitchObserver);
+		//this._registerObserver(document, "app:trigger_repository_switch", repoSwitchObserver);
 	},
 	/**
 	 * Initialize standards editor actions
@@ -111,7 +111,7 @@ Class.create("View", Pane, {
 		}, this);
 		if(this.registeredActions.size()){
 			this.keyObs = function(e){
-                if(application.blockEditorShortcuts) return;
+                if(app.blockEditorShortcuts) return;
 				if(this.registeredActions.get(e.keyCode)){
 					this.actions.get(this.registeredActions.get(e.keyCode)).onclick();
 				}else if(this.registeredActions.get(String.fromCharCode(e.keyCode).toLowerCase())){
@@ -213,7 +213,7 @@ Class.create("View", Pane, {
 		}
 		else {
 			newForm.onsubmit = function(){
-				application.actionBar.submitForm(modal.getForm());
+				app.actionBar.submitForm(modal.getForm());
 				return false;
 			};
 		}
@@ -225,12 +225,12 @@ Class.create("View", Pane, {
 		if($(newForm).select(".replace_rep").length)
 		{
 			repDisplay = $(newForm).select(".replace_rep")[0];
-			repDisplay.innerHTML = application.getContextHolder().getContextNode().getPath();
+			repDisplay.innerHTML = app.getContextHolder().getContextNode().getPath();
 		}
 		if($(newForm).select(".replace_file").length)
 		{
 			repDisplay = $(newForm).select(".replace_file")[0];
-			repDisplay.innerHTML = getBaseName(application.getUserSelection().getUniqueFileName());
+			repDisplay.innerHTML = getBaseName(app.getUserSelection().getUniqueFileName());
 		}
 		if($(newForm).select('.dialogEnterKey').length && Prototype.Browser.IE){
 			$(newForm).select('.dialogEnterKey').each(function(el){
@@ -273,19 +273,19 @@ Class.create("View", Pane, {
     },
 	//this._onSselectionChanged = function(event){
 		//if(event.memo._selectionSource == null || event.memo._selectionSource == this) return;
-		//this.setSelectedNodes(application.getContextHolder().getSelectedNodes());
+		//this.setSelectedNodes(app.getContextHolder().getSelectedNodes());
 	//},
 	_onContextChanged : function(event){
 		var onLoading = this.setOnLoad.bind(this);
 		var onLoad = this.removeOnLoad.bind(this);
-		var currentDir = application.getContextNode().getPath();
+		var currentDir = app.getContextNode().getPath();
 		if (currentDir != '/'){currentDir += "/"};
 		var defaultFileName = currentDir + '.' + this.mime;
 		var defaultFile = new Node(defaultFileName);
 		//TODO add 3d parameter selectionSource
 		//add default file to selection within current context
-		application.updateContextData(null, [defaultFile]); 
-		this.open(application.getUserSelection());		
+		app.updateContextData(null, [defaultFile]); 
+		this.open(app.getUserSelection());		
 	},
 	/**
 	 * Implementation of the IWidget methods
@@ -327,11 +327,11 @@ Class.create("View", Pane, {
 	showElement : function(show){
 	},
 	/**
-	 * Link focusing to application main
+	 * Link focusing to app main
 	 */
 	setFocusBehaviour : function(){
         //var clickObserver = function(){
-			//if(application) application.focusOn(this);
+			//if(app) app.focusOn(this);
 		//}.bind(this) ;
         //this._registerObserver(this.element, "click", clickObserver);
 	},

@@ -143,11 +143,11 @@ Class.create("Splitter", Pane, {
                 this.foldWithoutAnim();
             }
 		}.bind(this);
-		document.observe("application:user_logged",this.userLoggedObs);
+		document.observe("app:user_logged",this.userLoggedObs);
 
         this.compConfigObs = function(event){
             if(!this.htmlElement){
-                document.stopObserving("application:component_config_changed", this.compConfigObs);
+                document.stopObserving("app:component_config_changed", this.compConfigObs);
                 return;
             }
             if(event.memo.className == "Splitter::"+this.htmlElement.id){
@@ -164,7 +164,7 @@ Class.create("Splitter", Pane, {
                 }
             }
         }.bind(this);
-        document.observe("application:component_config_changed", this.compConfigObs);
+        document.observe("app:component_config_changed", this.compConfigObs);
 
         this.doSplitFunc = this.doSplitMouse.bind(this);
 		Event.observe(this.group, "mousemove", this.doSplitFunc);
@@ -181,8 +181,8 @@ Class.create("Splitter", Pane, {
         Event.stopObserving(this.group, "mousemove", this.doSplitFunc);
         this.splitbar.stopObserving("mousedown", this.startSplitFunc);
         this.splitbar.stopObserving("mouseup", this.endSplitFunc);
-        document.stopObserving("application:user_logged",this.userLoggedObs);
-        document.stopObserving("application:component_config_changed", this.compConfigObs);
+        document.stopObserving("app:user_logged",this.userLoggedObs);
+        document.stopObserving("app:component_config_changed", this.compConfigObs);
         this.splitbar.remove();
         if(this.paneA.ajxpPaneObject) {
             this.paneA.ajxpPaneObject.destroy();
@@ -216,7 +216,7 @@ Class.create("Splitter", Pane, {
             subMenuUpdateImage:false,
             callback: function(){
                 var state = oThis.toggleFolding();
-                application.actionBar.getActionByName("folding_action").setIconSrc('view_left_'+ (state?'right':'close') + '.png');
+                app.actionBar.getActionByName("folding_action").setIconSrc('view_left_'+ (state?'right':'close') + '.png');
             },
             listeners : {
                 init:function(){

@@ -4,7 +4,7 @@
     "label": "CONF_MESSAGE[Sharing Features]",
     "description": "CONF_MESSAGE[Share Center actions and hooks]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.application/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "server_settings": {
       "global_param": [
         {
@@ -115,7 +115,7 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "if(!application.actionBar.shareCenter){application.actionBar.shareCenter = new ShareCenter();}application.actionBar.shareCenter.performShareAction();"
+                "$t": "if(!app.actionBar.shareCenter){app.actionBar.shareCenter = new ShareCenter();}app.actionBar.shareCenter.performShareAction();"
               },
               "clientForm": {
                 "id": "share_form",
@@ -163,3 +163,4 @@
       }
     }
   }
+}

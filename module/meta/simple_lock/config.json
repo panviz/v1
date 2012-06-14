@@ -4,7 +4,7 @@
     "label": "CONF_MESSAGE[Simple Lock]",
     "description": "CONF_MESSAGE[Manual Locking mechanism to avoid concurrent edition]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.application/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "class_definition": {
       "filename": "plugins/meta.simple_lock/class.SimpleLockManager.php",
       "classname": "SimpleLockManager"
@@ -64,10 +64,10 @@
             "write": "true"
           },
           "processing": {
-            "clientCallback": "var conn = new Connexion();conn.addParameter(\"get_action\", \"sl_lock\");var n = application.getUserSelection().getUniqueNode();conn.addParameter(\"file\", n.getPath());if(n.getMetadata().get(\"sl_locked\")){conn.addParameter(\"unlock\", \"true\");}conn.onComplete = function(transport){application.actionBar.parseXmlMessage(transport.responseXML);};conn.sendAsync();",
+            "clientCallback": "var conn = new Connexion();conn.addParameter(\"get_action\", \"sl_lock\");var n = app.getUserSelection().getUniqueNode();conn.addParameter(\"file\", n.getPath());if(n.getMetadata().get(\"sl_locked\")){conn.addParameter(\"unlock\", \"true\");}conn.onComplete = function(transport){app.actionBar.parseXmlMessage(transport.responseXML);};conn.sendAsync();",
             "clientListener": {
               "name": "selectionChange",
-              "$t": "if(application){var action = application.getActionBar().getActionByName(\"sl_lock\");var n = application.getUserSelection().getUniqueNode();if(action && n){action.selectionContext.allowedMimes = $([]);if(n.getMetadata().get(\"sl_locked\")){action.setIconSrc('meta_simple_lock/ICON_SIZE/unlock.png');action.setLabel('meta.simple_lock.3');if(!n.getMetadata().get(\"sl_mylock\")){action.selectionContext.allowedMimes = $([\"fake_extension_that_never_exists\"]);}}else{action.setIconSrc('meta_simple_lock/ICON_SIZE/lock.png');action.setLabel('meta.simple_lock.1');}}}"
+              "$t": "if(app){var action = app.getActionBar().getActionByName(\"sl_lock\");var n = app.getUserSelection().getUniqueNode();if(action && n){action.selectionContext.allowedMimes = $([]);if(n.getMetadata().get(\"sl_locked\")){action.setIconSrc('meta_simple_lock/ICON_SIZE/unlock.png');action.setLabel('meta.simple_lock.3');if(!n.getMetadata().get(\"sl_mylock\")){action.selectionContext.allowedMimes = $([\"fake_extension_that_never_exists\"]);}}else{action.setIconSrc('meta_simple_lock/ICON_SIZE/lock.png');action.setLabel('meta.simple_lock.1');}}}"
             },
             "serverCallback": {
               "methodName": "applyChangeLock"
@@ -77,3 +77,4 @@
       }
     }
   }
+}

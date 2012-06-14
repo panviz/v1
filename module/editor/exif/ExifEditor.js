@@ -8,7 +8,7 @@ Class.create("ExifEditor", AbstractEditor, {
 		$super(oFormObject);
 		this.actions.get("downloadFileButton").observe('click', function(){
 			if(!this.currentFile) return;		
-			application.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+this.currentFile);
+			app.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+this.currentFile);
 			return false;
 		}.bind(this));
 		this.element.observe("view:resize", function(){

@@ -33,7 +33,7 @@ Class.create("IMagickPreviewer", Diaporama, {
 	{
 		this.downloadButton.onclick = function(){
 			if(!this.currentFile) return;		
-			application.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+userSelection.getUniqueFileName());
+			app.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+userSelection.getUniqueFileName());
 			return false;
 		}.bind(this);
 				

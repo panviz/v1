@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
  *
- * The latest code can be found at <http://www.application.info/>.
+ * The latest code can be found at <http://www.app.info/>.
  * Credit:
  *   Original class by Stickman -- http://www.the-stickman.com
  *      with thanks to:
@@ -44,16 +44,16 @@ Class.create("MultiUploader", {
 		// Current index
 		this.id = 0;
         this.mask = false;
-        mask = application.getPluginConfigs("uploader").get("ALLOWED_EXTENSIONS");
+        mask = app.getPluginConfigs("uploader").get("ALLOWED_EXTENSIONS");
 		if(mask && mask.trim() != ""){
 			this.mask = $A(mask.split(","));
-            this.maskLabel = application.getPluginConfigs("uploader").get("ALLOWED_EXTENSIONS_READABLE");
+            this.maskLabel = app.getPluginConfigs("uploader").get("ALLOWED_EXTENSIONS_READABLE");
 		}
 
-        this.max  = parseInt(application.getPluginConfigs("uploader").get("UPLOAD_MAX_NUMBER"));
-		this.namesMaxLength = application.getPluginConfigs("application").get("NODENAME_MAX_LENGTH");
+        this.max  = parseInt(app.getPluginConfigs("uploader").get("UPLOAD_MAX_NUMBER"));
+		this.namesMaxLength = app.getPluginConfigs("app").get("NODENAME_MAX_LENGTH");
 		
-		this.crtContext = application.getUserSelection();
+		this.crtContext = app.getUserSelection();
 		this.addElement(formObject.select('.dialogFocus')[0]);
 		var rep = new Element('input', {
 			type:'hidden', 
@@ -113,7 +113,7 @@ Class.create("MultiUploader", {
 		var closeButton = formObject.down('div[id="uploadCloseButton"]');
 		sendButton.observerSet = true;
 		sendButton.observe("click", function(){
-			application.actionBar.multi_selector.submitMainForm();
+			app.actionBar.multi_selector.submitMainForm();
 		});
 		optionsButton.observe("click", function(){
             var message = MessageHash[281] + '\n';
@@ -360,8 +360,9 @@ Class.create("MultiUploader", {
 		}
 		else
 		{
-			application.fireContextRefresh();
+			app.fireContextRefresh();
 		}
 		
 	}
 	
+});

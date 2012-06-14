@@ -29,18 +29,18 @@ Class.create("FilesList", SelectableElements, {
         //this.options.replaceScroller = false;
 
         var userLoggedObserver = function(){
-			if(!application || !application.user) return;
-			disp = application.user.getPreference("display");
+			if(!app || !app.user) return;
+			disp = app.user.getPreference("display");
 			if(disp && (disp == 'thumb' || disp == 'list')){
 				if(disp != this._displayMode) this.switchDisplayMode(disp);
 			}
-			this._thumbSize = parseInt(application.user.getPreference("thumb_size"));
+			this._thumbSize = parseInt(app.user.getPreference("thumb_size"));
 			if(this.slider){
 				this.slider.setValue(this._thumbSize);
 				this.resizeThumbnails();
 			}
 		}.bind(this);
-        this._registerObserver(document, "application:user_logged", userLoggedObserver);
+        this._registerObserver(document, "app:user_logged", userLoggedObserver);
 		
 		
 		var loadObserver = this.contextObserver.bind(this);
@@ -77,13 +77,13 @@ Class.create("FilesList", SelectableElements, {
 		}.bind(this) ;
         var selectionChangedObserver = function(event){
 			if(event.memo._selectionSource == null || event.memo._selectionSource == this) return;
-			this.setSelectedNodes(application.getContextHolder().getSelectedNodes());
+			this.setSelectedNodes(app.getContextHolder().getSelectedNodes());
 		}.bind(this);
 
-		this._registerObserver(document, "application:context_changed", contextChangedObserver );
-		this._registerObserver(document, "application:context_loading", loadingObs);
-		this._registerObserver(document, "application:component_config_changed", componentConfigObserver);
-		this._registerObserver(document, "application:selection_changed", selectionChangedObserver);
+		this._registerObserver(document, "app:context_changed", contextChangedObserver );
+		this._registerObserver(document, "app:context_loading", loadingObs);
+		this._registerObserver(document, "app:component_config_changed", componentConfigObserver);
+		this._registerObserver(document, "app:selection_changed", selectionChangedObserver);
 
 		this._thumbSize = 64;
 		this._crtImageIndex = 0;
@@ -112,7 +112,7 @@ Class.create("FilesList", SelectableElements, {
         var keydownObserver = this.keydown.bind(this);
         var repoSwitchObserver = this.setOnLoad.bind(this);
 		this._registerObserver(document, "keydown", keydownObserver);
-        this._registerObserver(document, "application:trigger_repository_switch", repoSwitchObserver);
+        this._registerObserver(document, "app:trigger_repository_switch", repoSwitchObserver);
 	},
 
     _registerObserver : function(object, eventName, handler){
@@ -195,16 +195,16 @@ Class.create("FilesList", SelectableElements, {
 			change = true;
 		}
 		if(change){
-			if(application && application.user){
-				var data = application.user.getPreference("columns_visibility", true) || {};
+			if(app && app.user){
+				var data = app.user.getPreference("columns_visibility", true) || {};
 				data = new Hash(data);
-				data.set(application.user.getActiveRepository(), this.hiddenColumns);
-				application.user.setPreference("columns_visibility", data, true);				
+				data.set(app.user.getActiveRepository(), this.hiddenColumns);
+				app.user.setPreference("columns_visibility", data, true);				
 			}			
 			this.initGUI();
 			this.fill(this.crtContext);
-			if(application && application.user){
-				application.user.savePreference("columns_visibility");
+			if(app && app.user){
+				app.user.savePreference("columns_visibility");
 			}
 		}
 		
@@ -316,7 +316,7 @@ Class.create("FilesList", SelectableElements, {
 					refreshGUI = true;
 				}else if(property.getAttribute("name") == "displayMode"){
 					var displayMode = property.getAttribute("value");
-					if(!(application && application.user && application.user.getPreference("display"))){
+					if(!(app && app.user && app.user.getPreference("display"))){
 						this._displayMode = displayMode;
 						refreshGUI = true;
 					}
@@ -398,22 +398,22 @@ Class.create("FilesList", SelectableElements, {
 		if(this._displayMode == "list")
 		{
 			var buffer = '';
-			if(application && application.user && application.user.getPreference("columns_visibility", true)){
-				var data = new Hash(application.user.getPreference("columns_visibility", true));
-				if(data.get(application.user.getActiveRepository())){
-					this.hiddenColumns = $A(data.get(application.user.getActiveRepository()));
+			if(app && app.user && app.user.getPreference("columns_visibility", true)){
+				var data = new Hash(app.user.getPreference("columns_visibility", true));
+				if(data.get(app.user.getActiveRepository())){
+					this.hiddenColumns = $A(data.get(app.user.getActiveRepository()));
 				}else{
 					this.hiddenColumns = $A();
 				}
 			}
 			var visibleColumns = this.getVisibleColumns();			
 			var userPref;
-			if(application && application.user && application.user.getPreference("columns_size", true)){
-				var data = new Hash(application.user.getPreference("columns_size", true));
+			if(app && app.user && app.user.getPreference("columns_size", true)){
+				var data = new Hash(app.user.getPreference("columns_size", true));
 				if(this.columnsTemplate && data.get(this.columnsTemplate)){
 					userPref = new Hash(data.get(this.columnsTemplate));
-				}else if(data.get(application.user.getActiveRepository())){
-					userPref = new Hash(data.get(application.user.getActiveRepository()));
+				}else if(data.get(app.user.getActiveRepository())){
+					userPref = new Hash(data.get(app.user.getActiveRepository()));
 				}
 			}
 			var headerData = $A();
@@ -460,21 +460,21 @@ Class.create("FilesList", SelectableElements, {
 			this._headerResizer.observe("drag_resize", function(){
 				if(this.prefSaver) window.clearTimeout(this.prefSaver);
 				this.prefSaver = window.setTimeout(function(){
-					if(!application.user || (this.gridStyle == "grid" && !this.columnsTemplate)) return;
+					if(!app.user || (this.gridStyle == "grid" && !this.columnsTemplate)) return;
 					var sizes = this._headerResizer.getCurrentSizes('percent');
-					var data = application.user.getPreference("columns_size", true);
+					var data = app.user.getPreference("columns_size", true);
 					data = (data ? new Hash(data) : new Hash());
 					sizes['type'] = 'percent';
-					var id = (this.columnsTemplate ? this.columnsTemplate : application.user.getActiveRepository());
+					var id = (this.columnsTemplate ? this.columnsTemplate : app.user.getActiveRepository());
 					data.set(id, sizes);
-					application.user.setPreference("columns_size", data, true);
-					application.user.savePreference("columns_size");
+					app.user.setPreference("columns_size", data, true);
+					app.user.savePreference("columns_size");
 				}.bind(this), 2000);				
 			}.bind(this) );
 			this._sortableTable = new Sortable(oElement, this.getVisibleSortTypes(), $('selectable_div_header'));
 			this._sortableTable.onsort = function(){
 				this.redistributeBackgrounds();
-				var ctxt = application.getContextNode();
+				var ctxt = app.getContextNode();
 				ctxt.getMetadata().set("filesList.sortColumn", ''+this._sortableTable.sortColumn);
 				ctxt.getMetadata().set("filesList.descending", this._sortableTable.descending);
 			}.bind(this);
@@ -541,8 +541,8 @@ Class.create("FilesList", SelectableElements, {
 			}.bind(this);
 			this.observe("resize", this.observer);
 			
-			if(application && application.user && application.user.getPreference("thumb_size")){
-				this._thumbSize = parseInt(application.user.getPreference("thumb_size"));
+			if(app && app.user && app.user.getPreference("thumb_size")){
+				this._thumbSize = parseInt(app.user.getPreference("thumb_size"));
 			}
 			if(this._fixedThumbSize){
 				this._thumbSize = parseInt(this._fixedThumbSize);
@@ -562,9 +562,9 @@ Class.create("FilesList", SelectableElements, {
                     if(this.options.replaceScroller){
                         this.notify("resize");
                     }
-					if(!application || !application.user) return;
-					application.user.setPreference("thumb_size", this._thumbSize);
-					application.user.savePreference("thumb_size");								
+					if(!app || !app.user) return;
+					app.user.setPreference("thumb_size", this._thumbSize);
+					app.user.savePreference("thumb_size");								
 				}.bind(this)
 			});
 
@@ -628,13 +628,13 @@ Class.create("FilesList", SelectableElements, {
 				var new_page = parseInt(currentInput.getValue());
 				if(new_page == current) return; 
 				if(new_page < 1 || new_page > total){
-					application.displayMessage('ERROR', MessageHash[335] +' '+ total);
+					app.displayMessage('ERROR', MessageHash[335] +' '+ total);
 					currentInput.setValue(current);
 					return;
 				}
-				var node = application.getContextNode();
+				var node = app.getContextNode();
 				node.getMetadata().get("paginationData").set("new_page", new_page);
-				application.updateContextData(node);
+				app.updateContextData(node);
 			}
 		}.bind(this) );
 		return div;
@@ -648,10 +648,10 @@ Class.create("FilesList", SelectableElements, {
 	 * @returns HTMLElement
 	 */
 	createPaginatorLink : function(page, text, title){
-		var node = application.getContextNode();
+		var node = app.getContextNode();
 		return new Element('a', {href: '#', style: 'font-size:12px; padding:0 7px;', title: title}).update(text).observe('click', function(e){
 			node.getMetadata().get("paginationData").set("new_page", page);
-			application.updateContextData(node);
+			app.updateContextData(node);
 			Event.stop(e);
 		}.bind(this));		
 	},
@@ -702,11 +702,11 @@ Class.create("FilesList", SelectableElements, {
 	},
 	
 	/**
-	 * Link focusing to application main
+	 * Link focusing to app main
 	 */
 	setFocusBehaviour : function(){
         var clickObserver = function(){
-			if(application) application.focusOn(this);
+			if(app) app.focusOn(this);
 		}.bind(this) ;
         this._registerObserver(this.htmlElement, "click", clickObserver);
 	},
@@ -726,7 +726,7 @@ Class.create("FilesList", SelectableElements, {
 	 * @returns String
 	 */
 	switchDisplayMode: function(mode){
-		application.getContextHolder().setPendingSelection(application.getContextHolder().getSelectedNodes());
+		app.getContextHolder().setPendingSelection(app.getContextHolder().getSelectedNodes());
         this.removeCurrentLines(true);
         
         if(mode){
@@ -738,9 +738,9 @@ Class.create("FilesList", SelectableElements, {
 		this.initGUI();
 		this.reload();
 		this.fireChange();
-		if(application && application.user){
-			application.user.setPreference("display", this._displayMode);
-			application.user.savePreference("display");
+		if(app && app.user){
+			app.user.setPreference("display", this._displayMode);
+			app.user.savePreference("display");
 		}
 		return this._displayMode;
 	},
@@ -817,8 +817,8 @@ Class.create("FilesList", SelectableElements, {
 	 * @param additionnalParameters Object
 	 */
 	reload : function(additionnalParameters){
-		if(application.getContextNode()){
-			this.fill(application.getContextNode());
+		if(app.getContextNode()){
+			this.fill(app.getContextNode());
 		}
 	},
 	/**
@@ -930,9 +930,9 @@ Class.create("FilesList", SelectableElements, {
 			this._sortableTable.sort(sortColumn, descending);
 			this._sortableTable.updateHeaderArrows();
 		}
-		if(application.getContextHolder().getPendingSelection())
+		if(app.getContextHolder().getPendingSelection())
 		{
-			var pendingFile = application.getContextHolder().getPendingSelection();
+			var pendingFile = app.getContextHolder().getPendingSelection();
 			if(Object.isString(pendingFile))
 			{
 				this.selectFile(pendingFile);
@@ -946,10 +946,10 @@ Class.create("FilesList", SelectableElements, {
 				}
 			}
 			this.hasFocus = true;
-			application.getContextHolder().clearPendingSelection();
+			app.getContextHolder().clearPendingSelection();
 		}	
 		if(this.hasFocus){
-			window.setTimeout(function(){application.focusOn(this);}.bind(this),200);
+			window.setTimeout(function(){app.focusOn(this);}.bind(this),200);
 		}
 		//if(modal.pageLoading) modal.updateLoadingProgress('List Loaded');
 	},
@@ -1229,7 +1229,7 @@ Class.create("FilesList", SelectableElements, {
 		var metadata = ajxpNode.getMetadata();
 				
 		var innerSpan = new Element('span', {style: "cursor:default;"});
-		var editors = application.findEditorsForMime((ajxpNode.isLeaf() ? ajxpNode.getMime() : "mime_folder"), true);
+		var editors = app.findEditorsForMime((ajxpNode.isLeaf() ? ajxpNode.getMime() : "mime_folder"), true);
 		var textNode = ajxpNode.getLabel();
 		var img = View.prototype.getPreview(ajxpNode);
 		var label = new Element('div', {
@@ -1298,7 +1298,7 @@ Class.create("FilesList", SelectableElements, {
 			img.writeAttribute("id", "ajxp_image_"+imgIndex);
 			var crtIndex = this._crtImageIndex;
 			
-			application.loadEditorResources(editors[0].resourcesManager);
+			app.loadEditorResources(editors[0].resourcesManager);
 			var editorClass = Class.getByName(editors[0].editorClass);
 			if(editorClass){
 				var oImageToLoad = {
@@ -1356,14 +1356,14 @@ Class.create("FilesList", SelectableElements, {
 				conn.setParameters({
 					action: 'stop_dl',
 					file : ajxpNode.getPath(),
-					dir : application.getContextNode().getPath()
+					dir : app.getContextNode().getPath()
 				});
 				conn.onComplete = function(transport){
 					if(transport.responseText == 'stop' && $(uuid).pe) {
 						$(uuid).pe.stop();
 						$(uuid).pgBar.setPercentage(0);
 						window.setTimeout(function(){
-							application.actionBar.fireAction("refresh");
+							app.actionBar.fireAction("refresh");
 						}, 2);
 					}
 				};
@@ -1387,7 +1387,7 @@ Class.create("FilesList", SelectableElements, {
 				conn.onComplete = function(transport){
 					if(transport.responseText == 'stop'){
 						pe.stop();
-						application.actionBar.fireAction("refresh");
+						app.actionBar.fireAction("refresh");
 					}else{
 						var newPercentage = parseInt( parseInt(transport.responseText)/parseInt($(uuid).getAttribute('data-target_size'))*100 );
 						$(uuid).pgBar.setPercentage(newPercentage);
@@ -1521,7 +1521,7 @@ Class.create("FilesList", SelectableElements, {
 	fireChange : function()
 	{		
 		if(this._fireChange){			
-			application.updateContextData(null, this.getSelectedNodes(), this);			
+			app.updateContextData(null, this.getSelectedNodes(), this);			
 		}
 	},
 	
@@ -1530,7 +1530,7 @@ Class.create("FilesList", SelectableElements, {
 	 */
 	fireDblClick : function (e) 
 	{
-		if(application.getContextNode().getMime() == "ajxp_recycle")
+		if(app.getContextNode().getMime() == "ajxp_recycle")
 		{
 			return; // DO NOTHING IN RECYCLE BIN
 		}
@@ -1542,11 +1542,11 @@ Class.create("FilesList", SelectableElements, {
 		var selNode = selRaw[0].ajxpNode;
 		if(selNode.isLeaf())
 		{
-			application.getActionBar().fireDefaultAction("file");
+			app.getActionBar().fireDefaultAction("file");
 		}
 		else
 		{
-			application.getActionBar().fireDefaultAction("dir", selNode);
+			app.getActionBar().fireDefaultAction("dir", selNode);
 		}
 	},
 
@@ -1558,7 +1558,7 @@ Class.create("FilesList", SelectableElements, {
 	selectFile : function(fileName, multiple)
 	{
 		fileName = getBaseName(fileName);
-		if(!application.getContextHolder().fileNameExists(fileName))
+		if(!app.getContextHolder().fileNameExists(fileName))
 		{
 			return;
 		}
@@ -1619,8 +1619,8 @@ Class.create("FilesList", SelectableElements, {
 	 */
 	keydown : function (event)
 	{
-		if(application.blockNavigation || this.blockNavigation) return false;
-		if(event.keyCode == 9 && !application.blockNavigation) return false;
+		if(app.blockNavigation || this.blockNavigation) return false;
+		if(event.keyCode == 9 && !app.blockNavigation) return false;
 		if(!this.hasFocus) return true;
 		var keyCode = event.keyCode;
 		if(this._displayMode == "list" && keyCode != Event.KEY_UP && keyCode != Event.KEY_DOWN && keyCode != Event.KEY_RETURN && keyCode != Event.KEY_END && keyCode != Event.KEY_HOME)

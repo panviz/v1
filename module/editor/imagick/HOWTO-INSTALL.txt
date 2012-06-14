@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
  *
- * The latest code can be found at <http://www.application.info/>.
+ * The latest code can be found at <http://www.app.info/>.
  *
  * PDF Preview Plugin : How to install?
  */ 
 To be able to see PDF previews as jpeg, you must have both ImageMagick and Ghostscript 
 (Ghostscript fonts must be there too) installed on your server. 
 Once this is done, fill the path to "convert" in the file conf.editor.pdf.inc and move 
-this file inside your application installation server/conf/, then rename manifest.xml.default 
+this file inside your app installation server/conf/, then rename manifest.xml.default 
 to manifest.xml
 Beaware that the PHP command will not necessarily take the fact that convert is in the PATH into account
 so write the full path to convert.
@@ -34,3 +34,4 @@ So for example, on windows, something like :
 > C:\PROGRA~1\ImageMagick\convert.exe myFile.pdf[0] preview.jpg
 or on Linux
 > /opt/bin/convert myFile.pdf[0] preview.jpg
+If it's working ok, then it should be in AjaXplorer too!

@@ -6,7 +6,7 @@ Class.create("TextEditor", View, {
 	initialize : function($super, oFormObject, options)
 	{
 		$super(oFormObject, options);
-		if(!application.user || application.user.canWrite()){
+		if(!app.user || app.user.canWrite()){
 			this.writable = true;
 			this.actions.get("saveButton").observe('click', function(){
 				this.saveFile();
@@ -18,7 +18,7 @@ Class.create("TextEditor", View, {
 		}
 		this.actions.get("downloadFileButton").observe('click', function(){
 			if(!this.currentFile) return;		
-			application.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+this.currentFile);
+			app.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+this.currentFile);
 			return false;
 		}.bind(this));
 		this.textareaContainer = document.createElement('div');

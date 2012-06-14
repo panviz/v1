@@ -30,7 +30,7 @@ Class.create("PixlrEditor", AbstractEditor, {
 			this.currentNode.getParent().getMetadata().set('preview_seed', Math.round(date.getTime()*Math.random()));
 			this.removeOnLoad();
 			hideLightBox(true);			
-			application.actionBar.fireAction('refresh');
+			app.actionBar.fireAction('refresh');
 		}.bind(this);
 		conn.sendAsync();
 	},

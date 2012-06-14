@@ -1,7 +1,7 @@
 /**
  * Encapsulation of the lightbox script for modal windows. Used for alerting user, but
  * also for all popup forms (generic_dialog_box)
- * An instance is automatically created at the end of the file, no very clean, application
+ * An instance is automatically created at the end of the file, no very clean, app
  * should create it instead.
  */
 Class.create("Modal", {
@@ -112,7 +112,7 @@ Class.create("Modal", {
 		}
 		else {
 			newForm.onsubmit = function(){
-				application.actionBar.submitForm(modal.getForm());
+				app.actionBar.submitForm(modal.getForm());
 				hideLightBox();
 				return false;
 			};
@@ -130,12 +130,12 @@ Class.create("Modal", {
 		if($(newForm).select(".replace_rep").length)
 		{
 			repDisplay = $(newForm).select(".replace_rep")[0];
-			repDisplay.innerHTML = application.getContextHolder().getContextNode().getPath();
+			repDisplay.innerHTML = app.getContextHolder().getContextNode().getPath();
 		}
 		if($(newForm).select(".replace_file").length)
 		{
 			repDisplay = $(newForm).select(".replace_file")[0];
-			repDisplay.innerHTML = getBaseName(application.getUserSelection().getUniqueFileName());
+			repDisplay.innerHTML = getBaseName(app.getUserSelection().getUniqueFileName());
 		}
 		if($(newForm).select('.dialogEnterKey').length && Prototype.Browser.IE){
 			$(newForm).select('.dialogEnterKey').each(function(el){
@@ -166,9 +166,9 @@ Class.create("Modal", {
 	 * @param skipShadow Boolean Do not add a shadow
 	 */
 	showContent: function(elementName, boxWidth, boxHeight, skipShadow, boxAutoResize){
-		application.disableShortcuts();
-		application.disableNavigation();
-		application.blurAll();
+		app.disableShortcuts();
+		app.disableNavigation();
+		app.blurAll();
 		var winWidth = document.viewport.getWidth();
 		var winHeight = document.viewport.getHeight();
 	
@@ -255,19 +255,19 @@ Class.create("Modal", {
 	 */
 	openEditorDialog : function(editorData){
 		if(!editorData.formId){
-			application.displayMessage('ERROR', 'Error, you must define a formId attribute in your &lt;editor&gt; manifest (or set it as openable="false")');
+			app.displayMessage('ERROR', 'Error, you must define a formId attribute in your &lt;editor&gt; manifest (or set it as openable="false")');
 			return;
 		}
 		var editorKlass = editorData.editorClass;
 		modal.prepareHeader(editorData.text, resolveImageSource(editorData.icon, '/images/actions/ICON_SIZE', 16));
 		var loadFunc = function(oForm){			
 			if(typeof(editorKlass) == "string"){
-				application.actionBar.editor = eval('new '+editorKlass+'(oForm)');
+				app.actionBar.editor = eval('new '+editorKlass+'(oForm)');
 			}else{
-				application.actionBar.editor = new editorKlass(oForm);
+				app.actionBar.editor = new editorKlass(oForm);
 			}
-			application.actionBar.editor.open(application.getUserSelection());
-			//application.actionBar.editor.resize();
+			app.actionBar.editor.open(app.getUserSelection());
+			//app.actionBar.editor.resize();
 		};
 		this.showDialogForm('', editorData.formId, loadFunc, null, null, true, true);			
 	},

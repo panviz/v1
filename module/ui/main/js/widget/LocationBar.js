@@ -18,7 +18,7 @@ Class.create("LocationBar", {
 		this.realPath = '/';
         this.options = options || {};
 		this.createGui();
-		document.observe("application:user_logged", this.resize.bind(this));
+		document.observe("app:user_logged", this.resize.bind(this));
 	},
 	/**
 	 * Creates the GUI
@@ -30,7 +30,7 @@ Class.create("LocationBar", {
 			24, 24, 
 			'goto_parent.png', 16, 
 			'inline_hover', 
-			function(){application.actionBar.fireAction('up_dir');}
+			function(){app.actionBar.fireAction('up_dir');}
 			);
 		this.element.insert(this.parentButton);
 		var locDiv = new Element('div', {id: 'location_form'});
@@ -125,7 +125,7 @@ Class.create("LocationBar", {
 			}
 		}.bind(this));		
 		this.currentPath.observe("focus", function(e)	{
-			application.disableShortcuts();
+			app.disableShortcuts();
 			this.hasFocus = true;
 			this.currentPath.select();
 			return false;
@@ -134,11 +134,11 @@ Class.create("LocationBar", {
 			this.currentPath.hide();
 			this.label.show();
 			if(!currentLightBox){
-				application.enableShortcuts();
+				app.enableShortcuts();
 				this.hasFocus = false;
 			}
 		}.bind(this));
-		document.observe("application:context_changed", function(event){
+		document.observe("app:context_changed", function(event){
 			window.setTimeout(function(){
 				this.updateLocationBar(event.memo);
 			}.bind(this), 0);			
@@ -157,7 +157,7 @@ Class.create("LocationBar", {
 	 */
 	submitPath : function(){
 		if(!this._modified){
-			application.actionBar.fireAction("refresh");
+			app.actionBar.fireAction("refresh");
 		}else{
 			var url = this.currentPath.value.stripScripts();
 			if(url == '') return false;	
@@ -171,11 +171,11 @@ Class.create("LocationBar", {
 				node.getMetadata().set("paginationData", data);
 			}
 			// Manually entered, stat path before calling
-			if(!application.pathExists(url)){
+			if(!app.pathExists(url)){
 				modal.displayMessage('ERROR','Cannot find : ' + url);
 				this.currentPath.setValue(this._beforeModified);
 			}else{
-				application.actionBar.fireDefaultAction("dir", node);
+				app.actionBar.fireDefaultAction("dir", node);
 			}
 		}
 		return false;

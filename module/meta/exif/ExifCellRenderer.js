@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
  *
- * The latest code can be found at <http://www.application.info/>.
+ * The latest code can be found at <http://www.app.info/>.
  */
 Class.create("ExifCellRenderer", {	
 	initialize: function(){
@@ -63,20 +63,21 @@ Class.create("ExifCellRenderer", {
 		// console.log(latitude, longitude);
 		// Call openLayer editor!
 		// TEST : WestHausen : longitude=10.2;latitude = 48.9;
-		var editors = application.findEditorsForMime("ol_layer");
+		var editors = app.findEditorsForMime("ol_layer");
 		if(editors.length){
 			editorData = editors[0];							
 		}					
 		if(editorData){
 			// Update ajxpNode with Google Layer!
-			var ajxpNode = application.getUserSelection().getUniqueNode();
+			var ajxpNode = app.getUserSelection().getUniqueNode();
 			var metadata = ajxpNode.getMetadata();
 			ajxpNode.setMetadata(metadata.merge({
 				'ol_layers' : [{type:'Google', google_type:'hybrid'}, {type:'Google', google_type:'streets'}, {type:'OSM'}],
 				'ol_center' : {latitude:parseFloat(latitude),longitude:parseFloat(longitude)}
 			}));
-			application.loadEditorResources(editorData.resourcesManager);
+			app.loadEditorResources(editorData.resourcesManager);
 			modal.openEditorDialog(editorData);
 		}
 		
 	}
+});

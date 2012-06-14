@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
  *
- * The latest code can be found at <http://www.application.info/>.
+ * The latest code can be found at <http://www.app.info/>.
  */
 /**
  * A local implementation that explore currently defined
@@ -336,7 +336,7 @@ Class.create("LocalAPINodeProvider", {
 			changes = true;
 		}
 		if(changes){
-			var fList = $A(application.guiCompRegistry).detect(function(object){
+			var fList = $A(app.guiCompRegistry).detect(function(object){
 				return (object.__className == "FilesList");
 			});
 			if(fList) fList.reload();			
@@ -382,3 +382,4 @@ Class.create("LocalAPINodeProvider", {
 	}	
 	
 	
+});

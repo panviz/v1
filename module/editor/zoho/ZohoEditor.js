@@ -22,7 +22,7 @@ Class.create("ZohoEditor", View, {
             conn.addParameter("get_action", "retrieve_from_zohoagent");
             conn.onComplete = function(transport){
                 if(transport.responseText == "MODIFIED"){
-                    application.fireContextRefresh();
+                    app.fireContextRefresh();
                 }
             };
             conn.sendAsync();

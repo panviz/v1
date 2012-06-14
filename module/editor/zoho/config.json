@@ -13,7 +13,7 @@
     "formId": "zoho_box",
     "write": "true",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.application/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "class_definition": {
       "filename": "plugins/editor.zoho/class.ZohoEditor.php",
       "classname": "ZohoEditor"
@@ -38,7 +38,7 @@
           "name": "USE_ZOHO_AGENT",
           "expose": "true",
           "type": "boolean",
-          "description": "CONF_MESSAGE[If you are working locally or behind a firewall, you can install an application Zoho Agent somewhere in the public zone. See the plugin folder content.]",
+          "description": "CONF_MESSAGE[If you are working locally or behind a firewall, you can install an app Zoho Agent somewhere in the public zone. See the plugin folder content.]",
           "label": "CONF_MESSAGE[Use Z-Agent]",
           "mandatory": "false",
           "default": "false"
@@ -188,3 +188,4 @@
       }
     }
   }
+}

@@ -4,7 +4,7 @@ var timerClearObserver = {
 		if(WebFXtimer) clearTimeout(WebFXtimer);
 	}
 } ;
-document.observe("application:loaded", function(){
+document.observe("app:loaded", function(){
 	Draggables.addObserver(timerClearObserver);
 	Draggables.addObserver({onDrag:function(eventName,element,event){
 		if(element.updateCtrlKey){
@@ -105,7 +105,7 @@ Class.create("Draggable", Draggable, {
 		}
 
 		if(this.options.ghosting) {
-			var selection = application.getUserSelection();
+			var selection = app.getUserSelection();
             if(this.component.findSelectableParent){
                 if(selection.isEmpty()){
                     this.component.findSelectableParent(this.element, true);
@@ -163,8 +163,8 @@ Class.create("Draggable", Draggable, {
 		if(this.options.starteffect){
 			this.options.starteffect(this.element);
 		}
-		this.dndAction = application.getActionBar().getDefaultAction('dragndrop');
-		this.ctrlDndAction = application.getActionBar().getDefaultAction('ctrldragndrop');			
+		this.dndAction = app.getActionBar().getDefaultAction('dragndrop');
+		this.ctrlDndAction = app.getActionBar().getDefaultAction('ctrldragndrop');			
     },
 
 
@@ -400,7 +400,7 @@ var Droppables = {
                     if(droppable.id && webFXTreeHandler.all[droppable.id]){
                         nodeId = droppable.id;
                     }
-					application.actionBar.applyDragMove(srcName, targetName, nodeId, event['ctrlKey']);
+					app.actionBar.applyDragMove(srcName, targetName, nodeId, event['ctrlKey']);
 				},
 		onHover: function(draggable, droppable, event)
 				{

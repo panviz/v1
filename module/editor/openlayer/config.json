@@ -11,7 +11,7 @@
     "label": "CONF_MESSAGE[Map viewer]",
     "description": "CONF_MESSAGE[Geolocation feature to either display a WMS layer or simply place an exif-localized photo. Requires OpenLayers]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.application/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "client_settings": {
       "resources": {
         "js": {
@@ -40,3 +40,4 @@
       }
     }
   }
+}

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
  *
- * The latest code can be found at <http://www.application.info/>.
+ * The latest code can be found at <http://www.app.info/>.
  */
 window.logAjxpEven = false;
 function logAjxpBmAction(text){
@@ -41,9 +41,9 @@ function string_to_slug(str) {
   return str;
 }
 window.ajxpActionRegisterd = false;
-document.observe("application:gui_loaded", function(){
-	document.observe("application:user_logged", function(){
-		if(application.user && !window.ajxpActionRegistered){
+document.observe("app:gui_loaded", function(){
+	document.observe("app:user_logged", function(){
+		if(app.user && !window.ajxpActionRegistered){
 			window.ajxpActionRegistered = true;
 			var params = document.location.href.toQueryParams();
 			logAjxpBmAction('Downloading '+getBaseName(params['dl_later']));
@@ -81,3 +81,4 @@ document.observe("application:gui_loaded", function(){
             }
 		}
 	});	
+});

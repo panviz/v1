@@ -27,8 +27,8 @@ Class.create("FoldersTree", Pane, {
         if(this.options.replaceScroller){
             this.scrollbar = new Control.ScrollBar('tree_container','tree_scroller');
             var scrollbarLayoutObserver = this.scrollbar.recalculateLayout.bind(this.scrollbar);
-            document.observe("application:tree_change",  scrollbarLayoutObserver);
-            this.registeredObservers.set("application:tree_change", scrollbarLayoutObserver);
+            document.observe("app:tree_change",  scrollbarLayoutObserver);
+            this.registeredObservers.set("app:tree_change", scrollbarLayoutObserver);
         }
 
 
@@ -38,10 +38,10 @@ Class.create("FoldersTree", Pane, {
 		}
 		var thisObject = this;
 		var action = function(e){
-			if(!application) return;
-			application.focusOn(thisObject);
+			if(!app) return;
+			app.focusOn(thisObject);
 			if(this.ajxpNode){
-				application.actionBar.fireDefaultAction("dir", this.ajxpNode);
+				app.actionBar.fireDefaultAction("dir", this.ajxpNode);
 			}
 		};
 		
@@ -62,7 +62,7 @@ Class.create("FoldersTree", Pane, {
 			this.tree.toggle();		
 		}
 		this.treeContainer.observe("click", function(){			
-			application.focusOn(this);
+			app.focusOn(this);
 		}.bind(this));
 	
 		this.rootNodeId = this.tree.id;
@@ -74,16 +74,16 @@ Class.create("FoldersTree", Pane, {
 				this.setSelectedPath(path);
 			}.bind(this), 100);
 		}.bind(this);
-		document.observe("application:context_changed",  ctxChangedObs);
-        this.registeredObservers.set("application:context_changed", ctxChangedObs);
+		document.observe("app:context_changed",  ctxChangedObs);
+        this.registeredObservers.set("app:context_changed", ctxChangedObs);
 
         var rootNodeObs = function(event){
 			var ajxpRootNode = event.memo;
 			this.tree.setRootNode(ajxpRootNode);
 			this.changeRootLabel(ajxpRootNode.getLabel(), ajxpRootNode.getIcon());
 		}.bind(this);
-		document.observe("application:root_node_changed", rootNodeObs);
-        this.registeredObservers.set("application:root_node_changed", rootNodeObs);
+		document.observe("app:root_node_changed", rootNodeObs);
+        this.registeredObservers.set("app:root_node_changed", rootNodeObs);
 
         var compConfChanged = function(event){
 			if(event.memo.className == "FoldersTree"){
@@ -97,8 +97,8 @@ Class.create("FoldersTree", Pane, {
 				}
 			}
 		}.bind(this);
-		document.observe("application:component_config_changed",  compConfChanged);
-        this.registeredObservers.set("application:component_config_changed", compConfChanged);
+		document.observe("app:component_config_changed",  compConfChanged);
+        this.registeredObservers.set("app:component_config_changed", compConfChanged);
 		
 	},
 

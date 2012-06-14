@@ -12,8 +12,9 @@
 "Password" : "Password",
 "Password for http authentification" : "Password for http authentification",
 "Http Auth URI" : "Http Auth URI",
-"Path to the authentication script, e.g. /application/index.php (only if you are using basic http auth)" : "Path to the authentication script, e.g. /application/index.php (only if you are using basic http auth)",
+"Path to the authentication script, e.g. /app/index.php (only if you are using basic http auth)" : "Path to the authentication script, e.g. /app/index.php (only if you are using basic http auth)",
 "Temporary Folder" : "Temporary Folder",
-"Temporary folder on the local server used for file uploads. For the moment, it must be placed under your application folder and you must create it and set it writeable by Apache." : "Temporary folder on the local server used for file uploads. For the moment, it must be placed under your application folder and you must create it and set it writeable by Apache.",
+"Temporary folder on the local server used for file uploads. For the moment, it must be placed under your app folder and you must create it and set it writeable by Apache." : "Temporary folder on the local server used for file uploads. For the moment, it must be placed under your app folder and you must create it and set it writeable by Apache.",
 "Api Capabilities" : "Api Capabilities",
 "AjaXplorer plugins actions supported by remote server, thus forwarded directly instead of executed locally." : "AjaXplorer plugins actions supported by remote server, thus forwarded directly instead of executed locally."
+}

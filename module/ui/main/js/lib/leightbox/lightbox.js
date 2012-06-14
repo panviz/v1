@@ -202,7 +202,7 @@ function initialize(){
 		if(e==null)e=window.event;		
 		if(e.keyCode == 27)
 		{
-			application.cancelCopyOrMove();
+			app.cancelCopyOrMove();
 			//modal.close();
 			hideLightBox();
 		}
@@ -240,10 +240,10 @@ function hideLightBox(onFormSubmit)
 		{
 			currentLightBox = null;
 		}
-		application.enableNavigation();
-		application.focusLast();
-		application.enableShortcuts();
-		document.fire("application:selection_changed");
+		app.enableNavigation();
+		app.focusLast();
+		app.enableShortcuts();
+		document.fire("app:selection_changed");
 	}
 	if(currentDraggable) currentDraggable.destroy();
 	if(modal.closeFunction){

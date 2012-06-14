@@ -2,15 +2,15 @@
  * Description
  */
 window.SM2_DEFER = true;
-if(!window.soundManager && application.findEditorById("editor.soundmanager")){
+if(!window.soundManager && app.findEditorById("editor.soundmanager")){
     var conn = new Connexion();
     conn._libUrl = (bootstrap.parameters.get('SERVER_PREFIX_URI') ? bootstrap.parameters.get('SERVER_PREFIX_URI') : '')+'plugins/editor.soundmanager/sm/';
     conn.loadLibrary('360-player/script/berniecode-animator.js');
     conn.loadLibrary('script/soundmanager2-nodebug-jsmin.js', function(){
         window.soundManager = new SoundManager('plugins/editor.soundmanager/sm/swf/');
         window.soundManager.url = (bootstrap.parameters.get('SERVER_PREFIX_URI') ? bootstrap.parameters.get('SERVER_PREFIX_URI') : '')+'plugins/editor.soundmanager/sm/swf/';
-        if(application && application.user && application.user.getPreference("soundmanager.volume") !== undefined){
-            soundManager.defaultOptions.volume = application.user.getPreference("soundmanager.volume");
+        if(app && app.user && app.user.getPreference("soundmanager.volume") !== undefined){
+            soundManager.defaultOptions.volume = app.user.getPreference("soundmanager.volume");
         }
         conn.loadLibrary('360-player/script/360player.js', function(){
             window.threeSixtyPlayer.config.scaleFont = !!(navigator.userAgent.match(/msie/i));
@@ -90,7 +90,7 @@ if(!window.soundManager && application.findEditorById("editor.soundmanager")){
 }
 
 function hookToFilesList(){
-    var fLists = application.guiCompRegistry.select(function(guiComponent){
+    var fLists = app.guiCompRegistry.select(function(guiComponent){
         return (guiComponent.__className == "FilesList");
     });
     if(!fLists.length){
@@ -99,7 +99,7 @@ function hookToFilesList(){
     var fList = fLists[0];
     fList.observe("rows:didInitialize", function(){
         if(fList.getDisplayMode() != "list" || !window.soundManager || !window.soundManager.enabled) return;
-        var resManager = application.findEditorById("editor.soundmanager").resourcesManager;
+        var resManager = app.findEditorById("editor.soundmanager").resourcesManager;
         if(!resManager.loaded){
             resManager.load();
         }
@@ -131,7 +131,7 @@ function hookToFilesList(){
 
 function addVolumeButton(){
     if($("sm_volume_button")) return;
-    var locBars = application.guiCompRegistry.select(function(guiComponent){
+    var locBars = app.guiCompRegistry.select(function(guiComponent){
         return (guiComponent.__className == "LocationBar");
     });
     if(!locBars.length){
@@ -163,9 +163,9 @@ function addVolumeButton(){
             soundManager.soundIDs.each(function(el){ soundManager.setVolume(el,parseInt(value)); });
         }.bind(this),
         onChange : function(value){
-            if(!application || !application.user) return;
-            application.user.setPreference("soundmanager.volume", parseInt(value));
-            application.user.savePreference("soundmanager.volume");
+            if(!app || !app.user) return;
+            app.user.setPreference("soundmanager.volume", parseInt(value));
+            app.user.savePreference("soundmanager.volume");
         }.bind(this)
     });
     locBar.resize();

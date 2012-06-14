@@ -22,8 +22,8 @@ Class.create("Bootstrap", {
 			window.setTimeout(function(){alert(this.parameters.get("ALERT"));}.bind(this),0);
 		}		
 		Event.observe(document, 'dom:loaded', this._onDomLoaded.bind(this));
-		document.observe('application:actions_loaded', this._onActionsLoaded.bind(this));
-		document.observe('application:loaded', this._onApplicationLoaded.bind(this));
+		document.observe('app:actions_loaded', this._onActionsLoaded.bind(this));
+		document.observe('app:loaded', this._onApplicationLoaded.bind(this));
 	},
 	/**
 	 * Real loading action
@@ -56,7 +56,7 @@ Class.create("Bootstrap", {
 		}
 		this.insertLoaderProgress();
 		if(!this.parameters.get("debugMode")){
-			connexion.loadLibrary("application.js?v="+this.parameters.get("ajxpVersion"));
+			connexion.loadLibrary("app.js?v="+this.parameters.get("ajxpVersion"));
 		}
 		window.MessageHash = this.parameters.get("i18nMessages");
 		for(var key in MessageHash){
@@ -64,13 +64,13 @@ Class.create("Bootstrap", {
 		}
 		window.zipEnabled = this.parameters.get("zipEnabled");
 		window.multipleFilesDownloadEnabled = this.parameters.get("multipleFilesDownloadEnabled");
-		document.fire("application:boot_loaded");
-		window.application = new Application(this.parameters.get("EXT_REP")||"", this.parameters.get("usersEnabled"), this.parameters.get("loggedUser"));
+		document.fire("app:boot_loaded");
+		window.app = new Application(this.parameters.get("EXT_REP")||"", this.parameters.get("usersEnabled"), this.parameters.get("loggedUser"));
 		if(this.parameters.get("currentLanguage")){
-			window.application.currentLanguage = this.parameters.get("currentLanguage");
+			window.app.currentLanguage = this.parameters.get("currentLanguage");
 		}
 		$('version_span').update(' - Version '+this.parameters.get("ajxpVersion") + ' - '+ this.parameters.get("ajxpVersionDate"));
-		window.application.init();		
+		window.app.init();		
 	},
 	
 	/**
@@ -124,7 +124,7 @@ Class.create("Bootstrap", {
 			var fontSize = customWording.titleFontSize || '35px';
             var titleDivSize = (customWording.iconHeight ? 'height:' + customWording.iconHeight + ';' : '');
 			html+=' <div style="margin-bottom:0px; font-size:'+fontSize+';font-weight:bold; background-image:url(\''+icon+'\');background-position:left center; background-repeat:no-repeat; padding-left:'+iconWidth+';'+titleDivSize+'color:#0077b3;">'+(customWording.iconOnly ? '' : title)+'</div>';
-			if(customWording.title.toLowerCase() != "application"){
+			if(customWording.title.toLowerCase() != "app"){
 				html+='	<div style="padding:4px 7px; position:relative;"><div>Powered by AjaXplorer<span id="version_span"></span></div>';
 			}else{
 				html+='	<div style="padding:4px 7px;position:relative;"><div>The web data-browser<span id="version_span"></span></div>';
@@ -282,20 +282,20 @@ Class.create("Bootstrap", {
 	},
 	_onActionsLoaded : function(){
 		debugger
-		if(!this.parameters.get("SELECTOR_DATA") && application.actionBar.actions.get("ext_select")){
-			application.actionBar.actions.unset("ext_select");
-			application.actionBar.fireContextChange();
-			application.actionBar.fireSelectionChange();	
+		if(!this.parameters.get("SELECTOR_DATA") && app.actionBar.actions.get("ext_select")){
+			app.actionBar.actions.unset("ext_select");
+			app.actionBar.fireContextChange();
+			app.actionBar.fireSelectionChange();	
 		}else if(this.parameters.get("SELECTOR_DATA")){
-			application.actionBar.defaultActions.set("file", "ext_select");
+			app.actionBar.defaultActions.set("file", "ext_select");
 		}
 	},
 	_onApplicationLoaded : function(){
 		debugger
 		this.insertAnalytics();
 		if(this.parameters.get("SELECTOR_DATA")){
-				application.actionBar.defaultActions.set("file", "ext_select");
-				application.actionBar.selectorData = new Hash(this.parameters.get("SELECTOR_DATA"));	    		
+				app.actionBar.defaultActions.set("file", "ext_select");
+				app.actionBar.selectorData = new Hash(this.parameters.get("SELECTOR_DATA"));	    		
 		}
 	}
 });

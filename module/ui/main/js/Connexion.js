@@ -128,27 +128,27 @@ Class.create("Connexion", {
 		}
 		if(message){
             if(message == "You are not allowed to access this resource.") message = tokenMessage;
-			if(application) application.displayMessage("ERROR", message);
+			if(app) app.displayMessage("ERROR", message);
 			else alert(message);
 		}
 		if(transport.responseXML && transport.responseXML.documentElement){
 			var authNode = XPathSelectSingleNode(transport.responseXML.documentElement, "require_auth");
-			if(authNode && application){
-				var root = application._contextHolder.getRootNode();
+			if(authNode && app){
+				var root = app._contextHolder.getRootNode();
 				if(root){
-					application._contextHolder.setContextNode(root);
+					app._contextHolder.setContextNode(root);
 					root.clear();
 				}
-				application.actionBar.fireAction('logout');
-				application.actionBar.fireAction('login');
+				app.actionBar.fireAction('logout');
+				app.actionBar.fireAction('login');
 			}
 			var messageNode = XPathSelectSingleNode(transport.responseXML.documentElement, "message");
 			if(messageNode){
 				var messageType = messageNode.getAttribute("type").toUpperCase();
 				var messageContent = getDomNodeText(messageNode);
                 if(messageContent == "You are not allowed to access this resource.") messageContent = tokenMessage;
-				if(application){
-					application.displayMessage(messageType, messageContent);
+				if(app){
+					app.displayMessage(messageType, messageContent);
 				}else{
 					if(messageType == "ERROR"){
 						alert(messageType+":"+messageContent);
@@ -159,7 +159,7 @@ Class.create("Connexion", {
 		if(this.onComplete){
 			this.onComplete(transport);
 		}
-		document.fire("application:server_answer");
+		document.fire("app:server_answer");
 	},
 	
 	/**
@@ -200,7 +200,7 @@ Class.create("Connexion", {
 						alert('error loading '+fileName+':'+e);
 					}
 				}
-				document.fire("application:server_answer");				
+				document.fire("app:server_answer");				
 			}
 		});	
 	}

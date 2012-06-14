@@ -40,9 +40,9 @@ Class.create("InfoPanel", Pane, {
 		}.bind(this);
 		this.userLogHandler = this.clearPanels.bind(this);
 		if(!this.options.skipObservers){
-            document.observe("application:actions_refreshed", this.updateHandler );
-            document.observe("application:component_config_changed", this.componentConfigHandler );
-            document.observe("application:user_logged", this.userLogHandler );
+            document.observe("app:actions_refreshed", this.updateHandler );
+            document.observe("app:component_config_changed", this.componentConfigHandler );
+            document.observe("app:user_logged", this.userLogHandler );
         }
 	},
 	/**
@@ -50,9 +50,9 @@ Class.create("InfoPanel", Pane, {
 	 */
 	destroy : function(){
         if(!this.options.skipObservers){
-            document.stopObserving("application:actions_refreshed", this.updateHandler );
-            document.stopObserving("application:component_config_changed", this.componentConfigHandler );
-            document.stopObserving("application:user_logged", this.userLogHandler );
+            document.stopObserving("app:actions_refreshed", this.updateHandler );
+            document.stopObserving("app:component_config_changed", this.componentConfigHandler );
+            document.stopObserving("app:user_logged", this.userLogHandler );
         }
 		this.empty();
         if(this.scrollbar){
@@ -91,7 +91,7 @@ Class.create("InfoPanel", Pane, {
         if(objectOrEvent.__className && objectOrEvent.__className == "Node"){
             var passedNode = objectOrEvent;
         }
-        var userSelection = application.getUserSelection();
+        var userSelection = app.getUserSelection();
         var contextNode = userSelection.getContextNode();
 		this.empty();
         if(this.scrollbar) this.scrollbar.recalculateLayout();
@@ -301,7 +301,7 @@ Class.create("InfoPanel", Pane, {
 	 */
 	addActions : function(selectionType){
         if(this.options.skipActions) return;
-		var actions = application.actionBar.getActionsForWidget("InfoPanel", this.htmlElement.id);
+		var actions = app.actionBar.getActionsForWidget("InfoPanel", this.htmlElement.id);
 		if(!actions.length) return;
 		var actionString = '<div class="panelHeader infoPanelGroup">'+MessageHash[5]+'</div><div class="infoPanelActions">';
 		var count = 0;
@@ -309,7 +309,7 @@ Class.create("InfoPanel", Pane, {
 			if(selectionType == 'empty' && action.context.selection) return;
 			if(selectionType == 'multiple' && action.selectionContext.unique) return; 
 			if(selectionType == 'unique' && (!action.context.selection || action.selectionContext.multipleOnly)) return;			
-			actionString += '<a href="" onclick="application.actionBar.fireAction(\''+action.options.name+'\');return false;"><img src="'+resolveImageSource(action.options.src, '/images/actions/ICON_SIZE', 16)+'" width="16" height="16" align="absmiddle" border="0"> '+action.options.title+'</a>';
+			actionString += '<a href="" onclick="app.actionBar.fireAction(\''+action.options.name+'\');return false;"><img src="'+resolveImageSource(action.options.src, '/images/actions/ICON_SIZE', 16)+'" width="16" height="16" align="absmiddle" border="0"> '+action.options.title+'</a>';
 			count++;
 		}.bind(this));
 		actionString += '</div>';
@@ -323,10 +323,10 @@ Class.create("InfoPanel", Pane, {
 	 * @returns String
 	 */
 	getPreviewElement : function(ajxpNode, getTemplateElement){
-		var editors = application.findEditorsForMime(ajxpNode.getMime(), true);
+		var editors = app.findEditorsForMime(ajxpNode.getMime(), true);
 		if(editors && editors.length)
 		{
-			application.loadEditorResources(editors[0].resourcesManager);
+			app.loadEditorResources(editors[0].resourcesManager);
 			var editorClass = Class.getByName(editors[0].editorClass);
 			if(editorClass){
 				if(getTemplateElement){

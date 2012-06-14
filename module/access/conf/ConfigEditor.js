@@ -41,7 +41,7 @@ ConfigEditor = Class.create({
 			this.feedUserForm(transport.responseXML);			
 			modal.refreshDialogPosition();
 			modal.refreshDialogAppearance();
-			application.blurAll();
+			app.blurAll();
 		}.bind(this);
 		connexion.sendAsync();		
 	},	
@@ -191,7 +191,7 @@ ConfigEditor = Class.create({
 				conn.onComplete = function(transport){
 					this.parseXmlMessage(transport.responseXML);
 					this.loadUser(this.userId, true);
-					application.fireContextRefresh();
+					app.fireContextRefresh();
 				}.bind(this);
 				conn.sendAsync();			
 			}else if(this.selectionUrl){
@@ -201,7 +201,7 @@ ConfigEditor = Class.create({
 				connexion.onComplete = function(transport){			
 					this.clearRolesForm();
 					this.populateRoles(transport.responseXML);
-					application.fireContextRefresh();
+					app.fireContextRefresh();
 				}.bind(this);
 				connexion.sendAsync();				
 			}
@@ -280,7 +280,7 @@ ConfigEditor = Class.create({
 		}
 		textfield.value = disabled.join(',');
 		if(clear){
-			application.displayMessage('SUCCESS', MessageHash['ajxp_conf.87']);
+			app.displayMessage('SUCCESS', MessageHash['ajxp_conf.87']);
 		}
 	},
 
@@ -296,8 +296,8 @@ ConfigEditor = Class.create({
             conn.addParameter("role_id", this.roleId);
             conn.addParameter("default_value", $('default_role_cb').checked? "true":"false");
             conn.onComplete = function(transport){
-                application.displayMessage('SUCCESS', MessageHash['ajxp_conf.113']);
-                application.fireContextRefresh();
+                app.displayMessage('SUCCESS', MessageHash['ajxp_conf.113']);
+                app.fireContextRefresh();
             };
             conn.sendAsync();
         }.bind(this));
@@ -313,7 +313,7 @@ ConfigEditor = Class.create({
 			this.generateCustomPane(transport.responseXML, true);			
 			modal.refreshDialogPosition();
 			modal.refreshDialogAppearance();
-			application.blurAll();
+			app.blurAll();
 		}.bind(this);
 		connexion.sendAsync();
 	},
@@ -534,19 +534,19 @@ ConfigEditor = Class.create({
 		var extraParams = this.form.select('div#custom_pane input');
 		
 		if(login.value == ''){
-			application.displayMessage("ERROR", MessageHash['ajxp_conf.38']);
+			app.displayMessage("ERROR", MessageHash['ajxp_conf.38']);
 			return false;
 		}
 		if(pass.value == '' || passConf.value == '' ){
-			application.displayMessage("ERROR", MessageHash['ajxp_conf.39']);
+			app.displayMessage("ERROR", MessageHash['ajxp_conf.39']);
 			return false;
 		}
 		if(pass.value.length < window.bootstrap.parameters.get("password_min_length")){
-			application.displayMessage("ERROR", MessageHash[378]);
+			app.displayMessage("ERROR", MessageHash[378]);
 			return false;
 		}
 		if(pass.value != passConf.value){
-			application.displayMessage("ERROR", MessageHash['ajxp_conf.37']);
+			app.displayMessage("ERROR", MessageHash['ajxp_conf.37']);
 			return false;
 		}
 		parameters = new Hash();
@@ -620,7 +620,7 @@ ConfigEditor = Class.create({
             this.bindDefaultRoleCheckbox(transport.responseXML);
 			modal.refreshDialogPosition();
 			modal.refreshDialogAppearance();
-			application.blurAll();
+			app.blurAll();
 		}.bind(this);
 		connexion.sendAsync();				
 	},
@@ -815,7 +815,7 @@ ConfigEditor = Class.create({
 			this.feedRepositoryForm(transport.responseXML, metaTab);			
 			modal.refreshDialogPosition();
 			modal.refreshDialogAppearance();
-			application.blurAll();
+			app.blurAll();
 		}.bind(this);
 		connexion.sendAsync();		
 	},
@@ -879,7 +879,7 @@ ConfigEditor = Class.create({
 			
 			modal.refreshDialogPosition();
 			modal.refreshDialogAppearance();
-			application.blurAll();
+			app.blurAll();
 		}.bind(this);
 		connexion.sendAsync();		
 	},
@@ -1150,11 +1150,11 @@ ConfigEditor = Class.create({
 				this.repositories.set(childs[i].getAttribute('index'), childs[i]);
 			}
 		}
-        application.actionBar.parseXmlMessage(xmlResponse);
+        app.actionBar.parseXmlMessage(xmlResponse);
 	},
 
 	
 	displayMessage: function(messageType, message){
-        application.displayMessage(messageType, message);
+        app.displayMessage(messageType, message);
 	}
 });

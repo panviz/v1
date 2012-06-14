@@ -64,14 +64,14 @@ function triggerFlashEvent(){
 	try{
 		switch(eventType){
 			case "currentFiles":
-				return parent.application.getUserSelection().getContextFileNames("__AJXP_SEP__");
+				return parent.app.getUserSelection().getContextFileNames("__AJXP_SEP__");
 			break;
 			case "currentFolder":
-				var folder = parent.base64_encode(parent.application.getUserSelection().getContextNode().getPath());
+				var folder = parent.base64_encode(parent.app.getUserSelection().getContextNode().getPath());
 				return folder.replace("+", "%2B");
 			break;	
 			case "uploadComplete":
-				parent.application.fireContextRefresh();
+				parent.app.fireContextRefresh();
 			break;
 			case "getMessage":
 				var messageId = arguments[1];
@@ -107,7 +107,7 @@ function triggerFlashEvent(){
 }
 
 var flashVarExt = '&fileTypes=*.*&fileTypeDescription=All%20files';
-var configs = parent.application.getPluginConfigs("uploader");
+var configs = parent.app.getPluginConfigs("uploader");
 if(configs.get("ALLOWED_EXTENSIONS") && configs.get("ALLOWED_EXTENSIONS_READABLE")){
 	var exts = [];
 	parent.$A(configs.get("ALLOWED_EXTENSIONS").split(",")).each(function(el){exts.push("*."+el); });

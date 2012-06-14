@@ -5,7 +5,7 @@
     "description": "CONF_MESSAGE[Access a WebDAV server. Requires PEAR/HTTP_WebDAVClient installed with the patched found in the plugin folder applied.]",
     "mixins": "credentials_consumer,filesystem_commons,slug_provider,template_provider",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.application/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "class_definition": {
       "filename": "plugins/access.webdav/class.webdavAccessDriver.php",
       "classname": "webdavAccessDriver"
@@ -80,3 +80,4 @@
       "protocol": "ajxp.webdav"
     }
   }
+}

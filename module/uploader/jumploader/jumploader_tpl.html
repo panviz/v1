@@ -45,7 +45,7 @@ var ftpUrl = '<?php echo ($ftpURL?$ftpURL:""); ?>';
 function appletInitialized(uploader){	
 	var applet = document.getElementById('jumpLoaderApplet');
 	var origUrl = applet.getUploaderConfig().getUploadUrl();
-	var currentFolder = parent.base64_encode(parent.application.getUserSelection().getContextNode().getPath());
+	var currentFolder = parent.base64_encode(parent.app.getUserSelection().getContextNode().getPath());
 	applet.getUploaderConfig().setUploadUrl(origUrl + "&dir=" + currentFolder + "&ajxp_sessid=" + clientId);
 	applet.getUploaderConfig().setPartitionLength(partitionLength);
 	applet.getUploaderConfig().setMaxFileLength(maxFileLength);
@@ -55,7 +55,7 @@ function uploaderStatusChanged(uploader){
 	var applet = document.getElementById('jumpLoaderApplet');
 	// 1 = uploading, 0 is back to normal => we assume "uploaded"
 	if(uploader.getStatus() == 0){
-		parent.application.fireContextRefresh();
+		parent.app.fireContextRefresh();
 	}
 }
 
@@ -113,3 +113,4 @@ document.write('<applet name="jumpLoaderApplet" id="jumpLoaderApplet" \
 				</applet>');
 </script>
 </body>
+</html>

@@ -8,7 +8,7 @@ Class.create("EmlViewer", AbstractEditor, {
 		$super(oFormObject);
 		this.actions.get("downloadFileButton").observe('click', function(){
 			if(!this.currentFile) return;		
-			application.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+this.currentFile);
+			app.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+this.currentFile);
 			return false;
 		}.bind(this));
 	},
@@ -76,7 +76,7 @@ Class.create("EmlViewer", AbstractEditor, {
 	cpAttachment : function(event){
 		var container = this.element.down('#treeSelectorCpContainer');
 		this.treeSelector = new TreeSelector(container);
-		var user = application.user;
+		var user = app.user;
 		if(user) var activeRepository = user.getActiveRepository();
 		if(user && user.canCrossRepositoryCopy() && user.hasCrossRepositories()){
 			var firstKey ;
@@ -130,7 +130,7 @@ Class.create("EmlViewer", AbstractEditor, {
 			var selectedNode = this.treeSelector.getSelectedNode();
 			var actionValue = "eml_cp_attachment";
 			var crossCopy = false;
-			var crtRepoType = application.user.repositories.get(application.user.activeRepository).accessType;
+			var crtRepoType = app.user.repositories.get(app.user.activeRepository).accessType;
 			if(activeRepository && this.treeSelector.getFilterActive(activeRepository)){
 				crossCopy = true;
 			}
@@ -153,7 +153,7 @@ Class.create("EmlViewer", AbstractEditor, {
                 console.log(connexion._parameters);
 			}
 			connexion.onComplete = function(transport){
-				application.actionBar.parseXmlMessage(transport.responseXML);
+				app.actionBar.parseXmlMessage(transport.responseXML);
 			};
 			connexion.sendAsync();
 			hideSelector();

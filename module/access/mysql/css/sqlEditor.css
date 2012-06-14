@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
  *
- * The latest code can be found at <http://www.application.info/>.
+ * The latest code can be found at <http://www.app.info/>.
  */
 .sqlForm input{
    width: 108px !important;
@@ -95,3 +95,4 @@
 {
    width: 250px !important;
    height: 70px;
+}

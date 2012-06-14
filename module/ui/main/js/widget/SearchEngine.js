@@ -40,7 +40,7 @@ Class.create("SearchEngine", Pane, {
         }
 		$super($(mainElementName), this._ajxpOptions);
         this.updateSearchModeFromRegistry();
-        document.observe("application:registry_loaded", this.updateSearchModeFromRegistry.bind(this));
+        document.observe("app:registry_loaded", this.updateSearchModeFromRegistry.bind(this));
 		this.initGUI();
 	},
 
@@ -48,7 +48,7 @@ Class.create("SearchEngine", Pane, {
         if($(this._resultsBoxId)){
             $(this._resultsBoxId).update('');
         }
-        var reg = application.getXmlRegistry();
+        var reg = app.getXmlRegistry();
         var indexerNode = XPathSelectSingleNode(reg, "plugins/indexer");
         if(indexerNode != null){
             if(indexerNode.getAttribute("indexed_meta_fields")){
@@ -119,16 +119,16 @@ Class.create("SearchEngine", Pane, {
 		}.bind(this));
 		
 		this._inputBox.observe("focus", function(e){
-			application.disableShortcuts();
-			application.disableNavigation();
+			app.disableShortcuts();
+			app.disableNavigation();
 			this.hasFocus = true;
 			this._inputBox.select();
 			return false;
 		}.bind(this));
 			
 		this._inputBox.observe("blur", function(e){
-			application.enableShortcuts();
-            application.enableNavigation();
+			app.enableShortcuts();
+            app.enableNavigation();
 			this.hasFocus = false;
 		}.bind(this));
 		
@@ -239,7 +239,7 @@ Class.create("SearchEngine", Pane, {
 		this.crtText = text.toLowerCase();
 		this.updateStateSearching();
 		this.clearResults();
-		var folder = application.getContextNode().getPath();
+		var folder = app.getContextNode().getPath();
 		if(folder == "/") folder = "";
 		window.setTimeout(function(){
 			this.searchFolderContent(folder);
@@ -334,14 +334,14 @@ Class.create("SearchEngine", Pane, {
 		if(isFolder)
 		{
 			divElement.observe("click", function(e){
-				application.goTo(folderName);
+				app.goTo(folderName);
 			});
 		}
 		else
 		{
 			divElement.observe("click", function(e){
-				application.getContextHolder().setPendingSelection(fileName);
-				application.goTo(folderName);
+				app.getContextHolder().setPendingSelection(fileName);
+				app.goTo(folderName);
 			});
 		}
 	},

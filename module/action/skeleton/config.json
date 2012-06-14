@@ -1,7 +1,7 @@
 {
   "ajxp_plugin": {
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.application/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "name": "skeleton",
     "enabled": "false",
     "label": "CONF_MESSAGE[Skeleton Plugin]",
@@ -31,7 +31,7 @@
           "label": "CONF_MESSAGE[Button Target Url]",
           "description": "CONF_MESSAGE[The target URL of the button that will be added to the application]",
           "mandatory": "true",
-          "default": "http://www.application.info"
+          "default": "http://www.app.info"
         }
       ]
     },
@@ -86,7 +86,7 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "false",
-                "$t": "var confs = application.getPluginConfigs(\"ajxp_plugin[@name='skeleton']\");var target = confs.get('CUSTOM_BUTTON_TARGET');if(window.confirm(MessageHash['skeleton.3'].replace('%s', target))){window.open(target, \"my_popup\");}"
+                "$t": "var confs = app.getPluginConfigs(\"ajxp_plugin[@name='skeleton']\");var target = confs.get('CUSTOM_BUTTON_TARGET');if(window.confirm(MessageHash['skeleton.3'].replace('%s', target))){window.open(target, \"my_popup\");}"
               }
             }
           },
@@ -129,3 +129,4 @@
       "classname": "PluginSkeleton"
     }
   }
+}

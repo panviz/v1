@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
  *
- * The latest code can be found at <http://www.application.info/>.
+ * The latest code can be found at <http://www.app.info/>.
  * Description : Simple display of SVN logs.
  */
 Class.create("SVNLogger", {
@@ -41,9 +41,9 @@ Class.create("SVNLogger", {
 	},
 	
 	open: function(currentRep){
-		var selection = application.getUserSelection();
+		var selection = app.getUserSelection();
 		if(currentRep || selection.isEmpty()){
-			var ajxpNode = application.getContextNode();
+			var ajxpNode = app.getContextNode();
 		}else{
 			var ajxpNode = selection.getUniqueNode();
 		}
@@ -134,7 +134,7 @@ Class.create("SVNLogger", {
 				this.addEntry(revision,author,date,message);
 			}
 		}catch(e){
-			application.displayMessage("ERROR", e.description + "(current index : "+i+")");
+			app.displayMessage("ERROR", e.description + "(current index : "+i+")");
 		}finally{
 			this.removeOnLoad();
 		}
@@ -143,7 +143,7 @@ Class.create("SVNLogger", {
 			if(a.getAttribute("ajxp_url")){
 				var conn = new Connexion(a.getAttribute("ajxp_url"));
 				conn.onComplete = function(){
-					application.fireContextRefresh()
+					app.fireContextRefresh()
 					hideLightBox();
 				};
 				conn.sendAsync();
@@ -167,3 +167,4 @@ Class.create("SVNLogger", {
 	removeOnLoad:function(){
 		removeLightboxFromElement(this.container);
 	}
+});
