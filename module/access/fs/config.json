@@ -5,7 +5,7 @@
     "description": "CONF_MESSAGE[The most standard access to a filesystem located on the server.]",
     "mixins": "filesystem_commons,slug_provider,template_provider",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "client_settings": {
       "icon": "plugins/access.fs/icon.png",
       "resources": {

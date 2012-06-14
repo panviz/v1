@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
  *
- * The latest code can be found at <http://www.ajaxplorer.info/>.
+ * The latest code can be found at <http://www.app.info/>.
  * Description : Extension of the SearchEngine class for SQL search.
  */
 Class.create("SQLSearchEngine", SearchEngine, {
@@ -25,13 +25,13 @@ Class.create("SQLSearchEngine", SearchEngine, {
 		this.sqlQuery = $('sql_query');
 		
 		this.sqlQuery.observe("focus", function(e){
-			ajaxplorer.disableShortcuts();
+			app.disableShortcuts();
 			this.hasFocus = true;
 			//this.sqlQuery.select();
 			Event.stop(e);
 		}.bind(this));
 		this.sqlQuery.observe("blur", function(e){
-			ajaxplorer.enableShortcuts();
+			app.enableShortcuts();
 			this.hasFocus = false;
 		}.bind(this) );
 		this.sqlQuery.observe("keydown", function(e){
@@ -63,7 +63,7 @@ Class.create("SQLSearchEngine", SearchEngine, {
 		connexion.setParameters(params);
 		var res = connexion.sendSync();
 		var path = "/ajxpmysqldriver_searchresults";
-		ajaxplorer.updateContextData(new AjxpNode(path));
+		app.updateContextData(new AjxpNode(path));
 	},
 	
 	resize:function(){

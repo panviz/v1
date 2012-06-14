@@ -11,7 +11,7 @@
     "label": "CONF_MESSAGE[EXIF Extractor]",
     "description": "CONF_MESSAGE[Display the Exif metadata contained inside the JPG files. Can locate the image on a map if it contains geolocation data.]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "client_settings": {
       "resources": {
         "js": [

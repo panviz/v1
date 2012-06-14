@@ -13,7 +13,7 @@
     "label": "CONF_MESSAGE[Image viewer]",
     "description": "CONF_MESSAGE[Image viewer, used for previewing images and browsing them in a diaporam. Generates a thumbnail version of the images.]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "server_settings": {
       "global_param": [
         {
@@ -126,7 +126,7 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var selectedMime = getAjxpMimeType(ajaxplorer.getUserSelection().getUniqueNode());var editors = ajaxplorer.findEditorsForMime(selectedMime);var editorData;if(editors.length){editorData = editors[0];}if(editorData){ajaxplorer.loadEditorResources(editorData.resourcesManager);modal.openEditorDialog(editorData);}else{alert('no data found!');}"
+                "$t": "var selectedMime = getAjxpMimeType(app.getUserSelection().getUniqueNode());var editors = app.findEditorsForMime(selectedMime);var editorData;if(editors.length){editorData = editors[0];}if(editorData){app.loadEditorResources(editorData.resourcesManager);modal.openEditorDialog(editorData);}else{alert('no data found!');}"
               },
               "serverCallback": {
                 "methodName": "switchAction"

@@ -1,5 +1,5 @@
 /**
- * A selector for displaying repository list. Will hook to ajaxplorer:repository_list_refreshed.
+ * A selector for displaying repository list. Will hook to app:repository_list_refreshed.
  */
 Class.create("RepositorySelect", {
 	__implements: "IWidget",
@@ -14,7 +14,7 @@ Class.create("RepositorySelect", {
 		this.element.ajxpPaneObject = this;
 		this.show = true;
 		this.createGui();
-		document.observe("ajaxplorer:repository_list_refreshed", function(e){
+		document.observe("app:repository_list_refreshed", function(e){
 			this.refreshRepositoriesMenu(e.memo.list,e.memo.active);
 		}.bind(this) );
 	},
@@ -135,7 +135,7 @@ Class.create("RepositorySelect", {
         }
 
         var menuItems = $A();
-        var otherActions = ajaxplorer.actionBar.getActionsForWidget("RepositorySelect", this.element.id).each(function(otherAction){
+        var otherActions = app.actionBar.getActionsForWidget("RepositorySelect", this.element.id).each(function(otherAction){
             menuItems.push({
                 name: otherAction.getKeyedText(),
                 alt: otherAction.options.title,
@@ -177,7 +177,7 @@ Class.create("RepositorySelect", {
 	 * @param key String
 	 */
 	onRepoSelect : function(key){
-		ajaxplorer.triggerRepositoryChange(key);
+		app.triggerRepositoryChange(key);
 	},
 	/**
 	 * Resize widget
@@ -209,7 +209,7 @@ Class.create("RepositorySelect", {
                         var conn = new Connexion();
                         conn.setParameters({get_action: 'user_delete_repository', repository_id: repositoryId});
                         conn.onComplete = function(transport){
-                            ajaxplorer.actionBar.parseXmlMessage(transport.responseXML);
+                            app.actionBar.parseXmlMessage(transport.responseXML);
                         };
                         conn.sendAsync();
                     }

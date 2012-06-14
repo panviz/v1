@@ -13,7 +13,7 @@
     "label": "CONF_MESSAGE[Audio Player]",
     "description": "CONF_MESSAGE[Inserts a flash player for reading mp3 files online, and playing a whole folder in a separate window.]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "class_definition": {
       "filename": "plugins/editor.audio/class.AudioPreviewer.php",
       "classname": "AudioPreviewer"
@@ -72,7 +72,7 @@
               "adminOnly": ""
             },
             "processing": {
-              "clientCallback": "var editor = ajaxplorer.findEditorById('editor.audio');if(editor){ajaxplorer.loadEditorResources(editor.resourcesManager);var editorClass = Class.getByName(editor.editorClass);if(editorClass){editorClass.prototype.createFolderPlayer(ajaxplorer.getContextNode());}}",
+              "clientCallback": "var editor = app.findEditorById('editor.audio');if(editor){app.loadEditorResources(editor.resourcesManager);var editorClass = Class.getByName(editor.editorClass);if(editorClass){editorClass.prototype.createFolderPlayer(app.getContextNode());}}",
               "serverCallback": {
                 "methodName": "switchAction"
               }

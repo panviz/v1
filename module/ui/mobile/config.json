@@ -4,7 +4,7 @@
     "label": "CONF_MESSAGE[Mobile]",
     "description": "CONF_MESSAGE[Template extending gui.ajax for small screen terminals.]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "class_definition": {
       "filename": "plugins/gui.mobile/class.MobileGuiPlugin.php",
       "classname": "MobileGuiPlugin"

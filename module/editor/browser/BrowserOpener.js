@@ -3,13 +3,13 @@ Class.create("BrowserOpener", View, {
 	initialize : function($super, oFormObject){},
 	
 	open : function($super, userSelection){
-        var fileName =  ajaxplorer.getUserSelection().getUniqueFileName();
-        var node = ajaxplorer.getUserSelection().getUniqueNode();
+        var fileName =  app.getUserSelection().getUniqueFileName();
+        var node = app.getUserSelection().getUniqueNode();
         if(node.getAjxpMime() == "url"){
         	this.openURL(fileName);
         	return;
         } 
-        var repo = ajaxplorer.user.getActiveRepository();
+        var repo = app.user.getActiveRepository();
         var loc = document.location.href;
         if(loc.indexOf("?") !== -1) loc = loc.substring(0, loc.indexOf("?"));
         var url = loc.substring(0, loc.lastIndexOf('/'));

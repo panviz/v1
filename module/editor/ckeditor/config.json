@@ -14,7 +14,7 @@
     "label": "CONF_MESSAGE[CKEditor]",
     "description": "CONF_MESSAGE[Wysiwyg HTML Editor, requires separate library to be downloaded.]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "dependencies": {
       "pluginResources": {
         "pluginName": "editor.text"

@@ -6,7 +6,7 @@
     "description": "CONF_MESSAGE[This plugin allows accessing a dropbox account. Still experimental, requires PEAR/HTTP_OAuth extension.]",
     "mixins": "filesystem_commons,slug_provider,template_provider",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "client_settings": {
       "icon": "plugins/access.dropbox/dropboxLogo.png",
       "resources": {

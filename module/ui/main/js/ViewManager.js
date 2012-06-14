@@ -7,11 +7,11 @@ Class.create("ViewManager", {
 		this._views = $H();
 		this._current = null;
 		this.modal = new Modal();
-		document.observeOnce("ajaxplorer:component_config_changed", function(event){
+		document.observeOnce("app:component_config_changed", function(event){
 			$$(".view").each(function(element){
 				//TODO mime should be set into editors data while xml parsing
 				var mime = element.getAttribute("default_mime")
-				var editors = ajaxplorer.findEditorsForMime(mime);
+				var editors = app.findEditorsForMime(mime);
 				if(editors.length && editors[0].openable){
 					var data = editors[0];
 					data.mime = mime;
@@ -38,9 +38,9 @@ Class.create("ViewManager", {
 	 */
 	_createEditor : function(element, data){
 		if(data){
-			ajaxplorer.loadEditorResources(data.resourcesManager);
+			app.loadEditorResources(data.resourcesManager);
 			if(!data.formId){
-				ajaxplorer.displayMessage('ERROR', 'Error, you must define a formId attribute in your &lt;editor&gt; manifest (or set it as openable="false")');
+				app.displayMessage('ERROR', 'Error, you must define a formId attribute in your &lt;editor&gt; manifest (or set it as openable="false")');
 				return;
 			}
 			var editorClass = data.editorClass;

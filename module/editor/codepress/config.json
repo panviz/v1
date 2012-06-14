@@ -13,7 +13,7 @@
     "label": "CONF_MESSAGE[CodePress]",
     "description": "CONF_MESSAGE[Legacy Syntax Highlighter]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "dependencies": {
       "pluginResources": {
         "pluginName": "editor.text"

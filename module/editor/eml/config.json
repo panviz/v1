@@ -11,7 +11,7 @@
     "label": "CONF_MESSAGE[Email Viewer]",
     "description": "CONF_MESSAGE[Email reader, supports eml format and eml mimetypes. Detects if a folder contains only email and display columns accordingly.]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "class_definition": {
       "filename": "plugins/editor.eml/class.EmlParser.php",
       "classname": "EmlParser"

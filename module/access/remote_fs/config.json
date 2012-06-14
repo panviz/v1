@@ -4,7 +4,7 @@
     "label": "CONF_MESSAGE[Remote Server (via API)]",
     "description": "CONF_MESSAGE[Access a remote server implementing the AjaXplorer API (most commonly a remote server with another AjaXplorer installed)]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "client_settings": {
       "icon": "plugins/access.remote_fs/remote_fs_icon.png",
       "resources": {
@@ -28,7 +28,7 @@
           "type": "string",
           "label": "CONF_MESSAGE[Uri]",
           "description": "CONF_MESSAGE[Path of the API implementor on the remote server.]",
-          "default": "/ajaxplorer/content.php",
+          "default": "/app/content.php",
           "mandatory": "true"
         },
         {
@@ -57,7 +57,7 @@
           "name": "AUTH_URI",
           "type": "string",
           "label": "CONF_MESSAGE[Http Auth URI]",
-          "description": "CONF_MESSAGE[Path to the authentication script, e.g. /ajaxplorer/index.php (only if you are using basic http auth)]",
+          "description": "CONF_MESSAGE[Path to the authentication script, e.g. /app/index.php (only if you are using basic http auth)]",
           "default": "",
           "mandatory": "false"
         },
@@ -65,7 +65,7 @@
           "name": "TMP_UPLOAD",
           "type": "string",
           "label": "CONF_MESSAGE[Temporary Folder]",
-          "description": "CONF_MESSAGE[Temporary folder on the local server used for file uploads. For the moment, it must be placed under your ajaxplorer folder and you must create it and set it writeable by Apache.]",
+          "description": "CONF_MESSAGE[Temporary folder on the local server used for file uploads. For the moment, it must be placed under your app folder and you must create it and set it writeable by Apache.]",
           "default": "tmp",
           "mandatory": "true"
         },

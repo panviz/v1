@@ -13,7 +13,7 @@
 "Download Folder" : "Répertoire",
 "Absolute path to the public folder where temporary download links will be created. Setting this empty will disable the sharing feature." : "Chemin absolu depuis la racine du serveur vers le répertoire dans lequel les liens publics seront créés. Si vous le laissez vide, cela désactive la fonction de partage.",
 "Download URL" : "URL",
-"If not inferred directly from the current ajaxplorer URI plus the public download folder name, replace the public access URL here." : "Si cette URL n'est pas logiquement déduite de l'URL d'AjaXplorer (si le répertoire est dans un virtual host par exemple), entrez l'URL ici.",
+"If not inferred directly from the current app URI plus the public download folder name, replace the public access URL here." : "Si cette URL n'est pas logiquement déduite de l'URL d'AjaXplorer (si le répertoire est dans un virtual host par exemple), entrez l'URL ici.",
 "Existing users" : "Autres utilisateurs",
 "Allow the users to pick an existing user when sharing a folder" : "Autoriser les utilisateurs à voir une liste des utilisateurs existants pour partager des dossiers avec eux",
 "Compression Features" : "Compression",

@@ -4,7 +4,7 @@
     "label": "CONF_MESSAGE[Update Engine]",
     "description": "CONF_MESSAGE[Automatic update of AjaXplorer. Since version 3.3.3]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "server_settings": {
       "global_param": [
         {
@@ -12,7 +12,7 @@
           "type": "string",
           "label": "CONF_MESSAGE[Update Site]",
           "description": "CONF_MESSAGE[Where to update]",
-          "default": "http://www.ajaxplorer.info/update/"
+          "default": "http://www.app.info/update/"
         },
         {
           "name": "UPDATE_CHANNEL",
@@ -174,7 +174,7 @@
                 "dialogOpenForm": "migrate_metaserial",
                 "dialogOkButtonOnly": "false",
                 "dialogSkipButtons": "false",
-                "dialogOnOpen": "var startButton = $(oForm).down('div[id=\"start_upgrade_button\"]');startButton.observe(\"click\", function(){var conn = new Connexion();conn.addParameter(\"get_action\", \"migrate_metaserial\");conn.addParameter(\"repository_id\", getBaseName(ajaxplorer.getUserSelection().getUniqueNode().getPath()));if($(oForm).down('div[id=\"start_upgrade_button\"]').RUN_NOW){conn.addParameter(\"real_run\", \"true\");}conn.onComplete = function(transport){$(oForm).down('div[id=\"upgrade_steps\"]').update(transport.responseText);$(oForm).down('div[id=\"start_upgrade_button\"]').update(MessageHash['updater.14']);$(oForm).down('div[id=\"start_upgrade_button\"]').RUN_NOW = true;};conn.sendAsync();});",
+                "dialogOnOpen": "var startButton = $(oForm).down('div[id=\"start_upgrade_button\"]');startButton.observe(\"click\", function(){var conn = new Connexion();conn.addParameter(\"get_action\", \"migrate_metaserial\");conn.addParameter(\"repository_id\", getBaseName(app.getUserSelection().getUniqueNode().getPath()));if($(oForm).down('div[id=\"start_upgrade_button\"]').RUN_NOW){conn.addParameter(\"real_run\", \"true\");}conn.onComplete = function(transport){$(oForm).down('div[id=\"upgrade_steps\"]').update(transport.responseText);$(oForm).down('div[id=\"start_upgrade_button\"]').update(MessageHash['updater.14']);$(oForm).down('div[id=\"start_upgrade_button\"]').RUN_NOW = true;};conn.sendAsync();});",
                 "dialogOnComplete": {
                   "hideDialog": "true",
                   "$t": "$(oForm).down('div[id=\"start_upgrade_button\"]').stopObserving(\"click\");$(oForm).down('div[id=\"start_upgrade_button\"]').RUN_NOW = false;"

@@ -4,7 +4,7 @@
     "label": "CONF_MESSAGE[Demo (no write actions)]",
     "description": "CONF_MESSAGE[This is a standard access to the filesystem but with all write actions disabled server-side.]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "client_settings": {
       "icon": "plugins/access.fs/icon.png",
       "resources": {

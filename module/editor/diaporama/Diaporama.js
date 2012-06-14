@@ -34,7 +34,7 @@ Class.create("Diaporama", View, {
             replaceScroll = true;
         }
         this.infoPanel = new InfoPanel(diapoInfoPanel, {skipObservers: true,skipActions: true, replaceScroller: replaceScroll});
-        var ipConfigs = ajaxplorer.getGuiComponentConfigs("InfoPanel");
+        var ipConfigs = app.getGuiComponentConfigs("InfoPanel");
         ipConfigs.each(function(el){
             this.infoPanel.parseComponentConfig(el.get("all"));
         }.bind(this));
@@ -111,7 +111,7 @@ Class.create("Diaporama", View, {
 		}.bind(this);
 		this.downloadButton.onclick = function(){
 			if(!this.currentFile) return;		
-			ajaxplorer.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+this.currentFile);
+			app.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+this.currentFile);
 			return false;
 		}.bind(this);
 		this.actualSizeButton.onclick = function(){
@@ -191,8 +191,8 @@ Class.create("Diaporama", View, {
 		}.bind(this));
 		
 		// Init preferences
-		if(ajaxplorer && ajaxplorer.user){
-			var autoFit = ajaxplorer.user.getPreference('diapo_autofit');
+		if(app && app.user){
+			var autoFit = app.user.getPreference('diapo_autofit');
 			if(autoFit && autoFit == "true"){
 				this.autoFit = true;
 				this.fitToScreenButton.select('img')[0].src = ajxpResourcesFolder + '/images/actions/22/zoom-fit-restore.png';
@@ -513,9 +513,9 @@ Class.create("Diaporama", View, {
 		}
 		this.fitToScreenButton.select('img')[0].src = ajxpResourcesFolder + '/images/actions/22/'+src+'.png';
 		this.fitToScreenButton.select('span')[0].update(MessageHash[id]);
-		if(ajaxplorer && ajaxplorer.user && !skipSave){
-			ajaxplorer.user.setPreference("diapo_autofit", (this.autoFit ? 'true' : 'false'));
-			ajaxplorer.user.savePreferences();
+		if(app && app.user && !skipSave){
+			app.user.setPreference("diapo_autofit", (this.autoFit ? 'true' : 'false'));
+			app.user.savePreferences();
 		}
 	},
 		
@@ -628,7 +628,7 @@ Class.create("Diaporama", View, {
 				theImage.setStyle({cursor: 'pointer'});
 				theImage.openBehaviour = true;
 				theImage.observe("click", function(event){
-					ajaxplorer.actionBar.fireAction('open_with');
+					app.actionBar.fireAction('open_with');
 				});
 			}
             var off = theImage.positionedOffset();

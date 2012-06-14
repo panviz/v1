@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with AjaXplorer.  If not, see <http://www.gnu.org/licenses/>.
  *
- * The latest code can be found at <http://www.ajaxplorer.info/>.
+ * The latest code can be found at <http://www.app.info/>.
  */
 function cleanURL(url){
     split = url.split("#");
@@ -28,7 +28,7 @@ function cleanURL(url){
 	return url;
 }
 
-document.observe("ajaxplorer:gui_loaded", function(){
+document.observe("app:gui_loaded", function(){
 	document.addEventListener("touchmove", function(event){
 		event.preventDefault();
 	});
@@ -40,16 +40,16 @@ document.observe("ajaxplorer:gui_loaded", function(){
     }
     var suffix;
     if(navigator.userAgent.match(/android/i)){
-        $("appstore-redir").href = ajaxplorer.getPluginConfigs("guidriver").get("ANDROID_URL");
+        $("appstore-redir").href = app.getPluginConfigs("guidriver").get("ANDROID_URL");
         //$("ajxpserver-redir").hide();
         suffix = "android";
     }else{
-        $("appstore-redir").href = ajaxplorer.getPluginConfigs("guidriver").get("IOS_URL");
+        $("appstore-redir").href = app.getPluginConfigs("guidriver").get("IOS_URL");
         suffix = "ios";
     }
     $("skipios-redir").href = currentHref + (currentHref.indexOf("?")>-1?"&":"?") + "skip"+suffix.toUpperCase()+"=true";
-    $("message-id-1").update(MessageHash["ios_gui.1."+suffix].replace("%s", ajaxplorer.getPluginConfigs("ajaxplorer").get("APPLICATION_TITLE")));
-    $("ajxpserver-redir").update(MessageHash["ios_gui.2."+suffix].replace("%s", ajaxplorer.getPluginConfigs("ajaxplorer").get("APPLICATION_TITLE")));
-    $("appstore-redir").update(MessageHash["ios_gui.3."+suffix].replace("%s", ajaxplorer.getPluginConfigs("ajaxplorer").get("APPLICATION_TITLE")));
-    $("skipios-redir").update(MessageHash["ios_gui.4."+suffix].replace("%s", ajaxplorer.getPluginConfigs("ajaxplorer").get("APPLICATION_TITLE")));
+    $("message-id-1").update(MessageHash["ios_gui.1."+suffix].replace("%s", app.getPluginConfigs("app").get("APPLICATION_TITLE")));
+    $("ajxpserver-redir").update(MessageHash["ios_gui.2."+suffix].replace("%s", app.getPluginConfigs("app").get("APPLICATION_TITLE")));
+    $("appstore-redir").update(MessageHash["ios_gui.3."+suffix].replace("%s", app.getPluginConfigs("app").get("APPLICATION_TITLE")));
+    $("skipios-redir").update(MessageHash["ios_gui.4."+suffix].replace("%s", app.getPluginConfigs("app").get("APPLICATION_TITLE")));
 });

@@ -5,7 +5,7 @@
     "label": "CONF_MESSAGE[Remote authentication]",
     "description": "CONF_MESSAGE[Authentication is done remotely (useful in CMS system).]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.ajaxplorer/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "client_settings": {
       "resources": {
         "i18n": {

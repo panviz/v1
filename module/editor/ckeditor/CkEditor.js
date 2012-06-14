@@ -15,7 +15,7 @@ Class.create("AjxpCkEditor", TextEditor, {
 			//filebrowserBrowseUrl: 'index.php?external_selector_type=ckeditor&relative_path=files',
 			filebrowserImageBrowseUrl: 'index.php?external_selector_type=ckeditor',
 			filebrowserFlashBrowseUrl: 'index.php?external_selector_type=ckeditor',
-			language: ajaxplorer.currentLanguage,
+			language: app.currentLanguage,
 			fullPage: true,
 			toolbar_Ajxp: [
 				['Source','Preview','Templates'],
@@ -46,7 +46,7 @@ Class.create("AjxpCkEditor", TextEditor, {
 				//filebrowserBrowseUrl: 'index.php?external_selector_type=ckeditor&relative_path=files',
 				filebrowserImageBrowseUrl: 'index.php?external_selector_type=ckeditor',
 				filebrowserFlashBrowseUrl: 'index.php?external_selector_type=ckeditor',
-				language: ajaxplorer.currentLanguage,
+				language: app.currentLanguage,
 				fullPage: true,
 				toolbar_Ajxp: [
 				    ['Bold','Italic','Underline', '-', 'NumberedList','BulletedList'],

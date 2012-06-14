@@ -120,32 +120,32 @@ Class.create("Pane", {
 	},
 	
 	/**
-	 * Sets a listener when the htmlElement is focused to notify ajaxplorer object
+	 * Sets a listener when the htmlElement is focused to notify app object
 	 */
 	setFocusBehaviour : function(){
 		this.htmlElement.observe("click", function(){
-			if(ajaxplorer) ajaxplorer.focusOn(this);
+			if(app) app.focusOn(this);
 		}.bind(this));
 	},
 
 
     getUserPreference : function(prefName){
-        if(!ajaxplorer || !ajaxplorer.user) return;
-        var gui_pref = ajaxplorer.user.getPreference("gui_preferences", true);
+        if(!app || !app.user) return;
+        var gui_pref = app.user.getPreference("gui_preferences", true);
         if(!gui_pref || !gui_pref[this.htmlElement.id+"_"+this.__className]) return;
         return gui_pref[this.htmlElement.id+"_"+this.__className][prefName];
     },
 
     setUserPreference : function(prefName, prefValue){
-        if(!ajaxplorer || !ajaxplorer.user) return;
-        var guiPref = ajaxplorer.user.getPreference("gui_preferences", true);
+        if(!app || !app.user) return;
+        var guiPref = app.user.getPreference("gui_preferences", true);
         if(!guiPref) guiPref = {};
         if(!guiPref[this.htmlElement.id+"_"+this.__className]) guiPref[this.htmlElement.id+"_"+this.__className] = {};
         if(guiPref[this.htmlElement.id+"_"+this.__className][prefName] && guiPref[this.htmlElement.id+"_"+this.__className][prefName] == prefValue){
             return;
         }
         guiPref[this.htmlElement.id+"_"+this.__className][prefName] = prefValue;
-        ajaxplorer.user.setPreference("gui_preferences", guiPref, true);
-        ajaxplorer.user.savePreference("gui_preferences");
+        app.user.setPreference("gui_preferences", guiPref, true);
+        app.user.savePreference("gui_preferences");
     }
 });
