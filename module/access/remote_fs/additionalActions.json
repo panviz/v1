@@ -1,0 +1,24 @@
+{
+	"driver" : {
+		"name" : "remote_fs",
+		"actions" : {
+			"uuidAttr" : "name",
+			"action" : [{
+					"name" : "next_to_remote",
+					"processing" : {
+						"serverCallback" : {
+							"methodName" : "switchAction"
+						}
+					}
+				}, {
+					"name" : "trigger_remote_copy",
+					"processing" : {
+						"serverCallback" : {
+							"methodName" : "switchAction"
+						}
+					}
+				}
+			]
+		}
+	}
+}

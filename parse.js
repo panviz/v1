@@ -44,7 +44,7 @@ var xml2json = function(files){
 			var xml = fs.readFileSync(filename);
 			//var data = parser.toJson(xml)
 			//add formatting
-			//var data = JSON.stringify(data, null, '  ');
+			//var data = JSON.stringify(data, null, '');
 			//fs.writeFileSync(filename.replace(/\.xml$/,'.json'), data)
 		}
 	})

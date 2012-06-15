@@ -537,7 +537,7 @@ Class.create("ActionsManager", {
 	 */
 	loadActionsFromRegistry : function(registry){
 		this.removeActions();		
-		this.parseActions(registry);
+		this.parseActions(registry.actions);
 		if(app && app.guiActions){
 			app.guiActions.each(function(pair){
 				var act = pair.value;
@@ -572,15 +572,14 @@ Class.create("ActionsManager", {
 	 * Parse an XML action node and registers the action
 	 * @param documentElement DOMNode The node to parse
 	 */
-	parseActions : function(documentElement){		
-		//var actions = XPathSelectNodes(documentElement, "actions/action");
-		//for(var i=0;i<actions.length;i++){
-			//if(actions[i].nodeName != 'action') continue;
-            //if(actions[i].getAttribute('enabled') == 'false') continue;
-			//var newAction = new Action();
-			//newAction.createFromXML(actions[i]);
-			//this.registerAction(newAction);
-		//}
+	parseActions : function(actions){		
+		for(var i=0;i<actions.length;i++){
+			if(actions[i].nodeName != 'action') continue;
+						if(actions[i].getAttribute('enabled') == 'false') continue;
+			var newAction = new Action();
+			newAction.createFromXML(actions[i]);
+			this.registerAction(newAction);
+		}
 	},
 	/**
 	 * Find an action by its name
