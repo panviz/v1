@@ -1,6 +1,7 @@
 #!/usr/bin/env node
  
-var path = require('path')
+var path = require('path');
+fs = require('fs');
 
 try {
   require.paths = require.paths.unshift(__dirname + '/../node_modules');

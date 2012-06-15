@@ -1,6 +1,8 @@
 			TODO
 	search all TODO notes in code
-Xml
+Rename
+	access modules -> driver?
+Template
 	set search bar back
 View
 	Does View contains Editor? or Editor is a View?

@@ -9,9 +9,10 @@
 if (Object.isUndefined(Proto)) { var Proto = { }; }
 
 Proto.Menu = Class.create({
-	initialize: function() {
+	initialize: function(options) {
 		var e = Prototype.emptyFunction;
 		this.ie = Prototype.Browser.IE;
+		var resourcesFolder = options.resourcesFolder || '';
 		this.options = Object.extend({
 			selector: '.contextmenu',
 			className: 'protoMenu',
@@ -20,7 +21,7 @@ Proto.Menu = Class.create({
 			pageOffset: 25,
 			topOffset:0,
 			leftOffset:0,
-			submenuArrow:ajxpResourcesFolder+'/images/arrow_right.png',
+			submenuArrow: resourcesFolder+'/images/arrow_right.png',
 			position:'bottom',
 			menuTitle:'',
 			fade: false,

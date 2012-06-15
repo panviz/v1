@@ -9,8 +9,15 @@ module.exports = {
 	link_tag: function(file){
 		return insert_file(file, '<link rel="stylesheet" type="text/css" href="%filename%">');
 	},
-	//Global translations object
-	t: settings.i18nMessages
+	//translations
+	//TODO add %s substitution
+	t: function(message){
+			 if (settings.currentLanguage == "en"){
+				 return message;
+			 } else {
+				 settings.i18n[settings.currentLanguage][message];
+			 }
+		 }
 }
 
 function insert_file(filename, code){

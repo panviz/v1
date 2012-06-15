@@ -13,14 +13,15 @@ Class.create("Application", {
 	 * @param usersEnabled Boolean Whether users management is enabled or not
 	 * @param loggedUser String Already logged user. 
 	 */
-	initialize : function(loadRep, usersEnabled, loggedUser)
+	initialize : function(params)
 	{	
-		this._initLoadRep = loadRep;
+		this.parameters = params;
+		this._initLoadRep = params.get("default_repository") || "";
 		this._initObj = true ;
-		this.usersEnabled = usersEnabled;
-		this.actionBar = new ActionsManager(usersEnabled);
+		this.usersEnabled = params.get("usersEnabled");
+		this.actionBar = new ActionsManager(this.usersEnabled);
 		this._setContextMenu();
-		this._initLoggedUser = loggedUser;
+		this._initLoggedUser = params.get("loggedUser");
 		this._contextHolder = new DataModel();
 		this._contextHolder.setNodeProvider(new RemoteNodeProvider());
 		this._focusables = [];
@@ -29,7 +30,10 @@ Class.create("Application", {
 		//this._initDefaultDisp = 'list';
 		this.historyCount = 0;
 		this._guiComponentsConfigs = new Hash();
-		this.appTitle = bootstrap.parameters.get("customWording").title || "Graph";
+		this.ui = params.get("ui");
+		this.appTitle = this.ui.title;
+		this.currentLanguage = params.get("currentLanguage");
+		this.element = this.ui.theme.element;
 	},
 	
 	/**
@@ -41,7 +45,7 @@ Class.create("Application", {
 		modal.setLoadingStepCounts(5);
 		//sync load
 		this.loadRegistry(true);		
-		this.initTemplates();
+		this.applyTemplates();
 		modal.initForms();
 		this._setHistory();
 		this.activityMonitor = new ActivityMonitor(
@@ -51,20 +55,19 @@ Class.create("Application", {
 		  
 		this.guiLoaded = false;
 
-		this.buildGUI($(bootstrap.parameters.get('MAIN_ELEMENT')));
-		//TODO wtf?
-		_fitWindow();
+		this.buildGUI($(this.element));
+		this._fitWindow();
 		// Rewind components creation!
 		if(this.guiCompRegistry){
-            this.initWidgets(this.guiCompRegistry);
+			this.initWidgets(this.guiCompRegistry);
 		}
 		this.guiLoaded = true;
 		document.fire("app:gui_loaded");
-		modal.updateLoadingProgress('GUI Initialized');
+		modal.updateLoadingProgress('User Interface: Done');
 		this.initTabNavigation();
 		this.blockShortcuts = false;
 		this.blockNavigation = false;
-		modal.updateLoadingProgress('Navigation loaded');
+		modal.updateLoadingProgress('Navigation: Done');
 		
 
 		this.tryLogUserFromCookie();
@@ -91,7 +94,7 @@ Class.create("Application", {
 		var data = transport.responseText.evalJSON();
 		if(data.registry){
 			this._registry = data.registry;
-			modal.updateLoadingProgress('Registry loaded');
+			modal.updateLoadingProgress('Registry: Done');
 			document.fire("app:registry_loaded", this._registry);
 			this.refreshExtensionsRegistry();
 			//TODO add user on server to registry
@@ -103,7 +106,7 @@ Class.create("Application", {
 				if(repositoryObject) repositoryObject.loadResources();
 			}
 			this.actionBar.loadActionsFromRegistry(this._registry);
-			modal.updateLoadingProgress('Actions Initialized');
+			modal.updateLoadingProgress('Actions: Done');
 				
 			if(this.guiLoaded) {
 				this.refreshTemplateParts();
@@ -115,7 +118,7 @@ Class.create("Application", {
 				}.bind(this));
 			}
 		this.loadActiveRepository();
-		}else if(doc.nodeName == "ajxp_registry_part"){
+		}else if(doc.nodeName == "registry_part"){
 			this.refreshXmlRegistryPart(doc);
 		}
 	},
@@ -183,7 +186,6 @@ Class.create("Application", {
 	 * @param domNode
 	 */
 	buildGUI : function(domNode, compRegistry){
-		debugger
 		if(domNode.nodeType != 1) return;
 		if(!this.guiCompRegistry) this.guiCompRegistry = $A([]);
         if(!compRegistry){
@@ -694,27 +696,16 @@ Class.create("Application", {
 	
 	/**
 	 * Inserts the main template in the GUI.
+	 * TODO handle passedTarget
 	 */
-	initTemplates : function(passedTarget){
+	applyTemplates : function(passedTarget){
 		if(!this._registry) return;
-		var tNodes = XPathSelectNodes(this._registry, "client_configs/template");
-		for(var i=0;i<tNodes.length;i++){
-			var target = tNodes[i].getAttribute("element");
-            var themeSpecific = tNodes[i].getAttribute("theme");
-            if(themeSpecific && window.bootstrap.parameters.get("theme") && window.bootstrap.parameters.get("theme") != themeSpecific){
-                continue;
-            }
-			if($(target) || $$(target).length || passedTarget){
-				if($(target)) target = $(target);
-				else target = $$(target)[0];
-				if(passedTarget) target = passedTarget;
-				var position = tNodes[i].getAttribute("position");
-				var obj = {}; obj[position] = tNodes[i].firstChild.nodeValue;
-				target.insert(obj);
-				obj[position].evalScripts();
-			}
-		}		
-		modal.updateLoadingProgress('Html templates loaded');	
+		var theme = this.ui.theme;
+		var target = $(this.element);
+		var obj = {}; obj['top'] = theme.html;
+		target.insert(obj);
+		obj['top'].evalScripts();
+		modal.updateLoadingProgress('Applied theme: ' + theme.name);	
 	},
 		
 	findOriginalTemplatePart : function(ajxpId){
@@ -790,7 +781,7 @@ Class.create("Application", {
 		connexion.onComplete = function(transport){
 			if(transport.responseJSON){
 				seedInputField.value = transport.responseJSON.seed;
-				var src = window.ajxpServerAccessPath + '&get_action=get_captcha&sid='+Math.random();
+				var src = window.serverAccessPath + '&get_action=get_captcha&sid='+Math.random();
 				var refreshSrc = ajxpResourcesFolder + '/images/actions/16/reload.png';
 				if(existingCaptcha){
 					existingCaptcha.src = src;
@@ -807,7 +798,7 @@ Class.create("Application", {
 					modal.refreshDialogPosition();
 					modal.refreshDialogAppearance();
 					$('captcha_refresh').observe('click', function(){
-						$('captcha_image').src = window.ajxpServerAccessPath + '&get_action=get_captcha&sid='+Math.random();
+						$('captcha_image').src = window.serverAccessPath + '&get_action=get_captcha&sid='+Math.random();
 					});
 				}
 			}else{
@@ -1097,8 +1088,10 @@ Class.create("Application", {
 			else return this.actionBar.fireActionByKey(e, (e.keyCode == Event.KEY_DELETE ? "key_delete" : String.fromCharCode(e.keyCode).toLowerCase()));
 		}.bind(this));
 	},
+
 	_setContextMenu : function(){
 		this.contextMenu = new Proto.Menu({
+			resourcesFolder: this.parameters.get('ui').theme.path,
 		  selector: '', // context menu will be shown when element with class name of "contextmenu" is clicked
 		  className: 'menu desktop', // this is a class which will be attached to menu container (used for css styling)
 		  menuItems: [],
@@ -1121,9 +1114,10 @@ Class.create("Application", {
 			}			
 		}.bind(protoMenu));
 	},
+	
 	_fitWindow : function(){
-		var desktop = $(this.parameters.get('MAIN_ELEMENT'));
-		var options = desktop.getAttribute("ajxpOptions").evalJSON(false);
+		var desktop = $(this.element);
+		var options = desktop.getAttribute("options").evalJSON(false);
 		if(options.fit && options.fit == 'height'){
 			var marginBottom = 0;
 			if(options.fitMarginBottom){
@@ -1131,7 +1125,7 @@ Class.create("Application", {
 			}
 			if(options.fitParent == 'window') options.fitParent = window;
 			else options.fitParent = $(options.fitParent);
-			fitHeightToBottom($(this.parameters.get('MAIN_ELEMENT')), options.fitParent, marginBottom, true);
+			fitHeightToBottom($(this.element), options.fitParent, marginBottom, true);
 		}
  }
 });

@@ -1,85 +1,65 @@
 {
-  "guidriver": {
-    "client_settings": {
-      "resources": {
-        "i18n": {
-          "namespace": "ajax_gui",
-          "path": "plugins/gui.ajax/res/i18n"
-        }
-      }
-    },
-    "registry_contributions": {
-      "actions": {
-        "action": [
-          {
-            "name": "get_boot_gui",
-            "skipSecureToken": "true",
-            "processing": {
-              "serverCallback": {
-                "methodName": "switchAction"
-              }
-            }
-          },
-          {
-            "name": "get_boot_conf",
-            "skipSecureToken": "true",
-            "processing": {
-              "serverCallback": {
-                "methodName": "switchAction"
-              }
-            }
-          }
-        ]
-      },
-      "hooks": {
-        "serverCallback": {
-          "hookName": "node.info",
-          "methodName": "nodeBookmarkMetadata"
-        }
-      },
-      "external_file": {
-        "filename": "plugins/gui.ajax/ajxpclient_actions.xml",
-        "include": "actions/*",
-        "exclude": ""
-      },
-      "client_configs": {
-        "uuidAttr": "name",
-        "template": [
-          {
-            "name": "main_oxygen",
-            "element": "ajxp_desktop",
-            "position": "top",
-            "theme": "oxygen",
-            "$t": "<div id=\"toolbars\"><div id=\"action_bar\"><div id=\"buttons_bar\" class=\"action_bar\" ajxpClass=\"ActionsToolbar\"></div><div id=\"locationbar_cont\"><div style=\"height: 100%;\" class=\"separator\"></div><div style=\"padding-top : 5px;\"><div id=\"repo_chooser\" ajxpClass=\"RepositorySelect\"></div><div id=\"locationBar\" ajxpClass=\"LocationBar\" ajxpOptions='{\"flexTo\": \"locationbar_cont\"}'></div><div id=\"logging_string\" ajxpClass=\"UserWidget\"></div></div></div></div></div><div id=\"browser\" ajxpClass=\"AjxpPane\" ajxpOptions='{\"fit\": \"height\",\"fitParent\": \"ajxp_desktop\"}'><div id=\"vertical_splitter\" style=\"background-color: #fff;\" ajxpClass=\"Splitter\" ajxpOptions='{\"direction\": \"vertical\", \"initA\": 200, \"maxA\": 600, \"minA\": 50,\"fit\": \"height\",\"fitParent\": \"browser\"}'><div id=\"sidebar_splitter\" style=\"float:left; overflow:hidden;\" ajxpClass=\"Splitter\" ajxpOptions='{\"direction\": \"horizontal\",\"initB\": 200,\"minB\": 24,\"maxB\": 500}'><div id=\"topPane\" ajxpClass=\"FoldersTree\" ajxpOptions='{\"display\": \"dz\"}' ajxpPaneHeader=\"130\" style=\"border: 1px solid #676965;\"></div><div id=\"bottomSplitPane\" ajxpClass=\"AjxpTabulator\" style=\"border: 1px solid #676965;\" ajxpOptions='{\"defaultTabId\": \"info\",\"tabInfos\" : [{\"id\": \"info\",\"label\": \"131\",\"icon\": \"file_info.png\",\"element\": \"info_panel\"},{\"id\": \"search\",\"label\": \"87\",\"icon\": \"search.png\",\"element\": \"search_container\"}]}'><div id=\"search_container\" ajxpClass=\"SearchEngine\"></div><div id=\"info_panel\" ajxpClass=\"InfoPanel\"></div></div></div><div id=\"content_pane\" ajxpClass=\"FilesList\" ajxpOptions='\"list\"' style=\"border: 1px solid #676965;\"></div></div></div>"
-          },
-          {
-            "name": "main_mybase",
-            "element": "ajxp_desktop",
-            "position": "top",
-            "theme": "mybase",
-            "$t": "<div id=\"toolbars\"><div><div id=\"buttons_bar\" class=\"action_bar\" ajxpClass=\"ActionsToolbar\" ajxpOptions='{\"skipBubbling\": true,\"defaultIconSize\": 16,\"defaultStyle\": \"icon_text\",\"styles\": {\"icons_only\": \"Icons Only\",\"icon_text\": \"Icons and Text\",\"text_only\": \"Text only\"},\"stylesImgSizes\": {\"icons_only\": 22,\"icon_text\": 16,\"text_only\": 16},\"stylesBarSizes\": {\"icons_only\": 40,\"icon_text\": 51,\"text_only\": 30}}' class=\"soft_css_gradient\"></div><div id=\"locationbar_cont\" class=\"css_gradient\"><div style=\"height: 100%;\" class=\"separator\"></div><div style=\"padding-top : 5px;\"><div id=\"repo_chooser\" ajxpClass=\"RepositorySelect\"></div><div id=\"locationBar\" ajxpClass=\"LocationBar\" ajxpOptions='{\"flexTo\": \"locationbar_cont\",\"searchButton\": \"searchbar_splitter\",\"searchIcon\": \"xmag.png\", \"searchFocus\": \"search_txt\"}'></div><div id=\"logging_string\" ajxpClass=\"UserWidget\"></div></div></div></div></div><div id=\"browser\" ajxpClass=\"AjxpPane\" ajxpOptions='{\"fit\": \"height\",\"fitParent\": \"ajxp_desktop\"}'><div id=\"vertical_splitter\" ajxpClass=\"Splitter\" ajxpOptions='{\"direction\": \"vertical\", \"initA\": 350, \"maxA\": 600, \"minA\": 0,\"fit\": \"height\",\"fitParent\": \"browser\", \"minSize\": 0, \"foldingButton\": true}'><div id=\"sidebar_splitter\" style=\"float:left; overflow:hidden;\" ajxpClass=\"Splitter\" ajxpOptions='{\"direction\": \"horizontal\",\"initB\": 300,\"minB\": 57}'><div id=\"topPane\" ajxpClass=\"FoldersTree\" ajxpOptions='{\"display\": \"dz\",\"replaceScroller\": true}' ajxpPaneHeader=\"130\" ajxpPaneIcon=\"view_tree.png\" style=\"margin: 20px;margin-bottom: 10px;padding-right: 10px;\"></div><div id=\"info_panel\" ajxpClass=\"InfoPanel\" ajxpPaneHeader=\"131\" ajxpPaneIcon=\"file_info.png\" ajxpOptions='{\"replaceScroller\": \"true\"}' style=\"margin:20px;margin-top:10px;padding-right: 10px;\" ></div></div><div id=\"view_splitter\" style=\"overflow:hidden;\" ajxpClass=\"Splitter\" ajxpOptions='{\"direction\": \"horizontal\",\"initA\": 0, \"minSize\": 500}'><div id=\"main_view\" class=\"view\" default_mime=\"html\" style=\"border: 1px solid #bbb;\"><div class=\"title\"></div><div class=\"content\"></div></div><div id=\"content_pane\" ajxpClass=\"FilesList\" ajxpOptions='{\"displayMode\": \"list\",\"replaceScroller\": true}' style=\"border: 1px solid #bbb;\"></div></div></div></div>"
-          },
-          {
-            "name": "widget",
-            "element": "ajxp_widget",
-            "position": "top",
-            "$t": "<div id=\"toolbars\"><div><div id=\"buttons_bar\" class=\"action_bar\" ajxpClass=\"ActionsToolbar\" ajxpOptions='{\"skipBubbling\": true,\"defaultIconSize\": 16,\"defaultStyle\": \"icon_text\",\"styles\": {\"icons_only\": \"Icons Only\",\"icon_text\": \"Icons and Text\",\"text_only\": \"Text only\"},\"stylesImgSizes\": {\"icons_only\": 22,\"icon_text\": 16,\"text_only\": 16},\"stylesBarSizes\": {\"icons_only\": 40,\"icon_text\": 51,\"text_only\": 30}}' class=\"soft_css_gradient\"></div><div id=\"locationbar_cont\" class=\"css_gradient\"><div style=\"height: 100%;\" class=\"separator\"></div><div style=\"padding-top : 5px;\"><div id=\"locationBar\" ajxpClass=\"LocationBar\" ajxpOptions='{\"flexTo\": \"locationbar_cont\"}'></div></div></div></div></div><div id=\"browser\" ajxpClass=\"AjxpPane\" ajxpOptions='{\"fit\": \"height\",\"fitParent\": \"ajxp_widget\"}'><div id=\"content_pane\" ajxpClass=\"FilesList\"  ajxpOptions='{\"fit\": \"height\",\"fitParent\": \"browser\"}'  style=\"margin:0px;\"></div></div>"
-          }
-        ],
-        "component_config": {
-          "className": "FilesList",
-          "property": [
-            {
-              "name": "thumbSize",
-              "value": "64"
-            },
-            {
-              "name": "displayMode",
-              "value": "list"
-            }
-          ]
-        }
-      }
-    }
-  }
+	"name" : "main",
+	"resources_path" : "/module/ui/main",
+	"js_path" : "/module/ui/main/js",
+	"widget" : {
+		"name": "widget",
+		"element": "widget",
+		"position": "top"
+	},
+	"themes" : {
+		"mybase" : {
+			"name" : "MyBase",
+			"path" : "/module/ui/main/theme/mybase",
+			"element" : "desktop",
+			"template" : "/module/ui/main/theme/mybase/html/template.html"
+		},
+		"manager" : {
+			"name" : "Manager",
+			"path" : "/module/ui/main/theme/mybase",
+			"element" : "desktop",
+			"template" : "/module/ui/main/theme/manager/html/template.html"
+		}
+	},
+	"actions": {
+		"action": [
+			{
+				"name": "get_boot_gui",
+				"skipSecureToken": "true",
+				"processing": {
+					"serverCallback": {
+						"methodName": "switchAction"
+					}
+				}
+			},
+			{
+				"name": "get_boot_conf",
+				"skipSecureToken": "true",
+				"processing": {
+					"serverCallback": {
+						"methodName": "switchAction"
+					}
+				}
+			}
+		]
+	},
+	"hooks": {
+		"serverCallback": {
+			"hookName": "node.info",
+			"methodName": "nodeBookmarkMetadata"
+		}
+	},
+	"component_config": {
+		"className": "FilesList",
+		"property": [
+			{
+				"name": "thumbSize",
+				"value": "64"
+			},
+			{
+				"name": "displayMode",
+				"value": "list"
+			}
+		]
+	}
 }

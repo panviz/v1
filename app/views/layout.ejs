@@ -4,15 +4,25 @@
 		<title>Graph</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-		<link rel="icon" type="image/x-png" href="<%= app.set("THEME_PATH") %>image/html-folder.png">
-		<%- link_tag(app.set("THEME_PATH") + 'css/list.txt') %>
-		<%- include_tag(app.set("GUI_JS_PATH") + 'boot_list.txt') %>
+		<link rel="icon" type="image/x-png" href="<%= settings.ui.theme.path %>image/html-folder.png">
+		<%- link_tag(settings.ui.theme.path + '/css/list.txt') %>
+		<%- include_tag(settings.ui.js_path + '/boot_list.txt') %>
 	</head>
 	<body bgcolor="#FFFFFF" text="#000000" marginheight="0" marginwidth="0" leftmargin="0" topmargin="0"  style="overflow:hidden;">		
-	<div id="desktop" ajxpClass="Pane" ajxpOptions='{"fit": "height","fitParent": "window","fitMarginBottom": "$(\"optional_bottom_div\").getHeight()"}'></div>
+		<div id="loading_overlay" style="background-color:#555555; opacity:0.2;"></div>
+		<div id="progressBox" class="dialogBox" style="width: 320px;display:block; top:30%; z-index:2002; left:40%; position:absolute; background-color:#fff; padding:0;">
+			<div align="left" class="dialogContent" style="color:#676965; font-family:Trebuchet MS,sans-serif; font-size:11px; font-weight:normal; left:10px; padding:10px;">
+				<div style="margin-bottom:0px; font-weight:bold;background-position:left center; background-repeat:no-repeat; color:#0077b3;"></div>
+				<div>The web data-browser<span id="version_span"></span></div>
+				by Dmitra.<div id="progressCustomMessage" style="margin-top: 35px; font-weight:bold; padding-bottom:5px;"></div>
+				<div id="progressState" style="float:left; display:inline;"><%= t("Booting...") %></div>
+				<div id="progressBarContainer" style="margin-top:3px; margin-left:126px;"><span id="loaderProgress"></span></div>
+				<div id="progressBarHeighter" style="height:10px;"></div>
+			</div>
+		</div>
+	<div id="desktop" ajxpClass="Pane" options='{"fit": "height","fitParent": "window","fitMarginBottom": "$(\"optional_bottom_div\").getHeight()"}'></div>
 		<script type="text/javascript">
-			var ajaxplorer, startParameters = {"BOOTER_URL":"settings.json","MAIN_ELEMENT":"desktop","EXT_REP":"\/"}, MessageHash={};
-			window.bootstrap = new Bootstrap(startParameters);
+			window.bootstrap = new Bootstrap({"url": "<%= settings.settings_path %>"});
 		</script>
 		<%- body %>
 	</body>

@@ -1,6 +1,6 @@
 const express   = require('express')
     , expose    = require('express-expose');
-settings = require('./settings.js');
+		_ = require('underscore');
 registry = require('./registry.js');
 
 module.exports = function(app){
@@ -15,18 +15,23 @@ module.exports = function(app){
 		.use(express.session({ secret: 'faFka1@$aGsja'}))
 	});
 
+	var appSettings = require('./settings.js');
+	//TODO don't expose expressjs setting to client
+	_.extend(app.settings, appSettings);
+	//make Global
+	settings = app.settings;
+	
 	//  Add template engine
 	app.configure(function(){
 	this
-		.set('views', __dirname + '/../app/views')
-		.helpers(require('../app/helpers/application_helper'))
+		.set('views', ROOT_PATH + '/app/views')
+		.helpers(require(ROOT_PATH + '/app/helpers/application_helper'))
 		.set('view engine', 'ejs')
-		.use('/module', express.static(__dirname + '/../module'))
+		.use('/module', express.static(ROOT_PATH + '/module'))
 	});
-
-	app.set('version', '0.0.1');
-	app.set('THEME_PATH', 'module/ui/main/theme/mybase/');
-	app.set('GUI_JS_PATH', 'module/ui/main/js/');
+	
+	settings.available_languages = require('./locales/list.json');
+	settings.i18n= require('./locales/' + app.settings.locale + '.json');
 
 	return app;
 }
