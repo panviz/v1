@@ -175,7 +175,7 @@ Class.create("LocalAPINodeProvider", {
 			if(!node.getMetadata().get("API_SOURCE")){
 				if(node.getMetadata().get("api_source_loading")) return;
 				node.getMetadata().set("api_source_loading", true);
-				var conn = new Connexion();
+				var conn = new Connection();
 				conn.setParameters({
 					get_action : 'get_js_source',
 					object_type : (node.getMetadata().get("API_CLASS")?'class':'interface'),

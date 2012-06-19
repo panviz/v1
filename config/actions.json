@@ -1,0 +1,266 @@
+{
+	"GetBootGui" : {
+		"skipSecureToken": "true",
+		"processing": {
+			"serverCallback": {
+				"methodName": "switchAction"
+			}
+		}
+	},
+	"GetBootConf" : {
+		"skipSecureToken": "true",
+		"processing": {
+			"serverCallback": {
+				"methodName": "switchAction"
+			}
+		}
+	},
+	"GetXmlRegistry" : {
+		"processing" : {
+			"serverCallback" : {
+				"methodName" : "switchAction"
+			}
+		}
+	},
+	"GetTemplate" : {
+		"processing" : {
+			"serverCallback" : {
+				"methodName" : "switchAction"
+			}
+		}
+	},
+	"GetI18nMessages" : {
+		"processing" : {
+			"serverCallback" : {
+				"methodName" : "switchAction"
+			}
+		}
+	},
+	"GetEditorsRegistry" : {
+		"processing" : {
+			"serverCallback" : {
+				"methodName" : "switchAction"
+			}
+		}
+	},
+	"DisplayDoc" : {
+		"processing" : {
+			"serverCallback" : {
+				"methodName" : "switchAction"
+			}
+		}
+	},
+	"CheckSoftwareUpdate" : {
+			"processing" : {
+				"serverCallback" : {
+					"methodName" : "switchAction"
+				}
+			},
+			"rightsContext" : {
+				"noUser" : "true",
+				"userLogged" : "only",
+				"read" : "true",
+				"write" : "true",
+				"adminOnly" : "true"
+			}
+		},
+	"UpDir" : {
+		"gui" : {
+			"text" : "148",
+			"title" : "24",
+			"src" : "up.png",
+			"hasAccessKey" : "true",
+			"accessKey" : "parent_access_key",
+			"context" : {
+				"selection" : "false",
+				"dir" : "false",
+				"recycle" : "false",
+				"actionBar" : "false",
+				"contextMenu" : "false",
+				"infoPanel" : "false",
+				"actionBarGroup" : "default"
+			}
+		},
+		"rightsContext" : {
+			"noUser" : "true",
+			"userLogged" : "only",
+			"read" : "true",
+			"write" : "false",
+			"adminOnly" : ""
+		},
+		"processing" : {
+			"clientCallback" : {
+				"prepareModal" : "false"
+			}
+		}
+	},
+	"Refresh" : {
+		"gui" : {
+			"text" : "149",
+			"title" : "149",
+			"src" : "reload.png",
+			"hasAccessKey" : "true",
+			"accessKey" : "refresh_access_key",
+			"context" : {
+				"selection" : "false",
+				"dir" : "true",
+				"recycle" : "false",
+				"actionBar" : "false",
+				"contextMenu" : "true",
+				"infoPanel" : "false"
+			}
+		},
+		"rightsContext" : {
+			"noUser" : "true",
+			"userLogged" : "only",
+			"read" : "true",
+			"write" : "false",
+			"adminOnly" : ""
+		},
+		"processing" : {
+			"clientCallback" : {
+				"prepareModal" : "false"
+			}
+		}
+	},
+	"ExtSelect" : {
+		"gui" : {
+			"text" : "321",
+			"title" : "322",
+			"src" : "download_manager.png",
+			"accessKey" : "",
+			"hasAccessKey" : "false",
+			"context" : {
+				"selection" : "true",
+				"dir" : "",
+				"recycle" : "false",
+				"actionBar" : "true",
+				"contextMenu" : "true",
+				"infoPanel" : "true",
+				"actionBarGroup" : "put",
+				"inZip" : "false"
+			},
+			"selectionContext" : {
+				"dir" : "true",
+				"file" : "true",
+				"recycle" : "false",
+				"unique" : "false"
+			}
+		},
+		"rightsContext" : {
+			"noUser" : "true",
+			"userLogged" : "only",
+			"read" : "true",
+			"write" : "false",
+			"adminOnly" : ""
+		},
+		"processing" : {
+			"clientCallback" : {
+				"prepareModal" : "false"
+			}
+		}
+	},
+	"Bookmark" : {
+		"gui" : {
+			"text" : "152",
+			"title" : "153",
+			"src" : "bookmark.png",
+			"hasAccessKey" : "true",
+			"accessKey" : "bookmarks_access_key",
+			"context" : {
+				"selection" : "false",
+				"dir" : "true",
+				"recycle" : "hidden",
+				"actionBar" : "false",
+				"contextMenu" : "true",
+				"infoPanel" : "false",
+				"actionBarGroup" : "default"
+			}
+		},
+		"rightsContext" : {
+			"noUser" : "true",
+			"userLogged" : "only",
+			"read" : "true",
+			"write" : "false",
+			"adminOnly" : ""
+		},
+		"processing" : {
+			"clientCallback" : {
+				"prepareModal" : "false"
+			}
+		}
+	},
+	"DeleteBookmark" : {
+		"gui" : {
+			"text" : "154",
+			"title" : "155",
+			"src" : "folder_new.png",
+			"accessKey" : "folder_access_key",
+			"context" : {
+				"selection" : "false",
+				"dir" : "",
+				"recycle" : "false",
+				"actionBar" : "false",
+				"contextMenu" : "false",
+				"infoPanel" : "false"
+			}
+		},
+		"processing" : {
+			"clientCallback" : {
+				"prepareModal" : "false"
+			}
+		}
+	},
+	"RenameBookmark" : {
+		"gui" : {
+			"text" : "154",
+			"title" : "155",
+			"src" : "folder_new.png",
+			"accessKey" : "folder_access_key",
+			"context" : {
+				"selection" : "false",
+				"dir" : "",
+				"recycle" : "false",
+				"actionBar" : "false",
+				"contextMenu" : "false",
+				"infoPanel" : "false"
+			}
+		},
+		"processing" : {
+			"clientCallback" : {
+				"prepareModal" : "false"
+			},
+			"clientForm" : {
+				"id" : "rename_bookmark",
+				"html" : "<div id=\"rename_bookmark\" action=\"get_bookmarks\" box_width=\"200\"><input type=\"text\" name=\"bm_title\" value=\"\" id=\"bm_title\" class=\"dialogFocus\"><input type=\"hidden\" name=\"bm_path\" value=\"\"></div>"
+			}
+		}
+	},
+	"Splash" : {
+		"gui" : {
+			"text" : "166",
+			"title" : "167",
+			"src" : "info.png",
+			"hasAccessKey" : "true",
+			"accessKey" : "about_access_key",
+			"context" : {
+				"selection" : "false",
+				"dir" : "",
+				"recycle" : "false",
+				"actionBar" : "true",
+				"contextMenu" : "false",
+				"infoPanel" : "false",
+				"actionBarGroup" : "user"
+			}
+		},
+		"processing" : {
+			"clientCallback" : {
+				"prepareModal" : "true"
+			},
+			"clientForm" : {
+				"id" : "splash_form",
+				"html" : "<div id=\"splash_form\" box_width=\"455\" box_padding=\"0\"><div id=\"docDiv\" style=\"padding:5px;overflow:auto;height:300px;\"><div class=\"dialogButtons\" style=\"text-align:right;padding-right:6px;\"><input type=\"image\" src=\"/image/actions/22/dialog_close.png\" width=\"16\" height=\"16\" class=\"dialogButton\"/></div></div></div>"
+			}
+		}
+	}
+}

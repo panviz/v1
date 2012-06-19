@@ -296,10 +296,10 @@ Class.create("SQLEditor", {
 		parameters.set('get_action', 'edit_table');
 		parameters.set('delete_column', columnName);
 		parameters.set('current_table', currentTable);
-		var connexion = new Connexion();
-		connexion.setParameters(parameters);		
-		connexion.onComplete = function(transport){app.actionBar.parseXmlMessage(transport.responseXML);};
-		connexion.sendAsync();
+		var connection = new Connexion();
+		connection.setParameters(parameters);		
+		connection.onComplete = function(transport){app.actionBar.parseXmlMessage(transport.responseXML);};
+		connection.sendAsync();
 		hideLightBox();
 	},
 	
@@ -314,10 +314,10 @@ Class.create("SQLEditor", {
 				params.set(elem.name, elem.getValue());
 			}
 		});		
-		var connexion = new Connexion();
-		connexion.setParameters(params);		
-		connexion.onComplete = function(transport){app.actionBar.parseXmlMessage(transport.responseXML);};
-		connexion.sendAsync();
+		var connection = new Connexion();
+		connection.setParameters(params);		
+		connection.onComplete = function(transport){app.actionBar.parseXmlMessage(transport.responseXML);};
+		connection.sendAsync();
 		hideLightBox();		
 	},
 	

@@ -18,8 +18,8 @@
         {
           "name": "SQL_DRIVER",
           "type": "array",
-          "label": "CONF_MESSAGE[Connexion]",
-          "description": "CONF_MESSAGE[The Database Connexion]",
+          "label": "CONF_MESSAGE[Connection]",
+          "description": "CONF_MESSAGE[The Database Connection]",
           "mandatory": "true"
         },
         {

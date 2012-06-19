@@ -56,12 +56,12 @@ Class.create("SQLSearchEngine", SearchEngine, {
 	
 	performSearch:function(query){
 		if(query == '') return;
-		var connexion = new Connexion();
+		var connection = new Connexion();
 		var params = new Hash();
 		params.set('get_action', 'set_query');
 		params.set('query', query);
-		connexion.setParameters(params);
-		var res = connexion.sendSync();
+		connection.setParameters(params);
+		var res = connection.sendSync();
 		var path = "/ajxpmysqldriver_searchresults";
 		app.updateContextData(new AjxpNode(path));
 	},

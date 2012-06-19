@@ -160,11 +160,11 @@ Class.create("AjxpCkEditor", TextEditor, {
 	},
 			
 	saveFile : function(){
-		var connexion = this.prepareSaveConnexion();
+		var connection = this.prepareSaveConnection();
 		var value = CKEDITOR.instances.content.getData();
 		this.textarea.value = value;		
-		connexion.addParameter('content', value);
-		connexion.sendAsync();
+		connection.addParameter('content', value);
+		connection.sendAsync();
 	},
 		
 	parseTxt : function(transport){	

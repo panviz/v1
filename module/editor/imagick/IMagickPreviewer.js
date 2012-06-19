@@ -39,11 +39,11 @@ Class.create("IMagickPreviewer", Diaporama, {
 				
 		this.currentIM = getBaseName(userSelection.getUniqueFileName());
 		// Extract the pages and load result!
-		var connexion = new Connexion();
-		connexion.addParameter("get_action", "imagick_data_proxy");
-		connexion.addParameter("all", "true");
-		connexion.addParameter("file", userSelection.getUniqueFileName());
-		connexion.onComplete = function(transport){
+		var connection = new Connection();
+		connection.addParameter("get_action", "imagick_data_proxy");
+		connection.addParameter("all", "true");
+		connection.addParameter("file", userSelection.getUniqueFileName());
+		connection.onComplete = function(transport){
 			this.removeOnLoad();
 			var result = transport.responseJSON;
 			this.items = new Array();
@@ -61,18 +61,18 @@ Class.create("IMagickPreviewer", Diaporama, {
 				
 				var tItems = this.items;
 				this.element.observe("view:close", function(){					
-					var connexion = new Connexion();
-					connexion.addParameter("get_action", "delete_imagick_data");
+					var connection = new Connection();
+					connection.addParameter("get_action", "delete_imagick_data");
 					var prefix = tItems[0].replace("-0.jpg", "").replace(".jpg", "");
-					connexion.addParameter("file", prefix);
-					connexion.sendAsync();
+					connection.addParameter("file", prefix);
+					connection.sendAsync();
 				}.bind(this));
 				
 			}
 		}.bind(this);
 		this.setOnLoad();
 		this.updateTitle(MessageHash[330]);
-		connexion.sendAsync();
+		connection.sendAsync();
 	},
 						
 	getPreview : function(ajxpNode){

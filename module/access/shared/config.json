@@ -159,7 +159,7 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var baseUrl = ajxpServerAccessPath + \"&get_action=reset_download_counter\";baseUrl = app.getUserSelection().updateFormOrUrl(null, baseUrl);var conn = new Connexion(baseUrl);conn.addParameter(\"get_action\", \"reset_download_counter\");conn.onComplete = function(transport){app.actionBar.parseXmlMessage(transport.responseXML);};conn.sendAsync();"
+                "$t": "var baseUrl = ajxpServerAccessPath + \"&get_action=reset_download_counter\";baseUrl = app.getUserSelection().updateFormOrUrl(null, baseUrl);var conn = new Connection(baseUrl);conn.addParameter(\"get_action\", \"reset_download_counter\");conn.onComplete = function(transport){app.actionBar.parseXmlMessage(transport.responseXML);};conn.sendAsync();"
               },
               "serverCallback": {
                 "methodName": "switchAction"
@@ -204,7 +204,7 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var conn = new Connexion();conn.addParameter(\"get_action\", \"clear_expired\");conn.onComplete = function(transport){app.actionBar.parseXmlMessage(transport.responseXML);};conn.sendAsync();"
+                "$t": "var conn = new Connection();conn.addParameter(\"get_action\", \"clear_expired\");conn.onComplete = function(transport){app.actionBar.parseXmlMessage(transport.responseXML);};conn.sendAsync();"
               },
               "serverCallback": {
                 "methodName": "switchAction"

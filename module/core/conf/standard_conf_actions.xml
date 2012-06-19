@@ -13,7 +13,7 @@
             <processing>
 				<clientCallback prepareModal="true" dialogOpenForm="user_create_repository_form" dialogOkButtonOnly="false" dialogSkipButtons="false">
 					<dialogOnOpen><![CDATA[
-                       var conn = new Connexion();
+                       var conn = new Connection();
                        var okButton = oForm.down('.dialogButtons input');
                        var backButton = new Element('img', {
                             src:ajxpResourcesFolder+'/images/actions/22/back_22.png',
@@ -100,7 +100,7 @@
                             params.set("DISPLAY", params.get("DRIVER_OPTION_DISPLAY"));
                             params.unset("DRIVER_OPTION_DISPLAY");
                             params.unset("DRIVER_OPTION_DISPLAY_ajxptype");
-                            var conn = new Connexion();
+                            var conn = new Connection();
                             conn.setParameters(params);
                             conn.onComplete = function(transport){
                                 application.actionBar.parseXmlMessage(transport.responseXML);
@@ -214,7 +214,7 @@
 					var cont = $('webdav_repo_list');
 					cont.update('');
 					var even = false;
-					var conn = new Connexion();
+					var conn = new Connection();
 					conn.setParameters(new Hash({get_action:'webdav_preferences'}));
 					conn.onComplete = function(transport){
 						application.webdavCurrentPreferences = transport.responseJSON;
@@ -234,7 +234,7 @@
 					if(!$('webdav_activator').hasObserver){
 						$('webdav_activator').observe("change", function(e){
 							var checked = $('webdav_activator').checked;
-							var conn = new Connexion();
+							var conn = new Connection();
 							conn.setParameters(new Hash({
 								get_action:'webdav_preferences',
 								activate:(checked?'true':'false')
@@ -252,7 +252,7 @@
 							conn.sendAsync();
 						});
 						$('webdav_pass_saver').observe("click", function(){
-							var conn = new Connexion();
+							var conn = new Connection();
 							conn.setMethod('POST');
 							conn.setParameters(new Hash({
 								get_action:'webdav_preferences',

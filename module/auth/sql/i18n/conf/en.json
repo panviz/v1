@@ -1,6 +1,6 @@
 {
 "DB Storage" : "DB Storage",
 "Stores the Authentication data in an SQL database." : "Stores the Authentication data in an SQL database.",
-"Connexion" : "Connexion",
-"The Database Connexion" : "The Database Connexion"
+"Connection" : "Connection",
+"The Database Connection" : "The Database Connection"
 }

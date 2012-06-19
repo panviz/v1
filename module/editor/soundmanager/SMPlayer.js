@@ -3,7 +3,7 @@
  */
 window.SM2_DEFER = true;
 if(!window.soundManager && app.findEditorById("editor.soundmanager")){
-    var conn = new Connexion();
+    var conn = new Connection();
     conn._libUrl = (bootstrap.parameters.get('SERVER_PREFIX_URI') ? bootstrap.parameters.get('SERVER_PREFIX_URI') : '')+'plugins/editor.soundmanager/sm/';
     conn.loadLibrary('360-player/script/berniecode-animator.js');
     conn.loadLibrary('script/soundmanager2-nodebug-jsmin.js', function(){

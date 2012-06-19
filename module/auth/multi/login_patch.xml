@@ -36,32 +36,32 @@
 		}, 
 		function(){
 			var oForm = modal.getForm();
-			var connexion = new Connexion();
-			connexion.addParameter('get_action', 'login');
+			var connection = new Connexion();
+			connection.addParameter('get_action', 'login');
 			var selectedSource = oForm.auth_source.value;
 			if(selectedSource == masterAuthSource){
-				connexion.addParameter('userid', oForm.userid.value);
+				connection.addParameter('userid', oForm.userid.value);
 			}else{
-				connexion.addParameter('userid', selectedSource+userIdSeparator+oForm.userid.value);
+				connection.addParameter('userid', selectedSource+userIdSeparator+oForm.userid.value);
 			}
-			connexion.addParameter('login_seed', oForm.login_seed.value);
-			connexion.addParameter('auth_source', selectedSource);
-			connexion.addParameter('remember_me', (oForm.remember_me.checked?"true":"false"));
+			connection.addParameter('login_seed', oForm.login_seed.value);
+			connection.addParameter('auth_source', selectedSource);
+			connection.addParameter('remember_me', (oForm.remember_me.checked?"true":"false"));
 			if(oForm.login_seed.value != '-1'){
-				connexion.addParameter('password', hex_md5(hex_md5(oForm.password.value)+oForm.login_seed.value));
+				connection.addParameter('password', hex_md5(hex_md5(oForm.password.value)+oForm.login_seed.value));
 			}else{
-				connexion.addParameter('password', oForm.password.value);
+				connection.addParameter('password', oForm.password.value);
 			}
 			if(oForm.captcha_code){
-				connexion.addParameter('captcha_code', oForm.captcha_code.value);
+				connection.addParameter('captcha_code', oForm.captcha_code.value);
 			}
-			connexion.onComplete = function(transport){
+			connection.onComplete = function(transport){
 				application.actionBar.parseXmlMessage(transport.responseXML);
 				if(XPathGetSingleNodeText(transport.responseXML.documentElement, "logging_result/@value") == "-4"){
 					application.loadSeedOrCaptcha(oForm.down('#login_seed'), oForm.down('img#captcha_image'), oForm.down('div.dialogLegend'), 'before');
 				}
 			};
-			connexion.setMethod('put');
+			connection.setMethod('put');
 			document.observeOnce("application:user_logged", function(){
 		        if($('logging_string') && $('logging_string').down('i')){
 		            var ht = $('logging_string').down('i').innerHTML;
@@ -71,7 +71,7 @@
 		            }
 		        }
 			});
-			connexion.sendAsync();
+			connection.sendAsync();
 			oForm.userid.value = '';
 			oForm.password.value = '';
 			return false;				

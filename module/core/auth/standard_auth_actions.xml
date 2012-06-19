@@ -39,27 +39,27 @@
 						}, 
 						function(){
 							var oForm = modal.getForm();
-							var connexion = new Connexion();
-							connexion.addParameter('get_action', 'login');
-							connexion.addParameter('userid', oForm.userid.value);
-							connexion.addParameter('login_seed', oForm.login_seed.value);
-							connexion.addParameter('remember_me', (oForm.remember_me.checked?"true":"false"));
+							var connection = new Connection();
+							connection.addParameter('get_action', 'login');
+							connection.addParameter('userid', oForm.userid.value);
+							connection.addParameter('login_seed', oForm.login_seed.value);
+							connection.addParameter('remember_me', (oForm.remember_me.checked?"true":"false"));
 							if(oForm.login_seed.value != '-1'){
-								connexion.addParameter('password', hex_md5(hex_md5(oForm.password.value)+oForm.login_seed.value));
+								connection.addParameter('password', hex_md5(hex_md5(oForm.password.value)+oForm.login_seed.value));
 							}else{
-								connexion.addParameter('password', oForm.password.value);
+								connection.addParameter('password', oForm.password.value);
 							}
 							if(oForm.captcha_code){
-								connexion.addParameter('captcha_code', oForm.captcha_code.value);
+								connection.addParameter('captcha_code', oForm.captcha_code.value);
 							}
-							connexion.onComplete = function(transport){
+							connection.onComplete = function(transport){
 								application.actionBar.parseXmlMessage(transport.responseXML);
 								if(transport.responseXML && XPathGetSingleNodeText(transport.responseXML.documentElement, "logging_result/@value") == "-4"){
 									application.loadSeedOrCaptcha(oForm.down('#login_seed'), oForm.down('img#captcha_image'), oForm.down('div.dialogLegend'), 'before');
 								}
 							};
-							connexion.setMethod('put');
-							connexion.sendAsync();
+							connection.setMethod('put');
+							connection.sendAsync();
 							oForm.userid.value = '';
 							oForm.password.value = '';
 							return false;				
@@ -99,12 +99,12 @@
 					<dialogOnOpen><![CDATA[
 						$('user_change_ownpass_old').value = $('user_change_ownpass1').value = $('user_change_ownpass2').value = '';
 						// Update pass_seed
-						var connexion = new Connexion();
-						connexion.addParameter("get_action", "get_seed");
-						connexion.onComplete = function(transport){
+						var connection = new Connection();
+						connection.addParameter("get_action", "get_seed");
+						connection.onComplete = function(transport){
 							$('pass_seed').value = transport.responseText;
 						};
-						connexion.sendSync();			
+						connection.sendSync();			
 						new Protopass($('user_change_ownpass1'), {
 							barContainer:$('pwd_strength_container'),
 							barPosition:'bottom'
@@ -149,7 +149,7 @@
 									hideLightBox(true);
 								}
 							};
-							var conn = new Connexion();
+							var conn = new Connection();
 							conn.addParameter("get_action", "pass_change");
 							conn.addParameter("old_pass", userOldPass);
 							conn.addParameter("new_pass", userPass);
@@ -189,12 +189,12 @@
 			<processing>
 				<clientCallback prepareModal="false"><![CDATA[
 					clearRememberData();
-					var connexion = new Connexion();
-					connexion.addParameter('get_action', 'logout');
-					connexion.onComplete = function(transport){
+					var connection = new Connection();
+					connection.addParameter('get_action', 'logout');
+					connection.onComplete = function(transport){
 						application.actionBar.parseXmlMessage(transport.responseXML);
 						};
-					connexion.sendAsync();
+					connection.sendAsync();
 					]]></clientCallback>
 				<serverCallback methodName="switchAction"></serverCallback>
 			</processing>

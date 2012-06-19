@@ -4,9 +4,10 @@
 		<title>Graph</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-		<link rel="icon" type="image/x-png" href="<%= settings.ui.theme.path %>image/html-folder.png">
+		<link rel="icon" type="image/x-png" href="<%= settings.ui.theme.path %>/image/html-folder.png">
 		<%- link_tag(settings.ui.theme.path + '/css/list.txt') %>
-		<%- include_tag(settings.ui.js_path + '/boot_list.txt') %>
+		<%- include_tag('/config/boot_list.txt') %>
+		<%- include_tag('/config/list.txt') %>
 	</head>
 	<body bgcolor="#FFFFFF" text="#000000" marginheight="0" marginwidth="0" leftmargin="0" topmargin="0"  style="overflow:hidden;">		
 		<div id="loading_overlay" style="background-color:#555555; opacity:0.2;"></div>
@@ -20,7 +21,7 @@
 				<div id="progressBarHeighter" style="height:10px;"></div>
 			</div>
 		</div>
-	<div id="desktop" ajxpClass="Pane" options='{"fit": "height","fitParent": "window","fitMarginBottom": "$(\"optional_bottom_div\").getHeight()"}'></div>
+	<div id="desktop" jClass="Pane" options='{"fit": "height","fitParent": "window","fitMarginBottom": "$(\"optional_bottom_div\").getHeight()"}'></div>
 		<script type="text/javascript">
 			window.bootstrap = new Bootstrap({"url": "<%= settings.settings_path %>"});
 		</script>

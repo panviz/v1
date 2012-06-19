@@ -1,23 +1,16 @@
-var config = {
-	'registry': {
-		'editors': {
-		},
-		'uploaders': {
-		}
-	}
-},
-extensions = ['editor.text', 'uploader.html'];
+var registry = {'type' : 'registry'}
 
+//Main actions
+registry.actions = require(ROOT_PATH + '/config/actions.json')
+
+//Load extensions
+extensions = ['editor.text', 'uploader.html', 'access.fs'];
 extensions.forEach(function(name){
 	var file = '../module/' + name.replace('.','/') + '/config.json';
 	var extension = require(file);
 	var type = name.split('.')[0];
-
-	if (type == 'editors'){
-		config.registry.editors[name] = extension[type];
-	} else {
-		config.registry.uploaders[name] = extension[type];
-	}
+	registry[type + 's'] = {};
+	registry[type + 's'][name] = extension[type];
 })
 
 var global =
@@ -104,31 +97,7 @@ var global =
 			"mandatory": "false",
 			"default": "3"
 		},
-		{
-			"name": "GOOGLE_ANALYTICS_ID",
-			"group": "CONF_MESSAGE[Google Analytics]",
-			"type": "string",
-			"label": "CONF_MESSAGE[Analytics ID]",
-			"description": "CONF_MESSAGE[Id of your GA account, something like UE-XXXX-YY]",
-			"mandatory": "false"
-		},
-		{
-			"name": "GOOGLE_ANALYTICS_DOMAIN",
-			"group": "CONF_MESSAGE[Google Analytics]",
-			"type": "string",
-			"label": "CONF_MESSAGE[Analytics Domain]",
-			"description": "CONF_MESSAGE[Set the domain for yuor analytics reports (not mandatory!)]",
-			"mandatory": "false"
-		},
-		{
-			"name": "GOOGLE_ANALYTICS_EVENT",
-			"group": "CONF_MESSAGE[Google Analytics]",
-			"type": "boolean",
-			"label": "CONF_MESSAGE[Analytics Events]",
-			"description": "CONF_MESSAGE[Use Events Logging, experimental only implemented on download action in AjaXplorer]",
-			"mandatory": "false",
-			"default": "false"
-		}
 	]
 }
-module.exports = config;
+
+module.exports = registry;

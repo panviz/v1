@@ -23,13 +23,13 @@ Class.create("VideoPreviewer", View, {
 			if(mime == "mp4" || mime == "webm" || mime == "ogv"){
 				// Problem : some embedded HTML5 readers do not send the cookies!
 				if(!window.crtAjxpSessid){
-					var connexion = new Connexion();
-					connexion.addParameter("get_action", "get_sess_id");
-					connexion.onComplete = function(transport){
+					var connection = new Connection();
+					connection.addParameter("get_action", "get_sess_id");
+					connection.onComplete = function(transport){
 						window.crtAjxpSessid = transport.responseText.trim();
 						window.setTimeout(function(){window.crtAjxpSessid = null}, 1000 * 60 * 5);
 					};
-					connexion.sendSync();
+					connection.sendSync();
 				}
 				fileName += '&ajxp_sessid='+window.crtAjxpSessid; 
 

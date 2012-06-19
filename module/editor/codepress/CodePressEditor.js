@@ -52,12 +52,12 @@ Class.create("CodePressEditor", TextEditor, {
 	},
 			
 	saveFile : function(){
-		var connexion = this.prepareSaveConnexion();
+		var connection = this.prepareSaveConnection();
 		var value;
 		value = this.element.select('iframe')[0].getCode();
 		this.textarea.value = value;		
-		connexion.addParameter('content', value);
-		connexion.sendAsync();
+		connection.addParameter('content', value);
+		connection.sendAsync();
 	},
 		
 	parseTxt : function(transport){	

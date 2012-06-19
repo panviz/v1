@@ -137,7 +137,7 @@
           "name": "switch_repository",
           "post_processing": {
             "serverCallback": {
-              "methodName": "resetConnexionRepository"
+              "methodName": "resetConnectionRepository"
             }
           }
         }

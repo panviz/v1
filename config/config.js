@@ -28,10 +28,11 @@ module.exports = function(app){
 		.helpers(require(ROOT_PATH + '/app/helpers/application_helper'))
 		.set('view engine', 'ejs')
 		.use('/module', express.static(ROOT_PATH + '/module'))
+		.use('/client', express.static(ROOT_PATH + '/client'))
 	});
 	
-	settings.available_languages = require('./locales/list.json');
-	settings.i18n= require('./locales/' + app.settings.locale + '.json');
+	settings.available_languages = require('./i18n/list.json');
+	settings.i18n= require('./i18n/' + app.settings.locale + '.json');
 
 	return app;
 }

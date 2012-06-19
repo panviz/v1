@@ -18,7 +18,7 @@
     "server_settings": {
       "param": [
         {
-          "group": "CONF_MESSAGE[Connexion]",
+          "group": "CONF_MESSAGE[Connection]",
           "name": "FTP_HOST",
           "type": "string",
           "label": "CONF_MESSAGE[Host]",
@@ -26,7 +26,7 @@
           "mandatory": "true"
         },
         {
-          "group": "CONF_MESSAGE[Connexion]",
+          "group": "CONF_MESSAGE[Connection]",
           "name": "FTP_PORT",
           "type": "string",
           "label": "CONF_MESSAGE[Port]",
@@ -35,7 +35,7 @@
           "default": "21"
         },
         {
-          "group": "CONF_MESSAGE[Connexion]",
+          "group": "CONF_MESSAGE[Connection]",
           "name": "PATH",
           "type": "string",
           "label": "CONF_MESSAGE[Path]",
@@ -44,7 +44,7 @@
           "default": "/"
         },
         {
-          "group": "CONF_MESSAGE[Connexion]",
+          "group": "CONF_MESSAGE[Connection]",
           "name": "FTP_SECURE",
           "type": "boolean",
           "label": "CONF_MESSAGE[Secure]",
@@ -53,7 +53,7 @@
           "default": "false"
         },
         {
-          "group": "CONF_MESSAGE[Connexion]",
+          "group": "CONF_MESSAGE[Connection]",
           "name": "FTP_DIRECT",
           "type": "boolean",
           "label": "CONF_MESSAGE[Active]",

@@ -113,7 +113,7 @@ Class.create("ShareCenter", {
             var userSelection = app.getUserSelection();
             var publicUrl = ajxpServerAccessPath+'&get_action=share&sub_action=delegate_repo';
             publicUrl = userSelection.updateFormOrUrl(null,publicUrl);
-            var conn = new Connexion(publicUrl);
+            var conn = new Connection(publicUrl);
             conn.setParameters(modal.getForm().serialize(true));
             if(this._currentRepositoryId){
                 conn.addParameter("repository_id", this._currentRepositoryId);
@@ -193,7 +193,7 @@ Class.create("ShareCenter", {
     },
 
     loadSharedElementData : function(uniqueNode, jsonCallback){
-        var conn = new Connexion();
+        var conn = new Connection();
         conn.addParameter("get_action", "load_shared_element_data");
         conn.addParameter("file", uniqueNode.getPath());
         conn.addParameter("element_type", uniqueNode.isLeaf() ? "file" : "repository");
@@ -206,7 +206,7 @@ Class.create("ShareCenter", {
     performUnshareAction : function(){
         var userSelection = app.getUserSelection();
         modal.getForm().down("img#stop_sharing_indicator").src=window.ajxpResourcesFolder+"/images/autocompleter-loader.gif";
-        var conn = new Connexion();
+        var conn = new Connection();
         conn.addParameter("get_action", "unshare");
         conn.addParameter("file", userSelection.getUniqueNode().getPath());
         conn.addParameter("element_type", userSelection.getUniqueNode().isLeaf()?"file":"repository");
@@ -223,7 +223,7 @@ Class.create("ShareCenter", {
     },
 
     resetDownloadCounterCallback : function(){
-        var conn = new Connexion();
+        var conn = new Connection();
         conn.addParameter("get_action", "reset_counter");
         conn.addParameter("file", app.getUserSelection().getUniqueNode().getPath());
         conn.onComplete = function(){
@@ -239,7 +239,7 @@ Class.create("ShareCenter", {
         oForm.down('img#generate_image').src = window.ajxpResourcesFolder+"/images/autocompleter-loader.gif";
         var publicUrl = window.ajxpServerAccessPath+'&get_action=share';
         publicUrl = userSelection.updateFormOrUrl(null,publicUrl);
-        var conn = new Connexion(publicUrl);
+        var conn = new Connection(publicUrl);
         conn.setParameters(oForm.serialize(true));
         conn.addParameter('get_action','share');
         conn.onComplete = function(transport){

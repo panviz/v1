@@ -32,9 +32,9 @@ ConfigEditor = Class.create({
 		params.set("get_action", "edit");
 		params.set("sub_action", "edit_user");
 		params.set("user_id", userId);
-		var connexion = new Connexion();
-		connexion.setParameters(params);
-		connexion.onComplete = function(transport){
+		var connection = new Connection();
+		connection.setParameters(params);
+		connection.onComplete = function(transport){
 			if(reload){
 				this.clearUserForm();
 			}
@@ -43,7 +43,7 @@ ConfigEditor = Class.create({
 			modal.refreshDialogAppearance();
 			app.blurAll();
 		}.bind(this);
-		connexion.sendAsync();		
+		connection.sendAsync();		
 	},	
 	
 	loadUsers : function(selection){	
@@ -56,11 +56,11 @@ ConfigEditor = Class.create({
 		this.form.down('#roles_pane').select('span')[1].update(MessageHash['ajxp_conf.84']);
 		var url = window.ajxpServerAccessPath + '&get_action=batch_users_roles';
 		this.selectionUrl = selection.updateFormOrUrl(null, url);
-		var connexion = new Connexion(this.selectionUrl);
-		connexion.onComplete = function(transport){			
+		var connection = new Connection(this.selectionUrl);
+		connection.onComplete = function(transport){			
 			this.populateRoles(transport.responseXML);
 		}.bind(this);
-		connexion.sendAsync();
+		connection.sendAsync();
 	},
 	
 	clearUserForm : function(){
@@ -186,7 +186,7 @@ ConfigEditor = Class.create({
 				sub_action = "user_add_role";
 			}
 			if(this.userId){
-				var conn = new Connexion();
+				var conn = new Connection();
 				conn.setParameters($H({get_action:"edit", sub_action:sub_action, user_id:this.userId, role_id:dragged.id}));
 				conn.onComplete = function(transport){
 					this.parseXmlMessage(transport.responseXML);
@@ -195,15 +195,15 @@ ConfigEditor = Class.create({
 				}.bind(this);
 				conn.sendAsync();			
 			}else if(this.selectionUrl){
-				var connexion = new Connexion(this.selectionUrl);
-				connexion.addParameter("update_role_action", (sub_action=="user_delete_role"?"remove":"add"));
-				connexion.addParameter("role_id", dragged.id);
-				connexion.onComplete = function(transport){			
+				var connection = new Connection(this.selectionUrl);
+				connection.addParameter("update_role_action", (sub_action=="user_delete_role"?"remove":"add"));
+				connection.addParameter("role_id", dragged.id);
+				connection.onComplete = function(transport){			
 					this.clearRolesForm();
 					this.populateRoles(transport.responseXML);
 					app.fireContextRefresh();
 				}.bind(this);
-				connexion.sendAsync();				
+				connection.sendAsync();				
 			}
 		}.bind(this);
 		Droppables.add(availSelect, {accept:'user_role', onDrop:dropFunc, hoverclass:'roles_hover'});
@@ -262,7 +262,7 @@ ConfigEditor = Class.create({
 			var submitButton = actionPane.down('#submit_actions_pane');
 			submitButton.observe("click", function(e){
 				Event.stop(e);
-				var conn = new Connexion();
+				var conn = new Connection();
 				conn.addParameter("get_action", "edit");
 				conn.addParameter("sub_action", "update_role_actions");
 				conn.addParameter("role_id", this.roleId);
@@ -290,7 +290,7 @@ ConfigEditor = Class.create({
             $("default_role_cb").checked = true;
         }
         $("default_role_cb").observe("change", function(){
-            var conn = new Connexion();
+            var conn = new Connection();
             conn.addParameter("get_action", "edit");
             conn.addParameter("sub_action", "update_role_default");
             conn.addParameter("role_id", this.roleId);
@@ -307,15 +307,15 @@ ConfigEditor = Class.create({
 		var params = new Hash();
 		params.set("get_action", "edit");
 		params.set("sub_action", "get_custom_params");
-		var connexion = new Connexion();
-		connexion.setParameters(params);
-		connexion.onComplete = function(transport){
+		var connection = new Connection();
+		connection.setParameters(params);
+		connection.onComplete = function(transport){
 			this.generateCustomPane(transport.responseXML, true);			
 			modal.refreshDialogPosition();
 			modal.refreshDialogAppearance();
 			app.blurAll();
 		}.bind(this);
-		connexion.sendAsync();
+		connection.sendAsync();
 	},
 		
 	generateCustomPane : function(xmlData, nosubmit){
@@ -490,7 +490,7 @@ ConfigEditor = Class.create({
 	
 	encodePassword : function(password){
 		// First get a seed to check whether the pass should be encoded or not.
-		var sync = new Connexion();
+		var sync = new Connection();
 		var seed;
 		sync.addParameter('get_action', 'get_seed');
 		sync.onComplete = function(transport){
@@ -612,9 +612,9 @@ ConfigEditor = Class.create({
 		params.set("get_action", "edit");
 		params.set("sub_action", "edit_role");
 		params.set("role_id", roleId);
-		var connexion = new Connexion();
-		connexion.setParameters(params);
-		connexion.onComplete = function(transport){
+		var connection = new Connection();
+		connection.setParameters(params);
+		connection.onComplete = function(transport){
 			this.generateRightsTable(transport.responseXML);
 			this.generateActionRightsPane(transport.responseXML);
             this.bindDefaultRoleCheckbox(transport.responseXML);
@@ -622,7 +622,7 @@ ConfigEditor = Class.create({
 			modal.refreshDialogAppearance();
 			app.blurAll();
 		}.bind(this);
-		connexion.sendAsync();				
+		connection.sendAsync();				
 	},
 	
 
@@ -809,24 +809,24 @@ ConfigEditor = Class.create({
 		params.set("get_action", "edit");
 		params.set("sub_action", "edit_repository");
 		params.set("repository_id", repId);
-		var connexion = new Connexion();
-		connexion.setParameters(params);
-		connexion.onComplete = function(transport){
+		var connection = new Connection();
+		connection.setParameters(params);
+		connection.onComplete = function(transport){
 			this.feedRepositoryForm(transport.responseXML, metaTab);			
 			modal.refreshDialogPosition();
 			modal.refreshDialogAppearance();
 			app.blurAll();
 		}.bind(this);
-		connexion.sendAsync();		
+		connection.sendAsync();		
 	},
 	
 	loadPluginConfig : function(pluginId){
 		var params = new Hash();		
 		params.set("get_action", "get_plugin_manifest");
 		params.set("plugin_id", pluginId);
-		var connexion = new Connexion();
-		connexion.setParameters(params);
-		connexion.onComplete = function(transport){
+		var connection = new Connection();
+		connection.setParameters(params);
+		connection.onComplete = function(transport){
 			var xmlData = transport.responseXML;
 			var params = XPathSelectNodes(xmlData, "//global_param");
 			var values = XPathSelectNodes(xmlData, "//plugin_settings_values/param");
@@ -881,7 +881,7 @@ ConfigEditor = Class.create({
 			modal.refreshDialogAppearance();
 			app.blurAll();
 		}.bind(this);
-		connexion.sendAsync();		
+		connection.sendAsync();		
 	},
 
 	feedRepositoryForm: function(xmlData, metaTab){
@@ -1040,7 +1040,7 @@ ConfigEditor = Class.create({
 			if(!res) return;
 		}
 		
-		var conn = new Connexion();
+		var conn = new Connection();
 		conn.setParameters(params);
 		conn.onComplete = function(transport){
 			this.parseXmlMessage(transport.responseXML);
@@ -1087,41 +1087,41 @@ ConfigEditor = Class.create({
 	},
 	
 	submitForm: function(mainAction, action, parameters, formName, callback){
-		//var connexion = new Connexion('admin.php');
-		var connexion = new Connexion();
+		//var connection = new Connection('admin.php');
+		var connection = new Connection();
 		if(formName)
 		{
 			$(formName).getElements().each(function(fElement){
-				connexion.addParameter(fElement.name, fElement.getValue());
+				connection.addParameter(fElement.name, fElement.getValue());
 			});	
 		}
 		if(parameters)
 		{
 			parameters.set('get_action', "edit");			
 			parameters.set('sub_action', action);
-			connexion.setParameters(parameters);
+			connection.setParameters(parameters);
 		}
 		if(!callback){
-			connexion.onComplete = function(transport){this.parseXmlMessage(transport.responseXML);}.bind(this);
+			connection.onComplete = function(transport){this.parseXmlMessage(transport.responseXML);}.bind(this);
 		}else{
-			connexion.onComplete = function(transport){
+			connection.onComplete = function(transport){
 				this.parseXmlMessage(transport.responseXML);
 				callback(transport.responseXML);
 			}.bind(this);
 		}
-		connexion.sendAsync();
+		connection.sendAsync();
 	},
 	
 	loadHtmlToDiv: function(div, parameters, completeFunc){
-		var connexion = new Connexion();
+		var connection = new Connection();
 		parameters.each(function(pair){
-			connexion.addParameter(pair.key, pair.value);
+			connection.addParameter(pair.key, pair.value);
 		});
-		connexion.onComplete = function(transport){		
+		connection.onComplete = function(transport){		
 			$(div).update(transport.responseText);
 			if(completeFunc) completeFunc();
 		};
-		connexion.sendAsync();	
+		connection.sendAsync();	
 	},
 	
 	

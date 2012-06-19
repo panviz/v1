@@ -49,12 +49,12 @@ Class.create("SVNLogger", {
 		}
 		this.fileName = ajxpNode.getPath();
 		this.isFile = ajxpNode.isLeaf();
-		var connexion = new Connexion();
-		connexion.addParameter('get_action', 'svnlog');
-		connexion.addParameter('file', this.fileName);
-		connexion.onComplete = this.displayResponse.bind(this);
+		var connection = new Connexion();
+		connection.addParameter('get_action', 'svnlog');
+		connection.addParameter('file', this.fileName);
+		connection.onComplete = this.displayResponse.bind(this);
 		this.setOnLoad();
-		connexion.sendAsync();
+		connection.sendAsync();
 	},
 	
 	addEntry:function(revision,author,date,message){

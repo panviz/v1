@@ -24,7 +24,7 @@ Class.create("EmlViewer", AbstractEditor, {
 			original.setAttribute("id", "emlDownloadForm");
 			$("emlDownloadForm").insert(new Element("input", {"type": "hidden", "name": "get_action", "value": "eml_dl_attachment"}));
 			$("emlDownloadForm").insert(new Element("input", {"type": "hidden", "name": "file", "value": ""}));
-			$("emlDownloadForm").insert(new Element("input", {"type": "hidden", "name": "secure_token", "value": Connexion.SECURE_TOKEN}));
+			$("emlDownloadForm").insert(new Element("input", {"type": "hidden", "name": "secure_token", "value": Connection.SECURE_TOKEN}));
 			$("emlDownloadForm").insert(new Element("input", {"type": "hidden", "name": "attachment_id", "value": ""}));
 		}
 		$super(userSelection);
@@ -44,30 +44,30 @@ Class.create("EmlViewer", AbstractEditor, {
 	
 	loadFileContent : function(fileName){
 		this.currentFile = fileName;
-		var connexion = new Connexion();
-		connexion.addParameter('get_action', 'eml_get_xml_structure');
-		connexion.addParameter('file', fileName);	
-		connexion.onComplete = function(transp){
+		var connection = new Connection();
+		connection.addParameter('get_action', 'eml_get_xml_structure');
+		connection.addParameter('file', fileName);	
+		connection.onComplete = function(transp){
 			this.parseXmlStructure(transp);
 			this.updateTitle(getBaseName(fileName));
 		}.bind(this);
-		connexion2 = new Connexion();
-		connexion2.addParameter('get_action', 'eml_get_bodies');
-		connexion2.addParameter('file', fileName);	
-		connexion2.onComplete = function(transp){
+		connection2 = new Connection();
+		connection2.addParameter('get_action', 'eml_get_bodies');
+		connection2.addParameter('file', fileName);	
+		connection2.onComplete = function(transp){
 			this.parseBodies(transp);
 		}.bind(this);
 		this.setModified(false);
 		this.setOnLoad(this.textareaContainer);
-		connexion.sendAsync();
-		connexion2.sendAsync();
+		connection.sendAsync();
+		connection2.sendAsync();
 	},
 		
 	
 	dlAttachment : function(event){
 		//console.log(event.target.__ATTACHMENT_ID);
 		var form = $("emlDownloadForm");
-		form.elements["secure_token"].value = Connexion.SECURE_TOKEN;
+		form.elements["secure_token"].value = Connection.SECURE_TOKEN;
 		form.elements["file"].value = this.currentFile; 
 		form.elements["attachment_id"].value = event.target.up("div").__ATTACHMENT_ID;
 		form.submit();
@@ -134,28 +134,28 @@ Class.create("EmlViewer", AbstractEditor, {
 			if(activeRepository && this.treeSelector.getFilterActive(activeRepository)){
 				crossCopy = true;
 			}
-			var connexion = new Connexion();
+			var connection = new Connection();
 			if(crtRepoType == "imap"){
-				connexion.setParameters({
+				connection.setParameters({
 					file: this.currentFile+"#attachments/"+attachmentId,
 					get_action: crossCopy ? "cross_copy" : "copy",
 					dest: selectedNode,
 					dest_repository_id: crossCopy ? this.treeSelector.filterSelector.getValue() : ""
 				});				
 			}else{
-				connexion.setParameters({
+				connection.setParameters({
 					file: this.currentFile,
 					get_action: "eml_cp_attachment",
 					attachment_id: attachmentId,
 					destination: selectedNode,
 					dest_repository_id: this.treeSelector.filterSelector.getValue()
 				});
-                console.log(connexion._parameters);
+                console.log(connection._parameters);
 			}
-			connexion.onComplete = function(transport){
+			connection.onComplete = function(transport){
 				app.actionBar.parseXmlMessage(transport.responseXML);
 			};
-			connexion.sendAsync();
+			connection.sendAsync();
 			hideSelector();
 		}.bind(this));
 		container.down("#eml_cp_can").observeOnce("click", function(e){

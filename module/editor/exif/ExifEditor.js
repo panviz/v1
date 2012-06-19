@@ -36,13 +36,13 @@ Class.create("ExifEditor", AbstractEditor, {
 	
 	loadFileContent : function(fileName){
 		this.currentFile = fileName;
-		var connexion = new Connexion();
-		connexion.addParameter('get_action', 'extract_exif');
-		connexion.addParameter('file', fileName);	
-		connexion.onComplete = function(transp){
+		var connection = new Connection();
+		connection.addParameter('get_action', 'extract_exif');
+		connection.addParameter('file', fileName);	
+		connection.onComplete = function(transp){
 			this.parseXml(transp);
 		}.bind(this);
-		connexion.sendAsync();
+		connection.sendAsync();
 	},
 	
 	

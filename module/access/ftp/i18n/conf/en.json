@@ -1,7 +1,7 @@
 {
 "FTP Server" : "FTP Server",
 "This driver can access a remote FTP server" : "This driver can access a remote FTP server",
-"Connexion" : "Connexion",
+"Connection" : "Connection",
 "Host" : "Host",
 "Ftp Host to connect to" : "Ftp Host to connect to",
 "Port" : "Port",

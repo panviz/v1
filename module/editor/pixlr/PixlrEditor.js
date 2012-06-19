@@ -21,7 +21,7 @@ Class.create("PixlrEditor", AbstractEditor, {
 		
 	save : function(pixlrUrl){
 		this.setOnLoad();
-		var conn = new Connexion();
+		var conn = new Connection();
 		conn.addParameter("get_action", "retrieve_pixlr_image");
 		conn.addParameter("original_file", this.currentNode.getPath());
 		conn.addParameter("new_url", pixlrUrl);

@@ -24,14 +24,14 @@ Class.create("BrowserOpener", View, {
 	},
 	
 	openURL : function(fileName){
-		var connexion = new Connexion();
-		connexion.addParameter('get_action', 'get_content');
-		connexion.addParameter('file', fileName);	
-		connexion.onComplete = function(transp){
+		var connection = new Connection();
+		connection.addParameter('get_action', 'get_content');
+		connection.addParameter('file', fileName);	
+		connection.onComplete = function(transp){
 			var url = transp.responseText;
 	        myRef = window.open(url, "AjaXplorer Bookmark", "location=yes,menubar=yes,resizable=yes,scrollbars=yea,toolbar=yes,status=yes");
 	        hideLightBox();
 		}.bind(this);
-		connexion.sendSync();		
+		connection.sendSync();		
 	}
 });

@@ -1,141 +1,173 @@
 {
-  "ajxpdriver": {
-    "name": "fs",
-    "label": "CONF_MESSAGE[File System (Standard)]",
-    "description": "CONF_MESSAGE[The most standard access to a filesystem located on the server.]",
-    "mixins": "filesystem_commons,slug_provider,template_provider",
-    "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
-    "client_settings": {
-      "icon": "plugins/access.fs/icon.png",
-      "resources": {
-        "i18n": {
-          "namespace": "access_fs",
-          "path": "plugins/access.fs/i18n"
-        }
-      }
-    },
-    "server_settings": {
-      "param": [
-        {
-          "name": "PATH",
-          "type": "string",
-          "label": "CONF_MESSAGE[Path]",
-          "description": "CONF_MESSAGE[Real path to the root folder on the server]",
-          "mandatory": "true"
-        },
-        {
-          "name": "CREATE",
-          "type": "boolean",
-          "label": "CONF_MESSAGE[Create]",
-          "description": "CONF_MESSAGE[Create folder if it does not exists]",
-          "default": "true",
-          "mandatory": "true"
-        },
-        {
-          "name": "CHMOD_VALUE",
-          "type": "string",
-          "label": "CONF_MESSAGE[File Creation Mask]",
-          "description": "CONF_MESSAGE[Optionnaly apply a chmod operation. Value must be numeric, like 0777, 0644, etc.]",
-          "default": "0666"
-        },
-        {
-          "name": "PURGE_AFTER",
-          "type": "integer",
-          "label": "CONF_MESSAGE[Purge Days]",
-          "description": "CONF_MESSAGE[Option to purge documents after a given number of days. This require a manual set up of a CRON task. Leave to 0 if you don't wan't to use this feature.]",
-          "default": "0"
-        }
-      ],
-      "global_param": [
-        {
-          "name": "PROBE_REAL_SIZE",
-          "type": "boolean",
-          "label": "CONF_MESSAGE[Real Size Probing]",
-          "description": "CONF_MESSAGE[Use system command line to get the filesize instead of php built-in function (fixes the 2Go limitation)]",
-          "default": "false"
-        },
-        {
-          "name": "USE_XSENDFILE",
-          "type": "boolean",
-          "label": "CONF_MESSAGE[X-SendFile Active]",
-          "description": "CONF_MESSAGE[Delegates all download operations to the webserver using the X-SendFile header. Warning, this is an external module to install for Apache. Module is active by default in Lighttpd. Warning, you have to manually add the folders where files will be downloaded in the module configuration (XSendFilePath directive)]",
-          "default": "false"
-        }
-      ]
-    },
-    "class_definition": {
-      "filename": "plugins/access.fs/class.fsAccessDriver.php",
-      "classname": "fsAccessDriver"
-    },
-    "registry_contributions": {
-      "external_file": [
-        {
-          "filename": "plugins/access.fs/fsActions.xml",
-          "include": "actions/*",
-          "exclude": ""
-        },
-        {
-          "filename": "plugins/access.fs/fsActions.xml",
-          "include": "client_configs/*",
-          "exclude": ""
-        }
-      ],
-      "client_configs": {
-        "component_config": [
-          {
-            "className": "FilesList",
-            "columns": {
-              "switchGridMode": "filelist",
-              "column": [
-                {
-                  "messageId": "1",
-                  "attributeName": "ajxp_label",
-                  "sortType": "StringDirFile",
-                  "defaultWidth": "48%"
-                },
-                {
-                  "messageId": "2",
-                  "attributeName": "filesize",
-                  "sortType": "CellSorterValue",
-                  "modifier": "FilesList.prototype.partSizeCellRenderer",
-                  "defaultWidth": "9%"
-                },
-                {
-                  "messageId": "3",
-                  "attributeName": "mimestring",
-                  "sortType": "String",
-                  "defaultWidth": "10%"
-                },
-                {
-                  "messageId": "4",
-                  "attributeName": "ajxp_modiftime",
-                  "sortType": "MyDate",
-                  "defaultWidth": "14%"
-                }
-              ]
-            }
-          },
-          {
-            "className": "FoldersTree",
-            "property": {
-              "name": "display",
-              "value": "dz"
-            }
-          }
-        ]
-      },
-      "hooks": {
-        "serverCallback": {
-          "hookName": "node.info",
-          "methodName": "loadNodeInfo"
-        }
-      }
-    },
-    "class_stream_wrapper": {
-      "filename": "plugins/access.fs/class.fsAccessWrapper.php",
-      "classname": "fsAccessWrapper",
-      "protocol": "ajxp.fs"
-    }
-  }
+	"name": "fs",
+	"label": "CONF_MESSAGE[File System (Standard)]",
+	"description": "CONF_MESSAGE[The most standard access to a filesystem located on the server.]",
+	"mixins": "filesystem_commons,slug_provider,template_provider",
+	"client_settings": {
+		"icon": "/icon.png"
+	},
+	"server_settings": {
+		"param": [
+			{
+				"name": "PATH",
+				"type": "string",
+				"label": "CONF_MESSAGE[Path]",
+				"description": "CONF_MESSAGE[Real path to the root folder on the server]",
+				"mandatory": "true"
+			},
+			{
+				"name": "CREATE",
+				"type": "boolean",
+				"label": "CONF_MESSAGE[Create]",
+				"description": "CONF_MESSAGE[Create folder if it does not exists]",
+				"default": "true",
+				"mandatory": "true"
+			},
+			{
+				"name": "CHMOD_VALUE",
+				"type": "string",
+				"label": "CONF_MESSAGE[File Creation Mask]",
+				"description": "CONF_MESSAGE[Optionnaly apply a chmod operation. Value must be numeric, like 0777, 0644, etc.]",
+				"default": "0666"
+			},
+			{
+				"name": "PURGE_AFTER",
+				"type": "integer",
+				"label": "CONF_MESSAGE[Purge Days]",
+				"description": "CONF_MESSAGE[Option to purge documents after a given number of days. This require a manual set up of a CRON task. Leave to 0 if you don't wan't to use this feature.]",
+				"default": "0"
+			}
+		],
+		"global_param": [
+			{
+				"name": "PROBE_REAL_SIZE",
+				"type": "boolean",
+				"label": "CONF_MESSAGE[Real Size Probing]",
+				"description": "CONF_MESSAGE[Use system command line to get the filesize instead of php built-in function (fixes the 2Go limitation)]",
+				"default": "false"
+			},
+			{
+				"name": "USE_XSENDFILE",
+				"type": "boolean",
+				"label": "CONF_MESSAGE[X-SendFile Active]",
+				"description": "CONF_MESSAGE[Delegates all download operations to the webserver using the X-SendFile header. Warning, this is an external module to install for Apache. Module is active by default in Lighttpd. Warning, you have to manually add the folders where files will be downloaded in the module configuration (XSendFilePath directive)]",
+				"default": "false"
+			}
+		]
+	},
+	"class_definition": {
+		"filename": "module/access.fs/class.fsAccessDriver.php",
+		"classname": "fsAccessDriver"
+	},
+	"client_configs": {
+		"component_config": {
+			"FilesList" : {
+				"columns": {
+					"switchGridMode": "filelist",
+					"column": [
+						{
+							"messageId": "1",
+							"attributeName": "ajxp_label",
+							"sortType": "StringDirFile",
+							"defaultWidth": "48%"
+						},
+						{
+							"messageId": "2",
+							"attributeName": "filesize",
+							"sortType": "CellSorterValue",
+							"modifier": "FilesList.prototype.partSizeCellRenderer",
+							"defaultWidth": "9%"
+						},
+						{
+							"messageId": "3",
+							"attributeName": "mimestring",
+							"sortType": "String",
+							"defaultWidth": "10%"
+						},
+						{
+							"messageId": "4",
+							"attributeName": "ajxp_modiftime",
+							"sortType": "MyDate",
+							"defaultWidth": "14%"
+						}
+					]
+				}
+			},
+			"FoldersTree" : {
+				"property": {
+					"name": "display",
+					"value": "dz"
+				}
+			},
+			"InfoPanel" : [{
+				"mime" : "no_selection",
+				"attributes" : "",
+				"messages" : {
+					"message" : [{
+							"key" : "folders_string",
+							"id" : "130"
+						}, {
+							"key" : "files_string",
+							"id" : "265"
+						}, {
+							"key" : "totalsize_string",
+							"id" : "259"
+						}
+					]
+				},
+				"html" : "<div><table class=\"infoPanelTable\" cellspacing=\"0\" border=\"0\" cellpadding=\"0\"><tr><td class=\"infoPanelLabel\">#{folders_string}</td><td class=\"infoPanelValue\">#{filelist_folders_count}</td></tr><tr class=\"even\"><td class=\"infoPanelLabel\">#{files_string}</td><td class=\"infoPanelValue\">#{filelist_files_count}</td></tr><tr><td class=\"infoPanelLabel\">#{totalsize_string}</td><td class=\"infoPanelValue\">#{filelist_totalsize}</td></tr></table></div>"
+					}, {
+					"mime" : "generic_file",
+					"attributes" : "basename,preview_rich,filesize,mimestring,formated_date",
+					"messages" : {
+						"message" : [{
+								"key" : "name_string",
+								"id" : "133"
+							}, {
+								"key" : "size_string",
+								"id" : "127"
+							}, {
+								"key" : "type_string",
+								"id" : "134"
+							}, {
+								"key" : "modif_string",
+								"id" : "138"
+							}, {
+								"key" : "header_string",
+								"id" : "341"
+							}
+						]
+					},
+					"html" : "<div><div class=\"infoPanelImagePreview\">#{preview_rich}</div><div class=\"panelHeader infoPanelGroup\">#{header_string}</div><table class=\"infoPanelTable\" cellspacing=\"0\" border=\"0\" cellpadding=\"0\"><tr><td class=\"infoPanelLabel\">#{name_string}</td><td class=\"infoPanelValue\">#{basename}</td></tr><tr class=\"even\"><td class=\"infoPanelLabel\">#{size_string}</td><td class=\"infoPanelValue\">#{filesize}</td></tr><tr><td class=\"infoPanelLabel\">#{modif_string}</td><td class=\"infoPanelValue\">#{formated_date}</td></tr><tr class=\"even\"><td class=\"infoPanelLabel\">#{type_string}</td><td class=\"infoPanelValue\">#{mimestring}</td></tr></table></div>"
+				}, {
+				"mime" : "generic_dir",
+				"attributes" : "basename,icon,formated_date",
+				"messages" : {
+					"message" : [{
+							"key" : "name_string",
+							"id" : "133"
+						}, {
+							"key" : "modif_string",
+							"id" : "138"
+						}, {
+							"key" : "header_string",
+							"id" : "342"
+						}
+					]
+				},
+				"html" : "<div><div class=\"folderImage infoPanelImagePreview\"><img src=\"AJXP_THEME_FOLDER/images/mimes/64/#{icon}\" height=\"64\" width=\"64\"></div><div class=\"panelHeader infoPanelGroup\">#{header_string}</div><table class=\"infoPanelTable\" cellspacing=\"0\" border=\"0\" cellpadding=\"0\"><tr><td class=\"infoPanelLabel\">#{name_string}</td><td class=\"infoPanelValue\">#{basename}</td></tr><tr class=\"even\"><td class=\"infoPanelLabel\">#{modif_string}</td><td class=\"infoPanelValue\">#{formated_date}</td></tr></table></div>"
+			}]
+		}
+	},
+	"hooks": {
+		"serverCallback": {
+			"hookName": "node.info",
+			"methodName": "loadNodeInfo"
+		}
+	},
+	"class_stream_wrapper": {
+		"filename": "plugins/access.fs/class.fsAccessWrapper.php",
+		"classname": "fsAccessWrapper",
+		"protocol": "ajxp.fs"
+	}
 }

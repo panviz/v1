@@ -12,13 +12,13 @@
 			<processing>
 				<clientCallback prepareModal="false"><![CDATA[
 					clearRememberData();
-					var connexion = new Connexion();
-					connexion.addParameter('get_action', 'back');
-					connexion.onComplete = function(transport){
+					var connection = new Connexion();
+					connection.addParameter('get_action', 'back');
+					connection.onComplete = function(transport){
 						var child = transport.responseXML.documentElement.childNodes;
                         document.location.href = child[0].nodeValue;
 						};
-					connexion.sendAsync();
+					connection.sendAsync();
 					]]></clientCallback>
 				<serverCallback methodName="switchAction"></serverCallback>
 			</processing>

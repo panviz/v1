@@ -1,31 +1,44 @@
-DEBUG OPTIONS - bootstrap_context.php
-window.
-	ajaxplorer
-	content_pane -> FilesList klass
+module									should contain server and client side logic alongside
 
-Ajaxplorer.klass
-	initExtension					//load extension configuration from manifest.xml
-	initAjxpWidgets 				//initialization GUI method
-		window[ajxpId] = compRegistry[i-1];	//window will contain access to all GUI components classes
-	guiCompRegistry 				//array of GUI components
-	guiActions 						//Hash
-	contextMenu						//Proto.Menu
-	actionBar						//ActionsManager
-	getUserSelection()				//AjxpDataModel
-	getContextNode()				//AjxpNode (current path)
-	getContextHolder()				//AjxpDataModel - contains current selection, path, repo
+Bootstrap								loads settings.json
+	
+window
+	.bootstrap
+	.app									client application
+	.THEME								current theme, default is "MyBase"
+	.I18n
 
-ActionsManager.klass
-	actions							//Action.klass
+Item		abstract item to be worked with
+				can be file, contact, calendar date, note, etc
+	.getPath()						//
 
-Action.ls
+Collection								collection of Items, represents selection object, data model as well
 
-InfoPanel							//Details for file
+Application								loads registry, builds app gui
+	.initExtension					load extension configuration from manifest.xml
+	.initWidgets 						initialization GUI method
+		.window[id] = compRegistry[i-1];	//window will contain access to all GUI components classes
+	.guiCompRegistry 				array of GUI components
+	.guiActions 						Hash
+	.contextMenu						Proto.Menu
+	.actionBar							ActionsManager
+	.getUserSelection				Collection
+	.getContextNode					Abstract Item (current path)
+	.getContextHolder				Collection - contains current selection, path, repo
 
-AjxpNode
-	getPath()						//
+View											widget to display Items
+	List
+		Table or List or Thumbnails
+			.fill								fill table with rows
+	Graph
 
-editor.text TextEditor.klass		//
+ActionsManager
+	.actions								Action
+Action
+	Ls
 
-FilesList
-	fill							//fill table with rows
+InfoPanel									Details for Item
+
+TextEditor.klass		//
+
+

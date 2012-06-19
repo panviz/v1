@@ -17,7 +17,7 @@ module.exports = function(app){
   
   app.error(function(err, req, res, next){
       if (err instanceof NotFound) {
-          res.render('404');
+          res.render('404', {layout : ''});
       } else {
           next(err);
       }
@@ -28,7 +28,8 @@ module.exports = function(app){
   app.error(function(err, req, res){
     console.log(err);
     res.render('500', {
-      error: err
+      error: err,
+			layout : ''
     });
   });
   

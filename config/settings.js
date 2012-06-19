@@ -22,7 +22,7 @@ module.exports =
 	"ui" : {
 		"welcomeMessage" : "",
 		"title" : "Graph",
-		"icon" : "/module/ui/main/logo.png",
+		"icon" : "/theme/logo.png",
 		"iconWidth" : "250px",
 		"iconHeight" : "50px",
 		"iconOnly" : true,

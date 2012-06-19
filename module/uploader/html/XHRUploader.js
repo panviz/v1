@@ -759,7 +759,7 @@ Class.create("XHRUploader", {
 	},
 	
 	sendUnifyQuery : function(fileName, lastIndex){
-		var conn = new Connexion();
+		var conn = new Connection();
 		conn.setParameters({
 			"get_action" : "upload_chunks_unify",
 			"file_name" : fileName,

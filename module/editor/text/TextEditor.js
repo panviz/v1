@@ -51,36 +51,36 @@ Class.create("TextEditor", View, {
 	
 	loadFileContent : function(fileName){
 		this.currentFile = fileName;
-		var connexion = new Connexion();
-		connexion.addParameter('get_action', 'get_content');
-		connexion.addParameter('file', fileName);	
-		connexion.onComplete = function(transp){
+		var connection = new Connection();
+		connection.addParameter('get_action', 'get_content');
+		connection.addParameter('file', fileName);	
+		connection.onComplete = function(transp){
 			//TODO doesn't called on missing file
 			this.parseTxt(transp);
 			this.updateTitle(getBaseName(fileName));
 		}.bind(this);
 		this.setModified(false);
 		this.setOnLoad(this.textareaContainer);
-		connexion.sendAsync();
+		connection.sendAsync();
 	},
 	
-	prepareSaveConnexion : function(){
-		var connexion = new Connexion();
-		connexion.addParameter('get_action', 'put_content');
-		connexion.addParameter('file', this.userSelection.getUniqueFileName());
-		connexion.addParameter('dir', this.userSelection.getCurrentRep());	
-		connexion.onComplete = function(transp){
+	prepareSaveConnection : function(){
+		var connection = new Connection();
+		connection.addParameter('get_action', 'put_content');
+		connection.addParameter('file', this.userSelection.getUniqueFileName());
+		connection.addParameter('dir', this.userSelection.getCurrentRep());	
+		connection.onComplete = function(transp){
 			this.parseXml(transp);			
 		}.bind(this);
 		this.setOnLoad(this.textareaContainer);
-		connexion.setMethod('put');		
-		return connexion;
+		connection.setMethod('put');		
+		return connection;
 	},
 	
 	saveFile : function(){
-		var connexion = this.prepareSaveConnexion();
-		connexion.addParameter('content', this.textarea.value);		
-		connexion.sendAsync();
+		var connection = this.prepareSaveConnection();
+		connection.addParameter('content', this.textarea.value);		
+		connection.sendAsync();
 	},
 	
 	parseXml : function(transport){

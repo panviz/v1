@@ -1,0 +1,11 @@
+Server is built on NodeJS with expressjs utilizing MVC pattern for server-client communication.
+Application structure is based on modules and can be easily extended.
+	It is highly configurable and have multiple conventions, such as following:
+		Module
+			Localization files -> i18n folder
+			images -> image folder
+
+Client application is loaded with Bootstrap
+"ui.main" is default interface for browser access.
+Uses HTML5 and PrototypeJS.
+The interface has default theme, which can be entirely customized.

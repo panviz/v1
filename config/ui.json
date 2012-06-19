@@ -1,0 +1,43 @@
+{
+	"name" : "desktop",
+	"resources_path" : "/client",
+	"js_path" : "/client",
+	"widget" : {
+		"name": "widget",
+		"element": "widget",
+		"position": "top"
+	},
+	"themes" : {
+		"mybase" : {
+			"name" : "MyBase",
+			"path" : "/client/theme/mybase",
+			"element" : "desktop",
+			"template" : "/client/theme/mybase/html/template.html"
+		},
+		"manager" : {
+			"name" : "Manager",
+			"path" : "/client/theme/mybase",
+			"element" : "desktop",
+			"template" : "/client/theme/manager/html/template.html"
+		}
+	},
+	"hooks": {
+		"serverCallback": {
+			"hookName": "node.info",
+			"methodName": "nodeBookmarkMetadata"
+		}
+	},
+	"component_config": {
+		"className": "List",
+		"property": [
+			{
+				"name": "thumbSize",
+				"value": "64"
+			},
+			{
+				"name": "displayMode",
+				"value": "list"
+			}
+		]
+	}
+}

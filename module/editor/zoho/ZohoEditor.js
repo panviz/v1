@@ -18,7 +18,7 @@ Class.create("ZohoEditor", View, {
 		});						
 		this.container.update(this.contentMainContainer);
         this.element.observe("view:close", function(){
-            var conn = new Connexion();
+            var conn = new Connection();
             conn.addParameter("get_action", "retrieve_from_zohoagent");
             conn.onComplete = function(transport){
                 if(transport.responseText == "MODIFIED"){

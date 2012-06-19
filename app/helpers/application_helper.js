@@ -1,13 +1,13 @@
-var fs = require('fs')
-	, path = require('path');
+var fs = require('fs'),
+		Path = require('path');
 
 module.exports = {
 	include_tag: function(file){
-		return insert_file(file, '<script language="javascript" type="text/javascript" src="%filename%"></script>');
+		return insert_file(file, '<script language="javascript" type="text/javascript" src="%path%"></script>');
 	},
 
 	link_tag: function(file){
-		return insert_file(file, '<link rel="stylesheet" type="text/css" href="%filename%">');
+		return insert_file(file, '<link rel="stylesheet" type="text/css" href="%path%">');
 	},
 	//translations
 	//TODO add %s substitution
@@ -20,20 +20,33 @@ module.exports = {
 		 }
 }
 
-function insert_file(filename, code){
-	if (filename.indexOf("list") != -1){
+function insert_file(path, code){
+	if (path.indexOf("list") != -1){
 		var list = [];
-		getList(filename).forEach(function(name) {
-			name = path.dirname(filename) + '/' + name;
+		getList(path).forEach(function(name) {
+			if (!name) return;
+			//if list.txt is not in /config, it has paths relative to its path
+			if (path.indexOf("config") == -1){
+				name = Path.dirname(path) + '/' + name;
+			} else{
+				name = '/client/' + name;
+			}
 			list.push(insert_file(name, code));
 		})
 		return list.join('\n');
 	} else {
-		return code.replace('%filename%', filename)
+		return code.replace('%path%', path)
 	}
 }
 
 //TODO use global root variable for path
-function getList(filename){
-	return fs.readFileSync(ROOT_PATH +'/'+ filename, "binary").split('\n');
+function getList(path){
+	var filepath = ROOT_PATH + path;
+	try {
+		fs.statSync(filepath)
+	}
+	catch (e) {
+			var filepath = ROOT_PATH + '/client' + path;
+		}
+	return fs.readFileSync(filepath, "binary").split('\n');
 }

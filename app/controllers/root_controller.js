@@ -10,7 +10,7 @@ module.exports = function (_app) {
 controller.index = function(req, res, next){
 	//TODO define ui.name, currentLanguage, theme in settings.json based on requester locale, platform 
 	if (!settings.ui.name){
-		setUI("main");
+		setUI("desktop");
 	}
 	if (!settings.ui.theme){
 		setTheme("mybase");
@@ -27,12 +27,17 @@ controller.registry = function(req, res, next){
 }
 
 var setUI = function(name){
-			config = require(ROOT_PATH + '/module/ui/' + name + '/config.json')
+	if (name == "desktop"){
+		var config = require(ROOT_PATH + '/config/ui.json')
+	}
 	_.extend(settings.ui, config);
 }
 
 var setTheme = function(name){
 	var ui = settings.ui;
 	ui.theme = ui.themes[name];
+	if (!ui.theme){
+		ui.theme = ui.themes['mybase']
+	}
 	ui.theme.html = fs.readFileSync(ROOT_PATH + ui.theme.template, 'binary');
 }
