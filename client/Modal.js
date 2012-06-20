@@ -20,9 +20,9 @@ Class.create("Modal", {
 	 */
 	initForms: function(){
 		this.elementName = 'generic_dialog_box';
-		this.htmlElement = $(this.elementName);
-		this.title = this.htmlElement.select(".dialogTitle")[0];
-		this.dialogContent = this.htmlElement.select(".dialogContent")[0];
+		this.element = $(this.elementName);
+		this.title = this.element.select(".dialogTitle")[0];
+		this.dialogContent = this.element.select(".dialogContent")[0];
 		this.currentForm;
 		this.cachedForms = new Hash();
 		this.iframeIndex = 0;	
@@ -36,7 +36,7 @@ Class.create("Modal", {
 	prepareHeader: function(sTitle, sIconSrc){
 		var hString = "<span class=\"titleString\">";
 		if(sIconSrc != "") hString = "<span class=\"titleString\"><img src=\""+sIconSrc.replace('22', '16')+"\" width=\"16\" height=\"16\" align=\"top\"/>&nbsp;";
-		var closeBtn = '<img id="modalCloseBtn" style="cursor:pointer; float:right; margin-top:2px;" src="'+ajxpResourcesFolder+'/images/actions/16/window_close.png" />';  
+		var closeBtn = '<img id="modalCloseBtn" style="cursor:pointer; float:right; margin-top:2px;" src="'+THEME.path+'/image/action/16/window_close.png" />';  
 		hString += sTitle + '</span>';
 		this.title.update(closeBtn + hString);
 	},
@@ -259,7 +259,7 @@ Class.create("Modal", {
 			return;
 		}
 		var editorKlass = editorData.editorClass;
-		modal.prepareHeader(editorData.text, resolveImageSource(editorData.icon, '/images/actions/ICON_SIZE', 16));
+		modal.prepareHeader(editorData.text, resolveImageSource(editorData.icon, '/image/action/ICON_SIZE', 16));
 		var loadFunc = function(oForm){			
 			if(typeof(editorKlass) == "string"){
 				app.actionBar.editor = eval('new '+editorKlass+'(oForm)');
@@ -364,10 +364,10 @@ Class.create("Modal", {
 		var okButton = new Element('input', {
 			type: 'image',
 			name: (bOkButtonOnly ? 'close' : 'ok'),
-			src: ajxpResourcesFolder+'/images/actions/22/dialog_'+(bOkButtonOnly ? 'close' : 'ok_apply')+'.png',
+			src: THEME.path+'/image/action/22/dialog_'+(bOkButtonOnly ? 'close' : 'ok_apply')+'.png',
 			height: 22,
 			width: 22,
-			title: MessageHash[48]});
+			title: I18N[48]});
 		okButton.addClassName('dialogButton');
 		okButton.addClassName('dialogFocus');
 		contDiv.insert(okButton);
@@ -378,8 +378,8 @@ Class.create("Modal", {
 				name: "can",
 				height: 22,
 				width: 22,
-				src: ajxpResourcesFolder+'/images/actions/22/dialog_close.png',
-				title: MessageHash[49],
+				src: THEME.path+'/image/action/22/dialog_close.png',
+				title: I18N[49],
 				className: "dialogButton"
 			});
 			if(fOnCancel){
@@ -454,7 +454,7 @@ Class.create("Modal", {
 	 */
 	displayMessage: function(messageType, message){
 		if(!this.messageBox){
-			this.messageBox = new Element("div", {title: MessageHash[98],id: "message_div",className: "messageBox"});
+			this.messageBox = new Element("div", {title: I18N[98],id: "message_div",className: "messageBox"});
 			$(document.body).insert(this.messageBox);
 			this.messageContent = new Element("div", {id: "message_content"});
 			this.messageBox.update(this.messageContent);

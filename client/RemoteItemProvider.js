@@ -18,35 +18,35 @@ Class.create("RemoteItemProvider", {
 		this.properties = properties;
 	},
 	/**
-	 * Load a item
+	 * Load an item
 	 * @param item Item
 	 * @param itemCallback Function On item loaded
 	 * @param childCallback Function On child added
 	 */
 	loadItem : function(item, itemCallback, childCallback){
-		var conn = new Connection();
-		conn.addParameter("get_action", "ls");
-		conn.addParameter("options", "al");
 		var path = item.getPath();
-		// Double encode # character
+		//TODO REST actions for loading items
+		// "/data/" for ls action
+		var connection = new Connection('/data' + path);
+		//load current page
 		if(item.getMetadata().get("paginationData")){
 			path += "%23" + item.getMetadata().get("paginationData").get("current");
 		}
-		conn.addParameter("dir", path);
 		if(this.properties){
 			$H(this.properties).each(function(pair){
-				conn.addParameter(pair.key, pair.value);
+				connection.addParameter(pair.key, pair.value);
 			});
 		}
-		conn.onComplete = function (transport){
+		connection.onComplete = function (transport){
 			try{				
+				debugger
 				this.parseItems(item, transport, itemCallback, childCallback);
 			}catch(e){
 				if(app) app.displayMessage('ERROR', 'Loading error:'+e.message);
 				else alert('Loading error:'+ e.message);
 			}
 		}.bind(this);	
-		conn.sendAsync();
+		connection.sendAsync();
 	},
 	/**
 	 * Parse the answer and create Items
@@ -56,10 +56,11 @@ Class.create("RemoteItemProvider", {
 	 * @param childCallback Function
 	 */
 	parseItems : function(origItem, transport, itemCallback, childCallback){
-		if(!transport.responseXML || !transport.responseXML.documentElement) return;
-		var rootItem = transport.responseXML.documentElement;
-		var children = rootItem.childItems;
-		var contextItem = this.parseItem(rootItem);
+		if(!transport.responseJSON || !transport.responseJSON.collection) return;
+		var rootItem = transport.responseJSON.collection;
+		var children = rootItem.collection;
+		var contextItem = new Item(rootItem.params);
+		
 		origItem.replaceBy(contextItem);
 		
 		// CHECK FOR MESSAGE OR ERRORS
@@ -92,7 +93,7 @@ Class.create("RemoteItemProvider", {
 		// NOW PARSE CHILDREN
 		var children = XPathSelectItems(rootItem, "tree");
 		children.each(function(childItem){
-			var child = this.parseItem(childItem);
+			var child = new Item(childItem);
 			origItem.addChild(child);
 			if(childCallback){
 				childCallback(child);
@@ -102,30 +103,5 @@ Class.create("RemoteItemProvider", {
 		if(itemCallback){
 			itemCallback(origItem);
 		}
-	},
-	/**
-	 * Parses XML Item and create Item
-	 * @param xmlItem XMLItem
-	 * @returns Item
-	 */
-	parseItem : function(xmlItem){
-		var item = new Item(
-			xmlItem.getAttribute('filename'), 
-			(xmlItem.getAttribute('is_file') == "1" || xmlItem.getAttribute('is_file') == "true"), 
-			xmlItem.getAttribute('text'),
-			xmlItem.getAttribute('icon'));
-		var reserved = ['filename', 'is_file', 'text', 'icon'];
-		var metadata = new Hash();
-		for(var i=0;i<xmlItem.attributes.length;i++)
-		{
-			metadata.set(xmlItem.attributes[i].itemName, xmlItem.attributes[i].itemValue);
-			if(Prototype.Browser.IE && xmlItem.attributes[i].itemName == "ID"){
-				metadata.set("ajxp_sql_"+xmlItem.attributes[i].itemName, xmlItem.attributes[i].itemValue);
-			}
-		}
-		// BACKWARD COMPATIBILIY
-		//metadata.set("XML_NODE", xmlItem);
-		item.setMetadata(metadata);
-		return item;
 	}
 });

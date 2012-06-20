@@ -57,7 +57,7 @@
 			<rightsContext noUser="true" userLogged="only" read="true" write="true" adminOnly=""></rightsContext>
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[					
-					var sTitle = MessageHash[187];
+					var sTitle = I18N[187];
 					var loadFunc = function(oForm){
 						application.actionBar.sqlEditor = new SQLEditor(oForm);
 						application.actionBar.sqlEditor.createTableEditor();
@@ -100,7 +100,7 @@
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
 					var currentTable = application.getContextNode().getPath();
-					var sTitle = MessageHash[187]+currentTable;
+					var sTitle = I18N[187]+currentTable;
 					var loadFunc = function(oForm){
 						application.actionBar.sqlEditor = new SQLEditor(oForm);
 						application.actionBar.sqlEditor.createTableEditor(currentTable);
@@ -237,7 +237,7 @@
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
 					var onLoad = function(oForm){
-				    	var message = MessageHash[275];
+				    	var message = I18N[275];
 		   		    	$(oForm).getElementsBySelector('span[id="delete_message"]')[0].innerHTML = message;
 					};
 					modal.showDialogForm('Delete', 'delete_form', onLoad, function(){
@@ -266,7 +266,7 @@
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
 					var onLoad = function(oForm){
-				    	var message = MessageHash[278];
+				    	var message = I18N[278];
 		   		    	$(oForm).getElementsBySelector('span[id="delete_message"]')[0].innerHTML = message;
 					};
 					modal.showDialogForm('Delete', 'delete_record_form', onLoad, function(){

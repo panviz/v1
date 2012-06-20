@@ -7,11 +7,11 @@
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
     "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "client_settings": {
-      "icon": "plugins/access.sftp/icon.png",
+      "icon": "module/gcaccess.sftp/icon.png",
       "resources": {
         "i18n": {
           "namespace": "sftp_access",
-          "path": "plugins/access.sftp/i18n"
+          "path": "module/gcaccess.sftp/i18n"
         }
       }
     },
@@ -50,7 +50,7 @@
       ]
     },
     "class_definition": {
-      "filename": "plugins/access.sftp/class.sftpAccessDriver.php",
+      "filename": "module/gcaccess.sftp/class.sftpAccessDriver.php",
       "classname": "sftpAccessDriver"
     },
     "registry_contributions": {
@@ -83,7 +83,7 @@
                 },
                 {
                   "messageId": "4",
-                  "attributeName": "ajxp_modiftime",
+                  "attributeName": "modiftime",
                   "sortType": "MyDate"
                 }
               ]
@@ -100,17 +100,17 @@
       },
       "external_file": [
         {
-          "filename": "plugins/access.fs/fsActions.xml",
+          "filename": "module/gcaccess.fs/fsActions.xml",
           "include": "actions/*",
           "exclude": ""
         },
         {
-          "filename": "plugins/access.fs/fsActions.xml",
+          "filename": "module/gcaccess.fs/fsActions.xml",
           "include": "client_configs/*",
           "exclude": ""
         },
         {
-          "filename": "plugins/access.fs/manifest.xml",
+          "filename": "module/gcaccess.fs/manifest.xml",
           "include": "registry_contributions/hooks/*",
           "exclude": ""
         }
@@ -122,7 +122,7 @@
       }
     },
     "class_stream_wrapper": {
-      "filename": "plugins/access.sftp/class.sftpAccessWrapper.php",
+      "filename": "module/gcaccess.sftp/class.sftpAccessWrapper.php",
       "classname": "sftpAccessWrapper",
       "protocol": "ajxp.sftp"
     }

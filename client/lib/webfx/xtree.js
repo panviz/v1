@@ -49,23 +49,23 @@
 | Created 2000-12-11 | All changes are in the log above. | Updated 2006-05-26 |
 \----------------------------------------------------------------------------*/
 var	webFXTreeConfig = {
-		rootIcon        : '/images/foldericon.png',
-		openRootIcon    : '/images/openfoldericon.png',
-		folderIcon      : '/images/foldericon.png',
-		openFolderIcon  : '/images/openfoldericon.png',
-		fileIcon        : '/images/foldericon.png',
-		iIcon           : '/images/I.png',
-		lIcon           : '/images/L.png',
-		lMinusIcon      : '/images/Lminus.png',
-		lPlusIcon       : '/images/Lplus.png',
-		lMinusIconActive: '/images/Lminus-active.png',
-		lPlusIconActive : '/images/Lplus-active.png',
-		tIcon           : '/images/T.png',
-		tMinusIcon      : '/images/Tminus.png',
-		tPlusIcon       : '/images/Tplus.png',
-		tMinusIconActive: '/images/Tminus-active.png',
-		tPlusIconActive : '/images/Tplus-active.png',
-		blankIcon       : '/images/blank.png',
+		rootIcon        : '/image/foldericon.png',
+		openRootIcon    : '/image/openfoldericon.png',
+		folderIcon      : '/image/foldericon.png',
+		openFolderIcon  : '/image/openfoldericon.png',
+		fileIcon        : '/image/foldericon.png',
+		iIcon           : '/image/I.png',
+		lIcon           : '/image/L.png',
+		lMinusIcon      : '/image/Lminus.png',
+		lPlusIcon       : '/image/Lplus.png',
+		lMinusIconActive: '/image/Lminus-active.png',
+		lPlusIconActive : '/image/Lplus-active.png',
+		tIcon           : '/image/T.png',
+		tMinusIcon      : '/image/Tminus.png',
+		tPlusIcon       : '/image/Tplus.png',
+		tMinusIconActive: '/image/Tminus-active.png',
+		tPlusIconActive : '/image/Tplus-active.png',
+		blankIcon       : '/image/blank.png',
 		defaultText     : 'Tree Item',
 		defaultAction   : function(e){},
 		defaultBehavior : 'classic',
@@ -73,24 +73,24 @@ var	webFXTreeConfig = {
 		usePersistence	: false
 };
 Event.observe(document, 'app:boot_loaded', function(){
-	var resourcesFolder = window.ajxpResourcesFolder;
-	webFXTreeConfig.rootIcon        = resourcesFolder+'/images/foldericon.png';
-	webFXTreeConfig.openRootIcon    = resourcesFolder+'/images/openfoldericon.png';
-	webFXTreeConfig.folderIcon      = resourcesFolder+'/images/foldericon.png';
-	webFXTreeConfig.openFolderIcon  = resourcesFolder+'/images/openfoldericon.png';
-	webFXTreeConfig.fileIcon        = resourcesFolder+'/images/foldericon.png';
-	webFXTreeConfig.iIcon           = resourcesFolder+'/images/I.png';
-	webFXTreeConfig.lIcon           = resourcesFolder+'/images/L.png';
-	webFXTreeConfig.lMinusIcon      = resourcesFolder+'/images/Lminus.png';
-	webFXTreeConfig.lPlusIcon       = resourcesFolder+'/images/Lplus.png';
-	webFXTreeConfig.lMinusIconActive= resourcesFolder+'/images/Lminus-active.png';
-	webFXTreeConfig.lPlusIconActive = resourcesFolder+'/images/Lplus-active.png';
-	webFXTreeConfig.tIcon           = resourcesFolder+'/images/T.png';
-	webFXTreeConfig.tMinusIcon      = resourcesFolder+'/images/Tminus.png';
-	webFXTreeConfig.tPlusIcon       = resourcesFolder+'/images/Tplus.png';
-	webFXTreeConfig.tMinusIconActive= resourcesFolder+'/images/Tminus-active.png';
-	webFXTreeConfig.tPlusIconActive = resourcesFolder+'/images/Tplus-active.png';
-	webFXTreeConfig.blankIcon       = resourcesFolder+'/images/blank.png';
+	var resourcesFolder = window.THEME.path;
+	webFXTreeConfig.rootIcon        = resourcesFolder+'/image/foldericon.png';
+	webFXTreeConfig.openRootIcon    = resourcesFolder+'/image/openfoldericon.png';
+	webFXTreeConfig.folderIcon      = resourcesFolder+'/image/foldericon.png';
+	webFXTreeConfig.openFolderIcon  = resourcesFolder+'/image/openfoldericon.png';
+	webFXTreeConfig.fileIcon        = resourcesFolder+'/image/foldericon.png';
+	webFXTreeConfig.iIcon           = resourcesFolder+'/image/I.png';
+	webFXTreeConfig.lIcon           = resourcesFolder+'/image/L.png';
+	webFXTreeConfig.lMinusIcon      = resourcesFolder+'/image/Lminus.png';
+	webFXTreeConfig.lPlusIcon       = resourcesFolder+'/image/Lplus.png';
+	webFXTreeConfig.lMinusIconActive= resourcesFolder+'/image/Lminus-active.png';
+	webFXTreeConfig.lPlusIconActive = resourcesFolder+'/image/Lplus-active.png';
+	webFXTreeConfig.tIcon           = resourcesFolder+'/image/T.png';
+	webFXTreeConfig.tMinusIcon      = resourcesFolder+'/image/Tminus.png';
+	webFXTreeConfig.tPlusIcon       = resourcesFolder+'/image/Tplus.png';
+	webFXTreeConfig.tMinusIconActive= resourcesFolder+'/image/Tminus-active.png';
+	webFXTreeConfig.tPlusIconActive = resourcesFolder+'/image/Tplus-active.png';
+	webFXTreeConfig.blankIcon       = resourcesFolder+'/image/blank.png';
 });
 
 var webFXTreeHandler = {
@@ -208,7 +208,7 @@ WebFXTreeAbstractNode.prototype.add = function (node, bNoIdent) {
 			foo = foo.parentNode;
 		}
 		$(this.id + '-cont').insert(node.toString());
-		$(node.id).ajxpNode = node.ajxpNode;
+		$(node.id).item = node.item;
 		if(!node.inZip){
 			AjxpDroppables.add(node.id);
 		}		
@@ -240,7 +240,7 @@ WebFXTreeAbstractNode.prototype.add = function (node, bNoIdent) {
 		}
 		if (!this.folder) { this.folder = true; this.collapse(true); }
 		if (!bNoIdent) { this.indent(); }
-		if (this.ajxpNode && this.ajxpNode.fake){
+		if (this.item && this.item.fake){
 			if(this.parentNode){
 				this.parentNode.expand();
 			}

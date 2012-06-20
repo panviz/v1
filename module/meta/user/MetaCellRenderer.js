@@ -21,11 +21,11 @@
 Class.create("MetaCellRenderer", {	
 	initialize: function(){
 		this.cssList = new Hash({
-			'low': {cssClass:'meta_low', label:MessageHash['meta.user.4'], sortValue:'5'},
-			'todo' : {cssClass:'meta_todo', label:MessageHash['meta.user.5'], sortValue:'4'},
-			'personal' : {cssClass:'meta_personal', label:MessageHash['meta.user.6'], sortValue:'3'},
-			'work' : {cssClass:'meta_work', label:MessageHash['meta.user.7'], sortValue:'2'},
-			'important' : {cssClass:'meta_important', label:MessageHash['meta.user.8'], sortValue:'1'}
+			'low': {cssClass:'meta_low', label:I18N['meta.user.4'], sortValue:'5'},
+			'todo' : {cssClass:'meta_todo', label:I18N['meta.user.5'], sortValue:'4'},
+			'personal' : {cssClass:'meta_personal', label:I18N['meta.user.6'], sortValue:'3'},
+			'work' : {cssClass:'meta_work', label:I18N['meta.user.7'], sortValue:'2'},
+			'important' : {cssClass:'meta_important', label:I18N['meta.user.8'], sortValue:'1'}
 		});
 		var head = $$('head')[0];
 		var href = "plugins/meta.user/css/labelsClasses.css";
@@ -89,7 +89,7 @@ Class.create("MetaCellRenderer", {
 			name:'',
 			value:'', 
 			selected:(!value)
-		}).update(MessageHash['meta.user.2']));
+		}).update(I18N['meta.user.2']));
 		cssList.each(function(pair){
 			var option = new Element('option', {
 				name:pair.key,
@@ -232,7 +232,7 @@ Class.create("MetaCellRenderer", {
 				src:imgRemove,
 				style:'float:left;cursor:pointer;margin-right:2px;padding-right:3px;border-right:1px solid #ccc;',
 				note:0,
-				title:MessageHash['meta.user.3']
+				title:I18N['meta.user.3']
 			});
 			cont.insert(img);			
 		}

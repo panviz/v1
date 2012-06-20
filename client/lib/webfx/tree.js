@@ -3,27 +3,27 @@
  */
 webFXTreeConfig.loadingText = "Loading...";
 
-function splitOverlayIcons(ajxpNode){
-    if(!ajxpNode.getMetadata().get("overlay_icon")  || !Modernizr.multiplebgs) return false;
+function splitOverlayIcons(item){
+    if(!item.getMetadata().get("overlay_icon")  || !Modernizr.multiplebgs) return false;
     var ret = [];
-    $A(ajxpNode.getMetadata().get("overlay_icon").split(",")).each(function(el){
-        ret.push(resolveImageSource(el, "/images/overlays/ICON_SIZE", 8));
+    $A(item.getMetadata().get("overlay_icon").split(",")).each(function(el){
+        ret.push(resolveImageSource(el, "/image/overlays/ICON_SIZE", 8));
     });
     return ret;
 }
 
-function AJXPTree(rootNode, sAction, filter) {
+function Tree(rootNode, sAction, filter) {
 	this.WebFXTree = WebFXTree;
 	this.loaded = true;
-	this.ajxpNode = rootNode;
+	this.item = rootNode;
 	var icon = rootNode.getIcon();
-	if(icon.indexOf(ajxpResourcesFolder+"/") != 0){
-		icon = resolveImageSource(icon, "/images/mimes/ICON_SIZE", 16);
+	if(icon.indexOf(THEME.path+"/") != 0){
+		icon = resolveImageSource(icon, "/image/mimes/ICON_SIZE", 16);
 	}
 	var openIcon = rootNode.getMetadata().get("openicon");
 	if(openIcon){
-		if(openIcon.indexOf(ajxpResourcesFolder+"/") != 0){
-			openIcon = resolveImageSource(openIcon, "/images/mimes/ICON_SIZE", 16);
+		if(openIcon.indexOf(THEME.path+"/") != 0){
+			openIcon = resolveImageSource(openIcon, "/image/mimes/ICON_SIZE", 16);
 		}
 	}else{
 		openIcon = icon;
@@ -40,54 +40,54 @@ function AJXPTree(rootNode, sAction, filter) {
     this.overlayIcon = splitOverlayIcons(rootNode);
 
 	this._loadingItem = new WebFXTreeItem(webFXTreeConfig.loadingText);		
-	if(this.open) this.ajxpNode.load();
+	if(this.open) this.item.load();
 	else{
 		this.add(this._loadingItem);
 	}
 };
 
-AJXPTree.prototype = new WebFXTree;
+Tree.prototype = new WebFXTree;
 
-AJXPTree.prototype._webfxtree_expand = WebFXTree.prototype.expand;
-AJXPTree.prototype.expand = function() {
-	if(!this.ajxpNode.fake){
-		this.ajxpNode.load();
+Tree.prototype._webfxtree_expand = WebFXTree.prototype.expand;
+Tree.prototype.expand = function() {
+	if(!this.item.fake){
+		this.item.load();
 	}
 	this._webfxtree_expand();
 };
 
-AJXPTree.prototype.destroy = function(){
-    if(this.ajxpNode) this.ajxpNode.stopObserving();
+Tree.prototype.destroy = function(){
+    if(this.item) this.item.stopObserving();
 };
 
-AJXPTree.prototype.setAjxpRootNode = function(rootNode){
-	if(this.ajxpNode){
-		var oldNode = this.ajxpNode;
+Tree.prototype.setAjxpRootNode = function(rootNode){
+	if(this.item){
+		var oldNode = this.item;
 	}
-	this.ajxpNode = rootNode;	
+	this.item = rootNode;	
 	var clear = function(){
 		this.open = false;
 		while (this.childNodes.length > 0)
 			this.childNodes[this.childNodes.length - 1].remove();
 		this.loaded = false;
 	};
-	this.ajxpNode.observe("force_clear",  clear.bind(this));
-	this.ajxpNode.observe("node_replaced",  clear.bind(this));
+	this.item.observe("force_clear",  clear.bind(this));
+	this.item.observe("node_replaced",  clear.bind(this));
 	this.attachListeners(this, rootNode);
 	if(oldNode){
 		oldNode.notify("node_replaced");
 	}
-	//this.ajxpNode.load();
+	//this.item.load();
 };
 
-AJXPTree.prototype.attachListeners = function(jsNode, ajxpNode){
-	ajxpNode.observe("child_added", function(childPath){
-		if(ajxpNode.getMetadata().get('paginationData')){
-			var pData = ajxpNode.getMetadata().get('paginationData');
+Tree.prototype.attachListeners = function(jsNode, item){
+	item.observe("child_added", function(childPath){
+		if(item.getMetadata().get('paginationData')){
+			var pData = item.getMetadata().get('paginationData');
 			if(!this.paginated){
 				this.paginated = true;
 				if(pData.get('dirsCount')!="0"){
-					this.updateLabel(this.text + " (" + MessageHash[pData.get('overflowMessage')]+ ")");
+					this.updateLabel(this.text + " (" + I18N[pData.get('overflowMessage')]+ ")");
 				}
 			}
 			return;
@@ -95,34 +95,34 @@ AJXPTree.prototype.attachListeners = function(jsNode, ajxpNode){
 			this.paginated = false;
 			this.updateLabel(this.text);
 		}
-		var child = ajxpNode.findChildByPath(childPath);
+		var child = item.findChildByPath(childPath);
 		if(child){
-			var jsChild = _ajxpNodeToTree(child, this);
+			var jsChild = _itemToTree(child, this);
 			if(jsChild){
 				this.attachListeners(jsChild, child);
 			}
 		}
 	}.bind(jsNode));
-	ajxpNode.observe("node_replaced", function(newNode){
+	item.observe("node_replaced", function(newNode){
 		// Should refresh label / icon
 		if(jsNode.updateIcon){ 
-			var ic = resolveImageSource(ajxpNode.getIcon(), "/images/mimes/ICON_SIZE", 16);
+			var ic = resolveImageSource(item.getIcon(), "/image/mimes/ICON_SIZE", 16);
 			var oic = ic;
-			if(ajxpNode.getMetadata().get("openicon")){
-				oic = resolveImageSource(ajxpNode.getMetadata().get("openicon"), "/images/mimes/ICON_SIZE", 16);
+			if(item.getMetadata().get("openicon")){
+				oic = resolveImageSource(item.getMetadata().get("openicon"), "/image/mimes/ICON_SIZE", 16);
 			}
 			jsNode.updateIcon(ic, oic);
-            jsNode.overlayIcon = splitOverlayIcons(ajxpNode);
+            jsNode.overlayIcon = splitOverlayIcons(item);
 		}
-		if(jsNode.updateLabel) jsNode.updateLabel(ajxpNode.getLabel());
+		if(jsNode.updateLabel) jsNode.updateLabel(item.getLabel());
 	}.bind(jsNode));
-	ajxpNode.observeOnce("node_removed", function(e){
+	item.observeOnce("node_removed", function(e){
 		jsNode.remove();
 	});
-	ajxpNode.observe("loading", function(){		
+	item.observe("loading", function(){		
 		//this.add(this._loadingItem);
 	}.bind(jsNode) );
-	ajxpNode.observe("loaded", function(){
+	item.observe("loaded", function(){
 		this._loadingItem.remove();
 		if(this.childNodes.length){
 			this._webfxtree_expand();
@@ -130,17 +130,17 @@ AJXPTree.prototype.attachListeners = function(jsNode, ajxpNode){
 	}.bind(jsNode) );
 };
 
-function AJXPTreeItem(ajxpNode, sAction, eParent) {
+function TreeItem(item, sAction, eParent) {
 	this.WebFXTreeItem = WebFXTreeItem;
-	this.ajxpNode = ajxpNode;
-	var icon = ajxpNode.getIcon();
-	if(icon.indexOf(ajxpResourcesFolder+"/") != 0){
-		icon = resolveImageSource(icon, "/images/mimes/ICON_SIZE", 16);
+	this.item = item;
+	var icon = item.getIcon();
+	if(icon.indexOf(THEME.path+"/") != 0){
+		icon = resolveImageSource(icon, "/image/mimes/ICON_SIZE", 16);
 	}
-	var openIcon = ajxpNode.getMetadata().get("openicon");
+	var openIcon = item.getMetadata().get("openicon");
 	if(openIcon){
-		if(openIcon.indexOf(ajxpResourcesFolder+"/") != 0){
-			openIcon = resolveImageSource(openIcon, "/images/mimes/ICON_SIZE", 16);
+		if(openIcon.indexOf(THEME.path+"/") != 0){
+			openIcon = resolveImageSource(openIcon, "/image/mimes/ICON_SIZE", 16);
 		}
 	}else{
 		openIcon = icon;
@@ -148,12 +148,12 @@ function AJXPTreeItem(ajxpNode, sAction, eParent) {
 	
 	this.folder = true;
 	this.WebFXTreeItem(
-        ajxpNode.getLabel(),
+        item.getLabel(),
         sAction,
         eParent,
         icon,
-        (openIcon?openIcon:resolveImageSource("folder_open.png", "/images/mimes/ICON_SIZE", 16)),
-        splitOverlayIcons(ajxpNode)
+        (openIcon?openIcon:resolveImageSource("folder_open.png", "/image/mimes/ICON_SIZE", 16)),
+        splitOverlayIcons(item)
     );
 
 	this.loading = false;
@@ -162,45 +162,45 @@ function AJXPTreeItem(ajxpNode, sAction, eParent) {
 
 	this._loadingItem = new WebFXTreeItem(webFXTreeConfig.loadingText);
 	if (this.open) {
-		this.ajxpNode.load();
+		this.item.load();
 	}else{
 		this.add(this._loadingItem);
 	}
 	webFXTreeHandler.all[this.id] = this;
 };
 
-AJXPTreeItem.prototype = new WebFXTreeItem;
+TreeItem.prototype = new WebFXTreeItem;
 
-AJXPTreeItem.prototype._webfxtree_expand = WebFXTreeItem.prototype.expand;
-AJXPTreeItem.prototype.expand = function() {
-	this.ajxpNode.load();
+TreeItem.prototype._webfxtree_expand = WebFXTreeItem.prototype.expand;
+TreeItem.prototype.expand = function() {
+	this.item.load();
 	this._webfxtree_expand();
 };
 
-AJXPTreeItem.prototype.attachListeners = AJXPTree.prototype.attachListeners;
+TreeItem.prototype.attachListeners = Tree.prototype.attachListeners;
 
 
 /*
  * Helper functions
  */
 // Converts an xml tree to a js tree. See article about xml tree format
-function _ajxpNodeToTree(ajxpNode, parentNode) {
-	if(parentNode.filter && !parentNode.filter(ajxpNode)){
+function _itemToTree(item, parentNode) {
+	if(parentNode.filter && !parentNode.filter(item)){
 		return false;
 	}
-	var jsNode = new AJXPTreeItem(ajxpNode, null, parentNode);	
-	if(ajxpNode.isLoaded())
+	var jsNode = new TreeItem(item, null, parentNode);	
+	if(item.isLoaded())
 	{
 		jsNode.loaded = true;
 	}
-	jsNode.filename = ajxpNode.getPath();	
+	jsNode.filename = item.getPath();	
 	if(parentNode.filter){
 		jsNode.filter = parentNode.filter;
 	}
-    jsNode.overlayIcon = splitOverlayIcons(ajxpNode);
+    jsNode.overlayIcon = splitOverlayIcons(item);
 
-	ajxpNode.getChildren().each(function(child){
-		var newNode = _ajxpNodeToTree(child, jsNode);
+	item.getChildren().each(function(child){
+		var newNode = _itemToTree(child, jsNode);
 		if(newNode){
 			if(jsNode.filter){
 				newNode.filter = jsNode.filter;

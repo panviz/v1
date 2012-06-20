@@ -9,9 +9,9 @@ Class.create("Connection", {
 	 */
 	initialize: function(baseUrl)
 	{
-		this._baseUrl = window.ajxpServerAccessPath;
+		this._baseUrl = window.serverAccessPath;
 		if(baseUrl) this._baseUrl = baseUrl;
-		this._libUrl = window.ajxpResourcesFolder+'/js';
+		this._libUrl = '/client';
 		this._parameters = new Hash();
 		this._method = 'get';
 	},
@@ -56,7 +56,7 @@ Class.create("Connection", {
     showLoader : function(){
         if(!$('Connection-loader') && window.bootstrap.parameters.get("theme")){
             var img = new Element("img", {
-                src: ajxpResourcesFolder+"/image/connexion-loader.gif",
+                src: THEME.path +"/image/connexion-loader.gif",
                 id: 'Connection-loader',
                 style: 'position:absolute; top:2px; right:2px; z-index:40000; display:none;'});
             $$('body')[0].insert(img);
@@ -110,9 +110,9 @@ Class.create("Connection", {
         var tokenMessage;
         var tok1 = "Ooops, it seems that your security token has expired! Please %s by hitting refresh or F5 in your browser!";
         var tok2 =  "reload the page";
-        if(window.MessageHash && window.MessageHash[437]){
-            var tok1 = window.MessageHash[437];
-            var tok2 = window.MessageHash[438];
+        if(window.I18N && window.I18N[437]){
+            var tok1 = window.I18N[437];
+            var tok2 = window.I18N[438];
         }
         tokenMessage = tok1.replace("%s", "<a href='javascript:document.location.reload()' style='text-decoration: underline;'>"+tok2+"</a>");
 
@@ -168,10 +168,10 @@ Class.create("Connection", {
 	 * @param onLoadedCode Function Callback
 	 */
 	loadLibrary : function(fileName, onLoadedCode){
-        if(window.bootstrap && window.bootstrap.parameters.get("ajxpVersion") && fileName.indexOf("?")==-1){
-            fileName += "?v="+window.bootstrap.parameters.get("ajxpVersion");
-        }
-        var path = (this._libUrl?this._libUrl+'/'+fileName: fileName);
+		if(window.bootstrap && window.bootstrap.parameters.get("version") && fileName.indexOf("?")==-1){
+				fileName += "?v="+window.bootstrap.parameters.get("version");
+		}
+		var path = (this._libUrl ? this._libUrl +'/'+ fileName : fileName);
 		new Ajax.Request(path,
 		{
 			method: 'get',

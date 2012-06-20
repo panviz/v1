@@ -31,4 +31,4 @@ Class.create("Splash", Action, {
 			null, 
 			true, true);		
 	}
-}
+})

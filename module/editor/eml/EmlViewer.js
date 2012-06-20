@@ -88,7 +88,7 @@ Class.create("EmlViewer", AbstractEditor, {
 			if(!user.canWrite()){
 				var nodeProvider = new RemoteNodeProvider();
 				nodeProvider.initProvider({tmp_repository_id: firstKey});
-				var rootNode = new AjxpNode("/", false, MessageHash[373], "folder.png", nodeProvider);								
+				var rootNode = new AjxpNode("/", false, I18N[373], "folder.png", nodeProvider);								
 				this.treeSelector.load(rootNode);
 			}else{
 				this.treeSelector.load();								
@@ -97,13 +97,13 @@ Class.create("EmlViewer", AbstractEditor, {
 			reposList.each(function(pair){
 				this.treeSelector.appendFilterValue(pair.key, pair.value);
 			}.bind(this)); 
-			if(user.canWrite()) this.treeSelector.appendFilterValue(activeRepository, "&lt;"+MessageHash[372]+"&gt;", 'top');
+			if(user.canWrite()) this.treeSelector.appendFilterValue(activeRepository, "&lt;"+I18N[372]+"&gt;", 'top');
 			this.treeSelector.setFilterSelectedIndex(0);
 			this.treeSelector.setFilterChangeCallback(function(e){
 				externalRepo = this.filterSelector.getValue();
 				var nodeProvider = new RemoteNodeProvider();
 				nodeProvider.initProvider({tmp_repository_id: externalRepo});
-				this.resetAjxpRootNode(new AjxpNode("/", false, MessageHash[373], "folder.png", nodeProvider));
+				this.resetAjxpRootNode(new AjxpNode("/", false, I18N[373], "folder.png", nodeProvider));
 			});
 		}else{
 			this.treeSelector.load();
@@ -218,7 +218,7 @@ Class.create("EmlViewer", AbstractEditor, {
 		$H(searchedHeaders).each(function(pair){
 			if(pair.value.length){
 				var value = pair.value.join(", ");
-				var label = MessageHash[labels[pair.key]];
+				var label = I18N[labels[pair.key]];
 				hContainer.insert('\
 					<div class="emlHeader">\
 						<div class="emlHeaderLabel">'+label+'</div>\
@@ -272,12 +272,12 @@ Class.create("EmlViewer", AbstractEditor, {
 				
 				var dlBut = new Element("a", {
 								className: "emlAttachmentAction", 
-								title: MessageHash["editor.eml.10"]+attachments[key]});
+								title: I18N["editor.eml.10"]+attachments[key]});
 				dlBut.update(new Element("img", {
 								src: window.ajxpResourcesFolder+'/images/actions/16/download_manager.png',
 								height: 16,
 								width: 16}));
-				var cpBut = new Element("a", {className: "emlAttachmentAction", title: MessageHash["editor.eml.11"]});
+				var cpBut = new Element("a", {className: "emlAttachmentAction", title: I18N["editor.eml.11"]});
 				cpBut.update(new Element("img", {
 					src: window.ajxpResourcesFolder+'/images/actions/16/editcopy.png',
 					height: 16,

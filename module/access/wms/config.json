@@ -117,7 +117,6 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var path;if(window.actionArguments && window.actionArguments.length>0){path = window.actionArguments[0];if(Object.isString(path)){path = new AjxpNode(path,false,getBaseName(path));}}else{userSelection = app.getUserSelection();if(userSelection && userSelection.isUnique() && (userSelection.hasDir() || userSelection.hasMime([\"zip\"]))){path = userSelection.getUniqueNode();}}if(path){app.updateContextData(path);}"
               },
               "serverCallback": {
                 "methodName": "switchAction"
@@ -169,12 +168,10 @@
               "adminOnly": ""
             },
             "subMenu": {
-              "dynamicBuilder": "var context = window.builderContext;context.builderMenuItems = $A([]);var selectedMime = getAjxpMimeType(app.getUserSelection().getUniqueNode());var editors = app.findEditorsForMime(selectedMime);if(editors.length){var index = 0;editors.each(function(el){if(!el.openable) return;context.builderMenuItems.push({name:el.text,alt:el.title,isDefault : (index == 0),image:resolveImageSource(el.icon, '/images/actions/ICON_SIZE', 22),callback:function(e){this.apply([el]);}.bind(context)} );index++;} );}if(!index){context.builderMenuItems.push({name:MessageHash[324],alt:MessageHash[324],image:resolveImageSource('button_cancel.png', '/images/actions/ICON_SIZE', 22),callback:function(e){}} );}"
             },
             "processing": {
               "clientCallback": {
                 "prepareModal": "false",
-                "$t": "var editorData = window.actionArguments[0];if(!editorData){var selectedMime = getAjxpMimeType(app.getUserSelection().getUniqueNode());var editors = app.findEditorsForMime(selectedMime);if(editors.length){editorData = editors[0];}}if(editorData){app.loadEditorResources(editorData.resourcesManager);modal.openEditorDialog(editorData);}"
               },
               "serverCallback": {
                 "methodName": "switchAction"

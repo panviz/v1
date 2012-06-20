@@ -16,78 +16,25 @@ Class.create("List", SelectableElements, {
 	initialize : function($super, oElement, initDefaultDispOrOptions)
 	{
 		$super(null, true);
-		$(oElement).ajxpPaneObject = this;
-		this.htmlElement = $(oElement);
+		$(oElement).paneObject = this;
+		this.element = $(oElement);
 		if(typeof initDefaultDispOrOptions == "string"){
 			this.options = {};
 			this._displayMode = initDefaultDispOrOptions;
 		}else{
 			this.options = initDefaultDispOrOptions;
-            if(this.options.displayMode) this._displayMode = this.options.displayMode;
-            else this._displayMode = 'list';
+			if(this.options.displayMode) this._displayMode = this.options.displayMode;
+			else this._displayMode = 'list';
 		}
-        //this.options.replaceScroller = false;
 
-        var userLoggedObserver = function(){
-			if(!app || !app.user) return;
-			disp = app.user.getPreference("display");
-			if(disp && (disp == 'thumb' || disp == 'list')){
-				if(disp != this._displayMode) this.switchDisplayMode(disp);
-			}
-			this._thumbSize = parseInt(app.user.getPreference("thumb_size"));
-			if(this.slider){
-				this.slider.setValue(this._thumbSize);
-				this.resizeThumbnails();
-			}
-		}.bind(this);
-        this._registerObserver(document, "app:user_logged", userLoggedObserver);
-		
-		
-		var loadObserver = this.contextObserver.bind(this);
 		var loadingObs = this.setOnLoad.bind(this);
 		var loadEndObs = this.removeOnLoad.bind(this);
-        var contextChangedObserver = function(event){
-			var newContext = event.memo;
-			var previous = this.crtContext;
-			if(previous){
-				previous.stopObserving("loaded", loadEndObs);
-				previous.stopObserving("loading", loadingObs);
-			}
-			this.crtContext = newContext;
-			if(this.crtContext.isLoaded()) {
-				this.contextObserver(event);
-			}else{
-				var oThis = this;
-				this.crtContext.observeOnce("loaded", function(){
-					oThis.crtContext = this ;
-					loadObserver();
-				});
-			}
-			this.crtContext.observe("loaded",loadEndObs);
-			this.crtContext.observe("loading",loadingObs);
-
-		}.bind(this);
-        var componentConfigObserver = function(event){
-			if(event.memo.className == "FilesList"){
-				var refresh = this.parseComponentConfig(event.memo.classConfig.get('all'));
-				if(refresh){
-					this.initGUI();
-				}
-			}
-		}.bind(this) ;
-        var selectionChangedObserver = function(event){
-			if(event.memo._selectionSource == null || event.memo._selectionSource == this) return;
-			this.setSelectedNodes(app.getContextHolder().getSelectedNodes());
-		}.bind(this);
-
-		this._registerObserver(document, "app:context_changed", contextChangedObserver );
+		this._registerObserver(document, "app:user_logged", this._onUserLogged.bind(this));
+		this._registerObserver(document, "app:context_changed", this.onContextChanged.bind(this));
 		this._registerObserver(document, "app:context_loading", loadingObs);
-		this._registerObserver(document, "app:component_config_changed", componentConfigObserver);
-		this._registerObserver(document, "app:selection_changed", selectionChangedObserver);
+		this._registerObserver(document, "app:component_config_changed", _onComponentConfig.bind(this));
+		this._registerObserver(document, "app:selection_changed", _onSelectionChanged.bind(this));
 
-		this._thumbSize = 64;
-		this._crtImageIndex = 0;
-	
 		this._pendingFile = null;
 		this.allDraggables = new Array();
 		this.allDroppables = new Array();		
@@ -97,22 +44,25 @@ Class.create("List", SelectableElements, {
 		this.paginationData = null;
 		this.even = true;
 		
-		// Default headersDef
+		// TODO load from config
 		this.hiddenColumns = $A([]);
 		this.columnsDef = $A([]);
-		this.columnsDef.push({messageId: 1,attributeName: 'ajxp_label'});
+		this.columnsDef.push({messageId: 1,attributeName: 'label'});
 		this.columnsDef.push({messageId: 2,attributeName: 'filesize'});
 		this.columnsDef.push({messageId: 3,attributeName: 'mimestring'});
-		this.columnsDef.push({messageId: 4,attributeName: 'ajxp_modiftime'});
+		this.columnsDef.push({messageId: 4,attributeName: 'modiftime'});
 		// Associated Defaults
 		this.defaultSortTypes = ["StringDirFile", "NumberKo", "String", "MyDate"];
 		this._oSortTypes = this.defaultSortTypes;
+		this._thumbSize = 64;
+		this._crtImageIndex = 0;
+	
 		
 		this.initGUI();
-        var keydownObserver = this.keydown.bind(this);
-        var repoSwitchObserver = this.setOnLoad.bind(this);
+		var keydownObserver = this.keydown.bind(this);
+		var repoSwitchObserver = this.setOnLoad.bind(this);
 		this._registerObserver(document, "keydown", keydownObserver);
-        this._registerObserver(document, "app:trigger_repository_switch", repoSwitchObserver);
+		this._registerObserver(document, "app:trigger_repository_switch", repoSwitchObserver);
 	},
 
     _registerObserver : function(object, eventName, handler){
@@ -139,7 +89,7 @@ Class.create("List", SelectableElements, {
 	 * Implementation of the IWidget methods
 	 */
 	getDomNode : function(){
-		return this.htmlElement;
+		return this.element;
 	},
 	
 	/**
@@ -147,10 +97,10 @@ Class.create("List", SelectableElements, {
 	 */
 	destroy : function(){
         this._clearObservers();
-        if(window[this.htmlElement.id]){
-            delete window[this.htmlElement.id];
+        if(window[this.element.id]){
+            delete window[this.element.id];
         }
-		this.htmlElement = null;
+		this.element = null;
 	},
 	
 	
@@ -208,16 +158,6 @@ Class.create("List", SelectableElements, {
 			}
 		}
 		
-	},
-	
-	/**
-	 * Handler for contextChange event 
-	 */
-	contextObserver : function(e){
-		if(!this.crtContext) return;
-		//console.log('FILES LIST : FILL');
-		this.fill(this.crtContext);
-		this.removeOnLoad();
 	},
 	
 	extractComponentConfig : function(){
@@ -338,8 +278,8 @@ Class.create("List", SelectableElements, {
 			src: 'view_icon.png',
 			text_id: 150,
 			title_id: 151,
-			text: MessageHash[150],
-			title: MessageHash[151],
+			text: I18N[150],
+			title: I18N[151],
 			hasAccessKey: false,
 			subMenu: true,
 			subMenuUpdateImage: true,
@@ -429,16 +369,16 @@ Class.create("List", SelectableElements, {
 				if(column.fixedWidth){
 					userWidth = column.fixedWidth;
 				}
-				var label = (column.messageId?MessageHash[column.messageId]: column.messageString);
+				var label = (column.messageId?I18N[column.messageId]: column.messageString);
 				var leftPadding = 0;
-				if(column.attributeName == "ajxp_label"){// Will contain an icon
+				if(column.attributeName == "label"){// Will contain an icon
 					leftPadding = 24;
 				}
 				headerData.push({label: label, size: userWidth, leftPadding: leftPadding});				
 			}
 			buffer = '<div id="selectable_div_header" class="sort-table"></div>';
 			buffer = buffer + '<div id="table_rows_container"><table id="selectable_div" class="sort-table" width="100%" cellspacing="0"><tbody></tbody></table></div>';
-			this.htmlElement.update(buffer);
+			this.element.update(buffer);
             $('table_rows_container').setStyle((this.gridStyle!="grid") ? {overflowX: "hidden", overflowY: (this.options.replaceScroller ? "hidden" : "auto")} : {overflow: "auto"});
 			attachMobileScroll("table_rows_container", "vertical");
             var scrollElement = $("table_rows_container");
@@ -486,7 +426,7 @@ Class.create("List", SelectableElements, {
 			this.disableTextSelection($('selectable_div_header'));
 			this.disableTextSelection($('table_rows_container'));
 			this.observer = function(e){
-				fitHeightToBottom($('table_rows_container'), this.htmlElement);
+				fitHeightToBottom($('table_rows_container'), this.element);
 				if(Prototype.Browser.IE){
 					this._headerResizer.resize($('table_rows_container').getWidth());
 				}else{
@@ -510,9 +450,9 @@ Class.create("List", SelectableElements, {
 			  	this.columnsDef.each(function(column){
 					var isVisible = !this.hiddenColumns.include(column.attributeName);
 					items.push({
-						name: (column.messageId?MessageHash[column.messageId]: column.messageString),
-						alt: (column.messageId?MessageHash[column.messageId]: column.messageString),
-						image: resolveImageSource((isVisible ? "column-visible" : "transp")+".png", '/images/actions/ICON_SIZE', 16),
+						name: (column.messageId?I18N[column.messageId]: column.messageString),
+						alt: (column.messageId?I18N[column.messageId]: column.messageString),
+						image: resolveImageSource((isVisible ? "column-visible" : "transp")+".png", '/image/action/ICON_SIZE', 16),
 						isDefault: false,
 						callback: function(e){this.setColumnVisible(column.attributeName, !isVisible);}.bind(this)
 					});
@@ -528,16 +468,16 @@ Class.create("List", SelectableElements, {
 				this.headerMenu.destroy();
 				delete this.headerMenu;
 			}
-			var buffer = '<div class="panelHeader"><div style="float:right; padding-right:5px; font-size:1px; height:16px;"><input type="image" height="16" width="16" src="'+ajxpResourcesFolder+'/images/actions/16/zoom-in.png" id="slider-input-1" style="border:0px; width:16px; height:16px; margin-top:0px; padding:0px;" value="64"/></div>'+MessageHash[126]+'</div>';
+			var buffer = '<div class="panelHeader"><div style="float:right; padding-right:5px; font-size:1px; height:16px;"><input type="image" height="16" width="16" src="'+resourcesFolder+'/image/action/16/zoom-in.png" id="slider-input-1" style="border:0px; width:16px; height:16px; margin-top:0px; padding:0px;" value="64"/></div>'+I18N[126]+'</div>';
 			buffer += '<div id="selectable_div" style="overflow:auto; padding:2px 5px;">';
-			this.htmlElement.update(buffer);
+			this.element.update(buffer);
 			attachMobileScroll("selectable_div", "vertical");
 			if(this.paginationData && parseInt(this.paginationData.get('total')) > 1 ){				
 				$('selectable_div').insert({before: this.createPaginator()});
 			}
             var scrollElement = $("selectable_div");
 			this.observer = function(e){
-				fitHeightToBottom($('selectable_div'), this.htmlElement);
+				fitHeightToBottom($('selectable_div'), this.element);
 			}.bind(this);
 			this.observe("resize", this.observer);
 			
@@ -605,7 +545,7 @@ Class.create("List", SelectableElements, {
 		var total = parseInt(this.paginationData.get('total'));
 		var div = new Element('div').addClassName("paginator");
 		var currentInput = new Element('input', {value: current, className: 'paginatorInput'});
-		div.update(MessageHash[331]);
+		div.update(I18N[331]);
 		div.insert(currentInput);
 		div.insert('/'+total);
 		if(current>1){
@@ -628,7 +568,7 @@ Class.create("List", SelectableElements, {
 				var new_page = parseInt(currentInput.getValue());
 				if(new_page == current) return; 
 				if(new_page < 1 || new_page > total){
-					app.displayMessage('ERROR', MessageHash[335] +' '+ total);
+					app.displayMessage('ERROR', I18N[335] +' '+ total);
 					currentInput.setValue(current);
 					return;
 				}
@@ -693,7 +633,7 @@ Class.create("List", SelectableElements, {
     			var expr = this.options.fitMarginBottom;
     			try{marginBottom = parseInt(eval(expr));}catch(e){}
     		}
-    		fitHeightToBottom(this.htmlElement, (this.options.fitParent ? $(this.options.fitParent) : null), expr);
+    		fitHeightToBottom(this.element, (this.options.fitParent ? $(this.options.fitParent) : null), expr);
     	}		
     	if($('table_rows_container') && Prototype.Browser.IE && this.gridStyle == "file"){
     		$('table_rows_container').setStyle({width: '100%'});
@@ -708,7 +648,7 @@ Class.create("List", SelectableElements, {
         var clickObserver = function(){
 			if(app) app.focusOn(this);
 		}.bind(this) ;
-        this._registerObserver(this.htmlElement, "click", clickObserver);
+        this._registerObserver(this.element, "click", clickObserver);
 	},
 	
 	/**
@@ -769,10 +709,10 @@ Class.create("List", SelectableElements, {
 		{
 			if(this.protoMenu) this.protoMenu.addElements('#table_rows_container');
 			if(this._headerResizer){
-				this._headerResizer.resize(this.htmlElement.getWidth()-2);
+				this._headerResizer.resize(this.element.getWidth()-2);
 			}
 		}
-		if(this.protoMenu)this.protoMenu.addElements('.ajxp_draggable');
+		if(this.protoMenu)this.protoMenu.addElements('.draggable');
 		var allItems = this.getItems();
 		for(var i=0; i<allItems.length;i++)
 		{
@@ -792,11 +732,11 @@ Class.create("List", SelectableElements, {
 			window.loader = new Image();
 			window.loader.editorClass = oImageToLoad.editorClass;
             window.loader.onerror = this.loadNextImage.bind(this);
-			window.loader.src = window.loader.editorClass.prototype.getThumbnailSource(oImageToLoad.ajxpNode);
+			window.loader.src = window.loader.editorClass.prototype.getThumbnailSource(oImageToLoad.Item);
 			var loader = function(){
 				var img = oImageToLoad.rowObject.IMAGE_ELEMENT || $(oImageToLoad.index);
 				if(img == null || window.loader == null) return;
-				var newImg = window.loader.editorClass.prototype.getPreview(oImageToLoad.ajxpNode);
+				var newImg = window.loader.editorClass.prototype.getPreview(oImageToLoad.Item);
 				newImg.setAttribute("data-is_loaded", "true");
 				img.parentNode.replaceChild(newImg, img);
 				oImageToLoad.rowObject.IMAGE_ELEMENT = newImg;
@@ -836,7 +776,7 @@ Class.create("List", SelectableElements, {
 	fill : function(contextNode){
 		this.imagesHash = new Hash();
 		if(this.protoMenu){
-			this.protoMenu.removeElements('.ajxp_draggable');
+			this.protoMenu.removeElements('.draggable');
 			this.protoMenu.removeElements('#selectable_div');
 		}
 		for(var i = 0; i< AllDroppables.length;i++){
@@ -910,12 +850,12 @@ Class.create("List", SelectableElements, {
 			if (child.isHidden()){continue}
 			var newItem;
 			if(this._displayMode == "list") {
-				newItem = this.ajxpNodeToTableRow(child);
+				newItem = this.itemToTableRow(child);
 			}else {
-				newItem = this.ajxpNodeToDiv(child);
+				newItem = this.itemToDiv(child);
 			}
-			newItem.ajxpNode = child;
-            newItem.addClassName("ajxpNodeProvider");
+			newItem.Item = child;
+            newItem.addClassName("ItemProvider");
 		}	
 		this.initRows();
 		
@@ -960,7 +900,8 @@ Class.create("List", SelectableElements, {
 	 */
 	switchCurrentLabelToEdition : function(callback){
 		var sel = this.getSelectedItems();
-		var item = sel[0]; // We assume this action was triggered with a single-selection active.
+		// assume this action was triggered with a single-selection active.
+		var item = sel[0];
 		var offset = {top: 0,left: 0};
 		var scrollTop = 0;
 		if(this._displayMode == "list"){
@@ -978,7 +919,7 @@ Class.create("List", SelectableElements, {
 		}
 		var pos = posSpan.cumulativeOffset();
 		var text = span.innerHTML;
-		var edit = new Element('input', {value: item.ajxpNode.getLabel('text'), id: 'editbox'}).setStyle({
+		var edit = new Element('input', {value: item.Item.getLabel('text'), id: 'editbox'}).setStyle({
 			zIndex: 5000, 
 			position: 'absolute',
 			marginLeft: '0px',
@@ -1014,7 +955,7 @@ Class.create("List", SelectableElements, {
 			var newValue = edit.getValue();
 			hideLightBox();
 			modal.close();			
-			callback(item.ajxpNode, newValue);
+			callback(item.Item, newValue);
 		};
 		edit.observe("keydown", function(event){
 			if(event.keyCode == Event.KEY_RETURN){				
@@ -1059,18 +1000,18 @@ Class.create("List", SelectableElements, {
 	
 	/**
 	 * Populate a node as a TR element
-	 * @param ajxpNode Node
+	 * @param Item Node
 	 * @returns HTMLElement
 	 */
-	ajxpNodeToTableRow : function(ajxpNode){		
-		var metaData = ajxpNode.getMetadata();
+	itemToTableRow : function(Item){		
+		var metaData = Item.getMetadata();
 		var newRow = new Element("tr");
-		var tBody = this.parsingCache.get('tBody') || $(this._htmlElement).select("tbody")[0];
+		var tBody = this.parsingCache.get('tBody') || $(this.element).select("tbody")[0];
 		this.parsingCache.set('tBody', tBody);
 		metaData.each(function(pair){
 			//newRow.setAttribute(pair.key, pair.value);
 			if(Prototype.Browser.IE && pair.key == "ID"){
-				newRow.setAttribute("ajxp_sql_"+pair.key, pair.value);
+				newRow.setAttribute("sql_"+pair.key, pair.value);
 			}			
 		});
 		var attributeList;
@@ -1092,34 +1033,34 @@ Class.create("List", SelectableElements, {
 			if(this._fullview){
 				fullview = ' full';
 			}
-			if(s == "ajxp_label")
+			if(s == "label")
 			{
                 var textLabel = new Element("span", {
-                    id          : 'ajxp_label',
+                    id          : 'label',
                     className   : 'text_label'+fullview
                 }).update(metaData.get('text'));
 
                 var backgroundPosition = '4px 2px';
-                var backgroundImage = 'url("'+resolveImageSource(metaData.get('icon'), "/images/mimes/ICON_SIZE", 16)+'")';
+                var backgroundImage = 'url("'+resolveImageSource(metaData.get('icon'), "/image/mimes/ICON_SIZE", 16)+'")';
                 if(metaData.get('overlay_icon') && Modernizr.multiplebgs){
                     var ovIcs = metaData.get('overlay_icon').split(',');
                     switch(ovIcs.length){
                         case 1:
                             backgroundPosition = '14px 11px, 4px 2px';
-                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/images/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/images/mimes/ICON_SIZE", 16)+'")';
+                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/image/mimes/ICON_SIZE", 16)+'")';
                         break;
                         case 2:
                             backgroundPosition = '2px 11px, 14px 11px, 4px 2px';
-                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/images/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[1], "/images/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/images/mimes/ICON_SIZE", 16)+'")';
+                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[1], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/image/mimes/ICON_SIZE", 16)+'")';
                         break;
                         case 3:
                             backgroundPosition = '14px 2px, 2px 11px, 14px 11px, 4px 2px';
-                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/images/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[1], "/images/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[2], "/images/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/images/mimes/ICON_SIZE", 16)+'")';
+                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[1], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[2], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/image/mimes/ICON_SIZE", 16)+'")';
                         break;
                         case 4:
                         default:
                             backgroundPosition = '2px 2px, 14px 2px, 2px 11px, 14px 11px, 4px 2px';
-                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/images/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[1], "/images/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[2], "/images/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[3], "/images/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/images/mimes/ICON_SIZE", 16)+'")';
+                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[1], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[2], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[3], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/image/mimes/ICON_SIZE", 16)+'")';
                         break;
                     }
                 }
@@ -1135,12 +1076,12 @@ Class.create("List", SelectableElements, {
 					style: "cursor:default; display:block;"
 				}).update(textLabel);
 
-				innerSpan.ajxpNode = ajxpNode; // For draggable
+				innerSpan.Item = Item; // For draggable
 				tableCell.insert(innerSpan);
 				
 				// Defer Drag'n'drop assignation for performances
 				window.setTimeout(function(){
-					if(ajxpNode.getMime() != "ajxp_recycle"){
+					if(Item.getMime() != "recycle"){
 						var newDrag = new Draggable(
 							innerSpan, 
 							{
@@ -1154,16 +1095,16 @@ Class.create("List", SelectableElements, {
 						);							
 						if(this.protoMenu) this.protoMenu.addElements(innerSpan);						
 					}
-					if(!ajxpNode.isLeaf())
+					if(!Item.isLeaf())
 					{
 						Droppables.add(innerSpan);
 					}
 				}.bind(this), 500);
 				
-			}else if(s=="ajxp_modiftime"){
+			}else if(s=="modiftime"){
 				var date = new Date();
 				date.setTime(parseInt(metaData.get(s))*1000);
-				newRow.ajxp_modiftime = date;
+				newRow.modiftime = date;
 				tableCell.update('<span class="text_label'+fullview+'">' + formatDate(date) + '</span>');
 			}
 			else
@@ -1188,7 +1129,7 @@ Class.create("List", SelectableElements, {
 			newRow.appendChild(tableCell);
 			if(attributeList.get(s).modifier){
 				var modifier = eval(attributeList.get(s).modifier);
-				modifier(tableCell, ajxpNode, 'row');
+				modifier(tableCell, Item, 'row');
 			}
 		}
         // test hidden modifiers
@@ -1209,7 +1150,7 @@ Class.create("List", SelectableElements, {
             this.parsingCache.set("hiddenModifiers", hiddenModifiers);
         }
         hiddenModifiers.each(function(mod){
-            mod(null,ajxpNode,'row', newRow);
+            mod(null,Item,'row', newRow);
         });
 		tBody.appendChild(newRow);
 		if(this.even){
@@ -1221,17 +1162,17 @@ Class.create("List", SelectableElements, {
 	
 	/**
 	 * Populates a node as a thumbnail div
-	 * @param ajxpNode Node
+	 * @param Item Node
 	 * @returns HTMLElement
 	 */
-	ajxpNodeToDiv : function(ajxpNode){
+	itemToDiv : function(Item){
 		var newRow = new Element('div', {className: "thumbnail_selectable_cell"});
-		var metadata = ajxpNode.getMetadata();
+		var metadata = Item.getMetadata();
 				
 		var innerSpan = new Element('span', {style: "cursor:default;"});
-		var editors = app.findEditorsForMime((ajxpNode.isLeaf() ? ajxpNode.getMime() : "mime_folder"), true);
-		var textNode = ajxpNode.getLabel();
-		var img = View.prototype.getPreview(ajxpNode);
+		var editors = app.findEditorsForMime((Item.isLeaf() ? Item.getMime() : "mime_folder"), true);
+		var textNode = Item.getLabel();
+		var img = View.prototype.getPreview(Item);
 		var label = new Element('div', {
 			className: "thumbLabel",
 			title: textNode
@@ -1242,16 +1183,16 @@ Class.create("List", SelectableElements, {
 		newRow.insert({"bottom": innerSpan});
 		newRow.IMAGE_ELEMENT = img;
 		newRow.LABEL_ELEMENT = label;
-        if(ajxpNode.getMetadata().get("overlay_icon")){
+        if(Item.getMetadata().get("overlay_icon")){
             var ovDiv = new Element("div");
-            var ovIcs = $A(ajxpNode.getMetadata().get("overlay_icon").split(","));
+            var ovIcs = $A(Item.getMetadata().get("overlay_icon").split(","));
             var bgPos = $A();
             var bgImg = $A();
             var bgRep = $A();
             var index = 0;
             ovIcs.each(function(ic){
                 bgPos.push('0px '+((index*12)+(index>0 ? 2 : 0))+'px');
-                bgImg.push("url('"+resolveImageSource(ovIcs[index], "/images/overlays/ICON_SIZE", 12)+"')");
+                bgImg.push("url('"+resolveImageSource(ovIcs[index], "/image/overlays/ICON_SIZE", 12)+"')");
                 bgRep.push('no-repeat');
                 index++;
             });
@@ -1270,7 +1211,7 @@ Class.create("List", SelectableElements, {
             innerSpan.insert({after: ovDiv});
         }
 
-		this._htmlElement.insert(newRow);
+		this.element.insert(newRow);
 			
 		var modifiers ;
 		if(!this.parsingCache.get('modifiers')){
@@ -1287,7 +1228,7 @@ Class.create("List", SelectableElements, {
 			modifiers = this.parsingCache.get('modifiers');
 		}
 		modifiers.each(function(el){
-			el(newRow, ajxpNode, 'thumb');
+			el(newRow, Item, 'thumb');
 		});
 
 		if(editors && editors.length)
@@ -1295,15 +1236,15 @@ Class.create("List", SelectableElements, {
 			this._crtImageIndex ++;
 			var imgIndex = this._crtImageIndex;
 			img.writeAttribute("data-is_loaded", "false");
-			img.writeAttribute("id", "ajxp_image_"+imgIndex);
+			img.writeAttribute("id", "image_"+imgIndex);
 			var crtIndex = this._crtImageIndex;
 			
 			app.loadEditorResources(editors[0].resourcesManager);
 			var editorClass = Class.getByName(editors[0].editorClass);
 			if(editorClass){
 				var oImageToLoad = {
-					index: "ajxp_image_"+crtIndex,
-					ajxpNode: ajxpNode,
+					index: "image_"+crtIndex,
+					Item: Item,
 					editorClass: editorClass, 
 					rowObject: newRow
 				};
@@ -1312,7 +1253,7 @@ Class.create("List", SelectableElements, {
 		}			
 		
 		// Defer Drag'n'drop assignation for performances
-		if(!ajxpNode.isRecycle()){
+		if(!Item.isRecycle()){
 			window.setTimeout(function(){
 				var newDrag = new Draggable(newRow, {
 					revert: true,
@@ -1322,40 +1263,40 @@ Class.create("List", SelectableElements, {
 				}, this, 'filesList');
 			}.bind(this), 500);
 		}
-		if(!ajxpNode.isLeaf())
+		if(!Item.isLeaf())
 		{
 			Droppables.add(newRow);
 		}		
 		return newRow;
 	},
 		
-	partSizeCellRenderer : function(element, ajxpNode, type){
+	partSizeCellRenderer : function(element, Item, type){
         if(!element) return;
-		element.setAttribute("data-sorter_value", ajxpNode.getMetadata().get("bytesize"));
-		if(!ajxpNode.getMetadata().get("target_bytesize")){
+		element.setAttribute("data-sorter_value", Item.getMetadata().get("bytesize"));
+		if(!Item.getMetadata().get("target_bytesize")){
 			return;
 		}
-		var percent = parseInt( parseInt(ajxpNode.getMetadata().get("bytesize")) / parseInt(ajxpNode.getMetadata().get("target_bytesize")) * 100  );
-		var uuid = 'ajxp_'+(new Date()).getTime();		
+		var percent = parseInt( parseInt(Item.getMetadata().get("bytesize")) / parseInt(Item.getMetadata().get("target_bytesize")) * 100  );
+		var uuid = (new Date()).getTime();		
 		var div = new Element('div', {style: 'padding-left:3px;', className: 'text_label'}).update('<span class="percent_text" style="line-height:19px; padding-left:5px;">'+percent+'%</span>');
 		var span = new Element('span', {id: uuid}).update('0%');		
 		var options = {
 			animate		: true,										// Animate the progress? - default: true
 			showText	: false,									// show text with percentage in next to the progressbar? - default : true
 			width		: 80,										// Width of the progressbar - don't forget to adjust your image too!!!
-			boxImage	: window.ajxpResourcesFolder+'/images/progress_box_80.gif',			// boxImage : image around the progress bar
-			barImage	: window.ajxpResourcesFolder+'/images/progress_bar_80.gif',	// Image to use in the progressbar. Can be an array of images too.
+			boxImage	: window.resourcesFolder+'/image/progress_box_80.gif',			// boxImage : image around the progress bar
+			barImage	: window.resourcesFolder+'/image/progress_bar_80.gif',	// Image to use in the progressbar. Can be an array of images too.
 			height		: 11										// Height of the progressbar - don't forget to adjust your image too!!!
 		};
 		element.update(div);
 		div.insert({top: span});
-		if(ajxpNode.getMetadata().get("process_stoppable")){
+		if(Item.getMetadata().get("process_stoppable")){
 			var stopButton = new Element('a', {className: 'pg_cancel_button'}).update("X");
 			stopButton.observe("click", function(){
 				var conn = new Connection();
 				conn.setParameters({
 					action: 'stop_dl',
-					file : ajxpNode.getPath(),
+					file : Item.getPath(),
 					dir : app.getContextNode().getPath()
 				});
 				conn.onComplete = function(transport){
@@ -1371,7 +1312,7 @@ Class.create("List", SelectableElements, {
 			});
 			div.insert({bottom: stopButton});			
 		}
-		span.setAttribute('data-target_size', ajxpNode.getMetadata().get("target_bytesize"));
+		span.setAttribute('data-target_size', Item.getMetadata().get("target_bytesize"));
 		window.setTimeout(function(){
 			span.pgBar = new JS_BRAMUS.jsProgressBar(span, percent, options);
 			var pe = new PeriodicalExecuter(function(){
@@ -1382,7 +1323,7 @@ Class.create("List", SelectableElements, {
 				var conn = new Connection();
 				conn.setParameters({
 					action: 'update_dl_data',
-					file : ajxpNode.getPath()
+					file : Item.getPath()
 				});
 				conn.onComplete = function(transport){
 					if(transport.responseText == 'stop'){
@@ -1409,9 +1350,9 @@ Class.create("List", SelectableElements, {
 		var defaultMargin = 5;
 		var elList;
 		if(one_element) elList = [one_element]; 
-		else elList = this._htmlElement.select('div.thumbnail_selectable_cell');
+		else elList = this._element.select('div.thumbnail_selectable_cell');
 		elList.each(function(element){
-			var node = element.ajxpNode;
+			var node = element.Item;
 			var image_element = element.IMAGE_ELEMENT || element.select('img')[0];		
 			var label_element = element.LABEL_ELEMENT || element.select('.thumbLabel')[0];
 			var tSize = this._thumbSize;
@@ -1470,8 +1411,8 @@ Class.create("List", SelectableElements, {
 	removeCurrentLines : function(skipFireChange){
         this.notify("rows:willClear");
 		var rows;		
-		if(this._displayMode == "list") rows = $(this._htmlElement).select('tr');
-		else if(this._displayMode == "thumb") rows = $(this._htmlElement).select('div.thumbnail_selectable_cell');
+		if(this._displayMode == "list") rows = $(this.element).select('tr');
+		else if(this._displayMode == "thumb") rows = $(this.element).select('div.thumbnail_selectable_cell');
 		for(i=0; i<rows.length;i++)
 		{
 			try{
@@ -1498,11 +1439,11 @@ Class.create("List", SelectableElements, {
 	 */
 	setOnLoad : function()	{
 		if(this.loading) return;
-		addLightboxMarkupToElement(this.htmlElement);
+		addLightboxMarkupToElement(this.element);
 		var img = new Element('img', {
-			src : ajxpResourcesFolder+'/images/loadingImage.gif'
+			src : resourcesFolder+'/image/loadingImage.gif'
 		});
-		var overlay = this.htmlElement.down("#element_overlay");
+		var overlay = this.element.down("#element_overlay");
 		overlay.insert(img);
 		img.setStyle({marginTop : Math.max(0, (overlay.getHeight() - img.getHeight())/2) + "px"});
 		this.loading = true;
@@ -1511,7 +1452,7 @@ Class.create("List", SelectableElements, {
 	 * Remove the loading image
 	 */
 	removeOnLoad : function(){
-		removeLightboxFromElement(this.htmlElement);
+		removeLightboxFromElement(this.element);
 		this.loading = false;
 	},
 	
@@ -1530,7 +1471,7 @@ Class.create("List", SelectableElements, {
 	 */
 	fireDblClick : function (e) 
 	{
-		if(app.getContextNode().getMime() == "ajxp_recycle")
+		if(app.getContextNode().getMime() == "recycle")
 		{
 			return; // DO NOTHING IN RECYCLE BIN
 		}
@@ -1539,7 +1480,7 @@ Class.create("List", SelectableElements, {
 		{
 			return; // Prevent from double clicking header!
 		}
-		var selNode = selRaw[0].ajxpNode;
+		var selNode = selRaw[0].Item;
 		if(selNode.isLeaf())
 		{
 			app.getActionBar().fireDefaultAction("file");
@@ -1565,7 +1506,7 @@ Class.create("List", SelectableElements, {
 		var allItems = this.getItems();
 		for(var i=0; i<allItems.length; i++)
 		{
-			if(getBaseName(allItems[i].ajxpNode.getPath()) == getBaseName(fileName))
+			if(getBaseName(allItems[i].Item.getPath()) == getBaseName(fileName))
 			{
 				this.setItemSelected(allItems[i], true);
 			}
@@ -1804,12 +1745,12 @@ Class.create("List", SelectableElements, {
 		{
 			return node != null && ( node.tagName == "TR" || node.tagName == "tr") &&
 				( node.parentNode.tagName == "TBODY" || node.parentNode.tagName == "tbody" )&&
-				node.parentNode.parentNode == this._htmlElement;
+				node.parentNode.parentNode == this.element;
 		}
 		if(this._displayMode == "thumb")
 		{
 			return node != null && ( node.tagName == "DIV" || node.tagName == "div") && 
-				node.parentNode == this._htmlElement;
+				node.parentNode == this.element;
 		}
 	},
 	
@@ -1821,13 +1762,13 @@ Class.create("List", SelectableElements, {
 	getItems : function () {
 		if(this._displayMode == "list")
 		{
-			return this._htmlElement.rows;
+			return this.element.rows;
 		}
 		if(this._displayMode == "thumb")
 		{
 			var tmp = [];
 			var j = 0;
-			var cs = this._htmlElement.childNodes;
+			var cs = this.element.childNodes;
 			var l = cs.length;
 			for (var i = 0; i < l; i++) {
 				if (cs[i].nodeType == 1)
@@ -1849,7 +1790,7 @@ Class.create("List", SelectableElements, {
 		if(this._displayMode == "thumb")
 		{
 			var j = 0;
-			var cs = this._htmlElement.childNodes;
+			var cs = this.element.childNodes;
 			var l = cs.length;
 			for (var i = 0; i < l; i++) {
 				if (cs[i] == el)
@@ -1868,12 +1809,12 @@ Class.create("List", SelectableElements, {
 	getItem : function (nIndex) {
 		if(this._displayMode == "list")
 		{
-			return this._htmlElement.rows[nIndex];
+			return this.element.rows[nIndex];
 		}
 		if(this._displayMode == "thumb")
 		{
 			var j = 0;
-			var cs = this._htmlElement.childNodes;
+			var cs = this.element.childNodes;
 			var l = cs.length;
 			for (var i = 0; i < l; i++) {
 				if (cs[i].nodeType == 1) {
@@ -1884,6 +1825,58 @@ Class.create("List", SelectableElements, {
 			}
 			return null;
 		}
-	}
+	},
 /* End Indexable Collection Interface */
+
+	_onUserLogged : function(){
+		if(!app || !app.user) return;
+		disp = app.user.getPreference("display");
+		if(disp && (disp == 'thumb' || disp == 'list')){
+			if(disp != this._displayMode) this.switchDisplayMode(disp);
+		}
+		this._thumbSize = parseInt(app.user.getPreference("thumb_size"));
+		if(this.slider){
+			this.slider.setValue(this._thumbSize);
+			this.resizeThumbnails();
+		}
+	},
+
+	_onContextChanged : function(event){
+		var newContext = event.memo;
+		var previous = this.crtContext;
+		if(previous){
+			previous.stopObserving("loaded", loadEndObs);
+			previous.stopObserving("loading", loadingObs);
+		}
+		this.crtContext = newContext;
+		if(this.crtContext.isLoaded()) {
+			this.fill(this.crtContext);
+			this.removeOnLoad();
+		}else{
+			var oThis = this;
+			this.crtContext.observeOnce("loaded", function(){
+				oThis.crtContext = this ;
+				this.fill(this.crtContext);
+				this.removeOnLoad();
+			});
+		}
+		this.crtContext.observe("loaded",loadEndObs);
+		this.crtContext.observe("loading",loadingObs);
+	},
+
+	_onSelectionChanged : function(event){
+			if(event.memo._selectionSource == null || event.memo._selectionSource == this) return;
+			this.setSelectedNodes(app.getContextHolder().getSelectedNodes());
+	},
+
+	//TODO what essential data is in component config?
+	_onComponentConfig : function(event){
+		if(event.memo.className == "List"){
+			var refresh = this.parseComponentConfig(event.memo.classConfig.get('all'));
+			if(refresh){
+				this.initGUI();
+			}
+		}
+	}
+	
 });

@@ -14,7 +14,7 @@ Class.create("LocationBar", {
 	 */
 	initialize : function(oElement, options){
 		this.element = oElement;
-		this.element.ajxpPaneObject = this;
+		this.element.paneObject = this;
 		this.realPath = '/';
         this.options = options || {};
 		this.createGui();
@@ -161,42 +161,42 @@ Class.create("LocationBar", {
 		}else{
 			var url = this.currentPath.value.stripScripts();
 			if(url == '') return false;	
-			var node = new Node(url, false);
+			var item = new Item(url, false);
 			var parts = url.split("##");
 			if(parts.length == 2){
 				var data = new Hash();
 				data.set("new_page", parts[1]);
 				url = parts[0];
-				node = new Node(url);
-				node.getMetadata().set("paginationData", data);
+				item = new Item(url);
+				item.getMetadata().set("paginationData", data);
 			}
 			// Manually entered, stat path before calling
 			if(!app.pathExists(url)){
 				modal.displayMessage('ERROR','Cannot find : ' + url);
 				this.currentPath.setValue(this._beforeModified);
 			}else{
-				app.actionBar.fireDefaultAction("dir", node);
+				app.actionBar.fireDefaultAction("dir", item);
 			}
 		}
 		return false;
 	},
 	/**
-	 * Observer for node change
-	 * @param newNode Node
+	 * Observer for item change
+	 * @param newItem Item
 	 */
-	updateLocationBar: function (newNode)
+	updateLocationBar: function (newItem)
 	{
-		if(Object.isString(newNode)){
-			newNode = new Node(newNode);
+		if(Object.isString(newItem)){
+			newItem = new Item(newItem);
 		}
-		var newPath = newNode.getPath();
-		if(newNode.getMetadata().get('paginationData')){
-			newPath += "##" + newNode.getMetadata().get('paginationData').get('current');
+		var newPath = newItem.getPath();
+		if(newItem.getMetadata().get('paginationData')){
+			newPath += "##" + newItem.getMetadata().get('paginationData').get('current');
 		}
 		this.realPath = newPath;
 		this.currentLabel = this.realPath;
-		if(getBaseName(newPath) != newNode.getLabel()){
-			this.currentLabel = getRepName(newPath) + '/' + newNode.getLabel();
+		if(getBaseName(newPath) != newItem.getLabel()){
+			this.currentLabel = getRepName(newPath) + '/' + newItem.getLabel();
 		}
 		this.label.update(this.currentLabel);
 		this.currentPath.value = this.realPath;
@@ -208,7 +208,7 @@ Class.create("LocationBar", {
 	 */
 	setModified : function(bool){
 		this._modified = bool;
-		this.gotoButton.setSrc(resolveImageSource((bool ? this._defaultGotoIcon : this._reloadGotoIcon), '/images/actions/ICON_SIZE', 16));
+		this.gotoButton.setSrc(resolveImageSource((bool ? this._defaultGotoIcon : this._reloadGotoIcon), '/image/action/ICON_SIZE', 16));
 		this._beforeModified = this.currentPath.getValue();
 	},
 	/**
@@ -219,8 +219,8 @@ Class.create("LocationBar", {
 			var parentWidth = $(this.options.flexTo).getWidth();
 			var siblingWidth = 0;
 			this.element.siblings().each(function(s){
-				if(s.ajxpPaneObject && s.ajxpPaneObject.getActualWidth){
-					siblingWidth+=s.ajxpPaneObject.getActualWidth();
+				if(s.paneObject && s.paneObject.getActualWidth){
+					siblingWidth+=s.paneObject.getActualWidth();
 				}else{
 					siblingWidth+=s.getWidth();
 				}

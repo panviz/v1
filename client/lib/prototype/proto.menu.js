@@ -21,7 +21,7 @@ Proto.Menu = Class.create({
 			pageOffset: 25,
 			topOffset:0,
 			leftOffset:0,
-			submenuArrow: resourcesFolder+'/images/arrow_right.png',
+			submenuArrow: resourcesFolder+'/image/arrow_right.png',
 			position:'bottom',
 			menuTitle:'',
 			fade: false,

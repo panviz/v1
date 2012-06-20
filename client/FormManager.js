@@ -33,17 +33,17 @@ Class.create("FormManager", {
 		parametersDefinitions.each(function(param){		
 			var label = param.get('label');
 			if(param.get('labelId')){
-				label = MessageHash[param.get('labelId')];
+				label = I18N[param.get('labelId')];
 			}
 			var name = param.get('name');
 			var type = param.get('type');
 			var desc = param.get('description');
 			if(param.get('descriptionId')){
-				desc = MessageHash[param.get('descriptionId')];
+				desc = I18N[param.get('descriptionId')];
 			}
-            var group = param.get('group') || MessageHash[439];
+            var group = param.get('group') || I18N[439];
             if(param.get('groupId')){
-                group = MessageHash[param.get('groupId')];
+                group = I18N[param.get('groupId')];
             }
 			var mandatory = false;
 			if(param.get('mandatory') && param.get('mandatory')=='true') mandatory = true;
@@ -66,8 +66,8 @@ Class.create("FormManager", {
 					if(defaultValue == "true" || defaultValue == "1") selectTrue = true;
 					if(defaultValue == "false" || defaultValue == "0") selectFalse = true;
 				}
-				element = '<input type="radio" ajxp_type="'+type+'" class="SF_box" name="'+name+'" value="true" '+(selectTrue ? 'checked' : '')+''+disabledString+'> '+MessageHash[440];
-				element = element + '<input type="radio" ajxp_type="'+type+'" class="SF_box" name="'+name+'" '+(selectFalse ? 'checked' : '')+' value="false"'+disabledString+'> '+MessageHash[441];
+				element = '<input type="radio" ajxp_type="'+type+'" class="SF_box" name="'+name+'" value="true" '+(selectTrue ? 'checked' : '')+''+disabledString+'> '+I18N[440];
+				element = element + '<input type="radio" ajxp_type="'+type+'" class="SF_box" name="'+name+'" '+(selectFalse ? 'checked' : '')+' value="false"'+disabledString+'> '+I18N[441];
 				element = '<div class="SF_input">'+element+'</div>';
 			}else if(type == 'select' && param.get('choices')){
                 var choices = param.get('choices').split(",");

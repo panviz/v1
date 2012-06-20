@@ -6,29 +6,29 @@ Class.create("InfoPanel", Pane, {
 	/**
 	 * Constructor
 	 * @param $super klass Superclass reference
-	 * @param htmlElement HTMLElement
+	 * @param element HTMLElement
 	 */
-	initialize : function($super, htmlElement, options){
-		$super(htmlElement, options);
-		disableTextSelection(htmlElement);
-        var id = htmlElement.id;
+	initialize : function($super, element, options){
+		$super(element, options);
+		disableTextSelection(element);
+        var id = element.id;
         var container = new Element("div", {className: "panelContent", id: "ip_content_"+id});
         if(options.replaceScroller){
             this.scroller = new Element('div', {id: 'ip_scroller_'+id, className: 'scroller_track'});
             this.scroller.insert(new Element('div', {id: 'ip_scrollbar_handle_'+id, className: 'scroller_handle'}));
-            this.htmlElement.insert(this.scroller);
+            this.element.insert(this.scroller);
             container.setStyle({overflow: "hidden"});
         }
-        this.htmlElement.insert(container);
+        this.element.insert(container);
         if(options.replaceScroller){
             this.scrollbar = new Control.ScrollBar('ip_content_'+id,'ip_scroller_'+id, {fixed_scroll_distance: 50});
         }
-        if(window.ajxpMobile){
+        if(window.mobile){
             attachMobileScroll(container, "vertical");
         }
         
         this.contentContainer = container;
-		this.setContent('<br><br><center><i>'+MessageHash[132]+'</i></center>');
+		this.setContent('<br><br><center><i>'+I18N[132]+'</i></center>');
 		this.mimesTemplates = new Hash();
 		this.registeredMimes = new Hash();
 		
@@ -59,11 +59,11 @@ Class.create("InfoPanel", Pane, {
             this.scrollbar.destroy();
             this.scroller.remove();
         }
-        this.htmlElement.update("");
-        if(window[this.htmlElement.id]){
-            delete window[this.htmlElement.id];
+        this.element.update("");
+        if(window[this.element.id]){
+            delete window[this.element.id];
         }
-		this.htmlElement = null;
+		this.element = null;
 	},
 	/**
 	 * Clear all panels
@@ -87,7 +87,7 @@ Class.create("InfoPanel", Pane, {
 	 * Updates content by finding the right template and applying it.
 	 */
 	update : function(objectOrEvent){
-		if(!this.htmlElement) return;
+		if(!this.element) return;
         if(objectOrEvent.__className && objectOrEvent.__className == "Node"){
             var passedNode = objectOrEvent;
         }
@@ -127,7 +127,7 @@ Class.create("InfoPanel", Pane, {
 			this.evalTemplateForMime("no_selection", null, {
 				filelist_folders_count: folderNumber,
 				filelist_files_count: filesNumber,
-				filelist_totalsize: roundSize(size, (MessageHash ? MessageHash[266] : 'B')),
+				filelist_totalsize: roundSize(size, (I18N ? I18N[266] : 'B')),
 				current_folder: currentRep
 			});
 				try{
@@ -147,7 +147,7 @@ Class.create("InfoPanel", Pane, {
 		}
 		if(!passedNode && !userSelection.isUnique())
 		{
-			this.setContent('<br><br><center><i>'+ userSelection.getFileNames().length + ' '+MessageHash[128]+'</i></center><br><br>');
+			this.setContent('<br><br><center><i>'+ userSelection.getFileNames().length + ' '+I18N[128]+'</i></center><br><br>');
 			this.addActions('multiple');
             if(this.scrollbar) this.scrollbar.recalculateLayout();
 			return;
@@ -181,7 +181,7 @@ Class.create("InfoPanel", Pane, {
 	 * @param sHtml String
 	 */
 	setContent : function(sHtml){
-		if(!this.htmlElement) return;
+		if(!this.element) return;
 		this.contentContainer.update(sHtml);
 	},
 	/**
@@ -189,9 +189,9 @@ Class.create("InfoPanel", Pane, {
 	 * @param show Boolean
 	 */
 	showElement : function(show){
-		if(!this.htmlElement) return;
-		if(show) this.htmlElement.show();
-		else this.htmlElement.hide();
+		if(!this.element) return;
+		if(show) this.element.show();
+		else this.element.hide();
 	},
 	/**
 	 * Resize the panel
@@ -202,8 +202,8 @@ Class.create("InfoPanel", Pane, {
             this.scroller.setStyle({height: parseInt(this.contentContainer.getHeight())+'px'});
             this.scrollbar.recalculateLayout();
         }
-		if(this.htmlElement && this.currentPreviewElement && this.currentPreviewElement.visible()){
-			var squareDim = Math.min(parseInt(this.htmlElement.getWidth()-40));
+		if(this.element && this.currentPreviewElement && this.currentPreviewElement.visible()){
+			var squareDim = Math.min(parseInt(this.element.getWidth()-40));
 			this.currentPreviewElement.resizePreviewElement({width: squareDim, height: squareDim, maxHeight: 150});
 		}
 	},
@@ -214,7 +214,7 @@ Class.create("InfoPanel", Pane, {
 	 * @param tArgs Object
 	 */
 	evalTemplateForMime : function(mimeType, fileNode, tArgs){
-		if(!this.htmlElement) return;
+		if(!this.element) return;
 		if(!this.registeredMimes.get(mimeType)) return;		
 		var registeredTemplates = this.registeredMimes.get(mimeType);
 		for(var i=0;i<registeredTemplates.length;i++){		
@@ -226,7 +226,7 @@ Class.create("InfoPanel", Pane, {
 			if(!tArgs){
 				tArgs = new Object();
 			}
-			var panelWidth = this.htmlElement.getWidth();
+			var panelWidth = this.element.getWidth();
 			var oThis = this;
 			if(fileNode){
 				var metadata = fileNode.getMetadata();			
@@ -256,13 +256,13 @@ Class.create("InfoPanel", Pane, {
 					}
 					else if(attName == 'escaped_filename' && metadata.get('filename')){
 						this[attName] = escape(encodeURIComponent(metadata.get('filename')));					
-					}else if(attName == 'formated_date' && metadata.get('ajxp_modiftime')){
-						var modiftime = metadata.get('ajxp_modiftime');
+					}else if(attName == 'formated_date' && metadata.get('modiftime')){
+						var modiftime = metadata.get('modiftime');
 						if(modiftime instanceof Object){
 							this[attName] = formatDate(modiftime);
 						}else{
 							var date = new Date();
-							date.setTime(parseInt(metadata.get('ajxp_modiftime'))*1000);
+							date.setTime(parseInt(metadata.get('modiftime'))*1000);
 							this[attName] = formatDate(date);
 						}
 					}
@@ -284,7 +284,7 @@ Class.create("InfoPanel", Pane, {
 				}.bind(tArgs));
 			}
 			tMessages.each(function(pair){
-				this[pair.key] = MessageHash[pair.value];
+				this[pair.key] = I18N[pair.value];
 			}.bind(tArgs));
 			var template = new Template(tString);
 			this.contentContainer.insert(template.evaluate(tArgs));
@@ -301,15 +301,15 @@ Class.create("InfoPanel", Pane, {
 	 */
 	addActions : function(selectionType){
         if(this.options.skipActions) return;
-		var actions = app.actionBar.getActionsForWidget("InfoPanel", this.htmlElement.id);
+		var actions = app.actionBar.getActionsForWidget("InfoPanel", this.element.id);
 		if(!actions.length) return;
-		var actionString = '<div class="panelHeader infoPanelGroup">'+MessageHash[5]+'</div><div class="infoPanelActions">';
+		var actionString = '<div class="panelHeader infoPanelGroup">'+I18N[5]+'</div><div class="infoPanelActions">';
 		var count = 0;
 		actions.each(function(action){
 			if(selectionType == 'empty' && action.context.selection) return;
 			if(selectionType == 'multiple' && action.selectionContext.unique) return; 
 			if(selectionType == 'unique' && (!action.context.selection || action.selectionContext.multipleOnly)) return;			
-			actionString += '<a href="" onclick="app.actionBar.fireAction(\''+action.options.name+'\');return false;"><img src="'+resolveImageSource(action.options.src, '/images/actions/ICON_SIZE', 16)+'" width="16" height="16" align="absmiddle" border="0"> '+action.options.title+'</a>';
+			actionString += '<a href="" onclick="app.actionBar.fireAction(\''+action.options.name+'\');return false;"><img src="'+resolveImageSource(action.options.src, '/image/action/ICON_SIZE', 16)+'" width="16" height="16" align="absmiddle" border="0"> '+action.options.title+'</a>';
 			count++;
 		}.bind(this));
 		actionString += '</div>';
@@ -318,12 +318,12 @@ Class.create("InfoPanel", Pane, {
 	},
 	/**
 	 * Use editors extensions to find a preview element for the current node
-	 * @param ajxpNode Node
+	 * @param item Item
 	 * @param getTemplateElement Boolean If true, will return a fake div that can be inserted in template and replaced later
 	 * @returns String
 	 */
-	getPreviewElement : function(ajxpNode, getTemplateElement){
-		var editors = app.findEditorsForMime(ajxpNode.getMime(), true);
+	getPreviewElement : function(item, getTemplateElement){
+		var editors = app.findEditorsForMime(item.getMime(), true);
 		if(editors && editors.length)
 		{
 			app.loadEditorResources(editors[0].resourcesManager);
@@ -332,12 +332,12 @@ Class.create("InfoPanel", Pane, {
 				if(getTemplateElement){
 					return '<div id="preview_rich_fake_element"></div>';
 				}else{
-					var element = editorClass.prototype.getPreview(ajxpNode, true);
+					var element = editorClass.prototype.getPreview(item, true);
 					return element;	
 				}
 			}
 		}
-		return '<img src="' + resolveImageSource(ajxpNode.getIcon(), '/images/mimes/ICON_SIZE',64) + '" height="64" width="64">';
+		return '<img src="' + resolveImageSource(item.getIcon(), '/image/mimes/ICON_SIZE',64) + '" height="64" width="64">';
 	},
 	/**
 	 * Parses config node

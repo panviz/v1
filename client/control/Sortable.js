@@ -177,14 +177,14 @@ Class.create("Sortable", SortableTable, {
 	},
 	
 	/**
-	 * Sort by ajxp_modiftime
+	 * Sort by modiftime
 	 * @param oRow HTMLElement Row
 	 * @param nColumn Integer
 	 * @returns String
 	 */
 	sortTimes : function(oRow, nColumn){
-        if(oRow.ajxpNode && oRow.ajxpNode.getMetadata().get("ajxp_modiftime")){
-            return oRow.ajxpNode.getMetadata().get("ajxp_modiftime");
+        if(oRow.ajxpNode && oRow.ajxpNode.getMetadata().get("modiftime")){
+            return oRow.ajxpNode.getMetadata().get("modiftime");
         }
 	}
 });

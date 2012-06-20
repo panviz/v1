@@ -6,11 +6,11 @@
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
     "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
     "client_settings": {
-      "icon": "plugins/access.remote_fs/remote_fs_icon.png",
+      "icon": "module/gcaccess.remote_fs/remote_fs_icon.png",
       "resources": {
         "i18n": {
           "namespace": "remote_fs_access",
-          "path": "plugins/access.remote_fs/i18n"
+          "path": "module/gcaccess.remote_fs/i18n"
         }
       }
     },
@@ -105,7 +105,7 @@
               },
               {
                 "messageId": "4",
-                "attributeName": "ajxp_modiftime"
+                "attributeName": "modiftime"
               }
             ]
           }
@@ -113,21 +113,21 @@
       },
       "external_file": [
         {
-          "filename": "plugins/access.fs/fsActions.xml",
+          "filename": "module/gcaccess.fs/fsActions.xml",
           "include": "actions/*",
           "exclude": ""
         },
         {
-          "filename": "plugins/access.fs/fsActions.xml",
+          "filename": "module/gcaccess.fs/fsActions.xml",
           "include": "client_configs/*"
         },
         {
-          "filename": "plugins/access.fs/manifest.xml",
+          "filename": "module/gcaccess.fs/manifest.xml",
           "include": "registry_contributions/hooks/*",
           "exclude": ""
         },
         {
-          "filename": "plugins/access.remote_fs/additionalActions.xml",
+          "filename": "module/gcaccess.remote_fs/additionalActions.xml",
           "include": "actions/*"
         }
       ],
@@ -144,7 +144,7 @@
       }
     },
     "class_definition": {
-      "filename": "plugins/access.remote_fs/class.remote_fsAccessDriver.php",
+      "filename": "module/gcaccess.remote_fs/class.remote_fsAccessDriver.php",
       "classname": "remote_fsAccessDriver"
     },
     "dependencies": {
@@ -153,7 +153,7 @@
       }
     },
     "class_stream_wrapper": {
-      "filename": "plugins/access.remote_fs/class.remote_fsAccessWrapper.php",
+      "filename": "module/gcaccess.remote_fs/class.remote_fsAccessWrapper.php",
       "classname": "remote_fsAccessWrapper",
       "protocol": "ajxp.remotefs"
     }

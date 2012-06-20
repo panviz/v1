@@ -22,7 +22,7 @@ Class.create("IMagickPreviewer", Diaporama, {
 				}
 			}
 			i++;
-			var text = this.currentIM + ' ('+MessageHash[331]+' '+i+' '+MessageHash[332]+' '+this.items.length+')';
+			var text = this.currentIM + ' ('+I18N[331]+' '+i+' '+I18N[332]+' '+this.items.length+')';
 			this.updateTitle(text);
 		}.bind(this);
 
@@ -71,7 +71,7 @@ Class.create("IMagickPreviewer", Diaporama, {
 			}
 		}.bind(this);
 		this.setOnLoad();
-		this.updateTitle(MessageHash[330]);
+		this.updateTitle(I18N[330]);
 		connection.sendAsync();
 	},
 						

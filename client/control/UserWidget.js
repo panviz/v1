@@ -41,7 +41,7 @@ Class.create("UserWidget", {
 		{
 			if(oUser.id != 'guest') 
 			{
-				logging_string = '<div class="user_widget_label"><ajxp:message ajxp_message_id="142">'+MessageHash[142]+'</ajxp:message><i ajxp_message_title_id="189" title="'+MessageHash[189]+'">'+ oUser.id+' </i></div><div class="inlineBarButtonLeft" style="-moz-border-radius: 0pt 5px 5px 0pt;border-radius: 0pt 5px 5px 0pt;border-left-style:none; border-width:1px;"><img width="16" height="16" style="height: 6px; width: 10px; margin-top: 9px; margin-left: 3px; margin-right: 3px;" ajxp_message_title="189" title="'+MessageHash[189]+'" src="'+ajxpResourcesFolder+'/images/arrow_down.png"></div>';
+				logging_string = '<div class="user_widget_label"><ajxp:message ajxp_message_id="142">'+I18N[142]+'</ajxp:message><i ajxp_message_title_id="189" title="'+I18N[189]+'">'+ oUser.id+' </i></div><div class="inlineBarButtonLeft" style="-moz-border-radius: 0pt 5px 5px 0pt;border-radius: 0pt 5px 5px 0pt;border-left-style:none; border-width:1px;"><img width="16" height="16" style="height: 6px; width: 10px; margin-top: 9px; margin-left: 3px; margin-right: 3px;" ajxp_message_title="189" title="'+I18N[189]+'" src="'+ajxpResourcesFolder+'/image/arrow_down.png"></div>';
 				this.element.removeClassName('disabled');
 				if(oUser.getPreference('lang') != null && oUser.getPreference('lang') != "" && oUser.getPreference('lang') != app.currentLanguage)
 				{
@@ -50,13 +50,13 @@ Class.create("UserWidget", {
 			}
 			else 
 			{
-				logging_string = '<div style="padding:3px 0 3px 7px;"><ajxp:message ajxp_message_id="143">'+MessageHash[143]+'</ajxp:message></div>';
+				logging_string = '<div style="padding:3px 0 3px 7px;"><ajxp:message ajxp_message_id="143">'+I18N[143]+'</ajxp:message></div>';
 				this.element.addClassName('disabled');
 			}
 		}
 		else 
 		{
-			logging_string = '<div style="padding:3px 0 3px 7px;"><ajxp:message ajxp_message_id="142">'+MessageHash[144]+'</ajxp:message></div>';
+			logging_string = '<div style="padding:3px 0 3px 7px;"><ajxp:message ajxp_message_id="142">'+I18N[144]+'</ajxp:message></div>';
 			this.element.addClassName('disabled');
 		}
 		this.element.update(logging_string);
@@ -72,7 +72,7 @@ Class.create("UserWidget", {
 			menuItems.push({
 				name: action.getKeyedText(),
 				alt: action.options.title,
-				image: resolveImageSource(action.options.src, '/images/actions/ICON_SIZE', 16),						
+				image: resolveImageSource(action.options.src, '/image/action/ICON_SIZE', 16),						
 				callback: function(e){this.apply();}.bind(action)
 			});			
 		});
@@ -89,7 +89,7 @@ Class.create("UserWidget", {
 				createAnchor: false,
 				topOffset: 2,
 				leftOffset: -5,
-				menuTitle: MessageHash[200],
+				menuTitle: I18N[200],
 				menuItems: menuItems,
 				fade: true,
 				zIndex: 1500,

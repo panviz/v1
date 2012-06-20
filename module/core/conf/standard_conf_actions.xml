@@ -42,7 +42,7 @@
                             var tplId = tplDiv.getAttribute('data-templateId');
                             var tplLabel = tplDiv.getAttribute('data-templateLabel');
                             tplDiv.addClassName('selected-focus');
-                            $('user_tpl_params_title').update('<img style="top:3px;left:4px;" src="'+conn._baseUrl+'&get_action=get_user_template_logo&template_id='+tplId+'&icon_format=small'+'" class="panelHeaderIcon"> '+MessageHash[421].replace('%s',tplLabel));
+                            $('user_tpl_params_title').update('<img style="top:3px;left:4px;" src="'+conn._baseUrl+'&get_action=get_user_template_logo&template_id='+tplId+'&icon_format=small'+'" class="panelHeaderIcon"> '+I18N[421].replace('%s',tplLabel));
                             $('user_template_parameters').select('div.SF_element').invoke('remove');
                             $('user_tpl_params_parameters').update('');
                             var params = conn.FORM_MANAGER.parseParameters(conn.TPL_XML, '//template[@repository_id="'+tplId+'"]/param');
@@ -65,7 +65,7 @@
                             var templates = XPathSelectNodes(conn.TPL_XML, "//template");
                             conn.ORIGINAL_HEIGHT = (templates.length*31+23);
                             $('user_tpl_container').setStyle({height:conn.ORIGINAL_HEIGHT+'px'});
-                            $('user_templates_selector').update('<div class="panelHeader">'+MessageHash[420]+'</div>');
+                            $('user_templates_selector').update('<div class="panelHeader">'+I18N[420]+'</div>');
                             for(var i=0;i<templates.length;i++){
                                 var label = templates[i].getAttribute('repository_label');
                                 var tplId = templates[i].getAttribute('repository_id');
@@ -183,7 +183,7 @@
                                 && oUser.getPreference('lang') != application.currentLanguage)
                             {
                                 application.loadI18NMessages(oUser.getPreference('lang'));
-                                application.displayMessage('SUCCESS', MessageHash[241]);
+                                application.displayMessage('SUCCESS', I18N[241]);
                             }
                         }else{
                             var selector = $(oForm).select('select[id="language_selector"]')[0];
@@ -243,10 +243,10 @@
 								application.webdavCurrentPreferences = transport.responseJSON;
 								if(application.webdavCurrentPreferences.webdav_active) {
 									$('webdav_password_form').show();
-									application.displayMessage("SUCCESS", MessageHash[408]);
+									application.displayMessage("SUCCESS", I18N[408]);
 								}else {
 									$('webdav_password_form').hide();
-									application.displayMessage("SUCCESS", MessageHash[409]);									
+									application.displayMessage("SUCCESS", I18N[409]);									
 								}								
 							};
 							conn.sendAsync();
@@ -259,7 +259,7 @@
 								webdav_pass: $('webdav_password').value
 							}));
 							conn.onComplete = function(transport){
-								application.displayMessage("SUCCESS", MessageHash[410]);
+								application.displayMessage("SUCCESS", I18N[410]);
 							};
 							conn.sendAsync();
 						});

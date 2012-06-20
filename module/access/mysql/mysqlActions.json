@@ -38,7 +38,6 @@
 					"processing" : {
 						"clientCallback" : {
 							"prepareModal" : "true",
-							"$t" : "var path;if(window.actionArguments && window.actionArguments.length>0){path = window.actionArguments[0];if(Object.isString(path)){path = new AjxpNode(path,false,getBaseName(path));}}else{userSelection = application.getUserSelection();if(userSelection && userSelection.isUnique() && (userSelection.hasDir() || userSelection.hasMime([\"zip\"]))){path = userSelection.getUniqueNode();}}if(path){application.updateContextData(path);}"
 						},
 						"serverCallback" : {
 							"methodName" : "switchAction"
@@ -109,7 +108,6 @@
 					"processing" : {
 						"clientCallback" : {
 							"prepareModal" : "true",
-							"$t" : "var sTitle = MessageHash[187];var loadFunc = function(oForm){application.actionBar.sqlEditor = new SQLEditor(oForm);application.actionBar.sqlEditor.createTableEditor();};modal.showDialogForm('Create Table', 'mysql_edit_table', loadFunc, null, null, true, true);"
 						},
 						"serverCallback" : {
 							"methodName" : "switchAction"
@@ -145,7 +143,6 @@
 					"processing" : {
 						"clientCallback" : {
 							"prepareModal" : "true",
-							"$t" : "var loadFunc = function(oForm){application.actionBar.sqlEditor = new SQLEditor(oForm);application.actionBar.sqlEditor.createRecordEditor();};var completeFunc = function(){application.actionBar.sqlEditor.submitRecordForm();return false;};modal.showDialogForm('Add Record', 'mysql_edit_record', loadFunc, completeFunc, null);"
 						},
 						"serverCallback" : {
 							"methodName" : "switchAction"
@@ -189,7 +186,6 @@
 					"processing" : {
 						"clientCallback" : {
 							"prepareModal" : "true",
-							"$t" : "var currentTable = application.getContextNode().getPath();var sTitle = MessageHash[187]+currentTable;var loadFunc = function(oForm){application.actionBar.sqlEditor = new SQLEditor(oForm);application.actionBar.sqlEditor.createTableEditor(currentTable);};modal.showDialogForm('Edit Table Columns', 'mysql_edit_table', loadFunc, null, null, true, true);"
 						},
 						"clientForm" : {
 							"id" : "mysql_edit_table",
@@ -237,7 +233,6 @@
 					"processing" : {
 						"clientCallback" : {
 							"prepareModal" : "true",
-							"$t" : "var userSelection =  application.getUserSelection();var loadFunc = function(oForm){application.actionBar.sqlEditor = new SQLEditor(oForm);application.actionBar.sqlEditor.createRecordEditor(userSelection);};var completeFunc = function(){application.actionBar.sqlEditor.submitRecordForm();return false;};modal.showDialogForm('Edit Online', 'mysql_edit_record', loadFunc, completeFunc, null);"
 						},
 						"clientForm" : {
 							"id" : "mysql_edit_record",
@@ -285,7 +280,6 @@
 					"processing" : {
 						"clientCallback" : {
 							"prepareModal" : "true",
-							"$t" : "var onLoad = function(oForm){var message = MessageHash[275];$(oForm).getElementsBySelector('span[id=\"delete_message\"]')[0].innerHTML = message;};modal.showDialogForm('Delete', 'delete_form', onLoad, function(){var oForm = modal.getForm();application.getUserSelection().updateFormOrUrl(oForm);application.actionBar.submitForm(oForm);hideLightBox(true);return false;});"
 						},
 						"clientForm" : {
 							"id" : "delete_form",
@@ -333,7 +327,6 @@
 					"processing" : {
 						"clientCallback" : {
 							"prepareModal" : "true",
-							"$t" : "var onLoad = function(oForm){var message = MessageHash[278];$(oForm).getElementsBySelector('span[id=\"delete_message\"]')[0].innerHTML = message;};modal.showDialogForm('Delete', 'delete_record_form', onLoad, function(){var oForm = modal.getForm();application.getUserSelection().updateFormOrUrl(oForm);application.actionBar.submitForm(oForm);hideLightBox(true);return false;});"
 						},
 						"clientForm" : {
 							"id" : "delete_record_form",

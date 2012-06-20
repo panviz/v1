@@ -7,8 +7,7 @@ Class.create("ActionsManager", {
 	 * Standard constructor
 	 * @param bUsersEnabled Boolen Whether users management is enabled or not
 	 */
-	initialize : function(bUsersEnabled)
-	{
+	initialize : function(bUsersEnabled){
 		this._registeredKeys = new Hash();
 		this._actions = new Hash();
 		this.usersEnabled = bUsersEnabled;
@@ -44,13 +43,11 @@ Class.create("ActionsManager", {
 	 * Stores the currently logged user object
 	 * @param oUser User User instance
 	 */
-	setUser : function(oUser)
-	{	
+	setUser : function(oUser){ 	
 		this.oUser = oUser;
 		if(oUser != null && app  && oUser.id != 'guest' && oUser.getPreference('lang') != null 
 			&& oUser.getPreference('lang') != "" 
-			&& oUser.getPreference('lang') != app.currentLanguage) 
-		{
+			&& oUser.getPreference('lang') != app.currentLanguage) { 
 			app.loadI18NMessages(oUser.getPreference('lang'));
 		}
 	},
@@ -60,15 +57,12 @@ Class.create("ActionsManager", {
 	 * @param srcElement String An identifier among selectionContext, genericContext, a webfx object id
 	 * @returns Array
 	 */
-	getContextActions : function(srcElement)
-	{		
+	getContextActions : function(srcElement){ 		
 		var actionsSelectorAtt = 'selectionContext';
-		if(srcElement.id && (srcElement.id == 'table_rows_container' ||  srcElement.id == 'selectable_div'))
-		{
+		if(srcElement.id && (srcElement.id == 'table_rows_container' ||  srcElement.id == 'selectable_div')){ 
 			actionsSelectorAtt = 'genericContext';
 		}
-		else if(srcElement.id.substring(0,5)=='webfx')
-		{
+		else if(srcElement.id.substring(0,5)=='webfx'){ 
 			actionsSelectorAtt = 'directoryContext';
 		}
 		var contextActions = new Array();
@@ -106,7 +100,7 @@ Class.create("ActionsManager", {
 			var menuItem = {
 				name: action.getKeyedText(),
 				alt: action.options.title,
-				image: resolveImageSource(action.options.src, '/images/actions/ICON_SIZE', 16),
+				image: resolveImageSource(action.options.src, '/image/actions/ICON_SIZE', 16),
 				isDefault: isDefault,
 				callback: function(e){this.apply();}.bind(action)
 			};
@@ -166,7 +160,7 @@ Class.create("ActionsManager", {
 		var actions = $A([]);
 		this.actions.each(function(pair){
 			var action = pair.value;
-			if(action.context.ajxpWidgets && (action.context.ajxpWidgets.include(className+'::'+widgetId)||action.context.ajxpWidgets.include(className)) && !action.deny) actions.push(action);
+			if(action.context.widgets && (action.context.widgets.include(className+'::'+widgetId)||action.context.widgets.include(className)) && !action.deny) actions.push(action);
 		});
 		return actions;		
 	},
@@ -226,10 +220,8 @@ Class.create("ActionsManager", {
 	 * @param event Event The key event (will be stopped)
 	 * @param keyName String A key name
 	 */
-	fireActionByKey : function(event, keyName)
-	{	
-		if(this._registeredKeys.get(keyName) && !app.blockShortcuts)
-		{
+	fireActionByKey : function(event, keyName){ 	
+		if(this._registeredKeys.get(keyName) && !app.blockShortcuts){ 
 			if(this._registeredKeys.get(keyName).indexOf("::")!==false){
 				var parts = this._registeredKeys.get(keyName).split("::");
 				this.fireAction(parts[0], parts[1]);
@@ -245,36 +237,33 @@ Class.create("ActionsManager", {
 	 * Complex function called when drag'n'dropping. Basic checks of who is child of who.
 	 * @param fileName String The dragged element 
 	 * @param destDir String The drop target node path
-	 * @param destNodeName String The drop target node name
+	 * @param destItemName String The drop target node name
 	 * @param copy Boolean Copy or Move
 	 */
-	applyDragMove : function(fileName, destDir, destNodeName, copy)
-	{
+	applyDragMove : function(fileName, destDir, destItemName, copy){ 
 		if((!copy && !this.defaultActions.get('dragndrop')) || 
 			(copy && (!this.defaultActions.get('ctrldragndrop')||this.getDefaultAction('ctrldragndrop').deny))){
 			return;
 		}
 		if(fileName == null) fileNames = app.getUserSelection().getFileNames();
 		else fileNames = [fileName];
-		if(destNodeName != null)
-		{
+		if(destItemName != null){ 
 			// Check that dest is not a child of the source
-			if(this.checkDestIsChildOfSource(fileNames, destNodeName)){
-				app.displayMessage('ERROR', MessageHash[202]);
+			if(this.checkDestIsChildOfSource(fileNames, destItemName)){
+				app.displayMessage('ERROR', I18N[202]);
 				return;
 			}
 		}
         // Check that dest is not the source it self
-        for(var i=0; i<fileNames.length;i++)
-        {
+        for(var i=0; i<fileNames.length;i++){ 
             if(fileNames[i] == destDir){
-                if(destNodeName != null) app.displayMessage('ERROR', MessageHash[202]);
+                if(destItemName != null) app.displayMessage('ERROR', I18N[202]);
                  return;
             }
         }
         // Check that dest is not the direct parent of source, ie current rep!
-        if(destDir == app.getContextNode().getPath()){
-            if(destNodeName != null) app.displayMessage('ERROR', MessageHash[203]);
+        if(destDir == app.getContextItem().getPath()){
+            if(destItemName != null) app.displayMessage('ERROR', I18N[203]);
             return;
         }
 		var connection = new Connection();
@@ -291,7 +280,7 @@ Class.create("ActionsManager", {
 			}
 		}
 		connection.addParameter('dest', destDir);
-		connection.addParameter('dir', app.getContextNode().getPath());		
+		connection.addParameter('dir', app.getContextItem().getPath());		
 		connection.onComplete = function(transport){this.parseXmlMessage(transport.responseXML);}.bind(this);
 		connection.sendAsync();
 	},
@@ -311,22 +300,22 @@ Class.create("ActionsManager", {
 	/**
 	 * Detects whether a destination is child of the source 
 	 * @param srcNames String|Array One or many sources pathes
-	 * @param destNodeName String the destination
+	 * @param destItemName String the destination
 	 * @returns Boolean
 	 */
-	checkDestIsChildOfSource : function(srcNames, destNodeName)
-	{
+	checkDestIsChildOfSource : function(srcNames, destItemName)
+{ 
 		if(typeof srcNames == "string"){
 			srcNames = [srcNames];
 		}
-		var destNode = webFXTreeHandler.all[destNodeName];
-		while(destNode.parentNode){
+		var destItem = webFXTreeHandler.all[destItemName];
+		while(destItem.parentItem){
 			for(var i=0; i<srcNames.length;i++){
-				if(destNode.filename == srcNames[i]){				
+				if(destItem.filename == srcNames[i]){				
 					return true;
 				}
 			}
-			destNode = destNode.parentNode;
+			destItem = destItem.parentItem;
 		}
 		return false;
 	},
@@ -337,8 +326,7 @@ Class.create("ActionsManager", {
 	 * @param post Boolean Whether to POST or GET
 	 * @param completeCallback Function Callback to be called on complete
 	 */
-	submitForm : function(formName, post, completeCallback)
-	{
+	submitForm : function(formName, post, completeCallback){ 
 		var connection = new Connection();
 		if(post){
 			connection.setMethod('POST');
@@ -352,8 +340,8 @@ Class.create("ActionsManager", {
 			if(fElement.type == 'radio' && !fElement.checked) return;
 			connection.addParameter(fElement.name, fValue);
 		});
-		if(app.getContextNode()){
-			connection.addParameter('dir', app.getContextNode().getPath());
+		if(app.getContextItem()){
+			connection.addParameter('dir', app.getContextItem().getPath());
 		}
 		if(completeCallback){
 			connection.onComplete = completeCallback;
@@ -367,58 +355,50 @@ Class.create("ActionsManager", {
 	 * Standard parser for server XML answers
 	 * @param xmlResponse DOMDocument 
 	 */
-	parseXmlMessage : function(xmlResponse)
-	{
+	parseXmlMessage : function(xmlResponse){
 		var messageBox = app.messageBox;
 		if(xmlResponse == null || xmlResponse.documentElement == null) return;
-		var childs = xmlResponse.documentElement.childNodes;	
+		var childs = xmlResponse.documentElement.childItems;	
 		
-		var reloadNodes = [];
+		var reloadItems = [];
 		
-		for(var i=0; i<childs.length;i++)
-		{
-			if(childs[i].tagName == "message")
-			{
+		for(var i=0; i<childs.length;i++){ 
+			if(childs[i].tagName == "message"){ 
 				var messageTxt = "No message";
 				if(childs[i].firstChild) messageTxt = childs[i].firstChild.nodeValue;
 				app.displayMessage(childs[i].getAttribute('type'), messageTxt);
 			}
-			else if(childs[i].tagName == "reload_instruction")
-			{
+			else if(childs[i].tagName == "reload_instruction"){ 
 				var obName = childs[i].getAttribute('object');
-				if(obName == 'data')
-				{
+				if(obName == 'data'){ 
 					var node = childs[i].getAttribute('node');				
 					if(node){
-						reloadNodes.push(node);
+						reloadItems.push(node);
 					}else{
 						var file = childs[i].getAttribute('file');
 						if(file){
 							app.getContextHolder().setPendingSelection(file);
 						}
-						reloadNodes.push(app.getContextNode());
+						reloadItems.push(app.getContextItem());
 					}
 				}
-				else if(obName == 'repository_list')
-				{
+				else if(obName == 'repository_list'){ 
 					app.reloadRepositoriesList();
 				}
 			}
-			else if(childs[i].tagName == "logging_result")
-			{
+			else if(childs[i].tagName == "logging_result"){ 
 				if(childs[i].getAttribute("secure_token")){
 					Connection.SECURE_TOKEN = childs[i].getAttribute("secure_token");
-					var parts = window.ajxpServerAccessPath.split("?secure_token");
-					window.ajxpServerAccessPath = parts[0] + "?secure_token=" + Connection.SECURE_TOKEN;
-					bootstrap.parameters.set('ajxpServerAccess', window.ajxpServerAccessPath);
+					var parts = window.serverAccessPath.split("?secure_token");
+					window.serverAccessPath = parts[0] + "?secure_token=" + Connection.SECURE_TOKEN;
+					bootstrap.parameters.set('serverAccess', window.serverAccessPath);
 				}
                 if($("generic_dialog_box") && $("generic_dialog_box").down(".login_error")){
                     $("generic_dialog_box").down(".login_error").remove();
                 }
 				var result = childs[i].getAttribute('value');
                 var errorId = false;
-				if(result == '1')
-				{
+				if(result == '1'){
 					hideLightBox(true);
 					if(childs[i].getAttribute('remember_login') && childs[i].getAttribute('remember_pass')){
 						var login = childs[i].getAttribute('remember_login');
@@ -427,32 +407,27 @@ Class.create("ActionsManager", {
 					}
 					app.loadXmlRegistry();
 				}
-				else if(result == '0' || result == '-1')
-				{
+				else if(result == '0' || result == '-1'){ 
                     var errorId = 285;
 				}
-				else if(result == '2')
-				{					
+				else if(result == '2'){ 					
 					app.loadXmlRegistry();
 				}
-				else if(result == '-2')
-				{
+				else if(result == '-2'){ 
                     var errorId = 285;
 				}
-				else if(result == '-3')
-				{
+				else if(result == '-3'){ 
                     var errorId = 366;
 				}
-				else if(result == '-4')
-				{
+				else if(result == '-4'){ 
                     var errorId = 386;
 				}
                 if(errorId){
                     if($("generic_dialog_box") && $("generic_dialog_box").visible() && $("generic_dialog_box").down("div.dialogLegend")){
-                        $("generic_dialog_box").down("div.dialogLegend").insert({bottom: '<div class="login_error" style="background-color: #D33131;display: block;font-size: 9px;color: white;border-radius: 3px;padding: 2px 6px;">'+MessageHash[errorId]+'</div>'});
+                        $("generic_dialog_box").down("div.dialogLegend").insert({bottom: '<div class="login_error" style="background-color: #D33131;display: block;font-size: 9px;color: white;border-radius: 3px;padding: 2px 6px;">'+I18N[errorId]+'</div>'});
                         $("generic_dialog_box").shake();
                     }else{
-                        alert(MessageHash[errorId]);
+                        alert(I18N[errorId]);
                     }
                 }
 
@@ -472,7 +447,7 @@ Class.create("ActionsManager", {
 
 		}
 		if(reloadNodes.length){
-			app.getContextHolder().multipleNodesReload(reloadNodes);
+			app.getContextHolder().multipleItemsReload(reloadNodes);
 		}
 	},
 	
@@ -502,12 +477,12 @@ Class.create("ActionsManager", {
 		var crtIsRoot = false;
 		var crtMime;
 		
-		if(app && app.getContextNode()){ 
-			var crtNode = app.getContextNode();
-			crtRecycle = (crtNode.getMime() == "recycle");
-			crtInZip = crtNode.hasMimeInBranch("browsable_archive");
-			crtIsRoot = crtNode.isRoot();
-			crtMime = crtNode.getMime();			
+		if(app && app.getContextItem()){ 
+			var crtItem = app.getContextItem();
+			crtRecycle = (crtItem.getMime() == "recycle");
+			crtInZip = crtItem.hasMimeInBranch("browsable_archive");
+			crtIsRoot = crtItem.isRoot();
+			crtMime = crtItem.getMime();			
 		}	
 		this.actions.each(function(pair){			
 			pair.value.fireContextChange(this.usersEnabled, 
@@ -536,14 +511,17 @@ Class.create("ActionsManager", {
 	 * @param registry DOMDocument
 	 */
 	initActions : function(actions){
-									debugger
 		this.removeActions();		
 		var names = Object.keys(actions);
 		for(var i=0; i<names.length; i++){
 			var params = actions[names[i]];
 			if(params.enabled == false) continue;
 			//TODO create all classes for Actions
-			var action = new names[i](params);
+			var className = Class.getByName(names[i]);
+			if (!className){
+				className = Class.create(names[i], Action)
+			}
+			var action = new className(params);
 			this.registerAction(action);
 		}
 		if(app && app.guiActions){
@@ -562,7 +540,7 @@ Class.create("ActionsManager", {
 	 * @param action Action
 	 */
 	registerAction : function(action){
-		var actionName = action.options.name;
+		var actionName = action.__className;
 		this.actions.set(actionName, action);
 		if(action.defaults){
 			for(var key in action.defaults) this.defaultActions.set(key, actionName);
@@ -589,8 +567,7 @@ Class.create("ActionsManager", {
 	 * Utilitary to get FlashVersion, should probably be removed from here!
 	 * @returns String
 	 */
-	getFlashVersion : function()
-	{
+	getFlashVersion : function(){ 
 		if (!this.pluginVersion) {
 			var x;
 			if(navigator.plugins && navigator.mimeTypes.length){

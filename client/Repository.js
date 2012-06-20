@@ -22,7 +22,7 @@ Class.create("Repository", {
 	/**
 	 * @var object
 	 */
-	nodeProviderDef: null,
+	itemProviderDef: null,
 	/**
 	 * @var ResourcesManager
 	 */
@@ -50,11 +50,11 @@ Class.create("Repository", {
 	 * @param xmlDef XMLNode
 	 */
 	initialize : function(id, xmlDef){
-		if(MessageHash){
-			this.label = MessageHash[391];
+		if(I18N){
+			this.label = I18N[391];
 		}
 		this.id = id;
-		this.icon = ajxpResourcesFolder+'/image/actions/16/network-wired.png';
+		this.icon = THEME.path +'/image/actions/16/network-wired.png';
 		this.resourcesManager = new ResourcesManager();
 		if(xmlDef) this.loadFromXml(xmlDef);
 	},
@@ -122,8 +122,8 @@ Class.create("Repository", {
 	/**
 	 * @returns Object
 	 */
-	getNodeProviderDef : function(){
-		return this.nodeProviderDef;
+	getItemProviderDef : function(){
+		return this.itemProviderDef;
 	},
 	
 	/**
@@ -181,7 +181,7 @@ Class.create("Repository", {
 					}else if(subCh.nodeName == 'node_provider'){
 						var nodeProviderName = subCh.getAttribute("ajxpClass");
 						var nodeProviderOptions = subCh.getAttribute("ajxpOptions").evalJSON();
-						this.nodeProviderDef = {name: nodeProviderName, options: nodeProviderOptions};
+						this.itemProviderDef = {name: nodeProviderName, options: nodeProviderOptions};
 					}
 				}
 			}

@@ -45,7 +45,6 @@
           {
             "name": "upload",
             "subMenu": {
-              "dynamicBuilder": "var context = window.builderContext;context.builderMenuItems = $A([]);context.builderMenuItems.push({name:MessageHash['httpdownloader.13'],alt:MessageHash['httpdownloader.13'],isDefault : true,image:resolveImageSource('httpdownloader_images/ICON_SIZE/computer_upload.png', '',  22),callback:function(e){this.apply();}.bind(context)} );context.builderMenuItems.push({name:MessageHash['httpdownloader.14'],alt:MessageHash['httpdownloader.2'],isDefault : false,image:resolveImageSource('httpdownloader_images/ICON_SIZE/external_download.png', '', 22),callback:function(e){app.actionBar.fireAction('external_download');}.bind(context)} );"
             }
           },
           {
@@ -79,7 +78,6 @@
                 "prepareModal": "true",
                 "dialogOpenForm": "external_download",
                 "dialogOnOpen": {},
-                "dialogOnComplete": "var dlFile = oForm.down('[name=\"url\"]').getValue();var crtDir = app.getContextNode().getPath();var bgManager = app.actionBar.bgManager;bgManager.queueAction(\"external_download\", new Hash({file:dlFile, dir:crtDir}), MessageHash[\"httpdownloader.6\"]+ \" \" +getBaseName(dlFile)+\" \" + MessageHash[\"httpdownloader.7\"]);for(var i=2;i<6;i++){var file = oForm.down('[name=\"url'+i+'\"]').getValue();if(file){bgManager.queueAction(\"external_download\", new Hash({file:file, dir:crtDir}), MessageHash[\"httpdownloader.6\"]+ \" \" +getBaseName(file)+\" \" + MessageHash[\"httpdownloader.7\"]);}}bgManager.next();hideLightBox(true);"
               },
               "clientForm": {
                 "id": "external_download",
@@ -125,7 +123,6 @@
               "adminOnly": ""
             },
             "processing": {
-              "clientCallback": "fileName = app.getUserSelection().getUniqueFileName();var crtDir = app.getContextNode().getPath();var bgManager = app.actionBar.bgManager;bgManager.queueAction(\"external_download\", new Hash({dlfile:fileName, dir:crtDir}), MessageHash[\"httpdownloader.6\"]+ \" \" +getBaseName(fileName)+\" \" + MessageHash[\"httpdownloader.7\"]);bgManager.next();",
               "serverCallback": {
                 "methodName": "switchAction"
               }
@@ -161,7 +158,6 @@
               "clientCallback": {
                 "prepareModal": "true",
                 "dialogOpenForm": "dynamic_bookmarklet",
-                "dialogOnOpen": "var rm =new ResourcesManager();rm.loadCSSResource('plugins/downloader.http/resources/downloader.css');var root = document.location.href;root = root.substring(0,root.lastIndexOf(\"/\") + 1);var repository = app.user.getActiveRepository();var folder = app.getContextNode().getPath();var bmletValue = \"javascript:(function(){window.ajxp_bm_target='\"+root+\"',window.ajxp_bm_repository_id='\"+repository+\"', window.ajxp_bm_folder='\"+folder+\"'; var d=document,s=d.createElement('scr'+'ipt'),b=d.body,l=d.location;s.setAttribute('src','\"+root+\"plugins/downloader.http/bookmarklet/ajxp.js?t='+(new Date().getTime()));b.appendChild(s)})();\";$('bookmarklet_link').setAttribute(\"href\", bmletValue);var basename = getBaseName(folder);if(basename == \"\"){$('bookmarklet_link_a').hide();$('bookmarklet_link_d').hide();$('bookmarklet_link_c').hide();}else{$('bookmarklet_link_a').setAttribute(\"href\", bmletValue);$('bookmarklet_link_a').insert(MessageHash['httpdownloader.10a'].replace(\"%s\", basename));$('bookmarklet_link_c').setAttribute(\"href\", bmletValue);$('bookmarklet_link_c').insert(MessageHash['httpdownloader.10c'].replace(\"%s\", basename));$('bookmarklet_link_d').setAttribute(\"href\", bmletValue);$('bookmarklet_link_d').insert(MessageHash['httpdownloader.10d'].replace(\"%s\", basename));}$('bookmarklet_link_b').setAttribute(\"href\", bmletValue);$('bookmarklet_link_b').insert(MessageHash['httpdownloader.10b'].replace(\"%s\", app.user.repositories.get(repository).getLabel()));$('bookmarklet_links_container').select('a').each(function(link){link.observe('click', function(e){Event.stop(e);alert(MessageHash['httpdownloader.16']);});});$('bookmarklet_textarea').setValue(bmletValue);$('bookmarklet_textarea').observe(\"focus\", function(){$('bookmarklet_textarea').select();});"
               },
               "clientForm": {
                 "id": "dynamic_bookmarklet",

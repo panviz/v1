@@ -113,11 +113,11 @@ Class.create("XHRUploader", {
 		var totalDiv = new Element('div', {id:'total_files_list'});
 		this.mainForm.down('#optClosButtonsContainer').insert({after:new Element('td', {style:'vertical-align:bottom'}).update(totalDiv)});
 		totalDiv.insert('<img src="'+ajxpResourcesFolder+'/images/actions/22/trashcan_empty.png" class="fakeUploadButton fakeOptionButton" id="clear_list_button"\
-			width="22" height="22" style="float:right;margin-top:3px;padding:4px;width:22px;" title="'+MessageHash[216]+'"/>\
-			<span id="totalStrings">'+MessageHash[258]+' : 0 '+MessageHash[259]+' : 0Kb</span>\
+			width="22" height="22" style="float:right;margin-top:3px;padding:4px;width:22px;" title="'+I18N[216]+'"/>\
+			<span id="totalStrings">'+I18N[258]+' : 0 '+I18N[259]+' : 0Kb</span>\
 			<div style="padding-top:3px;">\
 			<div id="pgBar_total" style="width:154px; height: 4px;border: 1px solid #ccc;float:left;margin-top: 6px;"></div>\
-			<span style="float:left;margin-left:10px;" id="uploadedString">'+MessageHash[256]+' : 0%</span>\
+			<span style="float:left;margin-left:10px;" id="uploadedString">'+I18N[256]+' : 0%</span>\
 			</div>');
 		var options = {
 			animate		: false,									// Animate the progress? - default: true
@@ -156,11 +156,11 @@ Class.create("XHRUploader", {
 		var optionPane = new Element('div', {id:'uploader_options_pane'});
 		optionPane.update('<div id="uploader_options_strings"></div>');
 		optionPane.insert('<div id="uploader_options_checks">\
-			<b>'+MessageHash[339]+'</b> <input type="radio" name="uploader_existing" id="uploader_existing_overwrite" value="overwrite"> '+MessageHash[263]+' \
-			<input type="radio" name="uploader_existing" id="uploader_existing_rename" value="rename"> '+MessageHash[6]+' \
-			<input type="radio" name="uploader_existing" id="uploader_existing_alert" value="alert"> '+MessageHash[340]+' <br>\
-			<b>Options</b> <input type="checkbox" style="width:20px;" id="uploader_auto_send"> '+MessageHash[337]+'&nbsp; &nbsp; \
-			<input type="checkbox" style="width:20px;" id="uploader_auto_close"> '+MessageHash[338]+'\
+			<b>'+I18N[339]+'</b> <input type="radio" name="uploader_existing" id="uploader_existing_overwrite" value="overwrite"> '+I18N[263]+' \
+			<input type="radio" name="uploader_existing" id="uploader_existing_rename" value="rename"> '+I18N[6]+' \
+			<input type="radio" name="uploader_existing" id="uploader_existing_alert" value="alert"> '+I18N[340]+' <br>\
+			<b>Options</b> <input type="checkbox" style="width:20px;" id="uploader_auto_send"> '+I18N[337]+'&nbsp; &nbsp; \
+			<input type="checkbox" style="width:20px;" id="uploader_auto_close"> '+I18N[338]+'\
 			</div>');
 		optionPane.hide();
 		optionPane.autoSendCheck = optionPane.down('#uploader_auto_send');
@@ -214,9 +214,9 @@ Class.create("XHRUploader", {
 			return value;
 		};
 		optionPane.loadData = function(){
-            var message = '<b>' + MessageHash[281] + '</b> ';
-            message += '&nbsp;&nbsp;'+ MessageHash[282] + ':' + roundSize(this.maxUploadSize, '');
-            message += '&nbsp;&nbsp;'+ MessageHash[284] + ':' + this.max;
+            var message = '<b>' + I18N[281] + '</b> ';
+            message += '&nbsp;&nbsp;'+ I18N[282] + ':' + roundSize(this.maxUploadSize, '');
+            message += '&nbsp;&nbsp;'+ I18N[284] + ':' + this.max;
             optionPane.optionsStrings.update(message);
 			var autoSendValue = false;
 			if(app.user && app.user.getPreference('upload_auto_send')){
@@ -295,33 +295,33 @@ Class.create("XHRUploader", {
 
 		if(file.size==0 && file.type == ""){
 			// FOLDER!
-			alert(MessageHash[336]);
+			alert(I18N[336]);
 			return;
 		}else if(Prototype.Browser.WebKit && !getBaseName(file.name).indexOf(".")){
-			var res = confirm(MessageHash[395]);
+			var res = confirm(I18N[395]);
 			if(!res){
 				return;
 			}
 		}
 		if(this.maxUploadSize && file.size > this.maxUploadSize){
-			alert(MessageHash[211]);
+			alert(I18N[211]);
 			return;
 		}
 		if(this.max && this.listTarget.childNodes.length == this.max){
-			alert(MessageHash[365].replace("%s", this.max));
+			alert(I18N[365].replace("%s", this.max));
 			return;
 		}
 		
 		var basename = getBaseName(file.name);
 		if(basename.length > this.namesMaxLength){
-			alert(MessageHash[393].replace("%s", this.namesMaxLength));
+			alert(I18N[393].replace("%s", this.namesMaxLength));
 		}
 		
 		
 		if(this.mask){
 			var ext = getFileExtension(file.name);
 			if(!this.mask.include(ext)){
-				alert(MessageHash[367] + this.mask.join(', ') + (this.maskLabel? " ("+ this.maskLabel +")":"" ) );
+				alert(I18N[367] + this.mask.join(', ') + (this.maskLabel? " ("+ this.maskLabel +")":"" ) );
 				return;
 			}
 		}
@@ -339,7 +339,7 @@ Class.create("XHRUploader", {
 			className : 'fakeUploadButton',
 			align : 'absmiddle',
 			style : '-moz-border-radius:3px;border-radius:3px;float:left;margin:1px 7px 2px 0px;padding:3px;width:16px;background-position:center top;',
-			title : MessageHash[257]
+			title : I18N[257]
 		});
 		delButton.observe("click", function(e){
 			if(item.xhr){
@@ -413,7 +413,7 @@ Class.create("XHRUploader", {
                 "error":436
             };
             try{
-                status = window.MessageHash[messageIds[status]];
+                status = window.I18N[messageIds[status]];
             }catch(e){};
 			this.statusText.innerHTML = "["+status+"]";
 		}.bind(item);
@@ -446,8 +446,8 @@ Class.create("XHRUploader", {
 			var percentage = Math.round(100*uploaded/size);
 		}
 		this.totalProgressBar.setPercentage(percentage, true);
-		this.totalStrings.update(MessageHash[258]+' ' + count + ' '+MessageHash[259]+' ' +roundSize(size, 'b'));
-		this.uploadedString.update(MessageHash[256]+' : ' + percentage + '%');
+		this.totalStrings.update(I18N[258]+' ' + count + ' '+I18N[259]+' ' +roundSize(size, 'b'));
+		this.uploadedString.update(I18N[256]+' : ' + percentage + '%');
 		
 	},
 	
@@ -534,7 +534,7 @@ Class.create("XHRUploader", {
 			if(behaviour == 'rename'){
 				auto_rename = true;
 			}else if(behaviour == 'alert'){
-				if(!confirm(MessageHash[124])){
+				if(!confirm(I18N[124])){
 					item.remove();
 					return;
 				}
@@ -592,7 +592,7 @@ Class.create("XHRUploader", {
 			if(behaviour == 'rename'){
 				auto_rename = true;
 			}else if(behaviour == 'alert'){
-				if(!confirm(MessageHash[124])){
+				if(!confirm(I18N[124])){
 					item.remove();
 					return;
 				}

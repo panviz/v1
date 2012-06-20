@@ -196,7 +196,7 @@ Class.create("Diaporama", View, {
 			if(autoFit && autoFit == "true"){
 				this.autoFit = true;
 				this.fitToScreenButton.select('img')[0].src = ajxpResourcesFolder + '/images/actions/22/zoom-fit-restore.png';
-				this.fitToScreenButton.select('span')[0].update(MessageHash[326]);
+				this.fitToScreenButton.select('span')[0].update(I18N[326]);
 			}
 		}
 		this.contentMainContainer = this.imgContainer ;
@@ -512,7 +512,7 @@ Class.create("Diaporama", View, {
 			this.fitToScreen();
 		}
 		this.fitToScreenButton.select('img')[0].src = ajxpResourcesFolder + '/images/actions/22/'+src+'.png';
-		this.fitToScreenButton.select('span')[0].update(MessageHash[id]);
+		this.fitToScreenButton.select('span')[0].update(I18N[id]);
 		if(app && app.user && !skipSave){
 			app.user.setPreference("diapo_autofit", (this.autoFit ? 'true' : 'false'));
 			app.user.savePreferences();
@@ -609,7 +609,7 @@ Class.create("Diaporama", View, {
 			var theImage = event.target;
 			if(theImage.up('.thumbnail_selectable_cell')) return;
 			if(!theImage.openBehaviour){
-				var opener = new Element('div').update(MessageHash[411]);
+				var opener = new Element('div').update(I18N[411]);
 				opener.setStyle({
 					width: styleObj.width, 
 					display: 'none', 

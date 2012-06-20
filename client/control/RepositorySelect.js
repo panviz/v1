@@ -37,13 +37,13 @@ Class.create("RepositorySelect", {
 	 * Creates the HTML
 	 */
 	createGui : function(){
-		if(MessageHash){
-			this._defaultString = MessageHash[391];
+		if(I18N){
+			this._defaultString = I18N[391];
 		}		
 		
 		this.icon = new Element('img', {
 			id: 'repo_icon',
-			src: resolveImageSource(this._defaultIcon,'/images/actions/ICON_SIZE', 16),
+			src: resolveImageSource(this._defaultIcon,'/image/action/ICON_SIZE', 16),
 			width: 16,
 			height: 16,
 			align: 'absmiddle'
@@ -63,7 +63,7 @@ Class.create("RepositorySelect", {
 			'inlineBarButton', 
 			200, 
 			200, 
-			ajxpResourcesFolder + '/images/arrow_down.png', 
+			THEME.path + '/image/arrow_down.png', 
 			16,
 			'inline_hover', null, true);
 		this.button.setStyle({marginRight: '7px'});		
@@ -88,7 +88,7 @@ Class.create("RepositorySelect", {
 				
 				var actionData = {
 					name: repoObject.getLabel(),
-					alt: repoObject.getLabel() + (repoObject.getOwner() ? " ("+MessageHash[413]+" " + repoObject.getOwner()+ ")" : ""),
+					alt: repoObject.getLabel() + (repoObject.getOwner() ? " ("+I18N[413]+" " + repoObject.getOwner()+ ")" : ""),
 					image: repoObject.getIcon(),
                     overlay: repoObject.getOverlay(),
 					className: "edit",
@@ -100,7 +100,7 @@ Class.create("RepositorySelect", {
                 if(repoObject.userEditable){
                     actionData.moreActions = this.getContextActions(key);
                 }
-				if(repoObject.getAccessType() == "ajxp_shared" || repoObject.getAccessType() == "ajxp_conf"){
+				if(repoObject.getAccessType() == "shared" || repoObject.getAccessType() == "conf"){
 					lastActions.push(actionData);
                 }else if(repoObject.getOwner()){
                     sharedActions.push(actionData);
@@ -114,7 +114,7 @@ Class.create("RepositorySelect", {
 			}.bind(this));
 		}else{
 			this.label.setValue(this._defaultString);
-			this.icon.src = resolveImageSource(this._defaultIcon,'/images/actions/ICON_SIZE', 16);
+			this.icon.src = resolveImageSource(this._defaultIcon,'/image/action/ICON_SIZE', 16);
 		}
 		
 		var fonc = function(a,b){
@@ -140,7 +140,7 @@ Class.create("RepositorySelect", {
                 name: otherAction.getKeyedText(),
                 alt: otherAction.options.title,
                 className: "edit",
-                image: resolveImageSource(otherAction.options.src, '/images/actions/ICON_SIZE', 16),
+                image: resolveImageSource(otherAction.options.src, '/image/action/ICON_SIZE', 16),
                 callback: function(e){this.apply();}.bind(otherAction)
             });
         });
@@ -159,11 +159,11 @@ Class.create("RepositorySelect", {
 				anchor: this.button,
 				createAnchor: false,
 				anchorContainer: $('dir_chooser'),
-				anchorSrc: ajxpResourcesFolder+'/images/arrow_down.png',
-				anchorTitle: MessageHash[200],
+				anchorSrc: THEME.path+'/image/arrow_down.png',
+				anchorTitle: I18N[200],
 				topOffset: 2,
 				leftOffset: -127,
-				menuTitle: MessageHash[200],
+				menuTitle: I18N[200],
 				menuItems: actions,
 				fade: true,
 				zIndex: 1500
@@ -199,13 +199,13 @@ Class.create("RepositorySelect", {
 	getContextActions : function(repositoryId){
 
 		var removeAction = {
-				name: MessageHash[423],
-				alt: MessageHash[423],
-				image: ajxpResourcesFolder+'/images/actions/16/delete_bookmark.png',
+				name: I18N[423],
+				alt: I18N[423],
+				image: THEME.path+'/image/action/16/delete_bookmark.png',
 				disabled: false,
 				className: "edit",
 				callback: function(e){
-					if(window.confirm(MessageHash[424])){
+					if(window.confirm(I18N[424])){
                         var conn = new Connection();
                         conn.setParameters({get_action: 'user_delete_repository', repository_id: repositoryId});
                         conn.onComplete = function(transport){

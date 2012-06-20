@@ -75,8 +75,8 @@ function triggerFlashEvent(){
 			break;
 			case "getMessage":
 				var messageId = arguments[1];
-				if(parent && parent.window.MessageHash && messages){
-					var message = parent.window.MessageHash[messages[messageId]];
+				if(parent && parent.window.I18N && messages){
+					var message = parent.window.I18N[messages[messageId]];
 					if(messages[messageId] == 365){
 						message = message.replace("%s","<?php print($confTotalNumber)?>");
 					}

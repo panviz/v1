@@ -45,12 +45,12 @@ Class.create("View", Pane, {
 		if(options){
 			var formId = options.formId;
 			this.mime = options.mime;
-			this.prepareHeader(options.text, resolveImageSource(options.icon, '/images/actions/ICON_SIZE', 16));
+			this.prepareHeader(options.text, resolveImageSource(options.icon, '/image/actions/ICON_SIZE', 16));
 		}
 		this.defaultActions = new Hash({
-			'fs': '<a id="fsButton"><img src="'+ajxpResourcesFolder+'/images/actions/22/window_fullscreen.png"  width="22" height="22" alt="" border="0"><br><span message_id="235"></span></a>',
-			'nofs': '<a id="nofsButton" style="display:none;"><img src="'+ajxpResourcesFolder+'/images/actions/22/window_nofullscreen.png"  width="22" height="22" alt="" border="0"><br><span message_id="236"></span></a>',
-			'close': '<a id="closeButton"><img src="'+ajxpResourcesFolder+'/images/actions/22/fileclose.png"  width="22" height="22" alt="" border="0"><br><span message_id="86"></span></a>'
+			'fs': '<a id="fsButton"><img src="'+THEME.path+'/image/actions/22/window_fullscreen.png"  width="22" height="22" alt="" border="0"><br><span message_id="235"></span></a>',
+			'nofs': '<a id="nofsButton" style="display:none;"><img src="'+THEME.path+'/image/actions/22/window_nofullscreen.png"  width="22" height="22" alt="" border="0"><br><span message_id="236"></span></a>',
+			'close': '<a id="closeButton"><img src="'+THEME.path+'/image/actions/22/fileclose.png"  width="22" height="22" alt="" border="0"><br><span message_id="86"></span></a>'
 		});
         if(this.editorOptions.actions){
             this.defaultActions = $H(Object.extend(this.defaultActions._object, this.editorOptions.actions));
@@ -98,7 +98,7 @@ Class.create("View", Pane, {
             link.select("img").invoke("addClassName", "actionbar_button_icon");
             link.select("span").invoke("addClassName", "actionbar_button_label");
 			var span = link.select('span[message_id]')[0];
-            var title = MessageHash[span.readAttribute("message_id")];
+            var title = I18N[span.readAttribute("message_id")];
 			if(span) span.update(title);
 			this.actions.set(link.id, link);
 			if(link.getAttribute('access_key')){
@@ -350,7 +350,7 @@ Class.create("View", Pane, {
 		if(this.loading) return;
 		addLightboxMarkupToElement(this.element);
 		var img = new Element('img', {
-			src: ajxpResourcesFolder+'/images/loadingImage.gif'
+			src: THEME.path+'/image/loadingImage.gif'
 		});
 		var overlay = this.element.down("#element_overlay");
 		overlay.insert(img);
@@ -560,20 +560,20 @@ Class.create("View", Pane, {
 	//setOnLoad : function(element){	
 		//addLightboxMarkupToElement(element);
 		//var img = document.createElement("img");
-		//img.src = ajxpResourcesFolder+"/images/loadingImage.gif";
+		//img.src = THEME.path+"/image/loadingImage.gif";
 		//$(element).select("#element_overlay")[0].appendChild(img);
 		//this.loading = true;
 	//},
 	/**
 	 * TODO move somewhere?
 	 * Called by the other components to create a preview (thumbnail) of a given node
-	 * @param ajxpNode Node The node to display
+	 * @param item Node The node to display
 	 * @param rich Boolean whether to display a rich content (flash, video, etc...) or not (image)
 	 * @returns Element
 	 */
-	getPreview : function(ajxpNode, rich){
+	getPreview : function(item, rich){
 		// Return icon if not overriden by derived classes
-		src = AbstractEditor.prototype.getThumbnailSource(ajxpNode);
+		src = AbstractEditor.prototype.getThumbnailSource(item);
 		imgObject = new Element("img", {src: src, width: 64, height: 64, align: 'absmiddle', border: 0});
 		imgObject.resizePreviewElement = function(dimensionObject){
 			dimensionObject.maxWidth = dimensionObject.maxHeight = 64;
@@ -593,11 +593,11 @@ Class.create("View", Pane, {
 	/**
 	 * TODO move somewhere?
 	 * Gets the standard thumbnail source for previewing the node
-	 * @param ajxpNode Node
+	 * @param item Node
 	 * @returns String
 	 */
-	getThumbnailSource : function(ajxpNode){
-		return resolveImageSource(ajxpNode.getIcon(), "/images/mimes/ICON_SIZE", 64);
+	getThumbnailSource : function(item){
+		return resolveImageSource(item.getIcon(), "/image/mimes/ICON_SIZE", 64);
 	},
 	/**
 	 * Clear all content

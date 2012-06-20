@@ -129,9 +129,9 @@ Class.create("ActivityMonitor", {
 		window.clearInterval(this.interval);
 		this.interval = window.setInterval(this.idleObserver.bind(this), 1000);
 		if(!this.warningPane){
-			var mess = MessageHash[375].replace("__IDLE__", Math.round(this._warningTime/60) + 'mn');
+			var mess = I18N[375].replace("__IDLE__", Math.round(this._warningTime/60) + 'mn');
 			mess = mess.replace("__LOGOUT__", "<span class=\"warning_timer\"></span>");
-			this.warningPane = new Element('div', {id: "activity_monitor_warning", className: 'dialogBox', style: 'padding:3px'}).update('<div class="dialogContent">'+mess+'<br><span class="click_anywhere">'+MessageHash[376]+'</span></div>');
+			this.warningPane = new Element('div', {id: "activity_monitor_warning", className: 'dialogBox', style: 'padding:3px'}).update('<div class="dialogContent">'+mess+'<br><span class="click_anywhere">'+I18N[376]+'</span></div>');
 			$(document.body).insert(this.warningPane);			
 		}
 		displayLightBoxById("activity_monitor_warning");

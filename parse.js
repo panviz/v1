@@ -51,11 +51,14 @@ var xml2json = function(files){
 }
 
 var replace = function(files){
+	var exp = 'ajxp_';
+	var sub = '';
 	var counter = 0;
 	var process = [];
+	var regxp = new RegExp(exp);
 	files.forEach(function(file){
-		if (file.match(/\.js|\.txt|\.html|\.css/gi)) {
-			process.push(path + '/module/' + file);
+		if (file.match(/\.js|\.txt|\.html|\.css|\.xml/gi)) {
+			process.push(path + '/' + file);
 		}
 	})
 	process.forEach(function(file){
@@ -64,10 +67,10 @@ var replace = function(files){
 		var f = new wrench.LineReader(file);
 		while(f.hasNextLine()) {
 			var line = f.getNextLine();
-			var exp = /ajaxplorer/g;
-			if (line.match(exp)){
-				console.log("LINE: " + line);
-				line = line.replace(exp, 'app');
+			if (line.match(regxp)){
+				//console.log("LINE: " + line);
+				console.log(line.substr(line.indexOf(exp)));
+				line = line.replace(regxp, sub);
 				changed = true;
 				counter++
 			}
@@ -75,10 +78,10 @@ var replace = function(files){
 		}
 		if (changed){
 			console.log(counter + ': '+ file)
-			fs.writeFileSync(file, data);
+			//fs.writeFileSync(file, data);
 		}
 	})
 }
 
-var files = wrench.readdirSyncRecursive('module');
-xml2json(files)
+var files = wrench.readdirSyncRecursive('.');
+replace(files)

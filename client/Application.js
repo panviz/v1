@@ -41,7 +41,6 @@ Class.create("Application", {
 	 * Event app:loaded is fired at the end.
 	 */
 	init : function(){
-					 debugger
 		//split progress bar on 5 parts
 		modal.setLoadingStepCounts(5);
 		//sync load
@@ -110,12 +109,12 @@ Class.create("Application", {
 			modal.updateLoadingProgress('Actions: Done');
 				
 			if(this.guiLoaded) {
-				this.refreshTemplateParts();
-				this.refreshGuiComponentConfigs();
+				//this.refreshTemplateParts();
+				//this.refreshGuiComponentConfigs();
 			} else {
 				document.observe("app:gui_loaded", function(){
-					this.refreshTemplateParts();
-					this.refreshGuiComponentConfigs();
+					//this.refreshTemplateParts();
+					//this.refreshGuiComponentConfigs();
 				}.bind(this));
 			}
 		this.loadActiveRepository();
@@ -158,27 +157,27 @@ Class.create("Application", {
 					for(var i=compRegistry.length;i>0;i--){
 							var el = compRegistry[i-1];
 							var id = el.id;
-							compRegistry[i-1] = new el['jClass'](el.item, el.options);
+							compRegistry[i-1] = new el['jClass'](el.node, el.options);
 							window[id] = compRegistry[i-1];
 							lastInst = compRegistry[i-1];
 					}
 					if(lastInst){
 							lastInst.resize();
 					}
-					for(var j=0;j<compRegistry.length;j++){
-							var obj = compRegistry[j];
-							if(Class.objectImplements(obj, "IFocusable")){
-									obj.setFocusBehaviour();
-									this._focusables.push(obj);
-							}
-							if(Class.objectImplements(obj, "IContextMenuable")){
-									obj.setContextualMenu(this.contextMenu);
-							}
-							if(Class.objectImplements(obj, "IActionProvider")){
-									if(!this.guiActions) this.guiActions = new Hash();
-									this.guiActions.update(obj.getActions());
-							}
-					}
+					//for(var j=0;j<compRegistry.length;j++){
+							//var obj = compRegistry[j];
+							//if(Class.objectImplements(obj, "IFocusable")){
+									//obj.setFocusBehaviour();
+									//this._focusables.push(obj);
+							//}
+							//if(Class.objectImplements(obj, "IContextMenuable")){
+									//obj.setContextualMenu(this.contextMenu);
+							//}
+							//if(Class.objectImplements(obj, "IActionProvider")){
+									//if(!this.guiActions) this.guiActions = new Hash();
+									//this.guiActions.update(obj.getActions());
+							//}
+					//}
 			}
 	},
 
@@ -202,7 +201,7 @@ Class.create("Application", {
 				}
 			}
 			if(jClass && id && Class.objectImplements(jClass, "IWidget")){
-				componentsRegistry.push({id: id, item: div, jClass: jClass, options: options});
+				componentsRegistry.push({id: id, node: div, jClass: jClass, options: options});
 			}		
 		});
 	},
@@ -489,6 +488,7 @@ Class.create("Application", {
 			this.skipLsHistory = false;
 		}
 		
+									debugger
 		rootItem.load();
 	},
 
@@ -566,8 +566,8 @@ Class.create("Application", {
 				previewProvider: !!(xmlItem.getAttribute("previewProvider")=="true"),
 				order: (xmlItem.getAttribute("order") ? parseInt(xmlItem.getAttribute("order")) : 0),
 				formId: xmlItem.getAttribute("formId") || null,				
-				text: MessageHash[xmlItem.getAttribute("text")],
-				title: MessageHash[xmlItem.getAttribute("title")],
+				text: I18N[xmlItem.getAttribute("text")],
+				title: I18N[xmlItem.getAttribute("title")],
 				icon: xmlItem.getAttribute("icon"),
 				editorClass: xmlItem.getAttribute("className"),
 				mimes: $A(xmlItem.getAttribute("mimes").split(",")),
@@ -733,9 +733,9 @@ Class.create("Application", {
 		connection.onComplete = function(transport){
 			if(transport.responseText){
 				var result = transport.responseText.evalScripts();
-				MessageHash = result[0];
-				for(var key in MessageHash){
-					MessageHash[key] = MessageHash[key].replace("\\n", "\n");
+				I18N = result[0];
+				for(var key in I18N){
+					I18N[key] = I18N[key].replace("\\n", "\n");
 				}
 				this.updateI18nTags();
 				if(this.guiActions){
@@ -759,7 +759,7 @@ Class.create("Application", {
 		messageTags.each(function(tag){	
 			var messageId = tag.getAttribute("j_message_id");
 			try{
-				tag.update(MessageHash[messageId]);
+				tag.update(I18N[messageId]);
 			}catch(e){}
 		});
 	},
@@ -778,15 +778,15 @@ Class.create("Application", {
 			if(transport.responseJSON){
 				seedInputField.value = transport.responseJSON.seed;
 				var src = window.serverAccessPath + '&get_action=get_captcha&sid='+Math.random();
-				var refreshSrc = jResourcesFolder + '/images/actions/16/reload.png';
+				var refreshSrc = jResourcesFolder + '/image/action/16/reload.png';
 				if(existingCaptcha){
 					existingCaptcha.src = src;
 				}else{
 					var insert = {};
-					var string = '<div class="main_captcha_div" style="padding-top: 4px;"><div class="dialogLegend" j_message_id="389">'+MessageHash[389]+'</div>';
+					var string = '<div class="main_captcha_div" style="padding-top: 4px;"><div class="dialogLegend" j_message_id="389">'+I18N[389]+'</div>';
 					string += '<div class="captcha_container"><img id="captcha_image" align="top" src="'+src+'" width="170" height="80"><img align="top" style="cursor:pointer;" id="captcha_refresh" src="'+refreshSrc+'" with="16" height="16"></div>';
 					string += '<div class="SF_element">';
-					string += '		<div class="SF_label" j_message_id="390">'+MessageHash[390]+'</div> <div class="SF_input"><input type="text" class="dialogFocus dialogEnterKey" style="width: 100px; padding: 0px;" name="captcha_code"></div>';
+					string += '		<div class="SF_label" j_message_id="390">'+I18N[390]+'</div> <div class="SF_input"><input type="text" class="dialogFocus dialogEnterKey" style="width: 100px; padding: 0px;" name="captcha_code"></div>';
 					string += '</div>';
 					string += '<div style="clear:left; margin-bottom:7px;"></div></div>';
 					insert[captchaPosition] = string;

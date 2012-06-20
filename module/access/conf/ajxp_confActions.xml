@@ -80,16 +80,16 @@
 				<clientForm id="create_user_box"><![CDATA[
 					<div id="create_user_box" action="create_user" box_width="210">
 						<div class="SF_element">
-							<div class="SF_label" ajxp_message_id="94">AJXP_MESSAGE[94] : </div><input name="new_user_login" type="text" class="dialogFocus SF_input"/>
+							<div class="SF_label" message_id="94">AJXP_MESSAGE[94] : </div><input name="new_user_login" type="text" class="dialogFocus SF_input"/>
 						</div>
 						<div class="SF_element">
-							<div class="SF_label" ajxp_message_id="182">AJXP_MESSAGE[182] : </div><input name="new_user_pwd" type="password" class="SF_input"/>
+							<div class="SF_label" message_id="182">AJXP_MESSAGE[182] : </div><input name="new_user_pwd" type="password" class="SF_input"/>
 						</div>
 						<div class="SF_element">						
-							<div class="SF_label" ajxp_message_id="199">AJXP_MESSAGE[199] : </div><input name="new_user_pwd_conf" type="password" class="SF_input"/>
+							<div class="SF_label" message_id="199">AJXP_MESSAGE[199] : </div><input name="new_user_pwd_conf" type="password" class="SF_input"/>
 						</div>
 						<div class="SF_element" id="pwd_strength_container"></div>
-						<div style="clear:both; display:none;" class="dialogLegend" ajxp_message_id="89">AJXP_MESSAGE[ajxp_conf.89]</div>
+						<div style="clear:both; display:none;" class="dialogLegend" message_id="89">AJXP_MESSAGE[ajxp_conf.89]</div>
 						<div id="custom_pane" class="config_subblock" style="display:none;">
 							
 						</div>
@@ -99,7 +99,7 @@
 				</processing>
 		</action>
 		<action name="create_role">
-			<gui text="ajxp_conf.75" title="ajxp_conf.75" src="user_group_new.png" accessKey="ajxp_conf.role_access" hasAccessKey="true">
+			<gui text="ajxp_conf.75" title="ajxp_conf.75" src="user_group_new.png" accessKey="conf.role_access" hasAccessKey="true">
 				<context selection="false" dir="false" recycle="hidden"  behaviour="hidden"
 					actionBar="true" contextMenu="false" infoPanel="false"
 					actionBarGroup="put" inZip="false">
@@ -113,7 +113,7 @@
 				<clientForm id="create_role_box"><![CDATA[
 					<div id="create_role_box" action="create_role" box_width="210">
 						<div class="SF_element">
-							<div class="SF_label" ajxp_message_id="ajxp_conf.76">AJXP_MESSAGE[ajxp_conf.76] : </div><input name="role_id" type="text" class="dialogFocus SF_input"/>
+							<div class="SF_label" message_id="conf.76">AJXP_MESSAGE[conf.76] : </div><input name="role_id" type="text" class="dialogFocus SF_input"/>
 						</div>
 					</div>
 				]]></clientForm>
@@ -121,7 +121,7 @@
 			</processing>
 		</action>
 		<action name="create_repository">
-			<gui text="299" title="300" src="hdd_external_unmount.png" accessKey="ajxp_conf.repository_access_key" hasAccessKey="true">
+			<gui text="299" title="300" src="hdd_external_unmount.png" accessKey="conf.repository_access_key" hasAccessKey="true">
 				<context selection="false" dir="false" recycle="hidden"  behaviour="hidden"
 					actionBar="true" contextMenu="false" infoPanel="false"
 					actionBarGroup="put" inZip="false">
@@ -133,26 +133,26 @@
 					var context = window.builderContext;
 					context.builderMenuItems = $A([]);
                     context.builderMenuItems.push({
-                        name:MessageHash['ajxp_conf.90'],
-                        alt:MessageHash[300],
+                        name:I18N['conf.90'],
+                        alt:I18N[300],
                         isDefault : true,
-                        image:resolveImageSource('images/actions/22/hdd_external_unmount.png', '',  22),
+                        image:resolveImageSource('image/action/22/hdd_external_unmount.png', '',  22),
                         callback:function(e){
                             window.createRepoCmd = "repository";
                             this.options.src = 'hdd_external_unmount.png';
-                            this.options.title = MessageHash[300];
+                            this.options.title = I18N[300];
                             this.apply();
                         }.bind(context)
                     } );
                     context.builderMenuItems.push({
-                        name:MessageHash['ajxp_conf.91'],
-                        alt:MessageHash['ajxp_conf.92'],
+                        name:I18N['conf.91'],
+                        alt:I18N['conf.92'],
                         isDefault : false,
-                        image:resolveImageSource('images/actions/22/hdd_external_mount.png', '',  22),
+                        image:resolveImageSource('image/action/22/hdd_external_mount.png', '',  22),
                         callback:function(e){
                             window.createRepoCmd = "template";
                             this.options.src = 'hdd_external_mount.png';
-                            this.options.title = MessageHash['ajxp_conf.92'];
+                            this.options.title = I18N['conf.92'];
                             this.apply();
                         }.bind(context)
                     } );
@@ -173,8 +173,8 @@
 				<clientForm id="create_repository_box"><![CDATA[
 					<div id="create_repository_box" action="create_repository" box_width="320">
 					    <div id="creation_form" style="padding:5px;padding-top:0px;">
-                            <div class="dialogLegend repoCreationString">AJXP_MESSAGE[ajxp_conf.95]</div>
-                            <div class="dialogLegend tplCreationString">AJXP_MESSAGE[ajxp_conf.96]</div>
+                            <div class="dialogLegend repoCreationString">AJXP_MESSAGE[conf.95]</div>
+                            <div class="dialogLegend tplCreationString">AJXP_MESSAGE[conf.96]</div>
                             <div class="SF_element">
                                 <div class="SF_label repoCreationString">Repository Label* : </div>
                                 <div class="SF_label tplCreationString">Template Label* : </div>
@@ -188,8 +188,8 @@
 						</div>
 						<div id="driver_form" style="margin-top:32px;"></div>
 						<div class="dialogButtons">
-							<input type="image" src="AJXP_THEME_FOLDER/images/actions/22/dialog_ok_apply.png" height="22" width="22" class="dialogButton" id="submit_create_repo" value="Next" class="button" onclick="return false;">
-							<input type="image" src="AJXP_THEME_FOLDER/images/actions/22/dialog_close.png" height="22" width="22" class="dialogButton" value="Cancel" class="button" onclick="hideLightBox();return false;">
+							<input type="image" src="AJXP_THEME_FOLDER/image/action/22/dialog_ok_apply.png" height="22" width="22" class="dialogButton" id="submit_create_repo" value="Next" class="button" onclick="return false;">
+							<input type="image" src="AJXP_THEME_FOLDER/image/action/22/dialog_close.png" height="22" width="22" class="dialogButton" value="Cancel" class="button" onclick="hideLightBox();return false;">
 						</div>
 					</div>				
 				]]></clientForm>
@@ -224,7 +224,7 @@
 				</processing>
 		</action>						
 		<action name="batch_users_roles" fileDefault="false">
-			<gui text="ajxp_conf.94" title="ajxp_conf.82" src="edit.png" accessKey="edit_access_key" hasAccessKey="true">
+			<gui text="conf.94" title="conf.82" src="edit.png" accessKey="edit_access_key" hasAccessKey="true">
 				<context selection="true" dir="" recycle="hidden"  behaviour="hidden"
 					actionBar="true" contextMenu="true" infoPanel="true"
 					actionBarGroup="change" inZip="false">
@@ -263,19 +263,19 @@
 			</processing>
 		</action>
 		<action name="edit" fileDefault="true">
-			<gui text="ajxp_conf.93" title="301" src="edit.png" accessKey="edit_access_key" hasAccessKey="true">
+			<gui text="conf.93" title="301" src="edit.png" accessKey="edit_access_key" hasAccessKey="true">
 				<context selection="true" dir="" recycle="hidden"  behaviour="hidden"
 					actionBar="true" contextMenu="true" infoPanel="true"
 					actionBarGroup="change" inZip="false">
 				</context>
-				<selectionContext dir="false" file="true" recycle="false" unique="true" allowedMimes="user,user_editable,repository,repository_editable,role,ajxp_plugin" behaviour="hidden"></selectionContext></gui>
+				<selectionContext dir="false" file="true" recycle="false" unique="true" allowedMimes="user,user_editable,repository,repository_editable,role,plugin" behaviour="hidden"></selectionContext></gui>
 			<rightsContext noUser="true" userLogged="only" read="true" write="true" adminOnly=""></rightsContext>
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
 					var userSelection =  application.getUserSelection();
 					var node = userSelection.getUniqueNode();
 					var meta = node.getMetadata();
-					var mime = meta.get("ajxp_mime");
+					var mime = meta.get("mime");
 					if(mime == "user" || mime == "user_editable" || mime == "role"){
 						var loadFunc = function(oForm){
 							application.getUserSelection().updateFormOrUrl(oForm);
@@ -290,7 +290,7 @@
 							}
 						};
 						modal.showDialogForm('Edit Online', 'edit_config_box', loadFunc, function(){hideLightBox();}, null, true);
-					}else if(mime == "ajxp_plugin"){
+					}else if(mime == "plugin"){
 						var loadFunc = function(oForm){
 							application.getUserSelection().updateFormOrUrl(oForm);
 							if(!application.actionBar.configEditor){
@@ -305,7 +305,7 @@
 							toSubmit.set("plugin_id", node.getMetadata().get("plugin_id"));
 							var missing = configEditor.formManager.serializeParametersInputs(oForm, toSubmit, 'DRIVER_OPTION_');
 							if(missing){
-								configEditor.displayMessage("ERROR", MessageHash['ajxp_conf.36']);
+								configEditor.displayMessage("ERROR", I18N['conf.36']);
 							}else{
 								configEditor.submitForm('edit', 'edit_plugin_options', toSubmit);							
 								hideLightBox();
@@ -331,7 +331,7 @@
 							toSubmit.set("repository_id", configEditor.currentRepoId);
 							var missing = configEditor.formManager.serializeParametersInputs(configEditor.currentForm, toSubmit, 'DRIVER_OPTION_', configEditor.currentRepoIsTemplate);
 							if(missing && !configEditor.currentRepoIsTemplate){
-								configEditor.displayMessage("ERROR", MessageHash['ajxp_conf.36']);
+								configEditor.displayMessage("ERROR", I18N['conf.36']);
 							}else{
 								configEditor.submitForm('edit_repository', 'edit_repository_data', toSubmit, null, function(){
 									this.loadRepList();
@@ -348,49 +348,49 @@
 						<fieldset>							
 							<div id="user_acl">
 								<div id="roles_pane">									
-									<div class="dialogLegend" ajxp_message_id="ajxp_conf.72">AJXP_MESSAGE[ajxp_conf.72]</div>
+									<div class="dialogLegend" message_id="conf.72">AJXP_MESSAGE[conf.72]</div>
 									<div>
-										<div style="width:44%;float:left;"><span ajxp_message_id="ajxp_conf.71">AJXP_MESSAGE[ajxp_conf.71]</span> : <br><div id="available_roles"></div></div>
+										<div style="width:44%;float:left;"><span message_id="conf.71">AJXP_MESSAGE[conf.71]</span> : <br><div id="available_roles"></div></div>
 										<div style="width:10%;float:left;text-align:center;vertical-align:middle;"><br>&gt;&gt;<br>&lt;&lt;</div>
-										<div style="width:44%;float:right;"><span ajxp_message_id="ajxp_conf.70">AJXP_MESSAGE[ajxp_conf.70]</span> : <br><div id="user_roles"></div></div>
+										<div style="width:44%;float:right;"><span message_id="conf.70">AJXP_MESSAGE[conf.70]</span> : <br><div id="user_roles"></div></div>
 									</div>
 								</div>
-								<div class="dialogLegend" id="rights_legend" style="clear:left;padding-top:15px;" ajxp_message_id="80">AJXP_MESSAGE[ajxp_conf.80]</div>
+								<div class="dialogLegend" id="rights_legend" style="clear:left;padding-top:15px;" message_id="80">AJXP_MESSAGE[conf.80]</div>
 								<div id="rights_pane">
 									<table class="repository" width="100%" cellspacing="0">
 										<tbody>
-										<tr id="loading_row"><td><span ajxp_message_id="ajxp_conf.33">AJXP_MESSAGE[ajxp_conf.33]</span></td></tr>
+										<tr id="loading_row"><td><span message_id="conf.33">AJXP_MESSAGE[conf.33]</span></td></tr>
 										</tbody>
 									</table>
 								</div>
 								<div id="actions_pane" style="display:none;padding-top:5px;color:#666;">
-								    <div style="border:1px solid #aaa;padding:5px;margin-bottom:5px;"><input type="checkbox" id="default_role_cb" style="float:left;">AJXP_MESSAGE[ajxp_conf.112]</div>
-									<div style="border:1px solid #aaa;padding:5px;"><div style="margin-bottom:5px;"><b>AJXP_MESSAGE[ajxp_conf.85]</b> : AJXP_MESSAGE[ajxp_conf.86]</div>
+								    <div style="border:1px solid #aaa;padding:5px;margin-bottom:5px;"><input type="checkbox" id="default_role_cb" style="float:left;">AJXP_MESSAGE[conf.112]</div>
+									<div style="border:1px solid #aaa;padding:5px;"><div style="margin-bottom:5px;"><b>AJXP_MESSAGE[conf.85]</b> : AJXP_MESSAGE[conf.86]</div>
                                         <textarea id="disabled_actions" style="width:317px;padding:1px; height:60px;"></textarea>
-                                        <input type="image" value="SAVE" class="dialogButton onclick="return false;" src="AJXP_THEME_FOLDER/images/actions/22/dialog_ok_apply.png" id="submit_actions_pane" style="float:right;margin:0px;"/>
+                                        <input type="image" value="SAVE" class="dialogButton onclick="return false;" src="AJXP_THEME_FOLDER/image/action/22/dialog_ok_apply.png" id="submit_actions_pane" style="float:right;margin:0px;"/>
 									</div>
 								</div>
 							</div>
 							<div id="user_personal" style="display:none;">
 								<div id="password_pane">
-									<div class="dialogLegend" ajxp_message_id="ajxp_conf.26">AJXP_MESSAGE[ajxp_conf.26]</div>
+									<div class="dialogLegend" message_id="conf.26">AJXP_MESSAGE[conf.26]</div>
 									<div class="config_subblock" id="pass_subblock">
-										<input style="float:right;margin-top:0px;" type="image" class="dialogButton" value="OK" name="new_pass_button" onclick="return false;" src="AJXP_THEME_FOLDER/images/actions/22/dialog_ok_apply.png"/>									
-										<span ajxp_message_id="182" style="display: block;float: left;padding-right: 5px;padding-top: 4px;text-align: right;width: 60px;">AJXP_MESSAGE[182]</span> <input type="password" id="new_pass" style="width:70px;margin-right:10px;"/><span ajxp_message_id="199">AJXP_MESSAGE[199]</span> <input type="password" id="new_pass_confirm" style="width:70px;"/>
+										<input style="float:right;margin-top:0px;" type="image" class="dialogButton" value="OK" name="new_pass_button" onclick="return false;" src="AJXP_THEME_FOLDER/image/action/22/dialog_ok_apply.png"/>									
+										<span message_id="182" style="display: block;float: left;padding-right: 5px;padding-top: 4px;text-align: right;width: 60px;">AJXP_MESSAGE[182]</span> <input type="password" id="new_pass" style="width:70px;margin-right:10px;"/><span message_id="199">AJXP_MESSAGE[199]</span> <input type="password" id="new_pass_confirm" style="width:70px;"/>
 										<div style="clear:left;width:240px;" id="strength_container"></div>
 									</div>
 								</div>
 								<div id="admin_right_pane" style="clear:left;">
-									<div class="dialogLegend" ajxp_message_id="ajxp_conf.27">AJXP_MESSAGE[ajxp_conf.27]</div>
+									<div class="dialogLegend" message_id="conf.27">AJXP_MESSAGE[conf.27]</div>
 									<div class="config_subblock">
-										<input id="admin_rights" class="user_delete_confirm" type="checkbox" style="width:20px;float:right;" /><span ajxp_message_id="ajpx_conf.28">AJXP_MESSAGE[ajxp_conf.28]</span>
+										<input id="admin_rights" class="user_delete_confirm" type="checkbox" style="width:20px;float:right;" /><span message_id="ajpx_conf.28">AJXP_MESSAGE[conf.28]</span>
 									</div>
 								</div>
-								<div class="dialogLegend" style="display:none;" ajxp_message_id="89">AJXP_MESSAGE[ajxp_conf.89]</div>
+								<div class="dialogLegend" style="display:none;" message_id="89">AJXP_MESSAGE[conf.89]</div>
 								<div id="custom_pane" class="config_subblock" style="display:none;">
 									
 								</div>
-								<div class="dialogLegend" ajxp_message_id="81">AJXP_MESSAGE[ajxp_conf.81]</div>
+								<div class="dialogLegend" message_id="81">AJXP_MESSAGE[conf.81]</div>
 								<div id="wallets_pane" class="config_subblock" style="margin-bottom:0px;">
 									
 								</div>
@@ -399,7 +399,7 @@
 					</div>					
 					<div id="edit_repo_box" action="edit_repository" box_width="320">
 						<fieldset id="options_pane">
-							<span ajxp_message_id="ajxp_conf.33">AJXP_MESSAGE[ajxp_conf.33]</span>
+							<span message_id="conf.33">AJXP_MESSAGE[conf.33]</span>
 						</fieldset>
 					</div>													
 				]]></clientForm>
@@ -440,20 +440,20 @@
 					var node = userSelection.getUniqueNode();
 					var meta = node.getMetadata();
 					var deleteMessage, fieldName, fieldValue;
-					if(meta.get("ajxp_mime") == "user_editable"){
-						deleteMessage = MessageHash['ajxp_conf.34'];
+					if(meta.get("mime") == "user_editable"){
+						deleteMessage = I18N['conf.34'];
 						fieldName = "user_id";
 						fieldValue = meta.get("text");
-					}else if(meta.get("ajxp_mime") == "role"){
-						deleteMessage = MessageHash['ajxp_shared.11'];
+					}else if(meta.get("mime") == "role"){
+						deleteMessage = I18N['shared.11'];
 						fieldName = "role_id";
 						fieldValue = meta.get("text");
-					}else if(meta.get("ajxp_mime") == "shared_file"){
-						deleteMessage = MessageHash['ajxp_shared.11'];
+					}else if(meta.get("mime") == "shared_file"){
+						deleteMessage = I18N['shared.11'];
 						fieldName = "shared_file";
 						fieldValue = meta.get("filename");
 					}else{
-						deleteMessage = MessageHash['ajxp_conf.35'];
+						deleteMessage = I18N['conf.35'];
 						fieldName = "repository_id";
 						fieldValue = meta.get("repository_id");
 					}
@@ -474,9 +474,9 @@
                                   var node = userSelection.getNode(i);
                                   var meta = node.getMetadata();
                                   var value;
-                                  if(meta.get("ajxp_mime") == "user_editable"){
+                                  if(meta.get("mime") == "user_editable"){
                                   	value = meta.get("text");
-                                  }else if(meta.get("ajxp_mime") == "shared_file"){
+                                  }else if(meta.get("mime") == "shared_file"){
                                   	value = meta.get("filename");
                                   }else{
                                   	value = meta.get("text");
@@ -524,7 +524,7 @@
 		   		    		var meta = node.getMetadata();	   		    		
 		   		    		for(var i=0;i<attributes.length;i++){
 		   		    			var attName = attributes[i];
-		   		    			if(attName == "ajxp_label") attName = "text";
+		   		    			if(attName == "label") attName = "text";
 		   		    			message += meta.get(attName) + '\t';
 		   		    		}
 			   		    	message += '\n';
@@ -546,7 +546,7 @@
 				</processing>
 		</action>					
 					
-	</actions>
+	</action>
 	<client_configs>
 		<component_config className="InfoPanel">
 			<infoPanel mime="generic_file" attributes="icon,text">
@@ -559,7 +559,7 @@
 				<html><![CDATA[
 				<div style="padding:10px;">
 					<div class="folderImage">
-						<img src="AJXP_THEME_FOLDER/images/mimes/64/#{icon}" height="64" width="64">
+						<img src="AJXP_THEME_FOLDER/image/mimes/64/#{icon}" height="64" width="64">
 					</div>
 					<b>#{name_string}</b> : #{text}
 				</div>
@@ -573,7 +573,7 @@
 				<html><![CDATA[
 					<div style="padding:10px;">
 						<div class="folderImage">
-							<img src="AJXP_THEME_FOLDER/images/mimes/64/#{icon}" height="64" width="64">
+							<img src="AJXP_THEME_FOLDER/image/mimes/64/#{icon}" height="64" width="64">
 						</div>
 						<b>#{name_string}</b> : #{text}
 					</div>
@@ -586,7 +586,7 @@
 				<html><![CDATA[
 					<div style="padding:10px;">
 						<div class="folderImage">
-							<img src="AJXP_THEME_FOLDER/images/mimes/64/admin.png" height="64" width="64">
+							<img src="AJXP_THEME_FOLDER/image/mimes/64/admin.png" height="64" width="64">
 						</div>
 					</div>
 				]]></html>

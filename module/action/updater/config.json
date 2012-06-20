@@ -84,10 +84,8 @@
                 "dialogOpenForm": "upgrade_form",
                 "dialogOkButtonOnly": "false",
                 "dialogSkipButtons": "false",
-                "dialogOnOpen": "var conn = new Connexion();$(oForm).down('div[id=\"upgrade_checking\"]').show();$(oForm).down('div[id=\"upgrade_checking\"]').update('Checking for available upgrades');conn.addParameter(\"get_action\", \"get_upgrade_path\");conn.onComplete = function(transport){var response = transport.responseJSON;if(response && response.packages.length){for(var i=0;i<response.packages.length;i++){response.packages[i] = '<li>'+getBaseName(response.packages[i])+'</li>';}var pList = response.packages.join(\" \");$(oForm).down('div[id=\"upgrade_status\"]').show();$(oForm).down('div[id=\"upgrade_status\"]').insert({top:'The following packages will be downloaded and installed : <ul style=\"margin-top:4px;\">'+ pList+'</ul> <br>'});var startButton = $(oForm).down('div[id=\"start_upgrade_button\"]');var stepsContainer = $(oForm).down('iframe[id=\"upgrade_steps\"]');startButton.observe(\"click\", function(){if(window.confirm('Are you sure you want to perform the upgrade?')){var conn = new Connexion();stepsContainer.src = conn._baseUrl + \"&get_action=perform_upgrade\";}});$(oForm).down('div[id=\"upgrade_checking\"]').hide();modal.refreshDialogPosition();}else{$(oForm).down('div[id=\"upgrade_checking\"]').update('No necessary upgrade detected');}};conn.sendAsync();",
                 "dialogOnComplete": {
                   "hideDialog": "true",
-                  "$t": "var startButton = $(oForm).down('div[id=\"start_upgrade_button\"]');startButton.stopObserving(\"click\");$(oForm).down('div[id=\"upgrade_status\"]').hide();"
                 },
                 "dialogOnCancel": {}
               },
@@ -125,7 +123,6 @@
                 "dialogOpenForm": "import_324_form",
                 "dialogOkButtonOnly": "false",
                 "dialogSkipButtons": "false",
-                "dialogOnOpen": "var startButton = $(oForm).down('div[id=\"start_upgrade_button\"]');startButton.observe(\"click\", function(){var conn = new Connexion();conn.addParameter(\"get_action\", \"import_from_324\");conn.addParameter(\"previous_location\", $(oForm).down('input[name=\"previous_location\"]').value);if($(oForm).down('div[id=\"start_upgrade_button\"]').RUN_NOW){conn.addParameter(\"real_run\", \"true\");}conn.onComplete = function(transport){$(oForm).down('div[id=\"upgrade_steps\"]').update(transport.responseText);$(oForm).down('div[id=\"start_upgrade_button\"]').update(MessageHash['updater.9']);$(oForm).down('div[id=\"start_upgrade_button\"]').RUN_NOW = true;};conn.sendAsync();});",
                 "dialogOnComplete": {
                   "hideDialog": "true",
                   "$t": "$(oForm).down('div[id=\"start_upgrade_button\"]').stopObserving(\"click\");"
@@ -174,7 +171,6 @@
                 "dialogOpenForm": "migrate_metaserial",
                 "dialogOkButtonOnly": "false",
                 "dialogSkipButtons": "false",
-                "dialogOnOpen": "var startButton = $(oForm).down('div[id=\"start_upgrade_button\"]');startButton.observe(\"click\", function(){var conn = new Connexion();conn.addParameter(\"get_action\", \"migrate_metaserial\");conn.addParameter(\"repository_id\", getBaseName(app.getUserSelection().getUniqueNode().getPath()));if($(oForm).down('div[id=\"start_upgrade_button\"]').RUN_NOW){conn.addParameter(\"real_run\", \"true\");}conn.onComplete = function(transport){$(oForm).down('div[id=\"upgrade_steps\"]').update(transport.responseText);$(oForm).down('div[id=\"start_upgrade_button\"]').update(MessageHash['updater.14']);$(oForm).down('div[id=\"start_upgrade_button\"]').RUN_NOW = true;};conn.sendAsync();});",
                 "dialogOnComplete": {
                   "hideDialog": "true",
                   "$t": "$(oForm).down('div[id=\"start_upgrade_button\"]').stopObserving(\"click\");$(oForm).down('div[id=\"start_upgrade_button\"]').RUN_NOW = false;"

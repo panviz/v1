@@ -7,26 +7,26 @@ Class.create("Pane", {
 	
 	/**
 	 * Constructor
-	 * @param htmlElement HTMLElement The Node anchor
+	 * @param element HTMLElement The Node anchor
 	 * @param options Object The pane parameters
 	 */
-	initialize : function(htmlElement, options){
-		this.htmlElement = $(htmlElement);
-		if(!this.htmlElement){
+	initialize : function(element, options){
+		this.element = $(element);
+		if(!this.element){
 			throw new Error('Cannot find element for Pane : ' + this.__className);
 		}
 		this.options = options || {};
-		this.htmlElement.ajxpPaneObject = this;
-		if(this.htmlElement.getAttribute('ajxpPaneHeader')){
+		this.element.paneObject = this;
+		if(this.element.getAttribute('paneHeader')){
 			this.addPaneHeader(
-				this.htmlElement.getAttribute('ajxpPaneHeader'), 
-				this.htmlElement.getAttribute('ajxpPaneIcon'));
+				this.element.getAttribute('paneHeader'), 
+				this.element.getAttribute('paneIcon'));
 		}
-        if(this.htmlElement && this.options.elementStyle){
-            this.htmlElement.setStyle(this.options.elementStyle);
+        if(this.element && this.options.elementStyle){
+            this.element.setStyle(this.options.elementStyle);
         }
 		this.childrenPanes = $A([]);
-		this.scanChildrenPanes(this.htmlElement);
+		this.scanChildrenPanes(this.element);
 	},
 	
 	/**
@@ -40,7 +40,7 @@ Class.create("Pane", {
     			var expr = this.options.fitMarginBottom;
     			try{marginBottom = parseInt(eval(expr));}catch(e){}
     		}
-    		fitHeightToBottom(this.htmlElement, (this.options.fitParent ? $(this.options.fitParent) : null), expr);
+    		fitHeightToBottom(this.element, (this.options.fitParent ? $(this.options.fitParent) : null), expr);
     	}
     	this.childrenPanes.invoke('resize');
 	},
@@ -49,7 +49,7 @@ Class.create("Pane", {
 	 * Implementation of the IWidget methods
 	 */	
 	getDomNode : function(){
-		return this.htmlElement;
+		return this.element;
 	},
 	
 	/**
@@ -59,11 +59,11 @@ Class.create("Pane", {
         this.childrenPanes.each(function(child){
             child.destroy();
         });
-        this.htmlElement.update("");
-        if(window[this.htmlElement.id]){
-            delete window[this.htmlElement.id];
+        this.element.update("");
+        if(window[this.element.id]){
+            delete window[this.element.id];
         }
-		this.htmlElement = null;
+		this.element = null;
 
 	},
 	
@@ -74,8 +74,8 @@ Class.create("Pane", {
 	scanChildrenPanes : function(element){
 		if(!element.childNodes) return;
 		$A(element.childNodes).each(function(c){
-			if(c.ajxpPaneObject) {
-				this.childrenPanes.push(c.ajxpPaneObject);
+			if(c.paneObject) {
+				this.childrenPanes.push(c.paneObject);
 			}else{
 				this.scanChildrenPanes(c);
 			}
@@ -88,9 +88,9 @@ Class.create("Pane", {
 	 */
 	showElement : function(show){
 		if(show){
-			this.htmlElement.show();
+			this.element.show();
 		}else{
-			this.htmlElement.hide();
+			this.element.hide();
 		}
 	},
 	
@@ -100,7 +100,7 @@ Class.create("Pane", {
 	 * @param headerIcon String Path for the icon image
 	 */
 	addPaneHeader : function(headerLabel, headerIcon){
-        var header = new Element('div', {className: 'panelHeader', ajxp_message_id: headerLabel}).update(MessageHash[headerLabel]);
+        var header = new Element('div', {className: 'panelHeader', message_id: headerLabel}).update(I18N[headerLabel]);
         if(headerIcon){
             var ic = resolveImageSource(headerIcon, '/image/actions/ICON_SIZE', 16);
             header.insert({top: new Element("img", {src: ic, className: 'panelHeaderIcon'})});
@@ -108,22 +108,22 @@ Class.create("Pane", {
         }
         if(this.options.headerClose){
             var ic = resolveImageSource(this.options.headerClose.icon, '/image/actions/ICON_SIZE', 16);
-            var img = new Element("img", {src: ic, className: 'panelHeaderCloseIcon', title: MessageHash[this.options.headerClose.title]});
+            var img = new Element("img", {src: ic, className: 'panelHeaderCloseIcon', title: I18N[this.options.headerClose.title]});
             header.insert({top: img});
             var sp = this.options.headerClose.splitter;
             img.observe("click", function(){
                 window[sp]["fold"]();
             });
         }
-		this.htmlElement.insert({top : header});
+		this.element.insert({top : header});
 		disableTextSelection(header);
 	},
 	
 	/**
-	 * Sets a listener when the htmlElement is focused to notify app object
+	 * Sets a listener when the element is focused to notify app object
 	 */
 	setFocusBehaviour : function(){
-		this.htmlElement.observe("click", function(){
+		this.element.observe("click", function(){
 			if(app) app.focusOn(this);
 		}.bind(this));
 	},
@@ -132,19 +132,19 @@ Class.create("Pane", {
     getUserPreference : function(prefName){
         if(!app || !app.user) return;
         var gui_pref = app.user.getPreference("gui_preferences", true);
-        if(!gui_pref || !gui_pref[this.htmlElement.id+"_"+this.__className]) return;
-        return gui_pref[this.htmlElement.id+"_"+this.__className][prefName];
+        if(!gui_pref || !gui_pref[this.element.id+"_"+this.__className]) return;
+        return gui_pref[this.element.id+"_"+this.__className][prefName];
     },
 
     setUserPreference : function(prefName, prefValue){
         if(!app || !app.user) return;
         var guiPref = app.user.getPreference("gui_preferences", true);
         if(!guiPref) guiPref = {};
-        if(!guiPref[this.htmlElement.id+"_"+this.__className]) guiPref[this.htmlElement.id+"_"+this.__className] = {};
-        if(guiPref[this.htmlElement.id+"_"+this.__className][prefName] && guiPref[this.htmlElement.id+"_"+this.__className][prefName] == prefValue){
+        if(!guiPref[this.element.id+"_"+this.__className]) guiPref[this.element.id+"_"+this.__className] = {};
+        if(guiPref[this.element.id+"_"+this.__className][prefName] && guiPref[this.element.id+"_"+this.__className][prefName] == prefValue){
             return;
         }
-        guiPref[this.htmlElement.id+"_"+this.__className][prefName] = prefValue;
+        guiPref[this.element.id+"_"+this.__className][prefName] = prefValue;
         app.user.setPreference("gui_preferences", guiPref, true);
         app.user.savePreference("gui_preferences");
     }

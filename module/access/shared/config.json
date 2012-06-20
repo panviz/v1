@@ -61,7 +61,6 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var path;if(window.actionArguments && window.actionArguments.length>0){path = window.actionArguments[0];if(Object.isString(path)){path = new Node(path,false,getBaseName(path));}}else{userSelection = app.getUserSelection();if(userSelection && userSelection.isUnique() && (userSelection.hasDir() || userSelection.hasMime([\"zip\"]))){path = userSelection.getUniqueNode();}}if(path){app.updateContextData(path);}"
               },
               "serverCallback": {
                 "methodName": "switchAction"
@@ -112,7 +111,6 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var onLoad = function(oForm){var userSelection =  app.getUserSelection();var firstNode = userSelection.getUniqueNode();var copyDiv = $(oForm).down('input[id=\"text_copy\"]');copyDiv.setValue(firstNode.getMetadata().get('download_url'));copyDiv.select();};modal.showDialogForm('Delete', 'copy_as_text', onLoad, function(){hideLightBox(true);return false;},null,true);"
               },
               "clientForm": {
                 "id": "copy_as_text",
@@ -159,7 +157,6 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var baseUrl = ajxpServerAccessPath + \"&get_action=reset_download_counter\";baseUrl = app.getUserSelection().updateFormOrUrl(null, baseUrl);var conn = new Connection(baseUrl);conn.addParameter(\"get_action\", \"reset_download_counter\");conn.onComplete = function(transport){app.actionBar.parseXmlMessage(transport.responseXML);};conn.sendAsync();"
               },
               "serverCallback": {
                 "methodName": "switchAction"
@@ -204,7 +201,6 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var conn = new Connection();conn.addParameter(\"get_action\", \"clear_expired\");conn.onComplete = function(transport){app.actionBar.parseXmlMessage(transport.responseXML);};conn.sendAsync();"
               },
               "serverCallback": {
                 "methodName": "switchAction"
@@ -247,7 +243,6 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var onLoad = function(oForm){$(oForm).down('span[id=\"delete_message\"]').update(MessageHash['ajxp_shared.11']);$(oForm).down('input[name=\"ajxp_mime\"]').value = app.getUserSelection().getUniqueNode().getMime();};modal.showDialogForm('Delete', 'delete_shared_form', onLoad, function(){var oForm = modal.getForm();app.getUserSelection().updateFormOrUrl(oForm);app.actionBar.submitForm(oForm);hideLightBox(true);return false;});"
               },
               "clientForm": {
                 "id": "delete_shared_form",

@@ -136,7 +136,7 @@ Class.create("Draggable", Draggable, {
 				this._clone.insert(text);
 			}
 			if(max < nodes.length){
-				this._clone.insert(',<br> ' + (nodes.length-max) + ' '+MessageHash[334]+'...');
+				this._clone.insert(',<br> ' + (nodes.length-max) + ' '+I18N[334]+'...');
 			}
 			this.element.setStyle({height:'auto', width:maxWidth + 'px'});			
 			Position.absolutize(this._clone);
@@ -381,7 +381,8 @@ Class.create("Draggable", Draggable, {
 			
 });
 
-var Droppables = {
+//TODO check where should be used?
+var AppDroppables = {
 
 	options : 
 	{
@@ -389,11 +390,11 @@ var Droppables = {
 		accept:'ajxp_draggable',		
 		onDrop: function(draggable, droppable, event)
 				{
-					if(!(draggable.ajxpNode || draggable.getAttribute('user_selection')) || !droppable.ajxpNode) return;
-					var targetName = droppable.ajxpNode.getPath();
+					if(!(draggable.item || draggable.getAttribute('user_selection')) || !droppable.item) return;
+					var targetName = droppable.item.getPath();
 					var srcName;
-					if(draggable.ajxpNode){
-						var srcName = draggable.ajxpNode.getPath();
+					if(draggable.item){
+						var srcName = draggable.item.getPath();
 					}
                     if(WebFXtimer) clearTimeout(WebFXtimer);
                     var nodeId = null;

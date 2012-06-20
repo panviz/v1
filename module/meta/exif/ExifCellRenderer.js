@@ -40,7 +40,7 @@ Class.create("ExifCellRenderer", {
 		var button = new Element('div', {
 			className:'fakeUploadButton',
 			style:'padding-top:3px;width:50px;margin-bottom:0px;padding-bottom:3px;'
-		}).update('<img src="plugins/meta.exif/world.png"><br>'+MessageHash['meta.exif.2']);
+		}).update('<img src="plugins/meta.exif/world.png"><br>'+I18N['meta.exif.2']);
 		var buttonCell = new Element('td', {
 			rowspan:2,
 			align:'center',

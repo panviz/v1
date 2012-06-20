@@ -26,25 +26,25 @@
 }
 
 div.ascending > .css_gradient{
-    background: url("../images/arrow_up_margin.png") right center no-repeat; /* Old browsers */
-    background: url("../images/arrow_up_margin.png") right center no-repeat, -moz-linear-gradient(top, rgba(247,247,247,1) 0%, rgba(227,227,227,1) 50%, rgba(216,216,216,1) 51%, rgba(242,242,242,1) 100%); /* FF3.6+ */
-    background: url("../images/arrow_up_margin.png") right center no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(247,247,247,1)), color-stop(50%,rgba(227,227,227,1)), color-stop(51%,rgba(216,216,216,1)), color-stop(100%,rgba(242,242,242,1))); /* Chrome,Safari4+ */
-    background: url("../images/arrow_up_margin.png") right center no-repeat, -webkit-linear-gradient(top, rgba(247,247,247,1) 0%,rgba(227,227,227,1) 50%,rgba(216,216,216,1) 51%,rgba(242,242,242,1) 100%); /* Chrome10+,Safari5.1+ */
-    background: url("../images/arrow_up_margin.png") right center no-repeat, -o-linear-gradient(top, rgba(247,247,247,1) 0%,rgba(227,227,227,1) 50%,rgba(216,216,216,1) 51%,rgba(242,242,242,1) 100%); /* Opera11.10+ */
-    background: url("../images/arrow_up_margin.png") right center no-repeat, -ms-linear-gradient(top, rgba(247,247,247,1) 0%,rgba(227,227,227,1) 50%,rgba(216,216,216,1) 51%,rgba(242,242,242,1) 100%); /* IE10+ */
+    background: url("../image/arrow_up_margin.png") right center no-repeat; /* Old browsers */
+    background: url("../image/arrow_up_margin.png") right center no-repeat, -moz-linear-gradient(top, rgba(247,247,247,1) 0%, rgba(227,227,227,1) 50%, rgba(216,216,216,1) 51%, rgba(242,242,242,1) 100%); /* FF3.6+ */
+    background: url("../image/arrow_up_margin.png") right center no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(247,247,247,1)), color-stop(50%,rgba(227,227,227,1)), color-stop(51%,rgba(216,216,216,1)), color-stop(100%,rgba(242,242,242,1))); /* Chrome,Safari4+ */
+    background: url("../image/arrow_up_margin.png") right center no-repeat, -webkit-linear-gradient(top, rgba(247,247,247,1) 0%,rgba(227,227,227,1) 50%,rgba(216,216,216,1) 51%,rgba(242,242,242,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: url("../image/arrow_up_margin.png") right center no-repeat, -o-linear-gradient(top, rgba(247,247,247,1) 0%,rgba(227,227,227,1) 50%,rgba(216,216,216,1) 51%,rgba(242,242,242,1) 100%); /* Opera11.10+ */
+    background: url("../image/arrow_up_margin.png") right center no-repeat, -ms-linear-gradient(top, rgba(247,247,247,1) 0%,rgba(227,227,227,1) 50%,rgba(216,216,216,1) 51%,rgba(242,242,242,1) 100%); /* IE10+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
-    background: url("../images/arrow_up_margin.png") right center no-repeat, linear-gradient(top, rgba(247,247,247,1) 0%,rgba(227,227,227,1) 50%,rgba(216,216,216,1) 51%,rgba(242,242,242,1) 100%); /* W3C */
+    background: url("../image/arrow_up_margin.png") right center no-repeat, linear-gradient(top, rgba(247,247,247,1) 0%,rgba(227,227,227,1) 50%,rgba(216,216,216,1) 51%,rgba(242,242,242,1) 100%); /* W3C */
 }
 
 div.descending > .css_gradient{
-    background: url("../images/arrow_down_margin.png") right center no-repeat; /* Old browsers */
-    background: url("../images/arrow_down_margin.png") right center no-repeat, -moz-linear-gradient(top, rgba(247,247,247,1) 0%, rgba(227,227,227,1) 50%, rgba(216,216,216,1) 51%, rgba(242,242,242,1) 100%); /* FF3.6+ */
-    background: url("../images/arrow_down_margin.png") right center no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(247,247,247,1)), color-stop(50%,rgba(227,227,227,1)), color-stop(51%,rgba(216,216,216,1)), color-stop(100%,rgba(242,242,242,1))); /* Chrome,Safari4+ */
-    background: url("../images/arrow_down_margin.png") right center no-repeat, -webkit-linear-gradient(top, rgba(247,247,247,1) 0%,rgba(227,227,227,1) 50%,rgba(216,216,216,1) 51%,rgba(242,242,242,1) 100%); /* Chrome10+,Safari5.1+ */
-    background: url("../images/arrow_down_margin.png") right center no-repeat, -o-linear-gradient(top, rgba(247,247,247,1) 0%,rgba(227,227,227,1) 50%,rgba(216,216,216,1) 51%,rgba(242,242,242,1) 100%); /* Opera11.10+ */
-    background: url("../images/arrow_down_margin.png") right center no-repeat, -ms-linear-gradient(top, rgba(247,247,247,1) 0%,rgba(227,227,227,1) 50%,rgba(216,216,216,1) 51%,rgba(242,242,242,1) 100%); /* IE10+ */
+    background: url("../image/arrow_down_margin.png") right center no-repeat; /* Old browsers */
+    background: url("../image/arrow_down_margin.png") right center no-repeat, -moz-linear-gradient(top, rgba(247,247,247,1) 0%, rgba(227,227,227,1) 50%, rgba(216,216,216,1) 51%, rgba(242,242,242,1) 100%); /* FF3.6+ */
+    background: url("../image/arrow_down_margin.png") right center no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(247,247,247,1)), color-stop(50%,rgba(227,227,227,1)), color-stop(51%,rgba(216,216,216,1)), color-stop(100%,rgba(242,242,242,1))); /* Chrome,Safari4+ */
+    background: url("../image/arrow_down_margin.png") right center no-repeat, -webkit-linear-gradient(top, rgba(247,247,247,1) 0%,rgba(227,227,227,1) 50%,rgba(216,216,216,1) 51%,rgba(242,242,242,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: url("../image/arrow_down_margin.png") right center no-repeat, -o-linear-gradient(top, rgba(247,247,247,1) 0%,rgba(227,227,227,1) 50%,rgba(216,216,216,1) 51%,rgba(242,242,242,1) 100%); /* Opera11.10+ */
+    background: url("../image/arrow_down_margin.png") right center no-repeat, -ms-linear-gradient(top, rgba(247,247,247,1) 0%,rgba(227,227,227,1) 50%,rgba(216,216,216,1) 51%,rgba(242,242,242,1) 100%); /* IE10+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
-    background: url("../images/arrow_down_margin.png") right center no-repeat, linear-gradient(top, rgba(247,247,247,1) 0%,rgba(227,227,227,1) 50%,rgba(216,216,216,1) 51%,rgba(242,242,242,1) 100%); /* W3C */
+    background: url("../image/arrow_down_margin.png") right center no-repeat, linear-gradient(top, rgba(247,247,247,1) 0%,rgba(227,227,227,1) 50%,rgba(216,216,216,1) 51%,rgba(242,242,242,1) 100%); /* W3C */
 }
 
 .grey_gradient_emboss,.selected, div.selected-webfx-tree-item-inactive{
@@ -575,7 +575,7 @@ div.accordion_toggle{
 	font-weight: bold;
 	cursor: pointer;
 	border-radius: 4px;
-	background-image: url('../images/0.gif');
+	background-image: url('../image/0.gif');
 	background-repeat: no-repeat;
 	background-position: 5px 6px;
 	padding-left: 18px;
@@ -583,7 +583,7 @@ div.accordion_toggle{
 }
 
 div.accordion_toggle_active{
-    background-image: url('../images/1.gif');
+    background-image: url('../image/1.gif');
 }
 
 
@@ -961,7 +961,7 @@ a.carousel-control img{
 
 #locationbar_cont
 {
-	/*background-image:url(../images/ToolbarBg.gif);*/
+	/*background-image:url(../image/ToolbarBg.gif);*/
 	background-position:center center;
 	background-repeat:repeat-x;
 	height:33px;
@@ -1194,7 +1194,7 @@ img.simple_button_arrow{
 .slider-handle,
 .slider-pane div.selected
 {
-	background-image:url("../images/slider-handle-vert.png");
+	background-image:url("../image/slider-handle-vert.png");
 	background-position:top center;
 	background-repeat:no-repeat;
 	background-color: transparent !important;
@@ -1203,13 +1203,13 @@ img.simple_button_arrow{
 }
 
 .slider-tracker {
-	background-image : url("../images/slider-track-bottom.png");
+	background-image : url("../image/slider-track-bottom.png");
 	background-position:bottom center;
 	background-repeat:no-repeat;
 }
 
 .slider-tracker-top {
-	background-image : url("../images/slider-track-top.png");
+	background-image : url("../image/slider-track-top.png");
 	background-position:top center;
 	background-repeat:no-repeat;
 }
@@ -1269,7 +1269,7 @@ div.resizeGhost{
 /*
 div.header_resizer div.descending {
 	background-color: #daddd7;
-	background-image: url("../images/arrow_up_margin.png");
+	background-image: url("../image/arrow_up_margin.png");
 	background-repeat : no-repeat;
 	background-position : right center;
 }
@@ -1277,7 +1277,7 @@ div.header_resizer div.descending {
 /*
 div.header_resizer div.ascending {
 	background-color: #daddd7;
-	background-image: url("../images/arrow_down_margin.png");
+	background-image: url("../image/arrow_down_margin.png");
 	background-repeat : no-repeat;
 	background-position : right center;
 }
@@ -1332,14 +1332,14 @@ div.header_resizer div.ascending {
 
 .sort-table thead td.descending {
 	background-color: #daddd7;
-	background-image: url("../images/arrow_up_margin.png");
+	background-image: url("../image/arrow_up_margin.png");
 	background-repeat : no-repeat;
 	background-position : right center;
 }
 
 .sort-table thead td.ascending {
 	background-color: #daddd7;
-	background-image: url("../images/arrow_down_margin.png");
+	background-image: url("../image/arrow_down_margin.png");
 	background-repeat : no-repeat;
 	background-position : right center;
 }
@@ -1427,7 +1427,7 @@ div.multiple_selection_draggable
 
 div.selection_ctrl_key
 {
-    background-image:url('../images/0.gif');
+    background-image:url('../image/0.gif');
     background-repeat: no-repeat;
     background-position: bottom right;
 }
@@ -1673,7 +1673,7 @@ div#upload_files_list div, div#multiple_download_container div
 	cursor:pointer;
     /*
     background-color: white;
-	background-image:url('../images/fakeFlashButtonBg.gif');
+	background-image:url('../image/fakeFlashButtonBg.gif');
 	background-position : bottom;
 	background-repeat : repeat-x;
 	*/
@@ -2105,7 +2105,7 @@ div#selectable_div, #table_rows_container, #tree_container, #bottomSplitPane, .a
 {
    width: 4px;
    /*background-color: #eee;*/
-   background-image: url(../images/vgrabber.gif);
+   background-image: url(../image/vgrabber.gif);
    background-repeat: no-repeat;
    background-position: center;
 }
@@ -2127,7 +2127,7 @@ div#selectable_div, #table_rows_container, #tree_container, #bottomSplitPane, .a
 {
    height: 4px;
    /*background-color: #eee;*/
-   background-image: url(../images/hgrabber.gif);
+   background-image: url(../image/hgrabber.gif);
    background-repeat: no-repeat;
    background-position: center;
 }

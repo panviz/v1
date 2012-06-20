@@ -105,7 +105,7 @@ Class.create("Bootstrap", {
 		var cssNode = new Element('link', {
 			type : 'text/css',
 			rel  : 'stylesheet',
-			href : this.parameters.get("ajxpResourcesFolder") + '/' + fileName,
+			href : THEME.path + '/' + fileName,
 			media : 'screen'
 		});
 		head.insert(cssNode);
@@ -171,7 +171,6 @@ Class.create("Bootstrap", {
 		
 	},
 	_onActionsLoaded : function(){
-												debugger
 		if(!this.parameters.get("SELECTOR_DATA") && app.actionBar.actions.get("ext_select")){
 			app.actionBar.actions.unset("ext_select");
 			app.actionBar.fireContextChange();
@@ -181,7 +180,6 @@ Class.create("Bootstrap", {
 		}
 	},
 	_onApplicationLoaded : function(){
-												debugger
 		if(this.parameters.get("SELECTOR_DATA")){
 				app.actionBar.defaultActions.set("file", "ext_select");
 				app.actionBar.selectorData = new Hash(this.parameters.get("SELECTOR_DATA"));	    		

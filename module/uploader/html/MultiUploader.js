@@ -116,9 +116,9 @@ Class.create("MultiUploader", {
 			app.actionBar.multi_selector.submitMainForm();
 		});
 		optionsButton.observe("click", function(){
-            var message = MessageHash[281] + '\n';
-            message += '&nbsp;&nbsp;'+ MessageHash[282] + ':' + roundSize(this.maxUploadSize, '') + '\n';
-            message += '&nbsp;&nbsp;'+ MessageHash[284] + ':' + this.max;
+            var message = I18N[281] + '\n';
+            message += '&nbsp;&nbsp;'+ I18N[282] + ':' + roundSize(this.maxUploadSize, '') + '\n';
+            message += '&nbsp;&nbsp;'+ I18N[284] + ':' + this.max;
             alert(message);
 		}.bind(this));
 		closeButton.observe("click", function(){			
@@ -196,7 +196,7 @@ Class.create("MultiUploader", {
 		if(this.mask){
 			var ext = getFileExtension(element.value);
 			if(!this.mask.include(ext)){
-                alert(MessageHash[367] + this.mask.join(', ') + (this.maskLabel? " ("+ this.maskLabel +")":"" ) );
+                alert(I18N[367] + this.mask.join(', ') + (this.maskLabel? " ("+ this.maskLabel +")":"" ) );
 				return;
 			}
 		}		
@@ -243,7 +243,7 @@ Class.create("MultiUploader", {
 		var value = element.value;
 		var basename = getBaseName(value);
 		if(basename.length > this.namesMaxLength){
-			alert(MessageHash[393].replace("%s", this.namesMaxLength));
+			alert(I18N[393].replace("%s", this.namesMaxLength));
 		}
 		
 		var maxLength = 63;
@@ -350,7 +350,7 @@ Class.create("MultiUploader", {
 			var crtValue = $(nextToSubmit).getElementsBySelector('input[type="file"]')[0].value;
 			if(this.crtContext.fileNameExists(crtValue))
 			{
-				overwrite = confirm(MessageHash[124]);
+				overwrite = confirm(I18N[124]);
 				if(!overwrite){
 					this.submitNext(true);
 					return;
