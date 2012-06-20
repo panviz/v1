@@ -5,7 +5,7 @@
     "description": "CONF_MESSAGE[Authentication is done remotely (useful in CMS system).]",
     "mixins": "authdriver_commons",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "client_settings": {
       "resources": {
         "i18n": {
@@ -90,12 +90,12 @@
       "external_file": [
         {
           "filename": "plugins/core.auth/standard_auth_actions.xml",
-          "include": "actions/*",
-          "exclude": "actions/action[@name='logout']"
+          "include": "action/*",
+          "exclude": "action/action[@name='logout']"
         },
         {
           "filename": "plugins/auth.remote/remoteAuthActions.xml",
-          "include": "actions/*"
+          "include": "action/*"
         }
       ]
     }

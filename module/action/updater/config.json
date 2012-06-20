@@ -1,10 +1,10 @@
 {
-  "ajxp_plugin": {
+  "plugin": {
     "name": "updater",
     "label": "CONF_MESSAGE[Update Engine]",
     "description": "CONF_MESSAGE[Automatic update of AjaXplorer. Since version 3.3.3]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "server_settings": {
       "global_param": [
         {
@@ -27,7 +27,7 @@
           "name": "PRESERVE_FILES",
           "type": "textarea",
           "label": "CONF_MESSAGE[Preserve Files]",
-          "description": "CONF_MESSAGE[Files declared here (enter pathes from the root of Ajxp installation, comma-separated) will be backed up and restored before and after upgrade.]",
+          "description": "CONF_MESSAGE[Files declared here (enter pathes from the root of  installation, comma-separated) will be backed up and restored before and after upgrade.]",
           "default": ""
         },
         {
@@ -40,7 +40,7 @@
       ]
     },
     "client_settings": {
-      "icon": "plugins/access.ajxp_conf/admin.png",
+      "icon": "plugins/access.conf/admin.png",
       "resources": {
         "i18n": {
           "namespace": "updater",
@@ -125,7 +125,7 @@
                 "dialogOpenForm": "import_324_form",
                 "dialogOkButtonOnly": "false",
                 "dialogSkipButtons": "false",
-                "dialogOnOpen": "var startButton = $(oForm).down('div[id=\"start_upgrade_button\"]');startButton.observe(\"click\", function(){var conn = new Connexion();conn.addParameter(\"get_action\", \"import_from_324\");conn.addParameter(\"previous_location\", $(oForm).down('input[name=\"previous_location\"]').value);if($(oForm).down('div[id=\"start_upgrade_button\"]').RUN_NOW){conn.addParameter(\"real_run\", \"true\");}conn.onComplete = function(transport){$(oForm).down('div[id=\"upgrade_steps\"]').update(transport.responseText);$(oForm).down('div[id=\"start_upgrade_button\"]').update(MessageHash['updater.9']);$(oForm).down('div[id=\"start_upgrade_button\"]').RUN_NOW = true;};conn.sendAsync();});",
+                "dialogOnOpen": "var startButton = $(oForm).down('div[id=\"start_upgrade_button\"]');startButton.observe(\"click\", function(){var conn = new Connexion();conn.addParameter(\"get_action\", \"import_from_324\");conn.addParameter(\"previous_location\", $(oForm).down('input[name=\"previous_location\"]').value);if($(oForm).down('div[id=\"start_upgrade_button\"]').RUN_NOW){conn.addParameter(\"real_run\", \"true\");}conn.onComplete = function(transport){$(oForm).down('div[id=\"upgrade_steps\"]').update(transport.responseText);$(oForm).down('div[id=\"start_upgrade_button\"]').update(I18N['updater.9']);$(oForm).down('div[id=\"start_upgrade_button\"]').RUN_NOW = true;};conn.sendAsync();});",
                 "dialogOnComplete": {
                   "hideDialog": "true",
                   "$t": "$(oForm).down('div[id=\"start_upgrade_button\"]').stopObserving(\"click\");"
@@ -174,7 +174,7 @@
                 "dialogOpenForm": "migrate_metaserial",
                 "dialogOkButtonOnly": "false",
                 "dialogSkipButtons": "false",
-                "dialogOnOpen": "var startButton = $(oForm).down('div[id=\"start_upgrade_button\"]');startButton.observe(\"click\", function(){var conn = new Connexion();conn.addParameter(\"get_action\", \"migrate_metaserial\");conn.addParameter(\"repository_id\", getBaseName(app.getUserSelection().getUniqueNode().getPath()));if($(oForm).down('div[id=\"start_upgrade_button\"]').RUN_NOW){conn.addParameter(\"real_run\", \"true\");}conn.onComplete = function(transport){$(oForm).down('div[id=\"upgrade_steps\"]').update(transport.responseText);$(oForm).down('div[id=\"start_upgrade_button\"]').update(MessageHash['updater.14']);$(oForm).down('div[id=\"start_upgrade_button\"]').RUN_NOW = true;};conn.sendAsync();});",
+                "dialogOnOpen": "var startButton = $(oForm).down('div[id=\"start_upgrade_button\"]');startButton.observe(\"click\", function(){var conn = new Connexion();conn.addParameter(\"get_action\", \"migrate_metaserial\");conn.addParameter(\"repository_id\", getBaseName(app.getUserSelection().getUniqueNode().getPath()));if($(oForm).down('div[id=\"start_upgrade_button\"]').RUN_NOW){conn.addParameter(\"real_run\", \"true\");}conn.onComplete = function(transport){$(oForm).down('div[id=\"upgrade_steps\"]').update(transport.responseText);$(oForm).down('div[id=\"start_upgrade_button\"]').update(I18N['updater.14']);$(oForm).down('div[id=\"start_upgrade_button\"]').RUN_NOW = true;};conn.sendAsync();});",
                 "dialogOnComplete": {
                   "hideDialog": "true",
                   "$t": "$(oForm).down('div[id=\"start_upgrade_button\"]').stopObserving(\"click\");$(oForm).down('div[id=\"start_upgrade_button\"]').RUN_NOW = false;"
@@ -199,7 +199,7 @@
     },
     "dependencies": {
       "activePlugin": {
-        "pluginName": "access.ajxp_conf"
+        "pluginName": "access.conf"
       }
     }
   }

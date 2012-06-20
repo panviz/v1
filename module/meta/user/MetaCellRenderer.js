@@ -21,11 +21,11 @@
 Class.create("MetaCellRenderer", {	
 	initialize: function(){
 		this.cssList = new Hash({
-			'low': {cssClass:'meta_low', label:MessageHash['meta.user.4'], sortValue:'5'},
-			'todo' : {cssClass:'meta_todo', label:MessageHash['meta.user.5'], sortValue:'4'},
-			'personal' : {cssClass:'meta_personal', label:MessageHash['meta.user.6'], sortValue:'3'},
-			'work' : {cssClass:'meta_work', label:MessageHash['meta.user.7'], sortValue:'2'},
-			'important' : {cssClass:'meta_important', label:MessageHash['meta.user.8'], sortValue:'1'}
+			'low': {cssClass:'meta_low', label:I18N['meta.user.4'], sortValue:'5'},
+			'todo' : {cssClass:'meta_todo', label:I18N['meta.user.5'], sortValue:'4'},
+			'personal' : {cssClass:'meta_personal', label:I18N['meta.user.6'], sortValue:'3'},
+			'work' : {cssClass:'meta_work', label:I18N['meta.user.7'], sortValue:'2'},
+			'important' : {cssClass:'meta_important', label:I18N['meta.user.8'], sortValue:'1'}
 		});
 		var head = $$('head')[0];
 		var href = "plugins/meta.user/css/labelsClasses.css";
@@ -41,14 +41,14 @@ Class.create("MetaCellRenderer", {
 	},
 	
 	/* LABELS SYSTEM */
-	cssLabelsFilter : function(element, ajxpNode, type, ajxpNodeObject){
-        if(!element && ajxpNodeObject){
-            var content = ajxpNode.getMetadata().get('css_label');
+	cssLabelsFilter : function(element, item, type, itemObject){
+        if(!element && itemObject){
+            var content = item.getMetadata().get('css_label');
             if(content){
                 var obj = new MetaCellRenderer();
                 var rule = obj.findCssRule(content.strip());
                 if(rule){
-                    ajxpNodeObject.addClassName(rule.cssClass);
+                    itemObject.addClassName(rule.cssClass);
                 }
             }
         }else if(type == 'row'){
@@ -67,7 +67,7 @@ Class.create("MetaCellRenderer", {
 				}
 			}
 		}else if(type =='thumb'){
-			var content = ajxpNode.getMetadata().get('css_label');
+			var content = item.getMetadata().get('css_label');
 			if(content){
 				var obj = new MetaCellRenderer();
 				var rule = obj.findCssRule(content.strip());
@@ -89,7 +89,7 @@ Class.create("MetaCellRenderer", {
 			name:'',
 			value:'', 
 			selected:(!value)
-		}).update(MessageHash['meta.user.2']));
+		}).update(I18N['meta.user.2']));
 		cssList.each(function(pair){
 			var option = new Element('option', {
 				name:pair.key,
@@ -110,7 +110,7 @@ Class.create("MetaCellRenderer", {
 	},
 	
 	/* STARS RATE SYSTEM */
-	starsRateFilter: function(element, ajxpNode, type){
+	starsRateFilter: function(element, item, type){
 		if(type == 'thumb') return;
         if(!element) return;
 		var value = 0;
@@ -166,7 +166,7 @@ Class.create("MetaCellRenderer", {
 	},
 
     linkEditableDiv : function(div){
-        div.saver = new Element("img", {src:"plugins/gui.ajax/res/themes/umbra/images/actions/22/dialog_ok_apply.png"}).setStyle({
+        div.saver = new Element("img", {src:"plugins/gui.ajax/res/themes/umbra/image/action/22/dialog_ok_apply.png"}).setStyle({
             float:"left",
             width: "22px",
             height:"22px",
@@ -232,7 +232,7 @@ Class.create("MetaCellRenderer", {
 				src:imgRemove,
 				style:'float:left;cursor:pointer;margin-right:2px;padding-right:3px;border-right:1px solid #ccc;',
 				note:0,
-				title:MessageHash['meta.user.3']
+				title:I18N['meta.user.3']
 			});
 			cont.insert(img);			
 		}

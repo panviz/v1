@@ -4,7 +4,7 @@
     "label": "CONF_MESSAGE[Javascript Api Browser]",
     "description": "CONF_MESSAGE[Browse AjaXplorer Javascript classes and interfaces. Helper for developpers, but also good demonstration of how Ajaxplorer data can be fed by something different than a remote server filesystem!]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "client_settings": {
       "icon": "plugins/access.jsapi/admin.png",
       "resources": {
@@ -41,7 +41,7 @@
       },
       "node_provider": {
         "ajxpClass": "LocalAPINodeProvider",
-        "ajxpOptions": "{}"
+        "options": "{}"
       }
     },
     "class_definition": {
@@ -86,7 +86,7 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var path;if(window.actionArguments && window.actionArguments.length>0){path = window.actionArguments[0];if(Object.isString(path)){path = new AjxpNode(path,false,getBaseName(path));}}else{userSelection = app.getUserSelection();if(userSelection && userSelection.isUnique() && (userSelection.hasDir() || userSelection.hasMime(\"AJXP_MIMES_ZIP\".split(\",\")))){path = userSelection.getUniqueNode();}}if(path){app.updateContextData(path);}"
+                "$t": "var path;if(window.actionArguments && window.actionArguments.length>0){path = window.actionArguments[0];if(Object.isString(path)){path = new Item(path,false,getBaseName(path));}}else{userSelection = app.getUserSelection();if(userSelection && userSelection.isUnique() && (userSelection.hasDir() || userSelection.hasMime(\"AJXP_MIMES_ZIP\".split(\",\")))){path = userSelection.getUniqueNode();}}if(path){app.updateContextData(path);}"
               },
               "serverCallback": {
                 "methodName": "switchAction"
@@ -106,15 +106,15 @@
       "client_configs": {
         "template": {
           "name": "api_viewer",
-          "element": "ajxp_api_desktop",
+          "element": "api_desktop",
           "position": "top",
-          "$t": "<div id=\"toolbars\"><div id=\"action_bar\"><div id=\"locationbar_cont\"><div style=\"height: 100%;\" class=\"separator\"></div><div style=\"padding-top : 5px;\"><div id=\"locationBar\" ajxpClass=\"LocationBar\" ajxpOptions='{\"flexTo\":\"locationbar_cont\"}'></div></div></div></div></div><div id=\"browser\" ajxpClass=\"AjxpPane\" ajxpOptions='{\"fit\":\"height\",\"fitParent\":\"ajxp_desktop\"}'><div id=\"vertical_splitter\" style=\"background-color: #fff;\" ajxpClass=\"Splitter\" ajxpOptions='{\"direction\": \"vertical\", \"initA\": 700, \"minA\":50,\"fit\":\"height\",\"fitParent\":\"browser\"}'><div id=\"sidebar_splitter\" style=\"float:left; overflow:hidden;\" ajxpClass=\"Splitter\" ajxpOptions='{\"direction\":\"vertical\",\"initA\":150,\"maxA\":300}'><div id=\"topPane\" ajxpClass=\"FoldersTree\" ajxpOptions='{\"display\":\"dz\"}' ajxpPaneHeader=\"jsapi.1\" style=\"border: 1px solid #676965;\"></div><div id=\"content_pane\" ajxpClass=\"FilesList\" ajxpOptions='\"list\"' style=\"border: 1px solid #676965;\"></div></div><div id=\"info_panel\" ajxpClass=\"InfoPanel\" ajxpPaneHeader=\"jsapi.3\" style=\"border: 1px solid #676965;\"></div></div></div><script type=\"text/javascript\">if(bootstrap){$('ajxp_current_version').update('- v'+bootstrap.parameters.get(\"ajxpVersion\"));}</script>"
+          "$t": "<div id=\"toolbars\"><div id=\"action_bar\"><div id=\"locationbar_cont\"><div style=\"height: 100%;\" class=\"separator\"></div><div style=\"padding-top : 5px;\"><div id=\"locationBar\" ajxpClass=\"LocationBar\" options='{\"flexTo\":\"locationbar_cont\"}'></div></div></div></div></div><div id=\"browser\" ajxpClass=\"Pane\" options='{\"fit\":\"height\",\"fitParent\":\"desktop\"}'><div id=\"vertical_splitter\" style=\"background-color: #fff;\" ajxpClass=\"Splitter\" options='{\"direction\": \"vertical\", \"initA\": 700, \"minA\":50,\"fit\":\"height\",\"fitParent\":\"browser\"}'><div id=\"sidebar_splitter\" style=\"float:left; overflow:hidden;\" ajxpClass=\"Splitter\" options='{\"direction\":\"vertical\",\"initA\":150,\"maxA\":300}'><div id=\"topPane\" ajxpClass=\"FoldersTree\" options='{\"display\":\"dz\"}' paneHeader=\"jsapi.1\" style=\"border: 1px solid #676965;\"></div><div id=\"list_view\" ajxpClass=\"FilesList\" options='\"list\"' style=\"border: 1px solid #676965;\"></div></div><div id=\"info_panel\" ajxpClass=\"InfoPanel\" paneHeader=\"jsapi.3\" style=\"border: 1px solid #676965;\"></div></div></div><script type=\"text/javascript\">if(bootstrap){$('current_version').update('- v'+bootstrap.parameters.get(\"ajxpVersion\"));}</script>"
         },
         "template_part": {
-          "ajxpId": "info_panel",
+          "id": "info_panel",
           "ajxpClass": "JsSourceViewer",
-          "ajxpOptions": "{}",
-          "ajxpPaneHeader": "jsapi.3"
+          "options": "{}",
+          "paneHeader": "jsapi.3"
         },
         "component_config": {
           "className": "FilesList",
@@ -122,7 +122,7 @@
             "switchDisplayMode": "full",
             "column": {
               "messageId": "jsapi.2",
-              "attributeName": "ajxp_label",
+              "attributeName": "label",
               "sortType": "StringDirFile"
             }
           }

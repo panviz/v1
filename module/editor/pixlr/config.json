@@ -4,7 +4,7 @@
     "openable": "true",
     "text": "333",
     "title": "333",
-    "icon": "pixlr_images/actions/ICON_SIZE/color_fill.png",
+    "icon": "pixlr_image/action/ICON_SIZE/color_fill.png",
     "className": "PixlrEditor",
     "mimes": "jpg,jpeg,png,bmp,pxd",
     "formId": "pixlr_box",
@@ -12,7 +12,7 @@
     "label": "CONF_MESSAGE[Pixlr Editor]",
     "description": "CONF_MESSAGE[Bridge to the Pixlr.com webservice that allow online image edition via a photoshop-like GUI.]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "class_definition": {
       "filename": "plugins/editor.pixlr/class.PixlrEditor.php",
       "classname": "PixlrEditor"

@@ -14,7 +14,7 @@ Class.create("Diaporama", View, {
             replaceScroller: false,
             toolbarStyle: "icons_only diaporama_toolbar",
             actions: {
-                'toggleSideBar': '<a id="toggleButton"><img src="'+ajxpResourcesFolder+'/images/actions/22/view_left_close.png"  width="22" height="22" alt="" border="0"><br><span message_id="86"></span></a>'
+                'toggleSideBar': '<a id="toggleButton"><img src="'+THEME.path+'/image/action/22/view_left_close.png"  width="22" height="22" alt="" border="0"><br><span message_id="86"></span></a>'
             }
         };
 		$super(oFormObject, options);
@@ -30,7 +30,7 @@ Class.create("Diaporama", View, {
             fitParent: oFormObject.up(".dialogBox")
         });
         var replaceScroll = false;
-        if(window.content_pane.options.replaceScroller){
+        if(window.list_view.options.replaceScroller){
             replaceScroll = true;
         }
         this.infoPanel = new InfoPanel(diapoInfoPanel, {skipObservers: true,skipActions: true, replaceScroller: replaceScroll});
@@ -90,7 +90,7 @@ Class.create("Diaporama", View, {
 		});
 		
 		var inputStyle = {
-			backgroundImage: 'url("'+ajxpResourcesFolder+'/images/locationBg.gif")',
+			backgroundImage: 'url("'+THEME.path+'/image/locationBg.gif")',
 			backgroundPosition: 'left top',
 			backgroundRepeat: 'no-repeat'
 		};
@@ -98,7 +98,7 @@ Class.create("Diaporama", View, {
 		this.timeInput.setStyle(inputStyle);
 		
 		
-		this.baseUrl = bootstrap.parameters.get('ajxpServerAccess')+'&action=preview_data_proxy&file=';
+		this.baseUrl = bootstrap.parameters.get('serverAccess')+'&action=preview_data_proxy&file=';
 		this.nextButton.onclick = function(){
 			this.next();
 			this.updateButtons();
@@ -111,7 +111,7 @@ Class.create("Diaporama", View, {
 		}.bind(this);
 		this.downloadButton.onclick = function(){
 			if(!this.currentFile) return;		
-			app.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+this.currentFile);
+			app.triggerDownload(bootstrap.parameters.get('serverAccess')+'&action=download&file='+this.currentFile);
 			return false;
 		}.bind(this);
 		this.actualSizeButton.onclick = function(){
@@ -195,8 +195,8 @@ Class.create("Diaporama", View, {
 			var autoFit = app.user.getPreference('diapo_autofit');
 			if(autoFit && autoFit == "true"){
 				this.autoFit = true;
-				this.fitToScreenButton.select('img')[0].src = ajxpResourcesFolder + '/images/actions/22/zoom-fit-restore.png';
-				this.fitToScreenButton.select('span')[0].update(MessageHash[326]);
+				this.fitToScreenButton.select('img')[0].src = THEME.path + '/image/action/22/zoom-fit-restore.png';
+				this.fitToScreenButton.select('span')[0].update(I18N[326]);
 			}
 		}
 		this.contentMainContainer = this.imgContainer ;
@@ -511,8 +511,8 @@ Class.create("Diaporama", View, {
 			id = 326;
 			this.fitToScreen();
 		}
-		this.fitToScreenButton.select('img')[0].src = ajxpResourcesFolder + '/images/actions/22/'+src+'.png';
-		this.fitToScreenButton.select('span')[0].update(MessageHash[id]);
+		this.fitToScreenButton.select('img')[0].src = THEME.path + '/image/action/22/'+src+'.png';
+		this.fitToScreenButton.select('span')[0].update(I18N[id]);
 		if(app && app.user && !skipSave){
 			app.user.setPreference("diapo_autofit", (this.autoFit ? 'true' : 'false'));
 			app.user.savePreferences();
@@ -579,12 +579,12 @@ Class.create("Diaporama", View, {
 	
 	/**
 	 * 
-	 * @param ajxpNode AjxpNode
+	 * @param item Item
 	 * @returns {___img1}
 	 */
-	getPreview : function(ajxpNode){
+	getPreview : function(item){
 		var img = new Element('img', {
-            src: Diaporama.prototype.getThumbnailSource(ajxpNode),
+            src: Diaporama.prototype.getThumbnailSource(item),
             border: 0,
             align: "absmiddle"
         });
@@ -592,8 +592,8 @@ Class.create("Diaporama", View, {
 		div.insert(img);
 		div.resizePreviewElement = function(dimensionObject){			
 			var imgDim = {
-				width: parseInt(ajxpNode.getMetadata().get("image_width")), 
-				height: parseInt(ajxpNode.getMetadata().get("image_height"))
+				width: parseInt(item.getMetadata().get("image_width")), 
+				height: parseInt(item.getMetadata().get("image_height"))
 			};
 			var styleObj = fitRectangleToDimension(imgDim, dimensionObject);
 			img.setStyle(styleObj);
@@ -609,7 +609,7 @@ Class.create("Diaporama", View, {
 			var theImage = event.target;
 			if(theImage.up('.thumbnail_selectable_cell')) return;
 			if(!theImage.openBehaviour){
-				var opener = new Element('div').update(MessageHash[411]);
+				var opener = new Element('div').update(I18N[411]);
 				opener.setStyle({
 					width: styleObj.width, 
 					display: 'none', 
@@ -648,9 +648,9 @@ Class.create("Diaporama", View, {
 		return div;
 	},
 	
-	getThumbnailSource : function(ajxpNode){
-		var source = ajxpServerAccessPath+"&get_action=preview_data_proxy&get_thumb=true&file="+encodeURIComponent(ajxpNode.getPath());
-		var preview_seed = ajxpNode.getParent().getMetadata().get('preview_seed');
+	getThumbnailSource : function(item){
+		var source = serverAccessPath+"&get_action=preview_data_proxy&get_thumb=true&file="+encodeURIComponent(item.getPath());
+		var preview_seed = item.getParent().getMetadata().get('preview_seed');
 		if(preview_seed){
 			source += "&rand="+preview_seed;
 		}

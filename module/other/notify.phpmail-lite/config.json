@@ -5,9 +5,9 @@
     "label": "CONF_MESSAGE[Simple Notification]",
     "description": "CONF_MESSAGE[Notification system (demonstrative)]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "client_settings": {
-      "icon": "plugins/access.mysql/resources/images/mysql_icon.png",
+      "icon": "plugins/access.mysql/resources/image/mysql_icon.png",
       "resources": {
         "js": {
           "file": "plugins/notify.phpmail-lite/class.NotifierFormEnricher.js",

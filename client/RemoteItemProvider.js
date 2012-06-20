@@ -120,7 +120,7 @@ Class.create("RemoteItemProvider", {
 		{
 			metadata.set(xmlItem.attributes[i].itemName, xmlItem.attributes[i].itemValue);
 			if(Prototype.Browser.IE && xmlItem.attributes[i].itemName == "ID"){
-				metadata.set("ajxp_sql_"+xmlItem.attributes[i].itemName, xmlItem.attributes[i].itemValue);
+				metadata.set("sql_"+xmlItem.attributes[i].itemName, xmlItem.attributes[i].itemValue);
 			}
 		}
 		// BACKWARD COMPATIBILIY

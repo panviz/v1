@@ -27,8 +27,8 @@ $CONF_STORAGE = array(
 			"driver" => "mysql",
 			"host"	=> "localhost",
 			"database" => "ajxp",
-			"user"	=> "ajxp_database_user",
-			"password" => "ajxp_database_password"
+			"user"	=> "database_user",
+			"password" => "database_password"
 		)
 	)
 );

@@ -10,7 +10,7 @@ Class.create("Toolbar", {
 	 */
 	initialize : function(oElement, options){
 		this.element = oElement;		
-		this.element.ajxpPaneObject = this;
+		this.element.paneObject = this;
 		this.options = Object.extend({
 			buttonRenderer : 'this',
             skipBubbling: false,
@@ -177,8 +177,8 @@ Class.create("Toolbar", {
 	initCarousel : function(){
 		this.outer = this.element;
 		var origHeight = this.outer.getHeight()-1;
-		this.prev = new Element("a", {className: 'carousel-control', rel: 'prev', style: 'height:'+origHeight+'px;'}).update(new Element('img', {src: ajxpResourcesFolder+'/images/arrow_left.png'}));
-		this.next = new Element("a", {className: 'carousel-control', rel: 'next', style: 'float:right; height:'+origHeight+'px;'}).update(new Element('img', {src: ajxpResourcesFolder+'/images/arrow_right.png'}));
+		this.prev = new Element("a", {className: 'carousel-control', rel: 'prev', style: 'height:'+origHeight+'px;'}).update(new Element('img', {src: THEME.path+'/image/arrow_left.png'}));
+		this.next = new Element("a", {className: 'carousel-control', rel: 'next', style: 'float:right; height:'+origHeight+'px;'}).update(new Element('img', {src: THEME.path+'/image/arrow_right.png'}));
 		this.inner = new Element("div", {id: 'buttons_inner', style: 'width:1000px;'});
 		this.outer.insert({before: this.prev});
 		this.outer.insert({before: this.next});
@@ -243,7 +243,7 @@ Class.create("Toolbar", {
 			this.buildActionBarSubMenu(button, action);// TODO
             button.setStyle({position: 'relative'});
 			var arrowDiv = new Element('div', {className: 'actionbar_arrow_div'});
-			arrowDiv.insert(new Element('img',{src: ajxpResourcesFolder+'/images/arrow_down.png',height: 6,width: 10,border: 0}));
+			arrowDiv.insert(new Element('img',{src: THEME.path+'/image/arrow_down.png',height: 6,width: 10,border: 0}));
 			arrowDiv.imgRef = img;
             button.insert(arrowDiv);
 		}else if(!this.options.skipBubbling) {
@@ -390,7 +390,7 @@ Class.create("Toolbar", {
                     img.src = resolveImageSource(img.getAttribute("data-action-src"),Action.prototype.__DEFAULT_ICON_PATH, this.options.stylesImgSizes[style]);
                 }.bind(this));
             }
-            if(parent.ajxpPaneObject) parent.ajxpPaneObject.resize();
+            if(parent.paneObject) parent.paneObject.resize();
             if(app.user && !start){
                 app.user.setPreference("action_bar_style", style);
                 app.user.savePreference("action_bar_style");
@@ -404,7 +404,7 @@ Class.create("Toolbar", {
                 afterFinish: applyResize,
                 afterUpdate: function(){
                     actBar.select("div.separator").invoke("setStyle", {height: (actBar.getHeight()-1)+"px"});
-                    if(parent.ajxpPaneObject) parent.ajxpPaneObject.resize();
+                    if(parent.paneObject) parent.paneObject.resize();
                 }
             });
         }else{

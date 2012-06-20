@@ -38,7 +38,7 @@ Class.create("Draggable", Draggable, {
 	 */
 	initialize : function($super, element, options, component, componentType){		
 		element = $(element);
-		element.addClassName('ajxp_draggable');
+		element.addClassName('draggable');
 		$super(element, options);
 		this.options.reverteffect =  function(element, top_offset, left_offset) {
 			new Effect.Move(element, { x: -left_offset, y: -top_offset, duration: 0,
@@ -56,7 +56,7 @@ Class.create("Draggable", Draggable, {
 	 */
 	destroy : function(){
 	    Event.stopObserving(this.handle, "mousedown", this.eventMouseDown);
-	    this.element.removeClassName('ajxp_draggable');
+	    this.element.removeClassName('draggable');
 	    this.element = null;
 	    Draggables.unregister(this);
 	},
@@ -122,7 +122,7 @@ Class.create("Draggable", Draggable, {
 			
 			this._draggingMultiple = true;
 			this._clone = new Element('div');
-			$(this._clone).addClassName("ajxp_draggable");
+			$(this._clone).addClassName("draggable");
 			$(this._clone).addClassName('multiple_selection_draggable');
 			this._clone.setAttribute('user_selection', 'true');
 			$(bootstrap.parameters.get("MAIN_ELEMENT")).insert(this._clone);
@@ -136,7 +136,7 @@ Class.create("Draggable", Draggable, {
 				this._clone.insert(text);
 			}
 			if(max < nodes.length){
-				this._clone.insert(',<br> ' + (nodes.length-max) + ' '+MessageHash[334]+'...');
+				this._clone.insert(',<br> ' + (nodes.length-max) + ' '+I18N[334]+'...');
 			}
 			this.element.setStyle({height:'auto', width:maxWidth + 'px'});			
 			Position.absolutize(this._clone);
@@ -386,14 +386,14 @@ var Droppables = {
 	options : 
 	{
 		hoverclass:'droppableZone', 
-		accept:'ajxp_draggable',		
+		accept:'draggable',		
 		onDrop: function(draggable, droppable, event)
 				{
-					if(!(draggable.ajxpNode || draggable.getAttribute('user_selection')) || !droppable.ajxpNode) return;
-					var targetName = droppable.ajxpNode.getPath();
+					if(!(draggable.item || draggable.getAttribute('user_selection')) || !droppable.item) return;
+					var targetName = droppable.item.getPath();
 					var srcName;
-					if(draggable.ajxpNode){
-						var srcName = draggable.ajxpNode.getPath();
+					if(draggable.item){
+						var srcName = draggable.item.getPath();
 					}
                     if(WebFXtimer) clearTimeout(WebFXtimer);
                     var nodeId = null;

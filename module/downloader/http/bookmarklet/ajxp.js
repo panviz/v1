@@ -19,20 +19,20 @@
  */
 var currentLink;
 function parseLinks(){
-    var bmlink1 = '<a id="ajxp_bm_link_dl1" title="Send to AjaXplorer">\
-                Download <img ajxp_image="true" src="'+window.ajxp_bm_target+'/plugins/ui/main/theme/mybase/image/actions/22/forward_22.png" align="absmiddle"><img align="absmiddle" ajxp_image="true" src="'+window.ajxp_bm_target+'/plugins/ui/main/theme/mybase/image/actions/32/hdd_external_unmount.png"></a>';
-	jQuery('body').append('<link rel="stylesheet" type="text/css" href="'+ajxp_bm_target+'plugins/downloader.http/bookmarklet/ajxp.css"></link>');
-	jQuery('body').append('<div id="ajxp_bm_main" style="display:none;" class="ajxp_bm_menu" ><div><a id="ajxp_bm_close" style="float:right;font-size:12px;cursor:pointer;border-left:1px solid #fff;padding-left: 10px;">X</a>AjaXplorer direct download</div><div class="ajxp_bm_menu_legend">Click on any link or image to send the link directly to your AjaXplorer account.</div><div style="display:none" id="ajxp_bm_frame_div"><iframe frameborder="0" id="ajxp_bm_iframe"></iframe></div></div><div style="position:absolute;" class="ajxp_bm_menu" id="ajxp_bm_link_menu">'+bmlink1+'<a id="ajxp_bm_link_dl2">Process link normally</a></div>').click(function(){jQuery('#ajxp_bm_link_menu').slideUp();}) ;
+    var bmlink1 = '<a id="bm_link_dl1" title="Send to AjaXplorer">\
+                Download <img image="true" src="'+window.bm_target+'/plugins/ui/main/theme/mybase/image/action/22/forward_22.png" align="absmiddle"><img align="absmiddle" image="true" src="'+window.bm_target+'/plugins/ui/main/theme/mybase/image/action/32/hdd_external_unmount.png"></a>';
+	jQuery('body').append('<link rel="stylesheet" type="text/css" href="'+bm_target+'plugins/downloader.http/bookmarklet/ajxp.css"></link>');
+	jQuery('body').append('<div id="bm_main" style="display:none;" class="bm_menu" ><div><a id="bm_close" style="float:right;font-size:12px;cursor:pointer;border-left:1px solid #fff;padding-left: 10px;">X</a>AjaXplorer direct download</div><div class="bm_menu_legend">Click on any link or image to send the link directly to your AjaXplorer account.</div><div style="display:none" id="bm_frame_div"><iframe frameborder="0" id="bm_iframe"></iframe></div></div><div style="position:absolute;" class="bm_menu" id="bm_link_menu">'+bmlink1+'<a id="bm_link_dl2">Process link normally</a></div>').click(function(){jQuery('#bm_link_menu').slideUp();}) ;
 
-    jQuery('#ajxp_bm_main').css("background-color", "#ffffff").css("width", "400px").css("font-size","29px").css("line-height","auto");
+    jQuery('#bm_main').css("background-color", "#ffffff").css("width", "400px").css("font-size","29px").css("line-height","auto");
     window.setTimeout(function(){
-        jQuery('#ajxp_bm_main').css("top", ((jQuery(window).height() - jQuery('#ajxp_bm_main').outerHeight()) / 2) + jQuery(window).scrollTop() + "px");
-        jQuery('#ajxp_bm_main').css("right", ((jQuery(window).width() - jQuery('#ajxp_bm_main').outerWidth()) / 2) + jQuery(window).scrollLeft() + "px");
-        jQuery('#ajxp_bm_main').slideDown();
+        jQuery('#bm_main').css("top", ((jQuery(window).height() - jQuery('#bm_main').outerHeight()) / 2) + jQuery(window).scrollTop() + "px");
+        jQuery('#bm_main').css("right", ((jQuery(window).width() - jQuery('#bm_main').outerWidth()) / 2) + jQuery(window).scrollLeft() + "px");
+        jQuery('#bm_main').slideDown();
     }, 100);
     window.setTimeout(function(){
         var wTop = jQuery(window).scrollTop() + 5;
-        jQuery("#ajxp_bm_main").animate({
+        jQuery("#bm_main").animate({
             top:jQuery(window).scrollTop() + 5,
             right:5,
             width:250,
@@ -40,15 +40,15 @@ function parseLinks(){
             lineHeight:"20px",
             opacity:0.9
         });
-        jQuery(".ajxp_bm_menu_legend").slideUp();
+        jQuery(".bm_menu_legend").slideUp();
     }, 2500);
     
 	jQuery(window).bind('scroll', function(){
-		jQuery('#ajxp_bm_main').css('top', jQuery(window).scrollTop() + 5);
+		jQuery('#bm_main').css('top', jQuery(window).scrollTop() + 5);
 	});
-	//jQuery('#ajxp_bm_main').css('top', jQuery(window).scrollTop() + 5);
-	jQuery('#ajxp_bm_link_dl1').click(triggerAjxpDL);
-	jQuery('#ajxp_bm_link_dl2').click(triggerOriginalDL);
+	//jQuery('#bm_main').css('top', jQuery(window).scrollTop() + 5);
+	jQuery('#bm_link_dl1').click(triggerDL);
+	jQuery('#bm_link_dl2').click(triggerOriginalDL);
 	var linkHandler = function(event){
 		event.preventDefault();
 		event.stopPropagation();
@@ -58,86 +58,86 @@ function parseLinks(){
         var width = currentLink.width();
 		var href = currentLink.attr("href") || currentLink.attr('src');
 		var title = realHref(href);
-		jQuery('#ajxp_bm_link_dl2').show();
+		jQuery('#bm_link_dl2').show();
 		if(currentLink.attr("src")){
 			if(!currentLink.parents('a').size()){
-				jQuery('#ajxp_bm_link_dl2').hide();
+				jQuery('#bm_link_dl2').hide();
 			}
 		}
 		if(title.length > 38){
 			title = title.substring(0,10)+'...'+title.substring(title.length-28);
 		}
-        jQuery("#ajxp_bm_link_menu a[ajxp_clone],#ajxp_bm_link_menu img[ajxp_clone]").remove();
+        jQuery("#bm_link_menu a[clone],#bm_link_menu img[clone]").remove();
         if(height > 45){
-            jQuery("#ajxp_bm_link_menu").addClass("ajxp_bm_big").removeClass("ajxp_bm_small");
-            if(jQuery("#ajxp_bm_link_menu").css('display') == 'none'){
-                jQuery("#ajxp_bm_link_menu").css('top', offset.top-5).css('left',offset.left-5).css('height',height).css('width',width).slideDown();
+            jQuery("#bm_link_menu").addClass("bm_big").removeClass("bm_small");
+            if(jQuery("#bm_link_menu").css('display') == 'none'){
+                jQuery("#bm_link_menu").css('top', offset.top-5).css('left',offset.left-5).css('height',height).css('width',width).slideDown();
             }else{
-                jQuery("#ajxp_bm_link_menu").animate({top:offset.top-5,left:offset.left-5,height:height,width:width});
+                jQuery("#bm_link_menu").animate({top:offset.top-5,left:offset.left-5,height:height,width:width});
             }
-            jQuery("#ajxp_bm_link_dl1").css("margin-top",(height/2)-30);
+            jQuery("#bm_link_dl1").css("margin-top",(height/2)-30);
         }else{
-            jQuery("#ajxp_bm_link_menu").removeClass("ajxp_bm_big").addClass("ajxp_bm_small");
-            if(jQuery("#ajxp_bm_link_menu").css('display') == 'none'){
-                jQuery("#ajxp_bm_link_menu").css('top', offset.top-5).css('left',offset.left-5).css('height','auto').css('width',Math.max(width,200)).slideDown();
+            jQuery("#bm_link_menu").removeClass("bm_big").addClass("bm_small");
+            if(jQuery("#bm_link_menu").css('display') == 'none'){
+                jQuery("#bm_link_menu").css('top', offset.top-5).css('left',offset.left-5).css('height','auto').css('width',Math.max(width,200)).slideDown();
             }else{
-                jQuery("#ajxp_bm_link_menu").animate({top:offset.top-5,left:offset.left-5,width:Math.max(width,200)}).css('height','auto');
+                jQuery("#bm_link_menu").animate({top:offset.top-5,left:offset.left-5,width:Math.max(width,200)}).css('height','auto');
             }
-            jQuery("#ajxp_bm_link_dl1").css("margin-top",5);
-            jQuery("#ajxp_bm_link_dl1").before(jQuery(currentLink[0].cloneNode(true)).attr("ajxp_clone", "true"));
+            jQuery("#bm_link_dl1").css("margin-top",5);
+            jQuery("#bm_link_dl1").before(jQuery(currentLink[0].cloneNode(true)).attr("clone", "true"));
         }
 	};
 	var eachFuncAttacher = function(index){
 		var link = jQuery(this);		
 		var href = link.attr("href") || link.attr('src');
-        if(link.attr('ajxp_image')) return;
+        if(link.attr('image')) return;
 		if(!href) return;
 		link.bind('click', linkHandler).bind("mouseenter", function(){
-            if(jQuery("#ajxp_bm_link_menu").css('display') == 'none') return;
+            if(jQuery("#bm_link_menu").css('display') == 'none') return;
             $(this).linkHandler();
-        }) .attr('ajxp_bound', 'true');
+        }) .attr('bound', 'true');
 	};
 	jQuery('a,img').each(eachFuncAttacher);
-	jQuery('#ajxp_bm_close').click(function(){
+	jQuery('#bm_close').click(function(){
 		jQuery('a,img').each(function(index){
 			var link = jQuery(this);
-			if(link.attr('ajxp_bound')){
+			if(link.attr('bound')){
 				link.unbind('click', linkHandler);				
 			}
 		});
-		jQuery('#ajxp_bm_main').remove();
-		jQuery('#ajxp_bm_link_menu').remove();
+		jQuery('#bm_main').remove();
+		jQuery('#bm_link_menu').remove();
 	});	
 }
-function triggerAjxpDL(){
-	jQuery("#ajxp_bm_link_menu").slideUp();
+function triggerDL(){
+	jQuery("#bm_link_menu").slideUp();
 	var href = currentLink.attr("href") || currentLink.attr('src');
 	var params = [
 		'gui=light',
 		'dl_later='+encodeURIComponent(realHref(href)),
-		'tmp_repository_id='+ajxp_bm_repository_id,
-		'folder='+ajxp_bm_folder,
-        'dl_now=true'//+(jQuery('#ajxp_dl_now')[0].checked ? "true":"false")
+		'tmp_repository_id='+bm_repository_id,
+		'folder='+bm_folder,
+        'dl_now=true'//+(jQuery('#dl_now')[0].checked ? "true":"false")
 	];
-	jQuery('#ajxp_bm_iframe').attr("src", ajxp_bm_target+"?" + params.join("&"));
-    jQuery('#ajxp_bm_frame_div').slideDown();
+	jQuery('#bm_iframe').attr("src", bm_target+"?" + params.join("&"));
+    jQuery('#bm_frame_div').slideDown();
     var firstLoad = true;
-    jQuery('#ajxp_bm_iframe')[0].onload = function(){
+    jQuery('#bm_iframe')[0].onload = function(){
         if(firstLoad){
             firstLoad = false;
         }else{
-            jQuery('#ajxp_bm_frame_div').slideUp();
+            jQuery('#bm_frame_div').slideUp();
         }
     };
 
     /*
 	window.setTimeout(function(){
-		jQuery('#ajxp_bm_frame_div').slideUp();
+		jQuery('#bm_frame_div').slideUp();
 	}, 10000);
 	*/
 }
 function triggerOriginalDL(){
-	jQuery("#ajxp_bm_link_menu").slideUp();
+	jQuery("#bm_link_menu").slideUp();
 	var href = currentLink.attr("href");
 	if(currentLink.attr("src")){
 		href = currentLink.parents('a').first().attr("href");

@@ -112,19 +112,19 @@ Class.create("XHRUploader", {
 		this.mainForm.down('#uploadFilesListContainer').setAttribute("rowspan", "1");
 		var totalDiv = new Element('div', {id:'total_files_list'});
 		this.mainForm.down('#optClosButtonsContainer').insert({after:new Element('td', {style:'vertical-align:bottom'}).update(totalDiv)});
-		totalDiv.insert('<img src="'+ajxpResourcesFolder+'/images/actions/22/trashcan_empty.png" class="fakeUploadButton fakeOptionButton" id="clear_list_button"\
-			width="22" height="22" style="float:right;margin-top:3px;padding:4px;width:22px;" title="'+MessageHash[216]+'"/>\
-			<span id="totalStrings">'+MessageHash[258]+' : 0 '+MessageHash[259]+' : 0Kb</span>\
+		totalDiv.insert('<img src="'+THEME.path+'/image/action/22/trashcan_empty.png" class="fakeUploadButton fakeOptionButton" id="clear_list_button"\
+			width="22" height="22" style="float:right;margin-top:3px;padding:4px;width:22px;" title="'+I18N[216]+'"/>\
+			<span id="totalStrings">'+I18N[258]+' : 0 '+I18N[259]+' : 0Kb</span>\
 			<div style="padding-top:3px;">\
 			<div id="pgBar_total" style="width:154px; height: 4px;border: 1px solid #ccc;float:left;margin-top: 6px;"></div>\
-			<span style="float:left;margin-left:10px;" id="uploadedString">'+MessageHash[256]+' : 0%</span>\
+			<span style="float:left;margin-left:10px;" id="uploadedString">'+I18N[256]+' : 0%</span>\
 			</div>');
 		var options = {
 			animate		: false,									// Animate the progress? - default: true
 			showText	: false,									// show text with percentage in next to the progressbar? - default : true
 			width		: 154,										// Width of the progressbar - don't forget to adjust your image too!!!
-			boxImage	: ajxpResourcesFolder+'/images/progress_box.gif',			// boxImage : image around the progress bar
-			barImage	: ajxpResourcesFolder+'/images/progress_bar.gif',	// Image to use in the progressbar. Can be an array of images too.
+			boxImage	: THEME.path+'/image/progress_box.gif',			// boxImage : image around the progress bar
+			barImage	: THEME.path+'/image/progress_bar.gif',	// Image to use in the progressbar. Can be an array of images too.
 			height		: 4										// Height of the progressbar - don't forget to adjust your image too!!!
 		};
 		$('clear_list_button').observe("click", function(e){
@@ -156,11 +156,11 @@ Class.create("XHRUploader", {
 		var optionPane = new Element('div', {id:'uploader_options_pane'});
 		optionPane.update('<div id="uploader_options_strings"></div>');
 		optionPane.insert('<div id="uploader_options_checks">\
-			<b>'+MessageHash[339]+'</b> <input type="radio" name="uploader_existing" id="uploader_existing_overwrite" value="overwrite"> '+MessageHash[263]+' \
-			<input type="radio" name="uploader_existing" id="uploader_existing_rename" value="rename"> '+MessageHash[6]+' \
-			<input type="radio" name="uploader_existing" id="uploader_existing_alert" value="alert"> '+MessageHash[340]+' <br>\
-			<b>Options</b> <input type="checkbox" style="width:20px;" id="uploader_auto_send"> '+MessageHash[337]+'&nbsp; &nbsp; \
-			<input type="checkbox" style="width:20px;" id="uploader_auto_close"> '+MessageHash[338]+'\
+			<b>'+I18N[339]+'</b> <input type="radio" name="uploader_existing" id="uploader_existing_overwrite" value="overwrite"> '+I18N[263]+' \
+			<input type="radio" name="uploader_existing" id="uploader_existing_rename" value="rename"> '+I18N[6]+' \
+			<input type="radio" name="uploader_existing" id="uploader_existing_alert" value="alert"> '+I18N[340]+' <br>\
+			<b>Options</b> <input type="checkbox" style="width:20px;" id="uploader_auto_send"> '+I18N[337]+'&nbsp; &nbsp; \
+			<input type="checkbox" style="width:20px;" id="uploader_auto_close"> '+I18N[338]+'\
 			</div>');
 		optionPane.hide();
 		optionPane.autoSendCheck = optionPane.down('#uploader_auto_send');
@@ -183,7 +183,7 @@ Class.create("XHRUploader", {
 				app.user.setPreference('upload_auto_send', (autoSendOpt?'true':'false'));
 				app.user.savePreference('upload_auto_send');
 			}else{
-				 setAjxpCookie('upload_auto_send', (autoSendOpt?'true':'false'));
+				 setCookie('upload_auto_send', (autoSendOpt?'true':'false'));
 			}			
 		});
 		optionPane.autoCloseCheck.observe("click", function(e){				
@@ -192,7 +192,7 @@ Class.create("XHRUploader", {
 				app.user.setPreference('upload_auto_close', (autoCloseOpt?'true':'false'));
 				app.user.savePreference('upload_auto_close');
 			}else{
-				 setAjxpCookie('upload_auto_close', (autoCloseOpt?'true':'false'));
+				 setCookie('upload_auto_close', (autoCloseOpt?'true':'false'));
 			}			
 		});
 		optionPane.existingRadio.each(function(el){
@@ -202,7 +202,7 @@ Class.create("XHRUploader", {
 					app.user.setPreference('upload_existing', value);
 					app.user.savePreference('upload_existing');
 				}else{
-					 setAjxpCookie('upload_existing', value);
+					 setCookie('upload_existing', value);
 				}							
 			});
 		});
@@ -214,9 +214,9 @@ Class.create("XHRUploader", {
 			return value;
 		};
 		optionPane.loadData = function(){
-            var message = '<b>' + MessageHash[281] + '</b> ';
-            message += '&nbsp;&nbsp;'+ MessageHash[282] + ':' + roundSize(this.maxUploadSize, '');
-            message += '&nbsp;&nbsp;'+ MessageHash[284] + ':' + this.max;
+            var message = '<b>' + I18N[281] + '</b> ';
+            message += '&nbsp;&nbsp;'+ I18N[282] + ':' + roundSize(this.maxUploadSize, '');
+            message += '&nbsp;&nbsp;'+ I18N[284] + ':' + this.max;
             optionPane.optionsStrings.update(message);
 			var autoSendValue = false;
 			if(app.user && app.user.getPreference('upload_auto_send')){
@@ -225,7 +225,7 @@ Class.create("XHRUploader", {
             }else if(this._globalConfigs.get('DEFAULT_AUTO_START')){
                 autoSendValue = this._globalConfigs.get('DEFAULT_AUTO_START');
 			}else{
-				var value = getAjxpCookie('upload_auto_send');
+				var value = getCookie('upload_auto_send');
 				autoSendValue = ((value && value == "true")?true:false);				
 			}
 			optionPane.autoSendCheck.checked = autoSendValue;
@@ -237,7 +237,7 @@ Class.create("XHRUploader", {
             }else if(this._globalConfigs.get('DEFAULT_AUTO_CLOSE')){
                 autoCloseValue = this._globalConfigs.get('DEFAULT_AUTO_CLOSE');
 			}else{
-				var value = getAjxpCookie('upload_auto_close');
+				var value = getCookie('upload_auto_close');
 				autoCloseValue = ((value && value == "true")?true:false);				
 			}
 			optionPane.autoCloseCheck.checked = autoCloseValue;
@@ -247,8 +247,8 @@ Class.create("XHRUploader", {
 				existingValue = app.user.getPreference('upload_existing');
             }else if(this._globalConfigs.get('DEFAULT_EXISTING')){
                 existingValue = this._globalConfigs.get('DEFAULT_EXISTING');
-			}else if(getAjxpCookie('upload_existing')){
-				var value = getAjxpCookie('upload_existing');				
+			}else if(getCookie('upload_existing')){
+				var value = getCookie('upload_existing');				
 			}
 			optionPane.down('#uploader_existing_' + existingValue).checked = true;
 			
@@ -295,33 +295,33 @@ Class.create("XHRUploader", {
 
 		if(file.size==0 && file.type == ""){
 			// FOLDER!
-			alert(MessageHash[336]);
+			alert(I18N[336]);
 			return;
 		}else if(Prototype.Browser.WebKit && !getBaseName(file.name).indexOf(".")){
-			var res = confirm(MessageHash[395]);
+			var res = confirm(I18N[395]);
 			if(!res){
 				return;
 			}
 		}
 		if(this.maxUploadSize && file.size > this.maxUploadSize){
-			alert(MessageHash[211]);
+			alert(I18N[211]);
 			return;
 		}
 		if(this.max && this.listTarget.childNodes.length == this.max){
-			alert(MessageHash[365].replace("%s", this.max));
+			alert(I18N[365].replace("%s", this.max));
 			return;
 		}
 		
 		var basename = getBaseName(file.name);
 		if(basename.length > this.namesMaxLength){
-			alert(MessageHash[393].replace("%s", this.namesMaxLength));
+			alert(I18N[393].replace("%s", this.namesMaxLength));
 		}
 		
 		
 		if(this.mask){
 			var ext = getFileExtension(file.name);
 			if(!this.mask.include(ext)){
-				alert(MessageHash[367] + this.mask.join(', ') + (this.maskLabel? " ("+ this.maskLabel +")":"" ) );
+				alert(I18N[367] + this.mask.join(', ') + (this.maskLabel? " ("+ this.maskLabel +")":"" ) );
 				return;
 			}
 		}
@@ -335,11 +335,11 @@ Class.create("XHRUploader", {
 		var item = new Element( 'div' );		
 		// Delete button
 		var delButton = new Element( 'img', {
-			src:ajxpResourcesFolder+'/images/actions/16/editdelete.png',
+			src:THEME.path+'/image/action/16/editdelete.png',
 			className : 'fakeUploadButton',
 			align : 'absmiddle',
 			style : '-moz-border-radius:3px;border-radius:3px;float:left;margin:1px 7px 2px 0px;padding:3px;width:16px;background-position:center top;',
-			title : MessageHash[257]
+			title : I18N[257]
 		});
 		delButton.observe("click", function(e){
 			if(item.xhr){
@@ -387,8 +387,8 @@ Class.create("XHRUploader", {
 			animate		: false,
 			showText	: false,
 			width		: 154,
-			boxImage	: ajxpResourcesFolder+'/images/progress_box.gif',
-			barImage	: ajxpResourcesFolder+'/images/progress_bar.gif',
+			boxImage	: THEME.path+'/image/progress_box.gif',
+			barImage	: THEME.path+'/image/progress_bar.gif',
 			height		: 4
 		};
 		item.pgBar = new JS_BRAMUS.jsProgressBar(div, 0, options);
@@ -413,7 +413,7 @@ Class.create("XHRUploader", {
                 "error":436
             };
             try{
-                status = window.MessageHash[messageIds[status]];
+                status = window.I18N[messageIds[status]];
             }catch(e){};
 			this.statusText.innerHTML = "["+status+"]";
 		}.bind(item);
@@ -446,8 +446,8 @@ Class.create("XHRUploader", {
 			var percentage = Math.round(100*uploaded/size);
 		}
 		this.totalProgressBar.setPercentage(percentage, true);
-		this.totalStrings.update(MessageHash[258]+' ' + count + ' '+MessageHash[259]+' ' +roundSize(size, 'b'));
-		this.uploadedString.update(MessageHash[256]+' : ' + percentage + '%');
+		this.totalStrings.update(I18N[258]+' ' + count + ' '+I18N[259]+' ' +roundSize(size, 'b'));
+		this.uploadedString.update(I18N[256]+' : ' + percentage + '%');
 		
 	},
 	
@@ -491,7 +491,7 @@ Class.create("XHRUploader", {
 	initializeXHR : function(item, queryStringParam){
 
 		var xhr = new XMLHttpRequest(); 	  
-		var uri = bootstrap.parameters.get('ajxpServerAccess')+"&get_action=upload&xhr_uploader=true&dir="+encodeURIComponent(this.crtContext.getContextNode().getPath());
+		var uri = bootstrap.parameters.get('serverAccess')+"&get_action=upload&xhr_uploader=true&dir="+encodeURIComponent(this.crtContext.getContextNode().getPath());
 		if(queryStringParam){
 			uri += '&' + queryStringParam;
 		}
@@ -534,7 +534,7 @@ Class.create("XHRUploader", {
 			if(behaviour == 'rename'){
 				auto_rename = true;
 			}else if(behaviour == 'alert'){
-				if(!confirm(MessageHash[124])){
+				if(!confirm(I18N[124])){
 					item.remove();
 					return;
 				}
@@ -592,7 +592,7 @@ Class.create("XHRUploader", {
 			if(behaviour == 'rename'){
 				auto_rename = true;
 			}else if(behaviour == 'alert'){
-				if(!confirm(MessageHash[124])){
+				if(!confirm(I18N[124])){
 					item.remove();
 					return;
 				}
@@ -635,7 +635,7 @@ Class.create("XHRUploader", {
         	item.statusText.update('[error]');        	
         };
         
-        var url = bootstrap.parameters.get('ajxpServerAccess')+"&get_action=upload&xhr_uploader=true&input_stream=true&dir="+encodeURIComponent(this.crtContext.getContextNode().getPath());
+        var url = bootstrap.parameters.get('serverAccess')+"&get_action=upload&xhr_uploader=true&input_stream=true&dir="+encodeURIComponent(this.crtContext.getContextNode().getPath());
         if(auto_rename){
         	url += '&auto_rename=true';
         }

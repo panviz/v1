@@ -17,10 +17,10 @@
  *
  * The latest code can be found at <http://www.app.info/>.
  */
-window.logAjxpEven = false;
-function logAjxpBmAction(text){
-	window.logAjxpEven = !window.logAjxpEven;
-	$('actions_log').insert('<div class="ajxp_bm_log_action" style="background-color:#'+(window.logAjxpEven?'eee':'fff')+'">' + text + '<div>');
+window.logEven = false;
+function logBmAction(text){
+	window.logEven = !window.logEven;
+	$('actions_log').insert('<div class="bm_log_action" style="background-color:#'+(window.logEven?'eee':'fff')+'">' + text + '<div>');
 }
 function string_to_slug(str) {
   str = str.replace('https://', '').replace('http://', '');
@@ -46,7 +46,7 @@ document.observe("app:gui_loaded", function(){
 		if(app.user && !window.ajxpActionRegistered){
 			window.ajxpActionRegistered = true;
 			var params = document.location.href.toQueryParams();
-			logAjxpBmAction('Downloading '+getBaseName(params['dl_later']));
+			logBmAction('Downloading '+getBaseName(params['dl_later']));
 			var conn = new Connexion();
 			//var filename = (new Date().getTime()) +".download";
             var filename = string_to_slug(params['dl_later']) + ".download";
@@ -57,8 +57,8 @@ document.observe("app:gui_loaded", function(){
 				filename:filename,
 				content:params['dl_later']
 			});
-			logAjxpBmAction('Creating download file');
-			//logAjxpBmAction('Creating download file ' + filename + ' pointing to ' + params['dl_later']);
+			logBmAction('Creating download file');
+			//logBmAction('Creating download file ' + filename + ' pointing to ' + params['dl_later']);
 			conn.sendSync();
 
             if(params["dl_now"] && params["dl_now"] == "true"){
@@ -71,9 +71,9 @@ document.observe("app:gui_loaded", function(){
                         delete_dlfile:'true',
                         dir:params['folder'] || '/'
                     });
-                    //logAjxpBmAction('Triggering download in background. This window will close automatically.');
+                    //logBmAction('Triggering download in background. This window will close automatically.');
                     conn.onComplete = function(){
-                        logAjxpBmAction('Download started');
+                        logBmAction('Download started');
                         document.location.href="plugins/gui.light/close.html";// Will trigger the onload event to close the frame!!
                     };
                     conn.sendAsync();

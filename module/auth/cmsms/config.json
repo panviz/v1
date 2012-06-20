@@ -5,7 +5,7 @@
     "label": "CONF_MESSAGE[DB Storage]",
     "description": "Stores the Authentication data in CMSMS FEU.",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "client_settings": {
       "resources": {
         "i18n": {
@@ -61,12 +61,12 @@
       "external_file": [
         {
           "filename": "plugins/core.auth/standard_auth_actions.xml",
-          "include": "actions/*",
+          "include": "action/*",
           "exclude": ""
         },
         {
           "filename": "plugins/auth.cmsms/action.xml",
-          "include": "actions/*"
+          "include": "action/*"
         }
       ]
     }

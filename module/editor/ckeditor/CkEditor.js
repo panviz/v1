@@ -1,14 +1,14 @@
 /*
  * Description
  */
-Class.create("AjxpCkEditor", TextEditor, {
+Class.create("CkEditor", TextEditor, {
 
 	initialize : function($super, oFormObject, options)
 	{
 		$super(oFormObject, options);
 		this.editorConfig = {
 			resize_enabled: false,
-			toolbar: "Ajxp",
+			toolbar: "App",
 			filebrowserBrowseUrl: 'index.php?external_selector_type=ckeditor',
 			// IF YOU KNOW THE RELATIVE PATH OF THE IMAGES (BETWEEN REPOSITORY ROOT AND REAL FILE)
 			// YOU CAN PASS IT WITH THE relative_path PARAMETER. FOR EXAMPLE: 
@@ -17,7 +17,7 @@ Class.create("AjxpCkEditor", TextEditor, {
 			filebrowserFlashBrowseUrl: 'index.php?external_selector_type=ckeditor',
 			language: app.currentLanguage,
 			fullPage: true,
-			toolbar_Ajxp: [
+			toolbar_App: [
 				['Source','Preview','Templates'],
 			    ['Undo','Redo','-', 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Print', 'SpellChecker', 'Scayt'],
 			    ['Find','Replace','-','SelectAll','RemoveFormat'],
@@ -39,7 +39,7 @@ Class.create("AjxpCkEditor", TextEditor, {
 		if(window.ajxpMobile){
 			this.editorConfig = {
 				resize_enabled: false,
-				toolbar: "Ajxp",
+				toolbar: "App",
 				filebrowserBrowseUrl: 'index.php?external_selector_type=ckeditor',
 				// IF YOU KNOW THE RELATIVE PATH OF THE IMAGES (BETWEEN REPOSITORY ROOT AND REAL FILE)
 				// YOU CAN PASS IT WITH THE relative_path PARAMETER. FOR EXAMPLE: 
@@ -48,7 +48,7 @@ Class.create("AjxpCkEditor", TextEditor, {
 				filebrowserFlashBrowseUrl: 'index.php?external_selector_type=ckeditor',
 				language: app.currentLanguage,
 				fullPage: true,
-				toolbar_Ajxp: [
+				toolbar_App: [
 				    ['Bold','Italic','Underline', '-', 'NumberedList','BulletedList'],
 				    ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock']
 				]

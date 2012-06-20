@@ -4,9 +4,9 @@
 Class.create("Action", {
 
 	/**
-	 * @var String Default "/images/actions/ICON_SIZE"
+	 * @var String Default "/image/action/ICON_SIZE"
 	 */
-	__DEFAULT_ICON_PATH : "/images/actions/ICON_SIZE",
+	__DEFAULT_ICON_PATH : "/image/action/ICON_SIZE",
 	
 	/**
 	 * Standard constructor
@@ -43,7 +43,7 @@ Class.create("Action", {
 			actionBar: false,
 			actionBarGroup: 'default',
 			contextMenu: false,
-			ajxpWidgets: null,
+			widgets: null,
 			infoPanel: false			
 			}, arguments[1] || { });
 			
@@ -317,8 +317,8 @@ Class.create("Action", {
 			}else if(node.nodeName == "gui"){
 				this.options.text_id = node.getAttribute('text');
 				this.options.title_id = node.getAttribute('title');
-				this.options.text = MessageHash[node.getAttribute('text')] || 'not_found';
-				this.options.title = MessageHash[node.getAttribute('title')] || 'not_found';
+				this.options.text = I18N[node.getAttribute('text')] || 'not_found';
+				this.options.title = I18N[node.getAttribute('title')] || 'not_found';
 				this.options.src = node.getAttribute('src');								
 				if(node.getAttribute('hasAccessKey') && node.getAttribute('hasAccessKey') == "true"){
 					this.options.accessKey = node.getAttribute('accessKey');
@@ -330,14 +330,14 @@ Class.create("Action", {
 				for(var j=0; j<node.childNodes.length;j++){
 					if(node.childNodes[j].nodeName == "context"){
 						this.attributesToObject(this.context, node.childNodes[j]);
-						if(this.context.ajxpWidgets){
-							this.context.ajxpWidgets = $A(this.context.ajxpWidgets.split(','));
+						if(this.context.widgets){
+							this.context.widgets = $A(this.context.widgets.split(','));
 						}else{
-							this.context.ajxpWidgets = $A();
+							this.context.widgets = $A();
 						}
 						// Backward compatibility
-						if(this.context.infoPanel) this.context.ajxpWidgets.push('InfoPanel');
-						if(this.context.actionBar) this.context.ajxpWidgets.push('ActionsToolbar');
+						if(this.context.infoPanel) this.context.widgets.push('InfoPanel');
+						if(this.context.actionBar) this.context.widgets.push('ActionsToolbar');
 					}
 					else if(node.childNodes[j].nodeName == "selectionContext"){
 						this.attributesToObject(this.selectionContext, node.childNodes[j]);
@@ -375,12 +375,12 @@ Class.create("Action", {
 		}
 		if(!this.options.hasAccessKey) return;
 		if(this.options.accessKey == '' 
-			|| !MessageHash[this.options.accessKey] 
-			|| this.options.text.indexOf(MessageHash[this.options.accessKey]) == -1)
+			|| !I18N[this.options.accessKey] 
+			|| this.options.text.indexOf(I18N[this.options.accessKey]) == -1)
 		{
 			this.options.accessKey == this.options.text.charAt(0);
 		}else{
-			this.options.accessKey = MessageHash[this.options.accessKey];
+			this.options.accessKey = I18N[this.options.accessKey];
 		}		
 	}, 
 	
@@ -391,16 +391,16 @@ Class.create("Action", {
 		var menuItems = [];
 		if(this.subMenuItems.staticItems){
 			this.subMenuItems.staticItems.each(function(item){
-				var itemText = MessageHash[item.text];
-				if(item.hasAccessKey && (item.hasAccessKey=='true' || item.hasAccessKey===true) && MessageHash[item.accessKey]){
-					itemText = this.getKeyedText(MessageHash[item.text],true,MessageHash[item.accessKey]);
+				var itemText = I18N[item.text];
+				if(item.hasAccessKey && (item.hasAccessKey=='true' || item.hasAccessKey===true) && I18N[item.accessKey]){
+					itemText = this.getKeyedText(I18N[item.text],true,I18N[item.accessKey]);
 					if(!this.subMenuItems.accessKeys) this.subMenuItems.accessKeys = [];
-					this.manager.registerKey(MessageHash[item.accessKey],this.options.name, item.command);					
+					this.manager.registerKey(I18N[item.accessKey],this.options.name, item.command);					
 				}
 				menuItems.push({
 					name: itemText,
-					alt: MessageHash[item.title],
-					image: resolveImageSource(item.src, '/images/actions/ICON_SIZE', 22),
+					alt: I18N[item.title],
+					image: resolveImageSource(item.src, '/image/action/ICON_SIZE', 22),
 					isDefault: !!(item.isDefault),
 					callback: function(e){this.apply([item]);}.bind(this)
 				});
@@ -427,7 +427,7 @@ Class.create("Action", {
 						menuItems.push({
 							name: action.getKeyedText(),
 							alt: action.options.title,
-							image: resolveImageSource(action.options.src, '/images/actions/ICON_SIZE', 16),						
+							image: resolveImageSource(action.options.src, '/image/action/ICON_SIZE', 16),						
 							callback: function(e){this.apply();}.bind(action)
 						});
 			  		}, this);
@@ -455,19 +455,19 @@ Class.create("Action", {
 	 * @param newTitle String the new tooltip
 	 */
 	setLabel : function(newLabel, newTitle){
-		this.options.text = MessageHash[newLabel];
+		this.options.text = I18N[newLabel];
 		if($(this.options.name+'_button_label')){
 			$(this.options.name+'_button_label').update(this.getKeyedText());
 		}
 		if(!newTitle) return;
-		this.options.title = MessageHash[newTitle];
+		this.options.title = I18N[newTitle];
 		if($(this.options.name+'_button_icon')){
 			$(this.options.name+'_button_icon').title = this.options.title;
 		}
 	},
 	
 	/**
-	 * Grab its label from the i18n MessageHash
+	 * Grab its label from the i18n I18N
 	 */
 	refreshFromI18NHash : function(){
 		var text; var title;

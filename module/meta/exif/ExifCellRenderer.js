@@ -40,7 +40,7 @@ Class.create("ExifCellRenderer", {
 		var button = new Element('div', {
 			className:'fakeUploadButton',
 			style:'padding-top:3px;width:50px;margin-bottom:0px;padding-bottom:3px;'
-		}).update('<img src="plugins/meta.exif/world.png"><br>'+MessageHash['meta.exif.2']);
+		}).update('<img src="plugins/meta.exif/world.png"><br>'+I18N['meta.exif.2']);
 		var buttonCell = new Element('td', {
 			rowspan:2,
 			align:'center',
@@ -68,10 +68,10 @@ Class.create("ExifCellRenderer", {
 			editorData = editors[0];							
 		}					
 		if(editorData){
-			// Update ajxpNode with Google Layer!
-			var ajxpNode = app.getUserSelection().getUniqueNode();
-			var metadata = ajxpNode.getMetadata();
-			ajxpNode.setMetadata(metadata.merge({
+			// Update item with Google Layer!
+			var item = app.getUserSelection().getUniqueNode();
+			var metadata = item.getMetadata();
+			item.setMetadata(metadata.merge({
 				'ol_layers' : [{type:'Google', google_type:'hybrid'}, {type:'Google', google_type:'streets'}, {type:'OSM'}],
 				'ol_center' : {latitude:parseFloat(latitude),longitude:parseFloat(longitude)}
 			}));

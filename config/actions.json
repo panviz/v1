@@ -259,7 +259,7 @@
 			},
 			"clientForm" : {
 				"id" : "splash_form",
-				"html" : "<div id=\"splash_form\" box_width=\"455\" box_padding=\"0\"><div id=\"docDiv\" style=\"padding:5px;overflow:auto;height:300px;\"><div class=\"dialogButtons\" style=\"text-align:right;padding-right:6px;\"><input type=\"image\" src=\"/image/actions/22/dialog_close.png\" width=\"16\" height=\"16\" class=\"dialogButton\"/></div></div></div>"
+				"html" : "<div id=\"splash_form\" box_width=\"455\" box_padding=\"0\"><div id=\"docDiv\" style=\"padding:5px;overflow:auto;height:300px;\"><div class=\"dialogButtons\" style=\"text-align:right;padding-right:6px;\"><input type=\"image\" src=\"/image/action/22/dialog_close.png\" width=\"16\" height=\"16\" class=\"dialogButton\"/></div></div></div>"
 			}
 		}
 	}

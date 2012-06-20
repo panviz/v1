@@ -4,7 +4,7 @@
     "label": "Core Options",
     "description": "CONF_MESSAGE[Main container for core AjaXplorer settings (application title, sharing, webdav server config, etc...)]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "client_settings": {
       "resources": {
         "i18n": {
@@ -123,7 +123,7 @@
           "label": "CONF_MESSAGE[Digest Realm]",
           "description": "CONF_MESSAGE[Default realm for authentication. Please READ THE DOC to safely use this feature.]",
           "mandatory": "false",
-          "default": "ajxp_webdav_realm"
+          "default": "webdav_realm"
         },
         {
           "name": "CMDLINE_ACTIVE",

@@ -157,7 +157,7 @@ Class.create("Sortable", SortableTable, {
 		else
 			s = this.getInnerText(c);
 		if(s[0] == ' ') s = s.substr(1, (s.length-1));	
-		if(!oRow.ajxpNode.isLeaf()){
+		if(!oRow.item.isLeaf()){
 			s = '000'+s;
 		}
 		return s.toUpperCase();
@@ -177,14 +177,14 @@ Class.create("Sortable", SortableTable, {
 	},
 	
 	/**
-	 * Sort by ajxp_modiftime
+	 * Sort by modiftime
 	 * @param oRow HTMLElement Row
 	 * @param nColumn Integer
 	 * @returns String
 	 */
 	sortTimes : function(oRow, nColumn){
-        if(oRow.ajxpNode && oRow.ajxpNode.getMetadata().get("ajxp_modiftime")){
-            return oRow.ajxpNode.getMetadata().get("ajxp_modiftime");
+        if(oRow.item && oRow.item.getMetadata().get("modiftime")){
+            return oRow.item.getMetadata().get("modiftime");
         }
 	}
 });

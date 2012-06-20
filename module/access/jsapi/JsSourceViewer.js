@@ -18,7 +18,7 @@
  * The latest code can be found at <http://www.app.info/>.
  * Description : A dynamic panel displaying details on the current selection. Works with Templates.
  */
-Class.create("JsSourceViewer", AjxpPane, {
+Class.create("JsSourceViewer", Pane, {
 
 	/**
 	 * Code Mirror Options
@@ -88,7 +88,7 @@ Class.create("JsSourceViewer", AjxpPane, {
 			var metadata = contextNode.getMetadata();
 			if(metadata.get("memberType") == "parent_method"){
 				var redirect = '/Classes/' + metadata.get("parentClass");
-				app.updateContextData(new AjxpNode(redirect, false, metadata.get("parentClass")));
+				app.updateContextData(new Item(redirect, false, metadata.get("parentClass")));
 				return;
 			}
 			var objectNode = contextNode.getParent();

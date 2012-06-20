@@ -31,15 +31,15 @@ Class.create("TreeSelector", {
 		this.filterSelector.hide();
 		this._nodeActionCallback = function(e){
 			// Warning, this is the tree object
-			target.value = this.ajxpNode.getPath();
-			targetNode.value = this.ajxpNode.getPath();
+			target.value = this.item.getPath();
+			targetNode.value = this.item.getPath();
  			this.select();			
 		};
-		this._nodeFilter = function(ajxpNode){
-			return (!ajxpNode.isLeaf());
+		this._nodeFilter = function(item){
+			return (!item.isLeaf());
 		};
 		if(!rootNode){
-			rootNode = new Node("/", false, MessageHash[373], "folder.png");
+			rootNode = new Node("/", false, I18N[373], "folder.png");
 		}
 		this.treeCopy = new AJXPTree(rootNode, this._nodeActionCallback, this._nodeFilter);							
 		this.treeContainer.update(this.treeCopy.toString());
@@ -124,11 +124,11 @@ Class.create("TreeSelector", {
 	},
 	/**
 	 * Reload the root node of the tree
-	 * @param ajxpNode Node
+	 * @param item Node
 	 */
-	resetRootNode : function(ajxpNode){
-		this.treeCopy.ajxpNode.clear();
-		this.treeCopy.setRootNode(ajxpNode);		
-		this.treeCopy.ajxpNode.load();
+	resetRootNode : function(item){
+		this.treeCopy.item.clear();
+		this.treeCopy.setRootNode(item);		
+		this.treeCopy.item.load();
 	}
 });

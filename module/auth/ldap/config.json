@@ -4,7 +4,7 @@
     "label": "CONF_MESSAGE[LDAP Directory]",
     "description": "CONF_MESSAGE[Authentication datas are stored on the LDAP server.]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "client_settings": {
       "resources": {
         "i18n": {
@@ -73,7 +73,7 @@
     "registry_contributions": {
       "external_file": {
         "filename": "plugins/core.auth/standard_auth_actions.xml",
-        "include": "actions/*",
+        "include": "action/*",
         "exclude": ""
       }
     }

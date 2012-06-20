@@ -5,7 +5,7 @@ Class.create("OLViewer", View, {
 		$super(oFormObject);
 		this.actions.get("downloadFileButton").observe('click', function(){
 			if(!this.currentFile) return;		
-			app.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+this.currentFile);
+			app.triggerDownload(bootstrap.parameters.get('serverAccess')+'&action=download&file='+this.currentFile);
 			return false;
 		}.bind(this));
 		this.element.observe('view:enterFS', function(){this.fullScreenMode = true;}.bind(this) );
@@ -13,15 +13,15 @@ Class.create("OLViewer", View, {
 	
 	open : function($super, userSelection){
 		$super(userSelection);
-		var ajxpNode = userSelection.getUniqueNode();
-		this.updateTitle(getBaseName(ajxpNode.getPath()));
+		var item = userSelection.getUniqueNode();
+		this.updateTitle(getBaseName(item.getPath()));
 		this.mapDiv = new Element('div', {id: 'openlayer_map', style: 'width:100%'});
 		this.contentMainContainer = this.mapDiv;
-		this.initFilterBar(ajxpNode.getAjxpMime() == 'wms_layer');
+		this.initFilterBar(item.getMime() == 'wms_layer');
 		this.element.insert(this.mapDiv);
 		fitHeightToBottom($(this.mapDiv), $(modal.elementName));
         
-		var result = this.createOLMap(ajxpNode, 'openlayer_map', false, true);
+		var result = this.createOLMap(item, 'openlayer_map', false, true);
 		this.olMap = result.MAP;
 		this.layers = result.LAYERS;
 		this.refreshLayersSwitcher();
@@ -47,7 +47,7 @@ Class.create("OLViewer", View, {
 		var bar = this.element.down('div.filter');
 		var button = this.element.down('div#filterButton');
 		bar.select('select').invoke('setStyle', {width: '80px',height: '18px',fontSize: '11px',marginRight: '5px',border: '1px solid #AAAAAA'});
-		bar.select('input').invoke('setStyle', {height: '18px',fontSize: '11px',border: '1px solid #AAAAAA',backgroundImage: 'url('+ajxpResourcesFolder+'"/images/locationBg.gif")', backgroundPosition: 'left top', backgroundRepeat: 'no-repeat'});
+		bar.select('input').invoke('setStyle', {height: '18px',fontSize: '11px',border: '1px solid #AAAAAA',backgroundImage: 'url('+THEME.path+'"/image/locationBg.gif")', backgroundPosition: 'left top', backgroundRepeat: 'no-repeat'});
 		bar.hide();
 		this.filterBar = bar;
 		button.observe("click", function(e){
@@ -142,12 +142,12 @@ Class.create("OLViewer", View, {
 		this.layers.invoke('mergeNewParams', filterParams);
 	},
 	
-	createOLMap : function(ajxpNode, targetId, useDefaultControls, dualTileMode){
+	createOLMap : function(item, targetId, useDefaultControls, dualTileMode){
 		
 		// PARSE METADATA
-		var metadata = ajxpNode.getMetadata();
+		var metadata = item.getMetadata();
 		var layersDefinitions;
-		if(metadata.get('ajxp_mime') == 'wms_layer'){			
+		if(metadata.get('mime') == 'wms_layer'){			
 			layersDefinitions = $A([
 				{type: 'WMS',tile: true,wms_url: metadata.get('wms_url'),name: metadata.get('name'),style: metadata.get('style')}
 				]);
@@ -289,25 +289,25 @@ Class.create("OLViewer", View, {
 		return {MAP: map, LAYERS: layers};
 	},		
 	
-	getPreview : function(ajxpNode, rich){		
+	getPreview : function(item, rich){		
 		if(rich){
 			
-			var metadata = ajxpNode.getMetadata();			
+			var metadata = item.getMetadata();			
 			var div = new Element('div', {id: "ol_map", style: "width:100%;height:200px;"});
 			div.resizePreviewElement = function(dimensionObject){
 				// do nothing;
 				div.setStyle({height: '200px'});
 				if(div.initialized) return;				
-				OLViewer.prototype.createOLMap(ajxpNode, 'ol_map', true);
+				OLViewer.prototype.createOLMap(item, 'ol_map', true);
 				div.initialized = true;
 			}
 			return div;
 		}else{
-			return new Element('img', {src: resolveImageSource(ajxpNode.getIcon(),'/images/mimes/ICON_SIZE',64)});
+			return new Element('img', {src: resolveImageSource(item.getIcon(),'/image/mime/ICON_SIZE',64)});
 		}
 	},
 	
-	getThumbnailSource : function(ajxpNode){
-		return resolveImageSource(ajxpNode.getIcon(),'/images/mimes/ICON_SIZE',64);
+	getThumbnailSource : function(item){
+		return resolveImageSource(item.getIcon(),'/image/mime/ICON_SIZE',64);
 	}
 });

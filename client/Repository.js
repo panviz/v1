@@ -50,11 +50,11 @@ Class.create("Repository", {
 	 * @param xmlDef XMLNode
 	 */
 	initialize : function(id, xmlDef){
-		if(MessageHash){
-			this.label = MessageHash[391];
+		if(I18N){
+			this.label = I18N[391];
 		}
 		this.id = id;
-		this.icon = ajxpResourcesFolder+'/image/actions/16/network-wired.png';
+		this.icon = THEME.path+'/image/action/16/network-wired.png';
 		this.resourcesManager = new ResourcesManager();
 		if(xmlDef) this.loadFromXml(xmlDef);
 	},
@@ -170,7 +170,7 @@ Class.create("Repository", {
 				this.setLabel(childNode.firstChild.nodeValue);
 			}else if(childNode.nodeName == "client_settings"){
                 if(childNode.getAttribute('icon_tpl_id')){
-                    this.setIcon(window.ajxpServerAccessPath+'&get_action=get_user_template_logo&template_id='+childNode.getAttribute('icon_tpl_id')+'&icon_format=small');
+                    this.setIcon(window.serverAccessPath+'&get_action=get_user_template_logo&template_id='+childNode.getAttribute('icon_tpl_id')+'&icon_format=small');
                 }else{
                     this.setIcon(childNode.getAttribute('icon'));
                 }
@@ -180,7 +180,7 @@ Class.create("Repository", {
 						this.resourcesManager.loadFromXmlNode(subCh);
 					}else if(subCh.nodeName == 'node_provider'){
 						var nodeProviderName = subCh.getAttribute("ajxpClass");
-						var nodeProviderOptions = subCh.getAttribute("ajxpOptions").evalJSON();
+						var nodeProviderOptions = subCh.getAttribute("options").evalJSON();
 						this.nodeProviderDef = {name: nodeProviderName, options: nodeProviderOptions};
 					}
 				}

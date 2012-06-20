@@ -41,7 +41,7 @@ Class.create("PixlrEditor", AbstractEditor, {
 		this.setOnLoad(true);
 		this.currentNode = userSelection.getUniqueNode();
 		var fName = this.currentNode.getPath();
-		var src = bootstrap.parameters.get('ajxpServerAccess')+"&get_action=post_to_server&file=" + base64_encode(fName) + "&parent_url=" + base64_encode(getRepName(document.location.href));
+		var src = bootstrap.parameters.get('serverAccess')+"&get_action=post_to_server&file=" + base64_encode(fName) + "&parent_url=" + base64_encode(getRepName(document.location.href));
 		this.contentMainContainer.src = src;
 		var pe = new PeriodicalExecuter(function(){
 			var href;
@@ -73,7 +73,7 @@ Class.create("PixlrEditor", AbstractEditor, {
 		if(openMessage){
 			waiter.update('<br><br><br>Please wait while opening Pixlr editor...<br>');
 		}
-		waiter.insert(new Element("img", {src: ajxpResourcesFolder+'/images/loadingImage.gif'}));
+		waiter.insert(new Element("img", {src: THEME.path+'/image/loadingImage.gif'}));
 		$(this.container).select("#element_overlay")[0].insert(waiter);
 		this.loading = true;
 	},
@@ -83,16 +83,16 @@ Class.create("PixlrEditor", AbstractEditor, {
 		this.loading = false;
 	},	
 	
-	getPreview : function(ajxpNode){
-		if(ajxpNode.getAjxpMime() == "bmp"  || ajxpNode.getAjxpMime() == "pxd"){
-			return View.prototype.getPreview(ajxpNode);
+	getPreview : function(item){
+		if(item.getMime() == "bmp"  || item.getMime() == "pxd"){
+			return View.prototype.getPreview(item);
 		}
 		
-		var img = new Element('img', {src: Diaporama.prototype.getThumbnailSource(ajxpNode), border:0});
+		var img = new Element('img', {src: Diaporama.prototype.getThumbnailSource(item), border:0});
 		img.resizePreviewElement = function(dimensionObject){			
 			var imgDim = {
-				width: parseInt(ajxpNode.getMetadata().get("image_width")), 
-				height: parseInt(ajxpNode.getMetadata().get("image_height"))
+				width: parseInt(item.getMetadata().get("image_width")), 
+				height: parseInt(item.getMetadata().get("image_height"))
 			};
 			var styleObj = fitRectangleToDimension(imgDim, dimensionObject);
 			img.setStyle(styleObj);
@@ -100,11 +100,11 @@ Class.create("PixlrEditor", AbstractEditor, {
 		return img;
 	},
 	
-	getThumbnailSource : function(ajxpNode){
-		if(ajxpNode.getAjxpMime() == "bmp" || ajxpNode.getAjxpMime() == "pxd"){
-			return View.prototype.getThumbnailSource(ajxpNode);
+	getThumbnailSource : function(item){
+		if(item.getMime() == "bmp" || item.getMime() == "pxd"){
+			return View.prototype.getThumbnailSource(item);
 		}		
-		return ajxpServerAccessPath+"&get_action=preview_data_proxy&get_thumb=true&file="+encodeURIComponent(ajxpNode.getPath());
+		return serverAccessPath+"&get_action=preview_data_proxy&get_thumb=true&file="+encodeURIComponent(item.getPath());
 	}
 	
 });

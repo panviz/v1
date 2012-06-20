@@ -74,7 +74,7 @@ Class.create("BackgroundManager", {
 	},
 
     updatePanelMessage : function(message){
-        var imgString = '<img src="'+ajxpResourcesFolder+'/images/loadingImage.gif" width="16" align="absmiddle">';
+        var imgString = '<img src="'+THEME.path+'/image/loadingImage.gif" width="16" align="absmiddle">';
         this.panel.update(imgString+' '+message);
         this.panel.show();
     },

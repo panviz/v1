@@ -19,7 +19,7 @@
 					var path;					
 					if(window.actionArguments && window.actionArguments.length>0){
 						path = window.actionArguments[0];
-						if(Object.isString(path)){path = new AjxpNode(path,false,getBaseName(path));}
+						if(Object.isString(path)){path = new Item(path,false,getBaseName(path));}
 					}else{
 						userSelection = application.getUserSelection();
 						if(userSelection && userSelection.isUnique() && (userSelection.hasDir() || userSelection.hasMime(["zip"]))){
@@ -51,13 +51,13 @@
 			</processing>
 		</action>
 		<action name="mkdir">			
-			<gui text="sql.1" title="sql.1" src="sql_images/actions/ICON_SIZE/table_new.png" accessKey="folder_access_key" hasAccessKey="false">
+			<gui text="sql.1" title="sql.1" src="sql_image/action/ICON_SIZE/table_new.png" accessKey="folder_access_key" hasAccessKey="false">
 				<context selection="false" dir="true" recycle="hidden" actionBar="true" contextMenu="true" infoPanel="false" actionBarGroup="put" inZip="false"></context>
 			</gui>
 			<rightsContext noUser="true" userLogged="only" read="true" write="true" adminOnly=""></rightsContext>
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[					
-					var sTitle = MessageHash[187];
+					var sTitle = I18N[187];
 					var loadFunc = function(oForm){
 						application.actionBar.sqlEditor = new SQLEditor(oForm);
 						application.actionBar.sqlEditor.createTableEditor();
@@ -68,7 +68,7 @@
 				</processing>
 		</action>
 		<action name="mkfile">
-			<gui text="273" title="274" src="sql_images/actions/ICON_SIZE/table_record_new.png" accessKey="file_access_key" hasAccessKey="false">
+			<gui text="273" title="274" src="sql_image/action/ICON_SIZE/table_record_new.png" accessKey="file_access_key" hasAccessKey="false">
 				<context selection="false" dir="true" recycle="hidden"
 					actionBar="true" contextMenu="true" infoPanel="false"
 					actionBarGroup="change" inZip="false" root="false">
@@ -90,7 +90,7 @@
 				</processing>
 		</action>
 		<action name="edit_table">
-			<gui text="269" title="270" src="sql_images/actions/ICON_SIZE/table_edit.png" accessKey="edit_access_key" hasAccessKey="false">
+			<gui text="269" title="270" src="sql_image/action/ICON_SIZE/table_edit.png" accessKey="edit_access_key" hasAccessKey="false">
 				<context selection="false" dir="true" recycle="hidden" 
 					actionBar="true" contextMenu="true" infoPanel="true"
 					actionBarGroup="put" inZip="false" root="false">
@@ -100,7 +100,7 @@
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
 					var currentTable = application.getContextNode().getPath();
-					var sTitle = MessageHash[187]+currentTable;
+					var sTitle = I18N[187]+currentTable;
 					var loadFunc = function(oForm){
 						application.actionBar.sqlEditor = new SQLEditor(oForm);
 						application.actionBar.sqlEditor.createTableEditor(currentTable);
@@ -199,7 +199,7 @@
 				</processing>
 		</action>
 		<action name="edit_record">
-			<gui text="51" title="276" src="sql_images/actions/ICON_SIZE/table_record_edit.png" accessKey="edit_access_key" hasAccessKey="false">
+			<gui text="51" title="276" src="sql_image/action/ICON_SIZE/table_record_edit.png" accessKey="edit_access_key" hasAccessKey="false">
 				<context selection="true" dir="" recycle="hidden" 
 					actionBar="true" contextMenu="true" infoPanel="true"
 					actionBarGroup="change" inZip="false" root="false">
@@ -227,7 +227,7 @@
 				</processing>
 		</action>
 		<action name="delete_table">
-			<gui text="271" title="272" src="sql_images/actions/ICON_SIZE/table_delete.png" accessKey="delete_access_key" hasAccessKey="false" specialAccessKey="delete">
+			<gui text="271" title="272" src="sql_image/action/ICON_SIZE/table_delete.png" accessKey="delete_access_key" hasAccessKey="false" specialAccessKey="delete">
 				<context selection="true" dir="true" recycle="false"
 					actionBar="true" contextMenu="true" infoPanel="false"
 					actionBarGroup="put" inZip="false">
@@ -237,7 +237,7 @@
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
 					var onLoad = function(oForm){
-				    	var message = MessageHash[275];
+				    	var message = I18N[275];
 		   		    	$(oForm).getElementsBySelector('span[id="delete_message"]')[0].innerHTML = message;
 					};
 					modal.showDialogForm('Delete', 'delete_form', onLoad, function(){
@@ -256,7 +256,7 @@
 				</processing>
 		</action>
 		<action name="delete_record">
-			<gui text="7" title="277" src="sql_images/actions/ICON_SIZE/table_record_delete.png" accessKey="delete_access_key" hasAccessKey="true" specialAccessKey="delete">
+			<gui text="7" title="277" src="sql_image/action/ICON_SIZE/table_record_delete.png" accessKey="delete_access_key" hasAccessKey="true" specialAccessKey="delete">
 				<context selection="true" dir="true" recycle="false"
 					actionBar="true" contextMenu="true" infoPanel="false"
 					actionBarGroup="change" inZip="false">
@@ -266,7 +266,7 @@
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
 					var onLoad = function(oForm){
-				    	var message = MessageHash[278];
+				    	var message = I18N[278];
 		   		    	$(oForm).getElementsBySelector('span[id="delete_message"]')[0].innerHTML = message;
 					};
 					modal.showDialogForm('Delete', 'delete_record_form', onLoad, function(){

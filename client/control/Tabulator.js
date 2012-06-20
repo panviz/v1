@@ -26,7 +26,7 @@ Class.create("Tabulator", Pane, {
 		this.tabulatorData.each(function(tabInfo){
 			var td = new Element('td').addClassName('toggleHeader');
 			td.addClassName('panelHeader');
-			td.update('<img width="16" height="16" align="absmiddle" src="'+resolveImageSource(tabInfo.icon, '/images/actions/ICON_SIZE', 16)+'"><span ajxp_message_id="'+tabInfo.label+'">'+MessageHash[tabInfo.label]+'</a>');
+			td.update('<img width="16" height="16" align="absmiddle" src="'+resolveImageSource(tabInfo.icon, '/image/action/ICON_SIZE', 16)+'"><span message_id="'+tabInfo.label+'">'+I18N[tabInfo.label]+'</a>');
 			td.observe('click', function(){
 				this.switchTabulator(tabInfo.id);
 			}.bind(this) );
@@ -47,19 +47,19 @@ Class.create("Tabulator", Pane, {
 	switchTabulator : function(tabId){
 		var toShow ;
 		this.tabulatorData.each(function(tabInfo){
-			var ajxpObject = this.getAndSetObject(tabInfo);
+			var object = this.getAndSetObject(tabInfo);
 			if(tabInfo.id == tabId){				
 				tabInfo.headerElement.removeClassName("toggleInactive");
 				tabInfo.headerElement.select('img')[0].show();
-				if(ajxpObject){
-					toShow = ajxpObject;
+				if(object){
+					toShow = object;
 				}
 				this.selectedTabInfo = tabInfo;
 			}else{
 				tabInfo.headerElement.addClassName("toggleInactive");
 				tabInfo.headerElement.select('img')[0].hide();
-				if(ajxpObject){
-					ajxpObject.showElement(false);
+				if(object){
+					object.showElement(false);
 				}
 			}
 		}.bind(this));
@@ -74,9 +74,9 @@ Class.create("Tabulator", Pane, {
 	 */
 	resize : function(){
 		if(!this.selectedTabInfo) return;
-		var ajxpObject = this.getAndSetObject(this.selectedTabInfo);
-		if(ajxpObject){
-			ajxpObject.resize();
+		var object = this.getAndSetObject(this.selectedTabInfo);
+		if(object){
+			object.resize();
 		}
 	},
 	
@@ -92,9 +92,9 @@ Class.create("Tabulator", Pane, {
 	 */
 	destroy : function(){
 		this.tabulatorData.each(function(tabInfo){
-			var ajxpObject = this.getAndSetObject(tabInfo);
+			var object = this.getAndSetObject(tabInfo);
 			tabInfo.headerElement.stopObserving("click");
-			ajxpObject.destroy();
+			object.destroy();
 		}.bind(this));
 		this.htmlElement.update("");
         if(window[this.htmlElement.id]){
@@ -110,10 +110,10 @@ Class.create("Tabulator", Pane, {
 	 * @returns IWidget
 	 */
 	getAndSetObject : function(tabInfo){
-		var ajxpObject = tabInfo.ajxpObject || null;
-		if($(tabInfo.element) && $(tabInfo.element).ajxpPaneObject && (!ajxpObject || ajxpObject != $(tabInfo.element).ajxpPaneObject) ){
-			ajxpObject = tabInfo.ajxpObject = $(tabInfo.element).ajxpPaneObject;
+		var object = tabInfo.object || null;
+		if($(tabInfo.element) && $(tabInfo.element).paneObject && (!object || object != $(tabInfo.element).paneObject) ){
+			object = tabInfo.object = $(tabInfo.element).paneObject;
 		}
-		return ajxpObject;		
+		return object;		
 	}
 });

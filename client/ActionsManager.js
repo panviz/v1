@@ -106,7 +106,7 @@ Class.create("ActionsManager", {
 			var menuItem = {
 				name: action.getKeyedText(),
 				alt: action.options.title,
-				image: resolveImageSource(action.options.src, '/images/actions/ICON_SIZE', 16),
+				image: resolveImageSource(action.options.src, '/image/action/ICON_SIZE', 16),
 				isDefault: isDefault,
 				callback: function(e){this.apply();}.bind(action)
 			};
@@ -166,7 +166,7 @@ Class.create("ActionsManager", {
 		var actions = $A([]);
 		this.actions.each(function(pair){
 			var action = pair.value;
-			if(action.context.ajxpWidgets && (action.context.ajxpWidgets.include(className+'::'+widgetId)||action.context.ajxpWidgets.include(className)) && !action.deny) actions.push(action);
+			if(action.context.widgets && (action.context.widgets.include(className+'::'+widgetId)||action.context.widgets.include(className)) && !action.deny) actions.push(action);
 		});
 		return actions;		
 	},
@@ -260,7 +260,7 @@ Class.create("ActionsManager", {
 		{
 			// Check that dest is not a child of the source
 			if(this.checkDestIsChildOfSource(fileNames, destNodeName)){
-				app.displayMessage('ERROR', MessageHash[202]);
+				app.displayMessage('ERROR', I18N[202]);
 				return;
 			}
 		}
@@ -268,13 +268,13 @@ Class.create("ActionsManager", {
         for(var i=0; i<fileNames.length;i++)
         {
             if(fileNames[i] == destDir){
-                if(destNodeName != null) app.displayMessage('ERROR', MessageHash[202]);
+                if(destNodeName != null) app.displayMessage('ERROR', I18N[202]);
                  return;
             }
         }
         // Check that dest is not the direct parent of source, ie current rep!
         if(destDir == app.getContextNode().getPath()){
-            if(destNodeName != null) app.displayMessage('ERROR', MessageHash[203]);
+            if(destNodeName != null) app.displayMessage('ERROR', I18N[203]);
             return;
         }
 		var connection = new Connection();
@@ -408,9 +408,9 @@ Class.create("ActionsManager", {
 			{
 				if(childs[i].getAttribute("secure_token")){
 					Connection.SECURE_TOKEN = childs[i].getAttribute("secure_token");
-					var parts = window.ajxpServerAccessPath.split("?secure_token");
-					window.ajxpServerAccessPath = parts[0] + "?secure_token=" + Connection.SECURE_TOKEN;
-					bootstrap.parameters.set('ajxpServerAccess', window.ajxpServerAccessPath);
+					var parts = window.serverAccessPath.split("?secure_token");
+					window.serverAccessPath = parts[0] + "?secure_token=" + Connection.SECURE_TOKEN;
+					bootstrap.parameters.set('serverAccess', window.serverAccessPath);
 				}
                 if($("generic_dialog_box") && $("generic_dialog_box").down(".login_error")){
                     $("generic_dialog_box").down(".login_error").remove();
@@ -449,10 +449,10 @@ Class.create("ActionsManager", {
 				}
                 if(errorId){
                     if($("generic_dialog_box") && $("generic_dialog_box").visible() && $("generic_dialog_box").down("div.dialogLegend")){
-                        $("generic_dialog_box").down("div.dialogLegend").insert({bottom: '<div class="login_error" style="background-color: #D33131;display: block;font-size: 9px;color: white;border-radius: 3px;padding: 2px 6px;">'+MessageHash[errorId]+'</div>'});
+                        $("generic_dialog_box").down("div.dialogLegend").insert({bottom: '<div class="login_error" style="background-color: #D33131;display: block;font-size: 9px;color: white;border-radius: 3px;padding: 2px 6px;">'+I18N[errorId]+'</div>'});
                         $("generic_dialog_box").shake();
                     }else{
-                        alert(MessageHash[errorId]);
+                        alert(I18N[errorId]);
                     }
                 }
 

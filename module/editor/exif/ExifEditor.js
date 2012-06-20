@@ -8,7 +8,7 @@ Class.create("ExifEditor", AbstractEditor, {
 		$super(oFormObject);
 		this.actions.get("downloadFileButton").observe('click', function(){
 			if(!this.currentFile) return;		
-			app.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+this.currentFile);
+			app.triggerDownload(bootstrap.parameters.get('serverAccess')+'&action=download&file='+this.currentFile);
 			return false;
 		}.bind(this));
 		this.element.observe("view:resize", function(){
@@ -116,11 +116,11 @@ Class.create("ExifEditor", AbstractEditor, {
 		this.refreshGPSData();
 	},
 	
-	getPreview : function(ajxpNode){
-		return Diaporama.prototype.getPreview(ajxpNode);
+	getPreview : function(item){
+		return Diaporama.prototype.getPreview(item);
 	},
 	
-	getThumbnailSource : function(ajxpNode){
-		return Diaporama.prototype.getThumbnailSource(ajxpNode);
+	getThumbnailSource : function(item){
+		return Diaporama.prototype.getThumbnailSource(item);
 	}
 });

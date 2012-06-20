@@ -13,7 +13,7 @@
     "formId": "zoho_box",
     "write": "true",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "class_definition": {
       "filename": "plugins/editor.zoho/class.ZohoEditor.php",
       "classname": "ZohoEditor"
@@ -105,77 +105,77 @@
       "extensions": {
         "extension": [
           {
-            "icon": "zoho_img/mimes/ICON_SIZE/word.png",
+            "icon": "zoho_img/mime/ICON_SIZE/word.png",
             "messageId": "zoho_editor.3",
             "mime": "doc"
           },
           {
-            "icon": "zoho_img/mimes/ICON_SIZE/word.png",
+            "icon": "zoho_img/mime/ICON_SIZE/word.png",
             "messageId": "zoho_editor.3",
             "mime": "docx"
           },
           {
-            "icon": "zoho_img/mimes/ICON_SIZE/word.png",
+            "icon": "zoho_img/mime/ICON_SIZE/word.png",
             "messageId": "zoho_editor.3",
             "mime": "odt"
           },
           {
-            "icon": "zoho_img/mimes/ICON_SIZE/word.png",
+            "icon": "zoho_img/mime/ICON_SIZE/word.png",
             "messageId": "zoho_editor.3",
             "mime": "sxw"
           },
           {
-            "icon": "zoho_img/mimes/ICON_SIZE/word.png",
+            "icon": "zoho_img/mime/ICON_SIZE/word.png",
             "messageId": "zoho_editor.3",
             "mime": "rtf"
           },
           {
-            "icon": "zoho_img/mimes/ICON_SIZE/spreadsheet.png",
+            "icon": "zoho_img/mime/ICON_SIZE/spreadsheet.png",
             "messageId": "zoho_editor.5",
             "mime": "xls"
           },
           {
-            "icon": "zoho_img/mimes/ICON_SIZE/spreadsheet.png",
+            "icon": "zoho_img/mime/ICON_SIZE/spreadsheet.png",
             "messageId": "zoho_editor.5",
             "mime": "xlsx"
           },
           {
-            "icon": "zoho_img/mimes/ICON_SIZE/spreadsheet.png",
+            "icon": "zoho_img/mime/ICON_SIZE/spreadsheet.png",
             "messageId": "zoho_editor.5",
             "mime": "ods"
           },
           {
-            "icon": "zoho_img/mimes/ICON_SIZE/spreadsheet.png",
+            "icon": "zoho_img/mime/ICON_SIZE/spreadsheet.png",
             "messageId": "zoho_editor.5",
             "mime": "sxc"
           },
           {
-            "icon": "zoho_img/mimes/ICON_SIZE/spreadsheet.png",
+            "icon": "zoho_img/mime/ICON_SIZE/spreadsheet.png",
             "messageId": "zoho_editor.5",
             "mime": "csv"
           },
           {
-            "icon": "zoho_img/mimes/ICON_SIZE/spreadsheet.png",
+            "icon": "zoho_img/mime/ICON_SIZE/spreadsheet.png",
             "messageId": "zoho_editor.5",
             "mime": "tsv"
           },
           {
-            "icon": "zoho_img/mimes/ICON_SIZE/presentation.png",
+            "icon": "zoho_img/mime/ICON_SIZE/presentation.png",
             "messageId": "zoho_editor.4",
             "mime": "ppt"
           },
           {
-            "icon": "zoho_img/mimes/ICON_SIZE/presentation.png",
+            "icon": "zoho_img/mime/ICON_SIZE/presentation.png",
             "messageId": "zoho_editor.4",
             "mime": "pps"
           },
           {
-            "icon": "zoho_img/mimes/ICON_SIZE/presentation.png",
+            "icon": "zoho_img/mime/ICON_SIZE/presentation.png",
             "messageId": "zoho_editor.4",
             "mime": "odp"
           },
           {
-            "icon": "zoho_img/mimes/ICON_SIZE/presentation.png",
+            "icon": "zoho_img/mime/ICON_SIZE/presentation.png",
             "messageId": "zoho_editor.4",
             "mime": "sxi"
           }

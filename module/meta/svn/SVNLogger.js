@@ -27,14 +27,14 @@ Class.create("SVNLogger", {
 		this.element.up('div.dialogContent').setStyle({padding:0});
 		this.element.insert(this.container);	
 		this.template = new Template('<div style="padding: 0px; border: 1px solid rgb(204, 204, 204); margin: 5px 8px 8px 4px;"><div style="padding: 3px; background-color: rgb(238, 238, 238);#{cssStyle}"><b>#{dateString} :</b> #{date} &nbsp;&nbsp;&nbsp;&nbsp;<b>#{revString} :</b> #{revision} &nbsp;&nbsp;&nbsp;&nbsp;<b>#{authString} :</b> #{author}<br></div><div style="padding: 3px;color:#333;word-wrap:break-word;">#{message}</div><div style="text-align: right; padding: 3px;">#{downloadLink}</div></div>');
-		this.downloadTemplate = new Template('<a style="color:#79f;font-weight:bold;" ajxp_download="'+window.ajxpServerAccessPath+'&get_action=svndownload&file=#{fileName}&revision=#{revision}" href="#">#{downloadString}</a>');
-		this.switchTemplate = new Template('<a style="color:#79f;font-weight:bold;" ajxp_url="'+window.ajxpServerAccessPath+'&get_action=svnswitch&revision=#{revision}" href="#">#{switchString}</a>');
-		this.revMessage = MessageHash[243];
-		this.authorMessage = MessageHash[244];
-		this.dateMessage = MessageHash[245];
-		this.messMessage = MessageHash[246];
-		this.downMessage = MessageHash[88];
-		this.switchMessage = MessageHash['meta.svn.3'];
+		this.downloadTemplate = new Template('<a style="color:#79f;font-weight:bold;" download="'+window.serverAccessPath+'&get_action=svndownload&file=#{fileName}&revision=#{revision}" href="#">#{downloadString}</a>');
+		this.switchTemplate = new Template('<a style="color:#79f;font-weight:bold;" url="'+window.serverAccessPath+'&get_action=svnswitch&revision=#{revision}" href="#">#{switchString}</a>');
+		this.revMessage = I18N[243];
+		this.authorMessage = I18N[244];
+		this.dateMessage = I18N[245];
+		this.messMessage = I18N[246];
+		this.downMessage = I18N[88];
+		this.switchMessage = I18N['meta.svn.3'];
 		if(!$('svndownload_iframe')){
 			$('hidden_frames').insert('<iframe id="svndownload_iframe" name="svndownload_iframe" style="display:none"></iframe>');
 		}
@@ -43,12 +43,12 @@ Class.create("SVNLogger", {
 	open: function(currentRep){
 		var selection = app.getUserSelection();
 		if(currentRep || selection.isEmpty()){
-			var ajxpNode = app.getContextNode();
+			var item = app.getContextNode();
 		}else{
-			var ajxpNode = selection.getUniqueNode();
+			var item = selection.getUniqueNode();
 		}
-		this.fileName = ajxpNode.getPath();
-		this.isFile = ajxpNode.isLeaf();
+		this.fileName = item.getPath();
+		this.isFile = item.isLeaf();
 		var connection = new Connexion();
 		connection.addParameter('get_action', 'svnlog');
 		connection.addParameter('file', this.fileName);
@@ -140,15 +140,15 @@ Class.create("SVNLogger", {
 		}
 		this.container.select("a").invoke("observe", "click", function(e){
 			var a = e.findElement();
-			if(a.getAttribute("ajxp_url")){
-				var conn = new Connexion(a.getAttribute("ajxp_url"));
+			if(a.getAttribute("url")){
+				var conn = new Connexion(a.getAttribute("url"));
 				conn.onComplete = function(){
 					app.fireContextRefresh()
 					hideLightBox();
 				};
 				conn.sendAsync();
-			}else if(a.getAttribute("ajxp_download")){
-				$('svndownload_iframe').src = a.getAttribute("ajxp_download");
+			}else if(a.getAttribute("download")){
+				$('svndownload_iframe').src = a.getAttribute("download");
 			}
 			Event.stop(e);
 		});		
@@ -159,7 +159,7 @@ Class.create("SVNLogger", {
 	setOnLoad:function(){
 		addLightboxMarkupToElement(this.container);
 		var img = new Element("img", {
-			src:ajxpResourcesFolder+'/images/loadingImage.gif',
+			src:THEME.path+'/image/loadingImage.gif',
 			style:'margin-top:80px;'
 		});
 		this.container.down("#element_overlay").insert(img);		

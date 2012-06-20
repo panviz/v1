@@ -21,7 +21,7 @@ Class.create("ShareCenter", {
 
     performShareAction : function(){
         var userSelection = app.getUserSelection();
-        if(userSelection.hasDir() && !userSelection.hasMime($A(['ajxp_browsable_archive']))){
+        if(userSelection.hasDir() && !userSelection.hasMime($A(['browsable_archive']))){
             this.shareRepository(userSelection);
         }else{
             this.shareFile(userSelection);
@@ -33,7 +33,7 @@ Class.create("ShareCenter", {
         var loadFunc = function(oForm){
 
             var nodeMeta = userSelection.getUniqueNode().getMetadata();
-            if(nodeMeta.get("ajxp_shared")){
+            if(nodeMeta.get("shared")){
                 // Reorganize
                 var repoFieldset = oForm.down('fieldset#target_repository');
                 repoFieldset.down('div.dialogLegend').remove();
@@ -52,9 +52,9 @@ Class.create("ShareCenter", {
                 $('share_folder_form').autocompleter = new Ajax.Autocompleter(
                     "shared_user",
                     "shared_users_autocomplete_choices",
-                    ajxpServerAccessPath + "&get_action=share&sub_action=list_shared_users",
+                    serverAccessPath + "&get_action=share&sub_action=list_shared_users",
                     {
-                        minChars:app.getPluginConfigs("ajxp_plugin[@name='share']").get("SHARED_USERS_LIST_MINIMUM"),
+                        minChars:app.getPluginConfigs("plugin[@name='share']").get("SHARED_USERS_LIST_MINIMUM"),
                         paramName:'value',
                         tokens:[',', '\n'],
                         frequency:0.1,
@@ -64,13 +64,13 @@ Class.create("ShareCenter", {
                 if(Prototype.Browser.IE){
                     $(document.body).insert($("shared_users_autocomplete_choices"));
                 }
-                if(!nodeMeta.get("ajxp_shared")){
+                if(!nodeMeta.get("shared")){
                     $('shared_user').observeOnce("focus", function(){
                         $('share_folder_form').autocompleter.activate();
                     });
                 }
                 $('create_shared_user_anchor').observeOnce("click", function(){
-                    var pref = app.getPluginConfigs("ajxp_plugin[@name='share']").get("SHARED_USERS_TMP_PREFIX");
+                    var pref = app.getPluginConfigs("plugin[@name='share']").get("SHARED_USERS_TMP_PREFIX");
                     if(pref){
                         $("new_shared_user").setValue(pref);
                     }
@@ -79,7 +79,7 @@ Class.create("ShareCenter", {
                 });
             }
             this._currentRepositoryId = null;
-            if(nodeMeta.get("ajxp_shared")){
+            if(nodeMeta.get("shared")){
                 oForm.down('fieldset#share_unshare').show();
                 oForm.down('div[id="unshare_button"]').observe("click", this.performUnshareAction.bind(this));
                 oForm.down('#complete_indicator').show();
@@ -102,16 +102,16 @@ Class.create("ShareCenter", {
         var submitFunc = function(oForm){
             if($('new_shared_user').value){
                 if( !$('shared_pass').value || $('shared_pass').value.length < bootstrap.parameters.get('password_min_length')){
-                    alert(MessageHash[378]);
+                    alert(I18N[378]);
                     return false;
                 }
             }
             if(!oForm.down('input[name="repo_label"]').value){
-                alert(MessageHash[349]);
+                alert(I18N[349]);
                 return false;
             }
             var userSelection = app.getUserSelection();
-            var publicUrl = ajxpServerAccessPath+'&get_action=share&sub_action=delegate_repo';
+            var publicUrl = serverAccessPath+'&get_action=share&sub_action=delegate_repo';
             publicUrl = userSelection.updateFormOrUrl(null,publicUrl);
             var conn = new Connection(publicUrl);
             conn.setParameters(modal.getForm().serialize(true));
@@ -122,15 +122,15 @@ Class.create("ShareCenter", {
                 var response = parseInt(transport.responseText);
                 if(response == 200){
                     if(this._currentRepositoryId){
-                        app.displayMessage('SUCCESS', MessageHash['share_center.19']);
+                        app.displayMessage('SUCCESS', I18N['share_center.19']);
                     }else{
-                        app.displayMessage('SUCCESS', MessageHash['share_center.18']);
+                        app.displayMessage('SUCCESS', I18N['share_center.18']);
                     }
                     app.fireContextRefresh();
                     hideLightBox(true);
                 }else{
                     var messages = {100:349, 101:352, 102:350, 103:351};
-                    app.displayMessage('ERROR', MessageHash[messages[response]]);
+                    app.displayMessage('ERROR', I18N[messages[response]]);
                 }
             }.bind(this);
             conn.sendAsync();
@@ -138,7 +138,7 @@ Class.create("ShareCenter", {
             return false;
         }.bind(this);
         if(window.bootstrap.parameters.get("usersEditable") == false){
-            app.displayMessage('ERROR', MessageHash[394]);
+            app.displayMessage('ERROR', I18N[394]);
         }else{
             modal.showDialogForm('Get', 'share_folder_form', loadFunc, submitFunc, closeFunc);
         }
@@ -156,7 +156,7 @@ Class.create("ShareCenter", {
                     minchar : 0
                 });
                 var nodeMeta = userSelection.getUniqueNode().getMetadata();
-                if(nodeMeta.get("ajxp_shared")){
+                if(nodeMeta.get("shared")){
                     oForm.down('fieldset#share_unshare').show();
                     oForm.down('fieldset#share_optional_fields').hide();
                     oForm.down('fieldset#share_generate').hide();
@@ -166,11 +166,11 @@ Class.create("ShareCenter", {
                     this.loadSharedElementData(userSelection.getUniqueNode(), function(json){
                         oForm.down('input[id="share_container"]').value = json['publiclet_link'];
                         oForm.down('div#generate_indicator').hide();
-                        var linkDescription = '<tr><td class="infoPanelValue">' + MessageHash['share_center.11']+'</td><td class="infoPanelValue">'+ (json['expire_time'] == 0 ? MessageHash['share_center.14']:json['expire_time']) + '</td></tr>';
-                        linkDescription += '<tr class="even"><td class="infoPanelValue">'  + MessageHash['share_center.12']+'</td><td class="infoPanelValue">' + (json['has_password']?MessageHash['share_center.13']:MessageHash['share_center.14']) + '</td></tr>';
-                        linkDescription += '<tr><td class="infoPanelValue">' + MessageHash['share_center.15'].replace('%s', '<span id="downloaded_times">'+json['download_counter']+'</span>')+'</td><td class="infoPanelValue" id="ip_reset_button"></td></tr>';
+                        var linkDescription = '<tr><td class="infoPanelValue">' + I18N['share_center.11']+'</td><td class="infoPanelValue">'+ (json['expire_time'] == 0 ? I18N['share_center.14']:json['expire_time']) + '</td></tr>';
+                        linkDescription += '<tr class="even"><td class="infoPanelValue">'  + I18N['share_center.12']+'</td><td class="infoPanelValue">' + (json['has_password']?I18N['share_center.13']:I18N['share_center.14']) + '</td></tr>';
+                        linkDescription += '<tr><td class="infoPanelValue">' + I18N['share_center.15'].replace('%s', '<span id="downloaded_times">'+json['download_counter']+'</span>')+'</td><td class="infoPanelValue" id="ip_reset_button"></td></tr>';
                         var descDiv = new Element('div', {style:"margin-top: 10px;"}).update('<table class="infoPanelTable" cellspacing="0" cellpadding="0" style="border-top:1px solid #eee;border-left:1px solid #eee;">'+linkDescription+'</table>');
-                        var resetLink = new Element('a', {style:'text-decoration:underline;cursor:pointer;', title:MessageHash['share_center.17']}).update(MessageHash['share_center.16']).observe('click', this.resetDownloadCounterCallback.bind(this));
+                        var resetLink = new Element('a', {style:'text-decoration:underline;cursor:pointer;', title:I18N['share_center.17']}).update(I18N['share_center.16']).observe('click', this.resetDownloadCounterCallback.bind(this));
                         descDiv.down('#ip_reset_button').insert(resetLink);
                         oForm.down('fieldset#share_result').insert(descDiv);
                         oForm.down('input[id="share_container"]').select();
@@ -205,7 +205,7 @@ Class.create("ShareCenter", {
 
     performUnshareAction : function(){
         var userSelection = app.getUserSelection();
-        modal.getForm().down("img#stop_sharing_indicator").src=window.ajxpResourcesFolder+"/images/autocompleter-loader.gif";
+        modal.getForm().down("img#stop_sharing_indicator").src=window.THEME.path+"/image/autocompleter-loader.gif";
         var conn = new Connection();
         conn.addParameter("get_action", "unshare");
         conn.addParameter("file", userSelection.getUniqueNode().getPath());
@@ -234,10 +234,10 @@ Class.create("ShareCenter", {
 
     generatePublicLinkCallback : function(){
         var userSelection = app.getUserSelection();
-        if(!userSelection.isUnique() || (userSelection.hasDir() && !userSelection.hasMime($A(['ajxp_browsable_archive'])))) return;
+        if(!userSelection.isUnique() || (userSelection.hasDir() && !userSelection.hasMime($A(['browsable_archive'])))) return;
         var oForm = $(modal.getForm());
-        oForm.down('img#generate_image').src = window.ajxpResourcesFolder+"/images/autocompleter-loader.gif";
-        var publicUrl = window.ajxpServerAccessPath+'&get_action=share';
+        oForm.down('img#generate_image').src = window.THEME.path+"/image/autocompleter-loader.gif";
+        var publicUrl = window.serverAccessPath+'&get_action=share';
         publicUrl = userSelection.updateFormOrUrl(null,publicUrl);
         var conn = new Connection(publicUrl);
         conn.setParameters(oForm.serialize(true));

@@ -4,13 +4,13 @@
     "label": "CONF_MESSAGE[Subversion Repository]",
     "description": "CONF_MESSAGE[Extract SVN informations (revision, change log, etc) if the repository is a Working-Copy, and SVN is available as a commandline.]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "class_definition": {
       "filename": "plugins/meta.svn/class.SvnManager.php",
       "classname": "SvnManager"
     },
     "client_settings": {
-      "icon": "plugins/access.mysql/resources/images/mysql_icon.png",
+      "icon": "plugins/access.mysql/resources/image/mysql_icon.png",
       "resources": {
         "i18n": {
           "namespace": "meta.svn",
@@ -87,7 +87,7 @@
             "gui": {
               "text": "meta.svn.2",
               "title": "meta.svn.21",
-              "src": "svn_images/actions/ICON_SIZE/system_file_manager.png",
+              "src": "svn_image/action/ICON_SIZE/system_file_manager.png",
               "hasAccessKey": "false",
               "context": {
                 "selection": "true",
@@ -133,7 +133,7 @@
             "gui": {
               "text": "meta.svn.1",
               "title": "meta.svn.11",
-              "src": "svn_images/actions/ICON_SIZE/system_file_manager.png",
+              "src": "svn_image/action/ICON_SIZE/system_file_manager.png",
               "hasAccessKey": "false",
               "context": {
                 "selection": "false",

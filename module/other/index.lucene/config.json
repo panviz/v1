@@ -4,10 +4,10 @@
     "label": "CONF_MESSAGE[Lucene Search Engine]",
     "description": "CONF_MESSAGE[Zend_Search_Lucene implementation to index all files and search a whole repository quickly.]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "class_definition": {
-      "filename": "plugins/index.lucene/class.AjxpLuceneIndexer.php",
-      "classname": "AjxpLuceneIndexer"
+      "filename": "plugins/index.lucene/class.LuceneIndexer.php",
+      "classname": "LuceneIndexer"
     },
     "client_settings": {
       "resources": {
@@ -120,7 +120,7 @@
             "gui": {
               "text": "index.lucene.1",
               "title": "index.lucene.2",
-              "src": "lucene_images/ICON_SIZE/ark_view.png",
+              "src": "lucene_image/ICON_SIZE/ark_view.png",
               "accessKey": "folder_access_key",
               "context": {
                 "selection": "false",

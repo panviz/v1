@@ -8,7 +8,7 @@ Class.create("IMagickPreviewer", Diaporama, {
 	initialize: function($super, oFormObject)
 	{
 		$super(oFormObject);
-		this.baseUrl = bootstrap.parameters.get('ajxpServerAccess')+"&get_action=get_extracted_page&file=";
+		this.baseUrl = bootstrap.parameters.get('serverAccess')+"&get_action=get_extracted_page&file=";
 		// Override onload for the text
 		this.jsImage.onload = function(){
 			this.jsImageLoading = false;
@@ -22,7 +22,7 @@ Class.create("IMagickPreviewer", Diaporama, {
 				}
 			}
 			i++;
-			var text = this.currentIM + ' ('+MessageHash[331]+' '+i+' '+MessageHash[332]+' '+this.items.length+')';
+			var text = this.currentIM + ' ('+I18N[331]+' '+i+' '+I18N[332]+' '+this.items.length+')';
 			this.updateTitle(text);
 		}.bind(this);
 
@@ -33,7 +33,7 @@ Class.create("IMagickPreviewer", Diaporama, {
 	{
 		this.downloadButton.onclick = function(){
 			if(!this.currentFile) return;		
-			app.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+userSelection.getUniqueFileName());
+			app.triggerDownload(bootstrap.parameters.get('serverAccess')+'&action=download&file='+userSelection.getUniqueFileName());
 			return false;
 		}.bind(this);
 				
@@ -71,13 +71,13 @@ Class.create("IMagickPreviewer", Diaporama, {
 			}
 		}.bind(this);
 		this.setOnLoad();
-		this.updateTitle(MessageHash[330]);
+		this.updateTitle(I18N[330]);
 		connection.sendAsync();
 	},
 						
-	getPreview : function(ajxpNode){
+	getPreview : function(item){
 		var img = new Element('img', {
-			src: IMagickPreviewer.prototype.getThumbnailSource(ajxpNode), 
+			src: IMagickPreviewer.prototype.getThumbnailSource(item), 
 			style: 'border:1px solid #676965;',
             align: 'absmiddle'
 		});
@@ -92,15 +92,15 @@ Class.create("IMagickPreviewer", Diaporama, {
 		return img;
 	},
 	
-	getThumbnailSource : function(ajxpNode){
-		return ajxpServerAccessPath+"&get_action=imagick_data_proxy&file="+encodeURIComponent(ajxpNode.getPath());
+	getThumbnailSource : function(item){
+		return serverAccessPath+"&get_action=imagick_data_proxy&file="+encodeURIComponent(item.getPath());
 	},
 	
 	setOnLoad: function()	{
 		if(this.loading) return;
 		addLightboxMarkupToElement(this.imgContainer);
 		var img = document.createElement("img");
-		img.src = ajxpResourcesFolder+'/images/loadingImage.gif';
+		img.src = THEME.path+'/image/loadingImage.gif';
 		$(this.imgContainer).getElementsBySelector("#element_overlay")[0].appendChild(img);
 		this.loading = true;
 	},

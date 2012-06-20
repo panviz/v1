@@ -116,9 +116,9 @@ Class.create("MultiUploader", {
 			app.actionBar.multi_selector.submitMainForm();
 		});
 		optionsButton.observe("click", function(){
-            var message = MessageHash[281] + '\n';
-            message += '&nbsp;&nbsp;'+ MessageHash[282] + ':' + roundSize(this.maxUploadSize, '') + '\n';
-            message += '&nbsp;&nbsp;'+ MessageHash[284] + ':' + this.max;
+            var message = I18N[281] + '\n';
+            message += '&nbsp;&nbsp;'+ I18N[282] + ':' + roundSize(this.maxUploadSize, '') + '\n';
+            message += '&nbsp;&nbsp;'+ I18N[284] + ':' + this.max;
             alert(message);
 		}.bind(this));
 		closeButton.observe("click", function(){			
@@ -196,7 +196,7 @@ Class.create("MultiUploader", {
 		if(this.mask){
 			var ext = getFileExtension(element.value);
 			if(!this.mask.include(ext)){
-                alert(MessageHash[367] + this.mask.join(', ') + (this.maskLabel? " ("+ this.maskLabel +")":"" ) );
+                alert(I18N[367] + this.mask.join(', ') + (this.maskLabel? " ("+ this.maskLabel +")":"" ) );
 				return;
 			}
 		}		
@@ -207,7 +207,7 @@ Class.create("MultiUploader", {
 		// Delete button
 		var new_row_button = document.createElement( 'img' );
 		//new_row_button.appendChild(document.createTextNode('remove'));
-		new_row_button.src = ajxpResourcesFolder+'/images/actions/22/editdelete.png';
+		new_row_button.src = THEME.path+'/image/action/22/editdelete.png';
 		new_row_button.align = 'absmiddle';
 		new_row_button.setAttribute("style", "border:0px;cursor:pointer;");
 
@@ -243,7 +243,7 @@ Class.create("MultiUploader", {
 		var value = element.value;
 		var basename = getBaseName(value);
 		if(basename.length > this.namesMaxLength){
-			alert(MessageHash[393].replace("%s", this.namesMaxLength));
+			alert(I18N[393].replace("%s", this.namesMaxLength));
 		}
 		
 		var maxLength = 63;
@@ -287,9 +287,9 @@ Class.create("MultiUploader", {
 			return;
 		}
 		var stateImg = $(row).select("img")[0];
-		if(state == 'loading') stateImg.src = ajxpResourcesFolder+'/images/yellowled.png';
-		else if(state == 'done') stateImg.src = ajxpResourcesFolder+'/images/greenled.png';
-		else if(state == 'error') stateImg.src = ajxpResourcesFolder+'/images/redled.png';
+		if(state == 'loading') stateImg.src = THEME.path+'/image/yellowled.png';
+		else if(state == 'done') stateImg.src = THEME.path+'/image/greenled.png';
+		else if(state == 'error') stateImg.src = THEME.path+'/image/redled.png';
 	},
 	
 	
@@ -350,7 +350,7 @@ Class.create("MultiUploader", {
 			var crtValue = $(nextToSubmit).getElementsBySelector('input[type="file"]')[0].value;
 			if(this.crtContext.fileNameExists(crtValue))
 			{
-				overwrite = confirm(MessageHash[124]);
+				overwrite = confirm(I18N[124]);
 				if(!overwrite){
 					this.submitNext(true);
 					return;

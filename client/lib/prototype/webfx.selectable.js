@@ -458,15 +458,15 @@ SelectableElements = Class.create({
 		var items = this._selectedItems;
 		var nodes = $A([]);
 		for(var i=0;i<items.length;i++){
-			if(items[i].ajxpNode) nodes.push(items[i].ajxpNode);
+			if(items[i].item) nodes.push(items[i].item);
 		}
 		return nodes;
 	},
 	
-	setSelectedNodes : function(ajxpNodes){
+	setSelectedNodes : function(items){
 		var items = this.getItems();
 		for(var i=0;i<items.length;i++){
-			if(items[i].ajxpNode && ajxpNodes.detect(function(el){return (el.getPath() == items[i].ajxpNode.getPath()); })){
+			if(items[i].item && items.detect(function(el){return (el.getPath() == items[i].item.getPath()); })){
 				this.setItemSelected(items[i], true);
 			}else{
 				this.setItemSelected(items[i], false);

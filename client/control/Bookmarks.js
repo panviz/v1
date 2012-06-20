@@ -20,10 +20,10 @@
 			this.addBookmarkObject = {
 				name: bmAction.getKeyedText(),
 				alt: bmAction.options.title,
-				image: ajxpResourcesFolder+'/image/actions/16/bookmark_add.png',
+				image: THEME.path+'/image/action/16/bookmark_add.png',
 				callback: function(e){
 					var node = app.getContextNode();
-                    node.getMetadata().set('ajxp_bookmarked', 'true');
+                    node.getMetadata().set('bookmarked', 'true');
                     node.getMetadata().set('overlay_icon', 'bookmark.png');
 					this.addBookmark(node.getPath(), node.getLabel());
 				}.bind(this)
@@ -32,7 +32,7 @@
 		document.observe("app:add_bookmark", function(){
 			var node = app.getContextNode();
 			this.addBookmark(node.getPath(), node.getLabel());
-            node.getMetadata().set('ajxp_bookmarked', 'true');
+            node.getMetadata().set('bookmarked', 'true');
             node.getMetadata().set('overlay_icon', 'bookmark.png');
 		}.bind(this) );
 	},
@@ -48,7 +48,7 @@
 			var bookmark = {
 				name: childNodes[i].getAttribute('title'),
 				alt: childNodes[i].getAttribute('path'),
-				image: ajxpResourcesFolder+'/image/mimes/16/folder.png'
+				image: THEME.path+'/image/mime/16/folder.png'
 			};
 			bookmark.callback = function(e){app.goTo(this.alt);}.bind(bookmark);
 			bookmark.moreActions = this.getContextActions(bookmark.alt, bookmark.name);
@@ -99,9 +99,9 @@
 	getContextActions : function(bmPath, bmTitle){
 		
 		var removeAction = {
-				name: MessageHash[146],
-				alt: MessageHash[146],
-				image: ajxpResourcesFolder+'/image/actions/16/delete_bookmark.png',
+				name: I18N[146],
+				alt: I18N[146],
+				image: THEME.path+'/image/action/16/delete_bookmark.png',
 				disabled: false,
 				className: "edit",
 				callback: function(e){
@@ -110,9 +110,9 @@
 			};
 		
 		var renameAction = {
-				name: MessageHash[6],
-				alt: MessageHash[6],
-				image: ajxpResourcesFolder+'/image/actions/16/applix.png',
+				name: I18N[6],
+				alt: I18N[6],
+				image: THEME.path+'/image/action/16/applix.png',
 				disabled: false,
 				className: "edit",
 				callback: function(e){
@@ -132,7 +132,7 @@
 	 */
 	toggleRenameForm : function(bmPath, bmTitle){
 		
-		modal.prepareHeader(MessageHash[225], ajxpResourcesFolder+'/image/actions/16/bookmark.png');
+		modal.prepareHeader(I18N[225], THEME.path+'/image/action/16/bookmark.png');
 	 	var onLoad = function(newForm){
 	 		$(newForm).bm_path.value = bmPath;
 	 		$(newForm).bm_title.value = bmTitle;

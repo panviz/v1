@@ -16,7 +16,7 @@ Class.create("List", SelectableElements, {
 	initialize : function($super, oElement, initDefaultDispOrOptions)
 	{
 		$super(null, true);
-		$(oElement).ajxpPaneObject = this;
+		$(oElement).paneObject = this;
 		this.htmlElement = $(oElement);
 		if(typeof initDefaultDispOrOptions == "string"){
 			this.options = {};
@@ -100,10 +100,10 @@ Class.create("List", SelectableElements, {
 		// Default headersDef
 		this.hiddenColumns = $A([]);
 		this.columnsDef = $A([]);
-		this.columnsDef.push({messageId: 1,attributeName: 'ajxp_label'});
+		this.columnsDef.push({messageId: 1,attributeName: 'label'});
 		this.columnsDef.push({messageId: 2,attributeName: 'filesize'});
 		this.columnsDef.push({messageId: 3,attributeName: 'mimestring'});
-		this.columnsDef.push({messageId: 4,attributeName: 'ajxp_modiftime'});
+		this.columnsDef.push({messageId: 4,attributeName: 'modiftime'});
 		// Associated Defaults
 		this.defaultSortTypes = ["StringDirFile", "NumberKo", "String", "MyDate"];
 		this._oSortTypes = this.defaultSortTypes;
@@ -338,8 +338,8 @@ Class.create("List", SelectableElements, {
 			src: 'view_icon.png',
 			text_id: 150,
 			title_id: 151,
-			text: MessageHash[150],
-			title: MessageHash[151],
+			text: I18N[150],
+			title: I18N[151],
 			hasAccessKey: false,
 			subMenu: true,
 			subMenuUpdateImage: true,
@@ -429,9 +429,9 @@ Class.create("List", SelectableElements, {
 				if(column.fixedWidth){
 					userWidth = column.fixedWidth;
 				}
-				var label = (column.messageId?MessageHash[column.messageId]: column.messageString);
+				var label = (column.messageId?I18N[column.messageId]: column.messageString);
 				var leftPadding = 0;
-				if(column.attributeName == "ajxp_label"){// Will contain an icon
+				if(column.attributeName == "label"){// Will contain an icon
 					leftPadding = 24;
 				}
 				headerData.push({label: label, size: userWidth, leftPadding: leftPadding});				
@@ -490,7 +490,7 @@ Class.create("List", SelectableElements, {
 				if(Prototype.Browser.IE){
 					this._headerResizer.resize($('table_rows_container').getWidth());
 				}else{
-					this._headerResizer.resize($('content_pane').getWidth());
+					this._headerResizer.resize($('list_view').getWidth());
 				}
 			}.bind(this);
 			this.observe("resize", this.observer);
@@ -510,9 +510,9 @@ Class.create("List", SelectableElements, {
 			  	this.columnsDef.each(function(column){
 					var isVisible = !this.hiddenColumns.include(column.attributeName);
 					items.push({
-						name: (column.messageId?MessageHash[column.messageId]: column.messageString),
-						alt: (column.messageId?MessageHash[column.messageId]: column.messageString),
-						image: resolveImageSource((isVisible ? "column-visible" : "transp")+".png", '/images/actions/ICON_SIZE', 16),
+						name: (column.messageId?I18N[column.messageId]: column.messageString),
+						alt: (column.messageId?I18N[column.messageId]: column.messageString),
+						image: resolveImageSource((isVisible ? "column-visible" : "transp")+".png", '/image/action/ICON_SIZE', 16),
 						isDefault: false,
 						callback: function(e){this.setColumnVisible(column.attributeName, !isVisible);}.bind(this)
 					});
@@ -528,7 +528,7 @@ Class.create("List", SelectableElements, {
 				this.headerMenu.destroy();
 				delete this.headerMenu;
 			}
-			var buffer = '<div class="panelHeader"><div style="float:right; padding-right:5px; font-size:1px; height:16px;"><input type="image" height="16" width="16" src="'+ajxpResourcesFolder+'/images/actions/16/zoom-in.png" id="slider-input-1" style="border:0px; width:16px; height:16px; margin-top:0px; padding:0px;" value="64"/></div>'+MessageHash[126]+'</div>';
+			var buffer = '<div class="panelHeader"><div style="float:right; padding-right:5px; font-size:1px; height:16px;"><input type="image" height="16" width="16" src="'+THEME.path+'/image/action/16/zoom-in.png" id="slider-input-1" style="border:0px; width:16px; height:16px; margin-top:0px; padding:0px;" value="64"/></div>'+I18N[126]+'</div>';
 			buffer += '<div id="selectable_div" style="overflow:auto; padding:2px 5px;">';
 			this.htmlElement.update(buffer);
 			attachMobileScroll("selectable_div", "vertical");
@@ -605,7 +605,7 @@ Class.create("List", SelectableElements, {
 		var total = parseInt(this.paginationData.get('total'));
 		var div = new Element('div').addClassName("paginator");
 		var currentInput = new Element('input', {value: current, className: 'paginatorInput'});
-		div.update(MessageHash[331]);
+		div.update(I18N[331]);
 		div.insert(currentInput);
 		div.insert('/'+total);
 		if(current>1){
@@ -628,7 +628,7 @@ Class.create("List", SelectableElements, {
 				var new_page = parseInt(currentInput.getValue());
 				if(new_page == current) return; 
 				if(new_page < 1 || new_page > total){
-					app.displayMessage('ERROR', MessageHash[335] +' '+ total);
+					app.displayMessage('ERROR', I18N[335] +' '+ total);
 					currentInput.setValue(current);
 					return;
 				}
@@ -772,7 +772,7 @@ Class.create("List", SelectableElements, {
 				this._headerResizer.resize(this.htmlElement.getWidth()-2);
 			}
 		}
-		if(this.protoMenu)this.protoMenu.addElements('.ajxp_draggable');
+		if(this.protoMenu)this.protoMenu.addElements('.draggable');
 		var allItems = this.getItems();
 		for(var i=0; i<allItems.length;i++)
 		{
@@ -792,11 +792,11 @@ Class.create("List", SelectableElements, {
 			window.loader = new Image();
 			window.loader.editorClass = oImageToLoad.editorClass;
             window.loader.onerror = this.loadNextImage.bind(this);
-			window.loader.src = window.loader.editorClass.prototype.getThumbnailSource(oImageToLoad.ajxpNode);
+			window.loader.src = window.loader.editorClass.prototype.getThumbnailSource(oImageToLoad.item);
 			var loader = function(){
 				var img = oImageToLoad.rowObject.IMAGE_ELEMENT || $(oImageToLoad.index);
 				if(img == null || window.loader == null) return;
-				var newImg = window.loader.editorClass.prototype.getPreview(oImageToLoad.ajxpNode);
+				var newImg = window.loader.editorClass.prototype.getPreview(oImageToLoad.item);
 				newImg.setAttribute("data-is_loaded", "true");
 				img.parentNode.replaceChild(newImg, img);
 				oImageToLoad.rowObject.IMAGE_ELEMENT = newImg;
@@ -836,7 +836,7 @@ Class.create("List", SelectableElements, {
 	fill : function(contextNode){
 		this.imagesHash = new Hash();
 		if(this.protoMenu){
-			this.protoMenu.removeElements('.ajxp_draggable');
+			this.protoMenu.removeElements('.draggable');
 			this.protoMenu.removeElements('#selectable_div');
 		}
 		for(var i = 0; i< AllDroppables.length;i++){
@@ -910,12 +910,12 @@ Class.create("List", SelectableElements, {
 			if (child.isHidden()){continue}
 			var newItem;
 			if(this._displayMode == "list") {
-				newItem = this.ajxpNodeToTableRow(child);
+				newItem = this.itemToTableRow(child);
 			}else {
-				newItem = this.ajxpNodeToDiv(child);
+				newItem = this.itemToDiv(child);
 			}
-			newItem.ajxpNode = child;
-            newItem.addClassName("ajxpNodeProvider");
+			newItem.item = child;
+            newItem.addClassName("itemProvider");
 		}	
 		this.initRows();
 		
@@ -978,7 +978,7 @@ Class.create("List", SelectableElements, {
 		}
 		var pos = posSpan.cumulativeOffset();
 		var text = span.innerHTML;
-		var edit = new Element('input', {value: item.ajxpNode.getLabel('text'), id: 'editbox'}).setStyle({
+		var edit = new Element('input', {value: item.item.getLabel('text'), id: 'editbox'}).setStyle({
 			zIndex: 5000, 
 			position: 'absolute',
 			marginLeft: '0px',
@@ -1014,7 +1014,7 @@ Class.create("List", SelectableElements, {
 			var newValue = edit.getValue();
 			hideLightBox();
 			modal.close();			
-			callback(item.ajxpNode, newValue);
+			callback(item.item, newValue);
 		};
 		edit.observe("keydown", function(event){
 			if(event.keyCode == Event.KEY_RETURN){				
@@ -1059,18 +1059,18 @@ Class.create("List", SelectableElements, {
 	
 	/**
 	 * Populate a node as a TR element
-	 * @param ajxpNode Node
+	 * @param item Node
 	 * @returns HTMLElement
 	 */
-	ajxpNodeToTableRow : function(ajxpNode){		
-		var metaData = ajxpNode.getMetadata();
+	itemToTableRow : function(item){		
+		var metaData = item.getMetadata();
 		var newRow = new Element("tr");
 		var tBody = this.parsingCache.get('tBody') || $(this._htmlElement).select("tbody")[0];
 		this.parsingCache.set('tBody', tBody);
 		metaData.each(function(pair){
 			//newRow.setAttribute(pair.key, pair.value);
 			if(Prototype.Browser.IE && pair.key == "ID"){
-				newRow.setAttribute("ajxp_sql_"+pair.key, pair.value);
+				newRow.setAttribute("sql_"+pair.key, pair.value);
 			}			
 		});
 		var attributeList;
@@ -1092,34 +1092,34 @@ Class.create("List", SelectableElements, {
 			if(this._fullview){
 				fullview = ' full';
 			}
-			if(s == "ajxp_label")
+			if(s == "label")
 			{
                 var textLabel = new Element("span", {
-                    id          : 'ajxp_label',
+                    id          : 'label',
                     className   : 'text_label'+fullview
                 }).update(metaData.get('text'));
 
                 var backgroundPosition = '4px 2px';
-                var backgroundImage = 'url("'+resolveImageSource(metaData.get('icon'), "/images/mimes/ICON_SIZE", 16)+'")';
+                var backgroundImage = 'url("'+resolveImageSource(metaData.get('icon'), "/image/mime/ICON_SIZE", 16)+'")';
                 if(metaData.get('overlay_icon') && Modernizr.multiplebgs){
                     var ovIcs = metaData.get('overlay_icon').split(',');
                     switch(ovIcs.length){
                         case 1:
                             backgroundPosition = '14px 11px, 4px 2px';
-                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/images/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/images/mimes/ICON_SIZE", 16)+'")';
+                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/image/mime/ICON_SIZE", 16)+'")';
                         break;
                         case 2:
                             backgroundPosition = '2px 11px, 14px 11px, 4px 2px';
-                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/images/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[1], "/images/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/images/mimes/ICON_SIZE", 16)+'")';
+                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[1], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/image/mime/ICON_SIZE", 16)+'")';
                         break;
                         case 3:
                             backgroundPosition = '14px 2px, 2px 11px, 14px 11px, 4px 2px';
-                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/images/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[1], "/images/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[2], "/images/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/images/mimes/ICON_SIZE", 16)+'")';
+                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[1], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[2], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/image/mime/ICON_SIZE", 16)+'")';
                         break;
                         case 4:
                         default:
                             backgroundPosition = '2px 2px, 14px 2px, 2px 11px, 14px 11px, 4px 2px';
-                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/images/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[1], "/images/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[2], "/images/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[3], "/images/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/images/mimes/ICON_SIZE", 16)+'")';
+                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[1], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[2], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[3], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/image/mime/ICON_SIZE", 16)+'")';
                         break;
                     }
                 }
@@ -1135,12 +1135,12 @@ Class.create("List", SelectableElements, {
 					style: "cursor:default; display:block;"
 				}).update(textLabel);
 
-				innerSpan.ajxpNode = ajxpNode; // For draggable
+				innerSpan.item = item; // For draggable
 				tableCell.insert(innerSpan);
 				
 				// Defer Drag'n'drop assignation for performances
 				window.setTimeout(function(){
-					if(ajxpNode.getMime() != "ajxp_recycle"){
+					if(item.getMime() != "recycle"){
 						var newDrag = new Draggable(
 							innerSpan, 
 							{
@@ -1154,16 +1154,16 @@ Class.create("List", SelectableElements, {
 						);							
 						if(this.protoMenu) this.protoMenu.addElements(innerSpan);						
 					}
-					if(!ajxpNode.isLeaf())
+					if(!item.isLeaf())
 					{
 						Droppables.add(innerSpan);
 					}
 				}.bind(this), 500);
 				
-			}else if(s=="ajxp_modiftime"){
+			}else if(s=="modiftime"){
 				var date = new Date();
 				date.setTime(parseInt(metaData.get(s))*1000);
-				newRow.ajxp_modiftime = date;
+				newRow.modiftime = date;
 				tableCell.update('<span class="text_label'+fullview+'">' + formatDate(date) + '</span>');
 			}
 			else
@@ -1188,7 +1188,7 @@ Class.create("List", SelectableElements, {
 			newRow.appendChild(tableCell);
 			if(attributeList.get(s).modifier){
 				var modifier = eval(attributeList.get(s).modifier);
-				modifier(tableCell, ajxpNode, 'row');
+				modifier(tableCell, item, 'row');
 			}
 		}
         // test hidden modifiers
@@ -1209,7 +1209,7 @@ Class.create("List", SelectableElements, {
             this.parsingCache.set("hiddenModifiers", hiddenModifiers);
         }
         hiddenModifiers.each(function(mod){
-            mod(null,ajxpNode,'row', newRow);
+            mod(null,item,'row', newRow);
         });
 		tBody.appendChild(newRow);
 		if(this.even){
@@ -1221,17 +1221,17 @@ Class.create("List", SelectableElements, {
 	
 	/**
 	 * Populates a node as a thumbnail div
-	 * @param ajxpNode Node
+	 * @param item Node
 	 * @returns HTMLElement
 	 */
-	ajxpNodeToDiv : function(ajxpNode){
+	itemToDiv : function(item){
 		var newRow = new Element('div', {className: "thumbnail_selectable_cell"});
-		var metadata = ajxpNode.getMetadata();
+		var metadata = item.getMetadata();
 				
 		var innerSpan = new Element('span', {style: "cursor:default;"});
-		var editors = app.findEditorsForMime((ajxpNode.isLeaf() ? ajxpNode.getMime() : "mime_folder"), true);
-		var textNode = ajxpNode.getLabel();
-		var img = View.prototype.getPreview(ajxpNode);
+		var editors = app.findEditorsForMime((item.isLeaf() ? item.getMime() : "mime_folder"), true);
+		var textNode = item.getLabel();
+		var img = View.prototype.getPreview(item);
 		var label = new Element('div', {
 			className: "thumbLabel",
 			title: textNode
@@ -1242,16 +1242,16 @@ Class.create("List", SelectableElements, {
 		newRow.insert({"bottom": innerSpan});
 		newRow.IMAGE_ELEMENT = img;
 		newRow.LABEL_ELEMENT = label;
-        if(ajxpNode.getMetadata().get("overlay_icon")){
+        if(item.getMetadata().get("overlay_icon")){
             var ovDiv = new Element("div");
-            var ovIcs = $A(ajxpNode.getMetadata().get("overlay_icon").split(","));
+            var ovIcs = $A(item.getMetadata().get("overlay_icon").split(","));
             var bgPos = $A();
             var bgImg = $A();
             var bgRep = $A();
             var index = 0;
             ovIcs.each(function(ic){
                 bgPos.push('0px '+((index*12)+(index>0 ? 2 : 0))+'px');
-                bgImg.push("url('"+resolveImageSource(ovIcs[index], "/images/overlays/ICON_SIZE", 12)+"')");
+                bgImg.push("url('"+resolveImageSource(ovIcs[index], "/image/overlays/ICON_SIZE", 12)+"')");
                 bgRep.push('no-repeat');
                 index++;
             });
@@ -1287,7 +1287,7 @@ Class.create("List", SelectableElements, {
 			modifiers = this.parsingCache.get('modifiers');
 		}
 		modifiers.each(function(el){
-			el(newRow, ajxpNode, 'thumb');
+			el(newRow, item, 'thumb');
 		});
 
 		if(editors && editors.length)
@@ -1295,15 +1295,15 @@ Class.create("List", SelectableElements, {
 			this._crtImageIndex ++;
 			var imgIndex = this._crtImageIndex;
 			img.writeAttribute("data-is_loaded", "false");
-			img.writeAttribute("id", "ajxp_image_"+imgIndex);
+			img.writeAttribute("id", "image_"+imgIndex);
 			var crtIndex = this._crtImageIndex;
 			
 			app.loadEditorResources(editors[0].resourcesManager);
 			var editorClass = Class.getByName(editors[0].editorClass);
 			if(editorClass){
 				var oImageToLoad = {
-					index: "ajxp_image_"+crtIndex,
-					ajxpNode: ajxpNode,
+					index: "image_"+crtIndex,
+					item: item,
 					editorClass: editorClass, 
 					rowObject: newRow
 				};
@@ -1312,7 +1312,7 @@ Class.create("List", SelectableElements, {
 		}			
 		
 		// Defer Drag'n'drop assignation for performances
-		if(!ajxpNode.isRecycle()){
+		if(!item.isRecycle()){
 			window.setTimeout(function(){
 				var newDrag = new Draggable(newRow, {
 					revert: true,
@@ -1322,40 +1322,40 @@ Class.create("List", SelectableElements, {
 				}, this, 'filesList');
 			}.bind(this), 500);
 		}
-		if(!ajxpNode.isLeaf())
+		if(!item.isLeaf())
 		{
 			Droppables.add(newRow);
 		}		
 		return newRow;
 	},
 		
-	partSizeCellRenderer : function(element, ajxpNode, type){
+	partSizeCellRenderer : function(element, item, type){
         if(!element) return;
-		element.setAttribute("data-sorter_value", ajxpNode.getMetadata().get("bytesize"));
-		if(!ajxpNode.getMetadata().get("target_bytesize")){
+		element.setAttribute("data-sorter_value", item.getMetadata().get("bytesize"));
+		if(!item.getMetadata().get("target_bytesize")){
 			return;
 		}
-		var percent = parseInt( parseInt(ajxpNode.getMetadata().get("bytesize")) / parseInt(ajxpNode.getMetadata().get("target_bytesize")) * 100  );
-		var uuid = 'ajxp_'+(new Date()).getTime();		
+		var percent = parseInt( parseInt(item.getMetadata().get("bytesize")) / parseInt(item.getMetadata().get("target_bytesize")) * 100  );
+		var uuid = ''+(new Date()).getTime();		
 		var div = new Element('div', {style: 'padding-left:3px;', className: 'text_label'}).update('<span class="percent_text" style="line-height:19px; padding-left:5px;">'+percent+'%</span>');
 		var span = new Element('span', {id: uuid}).update('0%');		
 		var options = {
 			animate		: true,										// Animate the progress? - default: true
 			showText	: false,									// show text with percentage in next to the progressbar? - default : true
 			width		: 80,										// Width of the progressbar - don't forget to adjust your image too!!!
-			boxImage	: window.ajxpResourcesFolder+'/images/progress_box_80.gif',			// boxImage : image around the progress bar
-			barImage	: window.ajxpResourcesFolder+'/images/progress_bar_80.gif',	// Image to use in the progressbar. Can be an array of images too.
+			boxImage	: window.THEME.path+'/image/progress_box_80.gif',			// boxImage : image around the progress bar
+			barImage	: window.THEME.path+'/image/progress_bar_80.gif',	// Image to use in the progressbar. Can be an array of images too.
 			height		: 11										// Height of the progressbar - don't forget to adjust your image too!!!
 		};
 		element.update(div);
 		div.insert({top: span});
-		if(ajxpNode.getMetadata().get("process_stoppable")){
+		if(item.getMetadata().get("process_stoppable")){
 			var stopButton = new Element('a', {className: 'pg_cancel_button'}).update("X");
 			stopButton.observe("click", function(){
 				var conn = new Connection();
 				conn.setParameters({
 					action: 'stop_dl',
-					file : ajxpNode.getPath(),
+					file : item.getPath(),
 					dir : app.getContextNode().getPath()
 				});
 				conn.onComplete = function(transport){
@@ -1371,7 +1371,7 @@ Class.create("List", SelectableElements, {
 			});
 			div.insert({bottom: stopButton});			
 		}
-		span.setAttribute('data-target_size', ajxpNode.getMetadata().get("target_bytesize"));
+		span.setAttribute('data-target_size', item.getMetadata().get("target_bytesize"));
 		window.setTimeout(function(){
 			span.pgBar = new JS_BRAMUS.jsProgressBar(span, percent, options);
 			var pe = new PeriodicalExecuter(function(){
@@ -1382,7 +1382,7 @@ Class.create("List", SelectableElements, {
 				var conn = new Connection();
 				conn.setParameters({
 					action: 'update_dl_data',
-					file : ajxpNode.getPath()
+					file : item.getPath()
 				});
 				conn.onComplete = function(transport){
 					if(transport.responseText == 'stop'){
@@ -1411,7 +1411,7 @@ Class.create("List", SelectableElements, {
 		if(one_element) elList = [one_element]; 
 		else elList = this._htmlElement.select('div.thumbnail_selectable_cell');
 		elList.each(function(element){
-			var node = element.ajxpNode;
+			var node = element.item;
 			var image_element = element.IMAGE_ELEMENT || element.select('img')[0];		
 			var label_element = element.LABEL_ELEMENT || element.select('.thumbLabel')[0];
 			var tSize = this._thumbSize;
@@ -1500,7 +1500,7 @@ Class.create("List", SelectableElements, {
 		if(this.loading) return;
 		addLightboxMarkupToElement(this.htmlElement);
 		var img = new Element('img', {
-			src : ajxpResourcesFolder+'/images/loadingImage.gif'
+			src : THEME.path+'/image/loadingImage.gif'
 		});
 		var overlay = this.htmlElement.down("#element_overlay");
 		overlay.insert(img);
@@ -1530,7 +1530,7 @@ Class.create("List", SelectableElements, {
 	 */
 	fireDblClick : function (e) 
 	{
-		if(app.getContextNode().getMime() == "ajxp_recycle")
+		if(app.getContextNode().getMime() == "recycle")
 		{
 			return; // DO NOTHING IN RECYCLE BIN
 		}
@@ -1539,7 +1539,7 @@ Class.create("List", SelectableElements, {
 		{
 			return; // Prevent from double clicking header!
 		}
-		var selNode = selRaw[0].ajxpNode;
+		var selNode = selRaw[0].item;
 		if(selNode.isLeaf())
 		{
 			app.getActionBar().fireDefaultAction("file");
@@ -1565,7 +1565,7 @@ Class.create("List", SelectableElements, {
 		var allItems = this.getItems();
 		for(var i=0; i<allItems.length; i++)
 		{
-			if(getBaseName(allItems[i].ajxpNode.getPath()) == getBaseName(fileName))
+			if(getBaseName(allItems[i].item.getPath()) == getBaseName(fileName))
 			{
 				this.setItemSelected(allItems[i], true);
 			}

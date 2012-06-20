@@ -1,25 +1,25 @@
 {
   "ajxpdriver": {
-    "name": "ajxp_conf",
+    "name": "conf",
     "label": "CONF_MESSAGE[Admin Driver]",
     "description": "CONF_MESSAGE[Access AjaXplorer configuration data.]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "client_settings": {
-      "icon": "plugins/access.ajxp_conf/admin.png",
+      "icon": "plugins/access.conf/admin.png",
       "resources": {
         "i18n": [
           {
-            "namespace": "ajxp_conf",
-            "path": "plugins/access.ajxp_conf/i18n"
+            "namespace": "conf",
+            "path": "plugins/access.conf/i18n"
           },
           {
-            "namespace": "ajxp_shared",
-            "path": "plugins/access.ajxp_shared/i18n"
+            "namespace": "shared",
+            "path": "plugins/access.shared/i18n"
           }
         ],
         "js": {
-          "file": "plugins/access.ajxp_conf/class.ConfigEditor.js",
+          "file": "plugins/access.conf/class.ConfigEditor.js",
           "className": "ConfigEditor"
         }
       }
@@ -28,30 +28,30 @@
       "client_configs": {
         "template_part": {
           "theme": "mybase",
-          "ajxpId": "sidebar_splitter",
+          "id": "sidebar_splitter",
           "ajxpClass": "Pane",
-          "ajxpOptions": "{\"fit\":\"height\"}",
-          "$t": "<div id=\"folderPane\" ajxpClass=\"FoldersTree\" ajxpOptions='{\"display\":\"dz\",\"replaceScroller\":true}' ajxpPaneHeader=\"165\" ajxpPaneIcon=\"view_tree.png\" style=\"margin:20px;\"></div><style>#sidebar_splitter{padding-bottom:20px;background-color:#EFD585;}.webfx-tree-item:first-of-type{display:none;}.webfx-tree-container>.webfx-tree-item:first-of-type{display:block;}.webfx-tree-container.first_container{margin-left: -19px;}.webfx-tree-container > .webfx-tree-item {font-weight: bold;}.webfx-tree-container > .webfx-tree-container > .webfx-tree-item {font-weight: normal;}</style>"
+          "options": "{\"fit\":\"height\"}",
+          "$t": "<div id=\"folderPane\" ajxpClass=\"FoldersTree\" options='{\"display\":\"dz\",\"replaceScroller\":true}' paneHeader=\"165\" paneIcon=\"view_tree.png\" style=\"margin:20px;\"></div><style>#sidebar_splitter{padding-bottom:20px;background-color:#EFD585;}.webfx-tree-item:first-of-type{display:none;}.webfx-tree-container>.webfx-tree-item:first-of-type{display:block;}.webfx-tree-container.first_container{margin-left: -19px;}.webfx-tree-container > .webfx-tree-item {font-weight: bold;}.webfx-tree-container > .webfx-tree-container > .webfx-tree-item {font-weight: normal;}</style>"
         }
       },
       "external_file": [
         {
-          "filename": "plugins/access.ajxp_conf/ajxp_confActions.xml",
-          "include": "actions/*"
+          "filename": "plugins/access.conf/confActions.xml",
+          "include": "action/*"
         },
         {
-          "filename": "plugins/access.ajxp_shared/manifest.xml",
-          "include": "registry_contributions/actions/action[@name=\"clear_expired\"]"
+          "filename": "plugins/access.shared/manifest.xml",
+          "include": "registry_contributions/action/action[@name=\"clear_expired\"]"
         },
         {
-          "filename": "plugins/access.ajxp_conf/ajxp_confActions.xml",
+          "filename": "plugins/access.conf/confActions.xml",
           "include": "client_configs/*"
         }
       ]
     },
     "class_definition": {
-      "filename": "plugins/access.ajxp_conf/class.ajxp_confAccessDriver.php",
-      "classname": "ajxp_confAccessDriver"
+      "filename": "plugins/access.conf/class.confAccessDriver.php",
+      "classname": "confAccessDriver"
     }
   },
 	"client_configs" : {
@@ -76,7 +76,7 @@
 							}
 						]
 					},
-					"html" : "<div style=\"padding:10px;\"><div class=\"folderImage\"><img src=\"AJXP_THEME_FOLDER/images/mimes/64/#{icon}\" height=\"64\" width=\"64\"></div><b>#{name_string}</b> : #{text}</div>"
+					"html" : "<div style=\"padding:10px;\"><div class=\"folderImage\"><img src=\"AJXP_THEME_FOLDER/image/mime/64/#{icon}\" height=\"64\" width=\"64\"></div><b>#{name_string}</b> : #{text}</div>"
 				}, {
 					"mime" : "generic_dir",
 					"attributes" : "icon,text",
@@ -90,7 +90,7 @@
 							}
 						]
 					},
-					"html" : "<div style=\"padding:10px;\"><div class=\"folderImage\"><img src=\"AJXP_THEME_FOLDER/images/mimes/64/#{icon}\" height=\"64\" width=\"64\"></div><b>#{name_string}</b> : #{text}</div>"
+					"html" : "<div style=\"padding:10px;\"><div class=\"folderImage\"><img src=\"AJXP_THEME_FOLDER/image/mime/64/#{icon}\" height=\"64\" width=\"64\"></div><b>#{name_string}</b> : #{text}</div>"
 				}, {
 					"mime" : "no_selection",
 					"attributes" : "",
@@ -100,7 +100,7 @@
 							"id" : "265"
 						}
 					},
-					"html" : "<div style=\"padding:10px;\"><div class=\"folderImage\"><img src=\"AJXP_THEME_FOLDER/images/mimes/64/admin.png\" height=\"64\" width=\"64\"></div></div>"
+					"html" : "<div style=\"padding:10px;\"><div class=\"folderImage\"><img src=\"AJXP_THEME_FOLDER/image/mime/64/admin.png\" height=\"64\" width=\"64\"></div></div>"
 				}
 			]
 		}

@@ -22,7 +22,7 @@ Class.create("Autocompleter", Autocompleter.Base, {
     this.options.asynchronous  = true;
     this.options.onComplete    = this.onComplete.bind(this);
     this.options.defaultParams = this.options.parameters || null;
-    this.url                   = ajxpServerAccessPath+"&get_action=ls&options=dz";
+    this.url                   = serverAccessPath+"&get_action=ls&options=dz";
     this.options.paramName	   = "dir";
     this.options.minChars	   = 1;
     //this.options.callback	   = this.parseValueBeforeSending.bind(this);

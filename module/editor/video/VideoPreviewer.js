@@ -8,37 +8,37 @@ Class.create("VideoPreviewer", View, {
 	initialize : function($super, oFormObject){
 	},
 		
-	getPreview : function(ajxpNode, rich){
+	getPreview : function(item, rich){
 		if(rich){
-			var escapedFilename = escape(encodeURIComponent(ajxpNode.getPath()));
+			var escapedFilename = escape(encodeURIComponent(item.getPath()));
 			var url = document.location.href;
 			if(url[(url.length-1)] == '/'){
 				url = url.substr(0, url.length-1);
 			}else if(url.lastIndexOf('/') > -1){
 				url = url.substr(0, url.lastIndexOf('/'));
 			}
-			var fileName = url+'/'+bootstrap.parameters.get('ajxpServerAccess')+'&action=read_video_data&file='+ajxpNode.getPath();
+			var fileName = url+'/'+bootstrap.parameters.get('serverAccess')+'&action=read_video_data&file='+item.getPath();
 			
-			var mime = ajxpNode.getAjxpMime();
+			var mime = item.getMime();
 			if(mime == "mp4" || mime == "webm" || mime == "ogv"){
 				// Problem : some embedded HTML5 readers do not send the cookies!
-				if(!window.crtAjxpSessid){
+				if(!window.crtSessid){
 					var connection = new Connection();
 					connection.addParameter("get_action", "get_sess_id");
 					connection.onComplete = function(transport){
-						window.crtAjxpSessid = transport.responseText.trim();
-						window.setTimeout(function(){window.crtAjxpSessid = null}, 1000 * 60 * 5);
+						window.crtSessid = transport.responseText.trim();
+						window.setTimeout(function(){window.crtSessid = null}, 1000 * 60 * 5);
 					};
 					connection.sendSync();
 				}
-				fileName += '&ajxp_sessid='+window.crtAjxpSessid; 
+				fileName += '&sessid='+window.crtSessid; 
 
 				var types = {
 					mp4: 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"',
 					webm: 'video/webm; codecs="vp8, vorbis"',
 					ogv: 'video/ogg; codecs="theora, vorbis"'
 				};
-				var poster = resolveImageSource(ajxpNode.getIcon(),'/images/mimes/ICON_SIZE',64);
+				var poster = resolveImageSource(item.getIcon(),'/image/mime/ICON_SIZE',64);
 				var div = new Element("div", {className: "video-js-box"});
 				var content = '';
 				content +='<!-- Using the Video for Everybody Embed Code http://camendesign.com/code/video_for_everybody -->';
@@ -50,7 +50,7 @@ Class.create("VideoPreviewer", View, {
 				content += '	<param name="movie" value="plugins/editor.video/player_flv_maxi.swf" />';
 				content += '	<param name="quality" value="high">';
 				content += '	<param name="allowFullScreen" value="true" />';
-				content += '	<param name="FlashVars" value="flv='+url+'/'+bootstrap.parameters.get('ajxpServerAccess')+'%26action=download%26file='+escapedFilename+'&showstop=1&showvolume=1&showtime=1&showfullscreen=1&playercolor=676965&bgcolor1=f1f1ef&bgcolor2=f1f1ef&buttonovercolor=000000&sliderovercolor=000000" />';
+				content += '	<param name="FlashVars" value="flv='+url+'/'+bootstrap.parameters.get('serverAccess')+'%26action=download%26file='+escapedFilename+'&showstop=1&showvolume=1&showtime=1&showfullscreen=1&playercolor=676965&bgcolor1=f1f1ef&bgcolor2=f1f1ef&buttonovercolor=000000&sliderovercolor=000000" />';
 				content += '</object>';
 								
 				content +='	</video>';
@@ -83,7 +83,7 @@ Class.create("VideoPreviewer", View, {
 				content += '	<param name="movie" value="plugins/editor.video/player_flv_maxi.swf" />';
 				content += '	<param name="quality" value="high">';
 				content += '	<param name="allowFullScreen" value="true" />';
-				content += '	<param name="FlashVars" value="flv='+url+'/'+bootstrap.parameters.get('ajxpServerAccess')+'%26action=download%26file='+escapedFilename+'&showstop=1&showvolume=1&showtime=1&showfullscreen=1&playercolor=676965&bgcolor1=f1f1ef&bgcolor2=f1f1ef&buttonovercolor=000000&sliderovercolor=000000" />';
+				content += '	<param name="FlashVars" value="flv='+url+'/'+bootstrap.parameters.get('serverAccess')+'%26action=download%26file='+escapedFilename+'&showstop=1&showvolume=1&showtime=1&showfullscreen=1&playercolor=676965&bgcolor1=f1f1ef&bgcolor2=f1f1ef&buttonovercolor=000000&sliderovercolor=000000" />';
 				content += '</object>';
 				div.update(content);
 				div.resizePreviewElement = function(dimensionObject){
@@ -92,11 +92,11 @@ Class.create("VideoPreviewer", View, {
 			}
 			return div;
 		}else{
-			return new Element('img', {src: resolveImageSource(ajxpNode.getIcon(),'/images/mimes/ICON_SIZE',64)});
+			return new Element('img', {src: resolveImageSource(item.getIcon(),'/image/mime/ICON_SIZE',64)});
 		}
 	},
 	
-	getThumbnailSource : function(ajxpNode){
-		return resolveImageSource(ajxpNode.getIcon(),'/images/mimes/ICON_SIZE',64);
+	getThumbnailSource : function(item){
+		return resolveImageSource(item.getIcon(),'/image/mime/ICON_SIZE',64);
 	}
 });

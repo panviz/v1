@@ -1,8 +1,8 @@
-#ajxp_bm_main, #ajxp_bm_main a {
+#bm_main, #bm_main a {
 	color: #999 !important;
 }
 
-.ajxp_bm_menu{
+.bm_menu{
     position: absolute;
     top: 5px;
     right: 5px;
@@ -19,14 +19,14 @@
     /*text-shadow: 1px 1px 3px black;*/
 }
 
-.ajxp_bm_menu_legend{
+.bm_menu_legend{
     color: #ccc;
     font-size: 0.5em;
     padding: 10px 5px;
     text-shadow: none;
 }
 
-#ajxp_bm_iframe{
+#bm_iframe{
     margin-bottom: 5px;
     width: 248px;
     height: 134px;
@@ -34,13 +34,13 @@
     /*border-radius: 5px;*/
 }
 
-#ajxp_bm_link_title{
+#bm_link_title{
 	font-size: 11px;
 	border-bottom: 1px solid #999;
 	padding: 3px 0px 5px 0px;
 }
 
-#ajxp_bm_link_menu{
+#bm_link_menu{
 	display:none;
 	width:240px;
 	right: 300px;
@@ -53,18 +53,18 @@
     text-align: center;
 }
 
-#ajxp_bm_link_menu.ajxp_bm_small{
+#bm_link_menu.bm_small{
     width:200px;
     text-align: left;
     background-color: rgba(255,255,255,0.90);
 }
-#ajxp_bm_link_menu.ajxp_bm_small a{
+#bm_link_menu.bm_small a{
     font-family: inherit;
     font-size: inherit;
 }
 
-#ajxp_bm_link_menu a#ajxp_bm_link_dl1,
-#ajxp_bm_link_menu a#ajxp_bm_link_dl2{
+#bm_link_menu a#bm_link_dl1,
+#bm_link_menu a#bm_link_dl2{
     display: block;
     color: #999 !important;
     margin-top: 4px;
@@ -73,7 +73,7 @@
     cursor: pointer;
 }
 
-#ajxp_bm_link_menu.ajxp_bm_big a#ajxp_bm_link_dl1{
+#bm_link_menu.bm_big a#bm_link_dl1{
 	display:inline-block;
 	cursor:pointer;
 	color:#aaa;
@@ -88,17 +88,17 @@
     box-shadow: 0px 0px 29px #999;
 }
 
-#ajxp_bm_link_menu.ajxp_bm_small a#ajxp_bm_link_dl1{
+#bm_link_menu.bm_small a#bm_link_dl1{
     background-color: transparent;
     box-shadow: none;
     border: none;
     margin-top: 0px;
 }
 
-#ajxp_bm_link_menu a img{
+#bm_link_menu a img{
     vertical-align: middle;
 }
 
-#ajxp_bm_link_menu.ajxp_bm_small a img{
+#bm_link_menu.bm_small a img{
     display: none;
 }

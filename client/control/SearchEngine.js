@@ -16,7 +16,7 @@ Class.create("SearchEngine", Pane, {
 	state: 'idle',
 	_runningQueries: undefined,
 	_queriesIndex: 0,
-	_ajxpOptions: undefined,
+	_options: undefined,
 	
 	_queue : undefined,
 
@@ -27,18 +27,18 @@ Class.create("SearchEngine", Pane, {
 	 * Constructor
 	 * @param $super klass Superclass reference
 	 * @param mainElementName String
-	 * @param ajxpOptions Object
+	 * @param options Object
 	 */
-	initialize : function($super, mainElementName, ajxpOptions)
+	initialize : function($super, mainElementName, options)
 	{
-        this._ajxpOptions = {};
+        this._options = {};
         if($(mainElementName).getAttribute("data-globalOptions")){
-            this._ajxpOptions = $(mainElementName).getAttribute("data-globalOptions").evalJSON();
+            this._options = $(mainElementName).getAttribute("data-globalOptions").evalJSON();
         }
-        if(ajxpOptions){
-            this._ajxpOptions = Object.extend(this._ajxpOptions, ajxpOptions);
+        if(options){
+            this._options = Object.extend(this._options, options);
         }
-		$super($(mainElementName), this._ajxpOptions);
+		$super($(mainElementName), this._options);
         this.updateSearchModeFromRegistry();
         document.observe("app:registry_loaded", this.updateSearchModeFromRegistry.bind(this));
 		this.initGUI();
@@ -56,9 +56,9 @@ Class.create("SearchEngine", Pane, {
                 if(this.indexedFields["indexed_meta_fields"]){
                     var addColumns = this.indexedFields["additionnal_meta_columns"];
                     this.indexedFields = $A(this.indexedFields["indexed_meta_fields"]);
-                    if(!this._ajxpOptions.metaColumns) this._ajxpOptions.metaColumns = {};
+                    if(!this._options.metaColumns) this._options.metaColumns = {};
                     for(var key in addColumns){
-                        this._ajxpOptions.metaColumns[key] = addColumns[key];
+                        this._options.metaColumns[key] = addColumns[key];
                     }
                 }else{
                     this.indexedFields = $A(this.indexedFields);
@@ -79,16 +79,16 @@ Class.create("SearchEngine", Pane, {
 		
 		if(!this.htmlElement) return;
 		
-		this.htmlElement.insert('<div id="search_panel"><div id="search_form"><input style="float:left;" type="text" id="search_txt" name="search_txt" onfocus="blockEvents=true;" onblur="blockEvents=false;"><a href="" id="search_button" ajxp_message_title_id="184" title="'+MessageHash[184]+'"><img width="16" height="16" align="absmiddle" src="'+ajxpResourcesFolder+'/images/actions/16/search.png" border="0"/></a><a href="" id="stop_search_button" ajxp_message_title_id="185" title="'+MessageHash[185]+'"><img width="16" height="16" align="absmiddle" src="'+ajxpResourcesFolder+'/images/actions/16/fileclose.png" border="0" /></a></div><div id="search_results"></div></div>');
+		this.htmlElement.insert('<div id="search_panel"><div id="search_form"><input style="float:left;" type="text" id="search_txt" name="search_txt" onfocus="blockEvents=true;" onblur="blockEvents=false;"><a href="" id="search_button" message_title_id="184" title="'+I18N[184]+'"><img width="16" height="16" align="absmiddle" src="'+THEME.path+'/image/action/16/search.png" border="0"/></a><a href="" id="stop_search_button" message_title_id="185" title="'+I18N[185]+'"><img width="16" height="16" align="absmiddle" src="'+THEME.path+'/image/action/16/fileclose.png" border="0" /></a></div><div id="search_results"></div></div>');
         if(this.htmlElement.down('div.panelHeader')){
             this.htmlElement.down('div#search_panel').insert({top: this.htmlElement.down('div.panelHeader')});
         }
 		
 		this.metaOptions = [];
-		if(this._ajxpOptions && this._ajxpOptions.metaColumns){
-            var cols = this._ajxpOptions.metaColumns;
-			$('search_form').insert({bottom: '<div id="search_meta">'+MessageHash[344]+' : <span id="search_meta_options"></span></div>'});
-			this.initMetaOption($('search_meta_options'), 'filename', MessageHash[1], true);
+		if(this._options && this._options.metaColumns){
+            var cols = this._options.metaColumns;
+			$('search_form').insert({bottom: '<div id="search_meta">'+I18N[344]+' : <span id="search_meta_options"></span></div>'});
+			this.initMetaOption($('search_meta_options'), 'filename', I18N[1], true);
 			for(var key in cols){
                 if(this.indexedFields && !this.indexedFields.include(key)) continue;
 				this.initMetaOption($('search_meta_options'), key, cols[key]);
@@ -165,12 +165,12 @@ Class.create("SearchEngine", Pane, {
 	
 	destroy : function(){
 		if(this.htmlElement) {
-            var ajxpId = this.htmlElement.id;
+            var id = this.htmlElement.id;
             this.htmlElement.update('');
         }
 		this.htmlElement = null;
-        if(ajxpId && window[ajxpId]){
-            try {delete window[ajxpId];}catch(e){}
+        if(id && window[id]){
+            try {delete window[id];}catch(e){}
         }
 	},
 	/**
@@ -296,16 +296,16 @@ Class.create("SearchEngine", Pane, {
 	/**
 	 * Add a result to the list - Highlight search term
 	 * @param folderName String
-	 * @param ajxpNode Node
+	 * @param item Node
 	 * @param metaFound String
 	 */
-	addResult : function(folderName, ajxpNode, metaFound){
-		var fileName = ajxpNode.getLabel();
-		var icon = ajxpNode.getIcon();
+	addResult : function(folderName, item, metaFound){
+		var fileName = item.getLabel();
+		var icon = item.getIcon();
 		// Display the result in the results box.
 		if(folderName == "") folderName = "/";
         if(this._searchMode == "remote"){
-            folderName = getRepName(ajxpNode.getPath());
+            folderName = getRepName(item.getPath());
         }
 		var isFolder = false;
 		if(icon == null) // FOLDER CASE
@@ -315,7 +315,7 @@ Class.create("SearchEngine", Pane, {
 			if(folderName != "/") folderName += "/";
 			folderName += fileName;
 		}
-        var imgPath = resolveImageSource(icon, '/images/mimes/16', 16);
+        var imgPath = resolveImageSource(icon, '/image/mime/16', 16);
 		var imageString = '<img align="absmiddle" width="16" height="16" src="'+imgPath+'"> ';
 		var stringToDisplay;
 		if(metaFound){
@@ -324,12 +324,12 @@ Class.create("SearchEngine", Pane, {
 			stringToDisplay = this.highlight(fileName, this.crtText);
 		}
 		
-		var divElement = new Element('div', {title: MessageHash[224]+' '+ folderName, className: (this._even ? 'even' : '')}).update(imageString+stringToDisplay);
+		var divElement = new Element('div', {title: I18N[224]+' '+ folderName, className: (this._even ? 'even' : '')}).update(imageString+stringToDisplay);
         this._even = !this._even;
 		$(this._resultsBoxId).insert(divElement);
-        if(this._searchMode == 'remote' && ajxpNode.getMetadata().get("search_score")){
+        if(this._searchMode == 'remote' && item.getMetadata().get("search_score")){
             /*divElement.insert(new Element('a', {className: "searchUnindex"}).update("X"));*/
-            divElement.insert(new Element('span', {className: "searchScore"}).update("SCORE "+ajxpNode.getMetadata().get("search_score")));
+            divElement.insert(new Element('span', {className: "searchScore"}).update("SCORE "+item.getMetadata().get("search_score")));
         }
 		if(isFolder)
 		{
@@ -444,29 +444,29 @@ Class.create("SearchEngine", Pane, {
 		{
 			if (nodes[i].tagName == "tree") 
 			{
-				var ajxpNode = this.parseNode(nodes[i]);
+				var item = this.parseNode(nodes[i]);
                 if(this.hasMetaSearch()){
                     var searchCols = this.getSearchColumns();
                     var added = false;
                     for(var k=0;k<searchCols.length;k++){
-                        var meta = ajxpNode.getMetadata().get(searchCols[k]);
+                        var meta = item.getMetadata().get(searchCols[k]);
                         if(meta && meta.toLowerCase().indexOf(this.crtText) != -1){
-                            this.addResult(currentFolder, ajxpNode, meta);
+                            this.addResult(currentFolder, item, meta);
                             added = true;
                         }
                     }
                     if(!added){
-                        this.addResult(currentFolder, ajxpNode);
+                        this.addResult(currentFolder, item);
                     }
                 }else{
-				    this.addResult(currentFolder, ajxpNode);
+				    this.addResult(currentFolder, item);
                 }
 			}
 		}		
 		
 	},
 	
-	_searchNode : function(ajxpNode, currentFolder){
+	_searchNode : function(item, currentFolder){
 		var searchFileName = true;
 		var searchCols;
 		if(this.hasMetaSearch()){
@@ -475,15 +475,15 @@ Class.create("SearchEngine", Pane, {
 				searchFileName = false;
 			}
 		}
-		if(searchFileName && ajxpNode.getLabel().toLowerCase().indexOf(this.crtText) != -1){
-			this.addResult(currentFolder, ajxpNode);
+		if(searchFileName && item.getLabel().toLowerCase().indexOf(this.crtText) != -1){
+			this.addResult(currentFolder, item);
 			return;
 		}
 		if(!searchCols) return;
 		for(var i=0;i<searchCols.length;i++){
-			var meta = ajxpNode.getMetadata().get(searchCols[i]);
+			var meta = item.getMetadata().get(searchCols[i]);
 			if(meta && meta.toLowerCase().indexOf(this.crtText) != -1){
-				this.addResult(currentFolder, ajxpNode, meta);
+				this.addResult(currentFolder, item, meta);
 				return;			
 			}
 		}
@@ -505,7 +505,7 @@ Class.create("SearchEngine", Pane, {
 		{
 			metadata.set(xmlNode.attributes[i].nodeName, xmlNode.attributes[i].nodeValue);
 			if(Prototype.Browser.IE && xmlNode.attributes[i].nodeName == "ID"){
-				metadata.set("ajxp_sql_"+xmlNode.attributes[i].nodeName, xmlNode.attributes[i].nodeValue);
+				metadata.set("sql_"+xmlNode.attributes[i].nodeName, xmlNode.attributes[i].nodeValue);
 			}
 		}
 		node.setMetadata(metadata);
@@ -543,7 +543,7 @@ Class.create("SearchEngine", Pane, {
      */
     setOnLoad : function(element){
         addLightboxMarkupToElement(element);
-        var img = new Element("img", {src : ajxpResourcesFolder+"/images/loadingImage.gif", style: "margin-top: 10px;"});
+        var img = new Element("img", {src : THEME.path+"/image/loadingImage.gif", style: "margin-top: 10px;"});
         $(element).down("#element_overlay").insert(img);
         this.loading = true;
     },

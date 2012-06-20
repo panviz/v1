@@ -37,15 +37,15 @@ Class.create("NotifierFormEnricher", {
         if($(formId) && $(formId).down("fieldset#notification_fieldset")){
             $(formId).down("fieldset#notification_fieldset").remove();
         }
-        var ajxpNode = app.getUserSelection().getUniqueNode();
-        if(ajxpNode.getMetadata().get("ajxp_shared")) {
+        var item = app.getUserSelection().getUniqueNode();
+        if(item.getMetadata().get("shared")) {
             return;
         }
         var html = '<fieldset id="notification_fieldset">\
-							<legend ajxp_message_id="357">Notification</legend>\
+							<legend message_id="357">Notification</legend>\
 							<div ><input type="checkbox" id="share_notification_active" name="PLUGINS_DATA_SHARE_NOTIFICATION_ACTIVE"> Be notified when files are uploaded or downloaded in this repository</div>\
 							<div class="SF_element" style="display:none;" id="share_notification_sf_element">\
-								<div class="SF_label" ajxp_message_id="359"> Target email(s): </div>\
+								<div class="SF_label" message_id="359"> Target email(s): </div>\
 								<input type="text" value="" name="PLUGINS_DATA_SHARE_NOTIFICATION_EMAIL" id="share_notification_email" class="SF_input"/>\
 							</div>\
 						</fieldset>\

@@ -17,7 +17,7 @@
  *
  * The latest code can be found at <http://www.app.info/>.
  */
-function getAjxpMobileActions(){
+function getMobileActions(){
 	var mobileActions = $('mobile_actions_copy');
 	if(mobileActions){
 		return mobileActions;
@@ -29,7 +29,7 @@ function getAjxpMobileActions(){
 		Event.stop(e);
 		$('info_container').down('.info_panel_title_span').update(app.getContextHolder().getUniqueNode().getLabel());
 		$('info_container').show();
-		$('info_container').ajxpPaneObject.resize();
+		$('info_container').paneObject.resize();
 		$('info_panel').select('.infoPanelActions a').each(function(action){
 			action.observe("click", function(){$('info_container').hide();});
 		});
@@ -41,11 +41,11 @@ function getAjxpMobileActions(){
 	return mobileActions;
 }
 
-function initAjxpMobileActions(){
+function initMobileActions(){
 	document.observe("app:selection_changed", function(e){
 		var list = e.memo._selectionSource;
 		if(!list) return;
-		var mobileActions = getAjxpMobileActions();
+		var mobileActions = getMobileActions();
 		mobileActions.hide();
 		var items = list.getSelectedItems();
 		var node = app.getContextHolder().getUniqueNode();
@@ -53,7 +53,7 @@ function initAjxpMobileActions(){
 		
 		if(node && node.isLeaf()){
 			//mobileActions.select('a')[1].hide();
-			var editors = app.findEditorsForMime(getAjxpMimeType(node));			
+			var editors = app.findEditorsForMime(getMimeType(node));			
 			if(editors.length){
 				a.show();
 				a._action = "open_with";
@@ -96,7 +96,7 @@ function initAjxpMobileActions(){
 }
 
 document.observe("app:gui_loaded", function(){
-	initAjxpMobileActions();
+	initMobileActions();
 	document.addEventListener("touchmove", function(event){
 		event.preventDefault();
 	});

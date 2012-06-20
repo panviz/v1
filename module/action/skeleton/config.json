@@ -1,7 +1,7 @@
 {
-  "ajxp_plugin": {
+  "plugin": {
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "name": "skeleton",
     "enabled": "false",
     "label": "CONF_MESSAGE[Skeleton Plugin]",
@@ -53,13 +53,13 @@
         "template": [
           {
             "name": "bottom",
-            "element": "ajxp_desktop",
+            "element": "desktop",
             "position": "after",
             "$t": "<div id=\"optional_bottom_div\" style=\"font-family:arial;padding:10px;\">This CDATA section will be overriden by the PHP part of the plugin</div>"
           },
           {
             "name": "head",
-            "element": "ajxp_desktop",
+            "element": "desktop",
             "position": "top",
             "$t": "<div id=\"optional_header_div\" style=\"background-color: #999; color: white;font-family:arial;padding:10px;\">Your custom header content</div>"
           }
@@ -72,21 +72,21 @@
             "gui": {
               "text": "skeleton.1",
               "title": "skeleton.2",
-              "src": "skeleton_images/ICON_SIZE/url.png",
+              "src": "skeleton_image/ICON_SIZE/url.png",
               "hasAccessKey": "false",
               "context": {
                 "selection": "false",
                 "dir": "",
                 "recycle": "hidden",
                 "actionBar": "true",
-                "ajxpWidgets": "ActionsToolbar",
+                "widgets": "ActionsToolbar",
                 "actionBarGroup": "user"
               }
             },
             "processing": {
               "clientCallback": {
                 "prepareModal": "false",
-                "$t": "var confs = app.getPluginConfigs(\"ajxp_plugin[@name='skeleton']\");var target = confs.get('CUSTOM_BUTTON_TARGET');if(window.confirm(MessageHash['skeleton.3'].replace('%s', target))){window.open(target, \"my_popup\");}"
+                "$t": "var confs = app.getPluginConfigs(\"plugin[@name='skeleton']\");var target = confs.get('CUSTOM_BUTTON_TARGET');if(window.confirm(I18N['skeleton.3'].replace('%s', target))){window.open(target, \"my_popup\");}"
               }
             }
           },
@@ -95,14 +95,14 @@
             "gui": {
               "text": "skeleton.4",
               "title": "skeleton.5",
-              "src": "skeleton_images/ICON_SIZE/user-desktop.png",
+              "src": "skeleton_image/ICON_SIZE/user-desktop.png",
               "hasAccessKey": "false",
               "context": {
                 "selection": "false",
                 "dir": "",
                 "recycle": "hidden",
                 "actionBar": "true",
-                "ajxpWidgets": "ActionsToolbar",
+                "widgets": "ActionsToolbar",
                 "actionBarGroup": "user"
               }
             },

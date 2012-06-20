@@ -105,7 +105,7 @@ Class.create("Bootstrap", {
 		var cssNode = new Element('link', {
 			type : 'text/css',
 			rel  : 'stylesheet',
-			href : this.parameters.get("ajxpResourcesFolder") + '/' + fileName,
+			href : this.parameters.get("THEME.path") + '/' + fileName,
 			media : 'screen'
 		});
 		head.insert(cssNode);

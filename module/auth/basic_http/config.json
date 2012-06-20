@@ -5,7 +5,7 @@
     "description": "CONF_MESSAGE[Use the standard http authentication.]",
     "mixins": "authdriver_commons",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "client_settings": {
       "resources": {
         "i18n": {
@@ -39,8 +39,8 @@
     "registry_contributions": {
       "external_file": {
         "filename": "plugins/core.auth/standard_auth_actions.xml",
-        "include": "actions/*",
-        "exclude": "actions/action[@name='logout']"
+        "include": "action/*",
+        "exclude": "action/action[@name='logout']"
       },
       "actions": {
         "action": {
@@ -60,7 +60,7 @@
               "contextMenu": "false",
               "infoPanel": "false",
               "actionBarGroup": "user",
-              "ajxpWidgets": "UserWidget::logging_string"
+              "widgets": "UserWidget::logging_string"
             }
           },
           "rightsContext": {

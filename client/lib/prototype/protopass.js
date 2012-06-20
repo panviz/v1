@@ -45,10 +45,10 @@ var Protopass = Class.create({
             barPosition : 'after',
             labelWidth: 39
         };
-        if(window.MessageHash){
+        if(window.I18N){
         	var keys = [379,380,381,382,383,384,385];
         	for(var key in keys){
-        		this.options.messages[key] = window.MessageHash[keys[key]];
+        		this.options.messages[key] = window.I18N[keys[key]];
         	}        	
         }
         if(window.bootstrap && window.bootstrap.parameters.get('password_min_length')){

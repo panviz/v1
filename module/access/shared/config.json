@@ -1,16 +1,16 @@
 {
   "ajxpdriver": {
-    "name": "ajxp_shared",
+    "name": "shared",
     "label": "CONF_MESSAGE[Shared Elements]",
     "description": "CONF_MESSAGE[Browse user shared elements.]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "client_settings": {
-      "icon": "plugins/access.ajxp_shared/share.png",
+      "icon": "plugins/access.shared/share.png",
       "resources": {
         "i18n": {
-          "namespace": "ajxp_shared",
-          "path": "plugins/access.ajxp_shared/i18n"
+          "namespace": "shared",
+          "path": "plugins/access.shared/i18n"
         }
       }
     },
@@ -18,10 +18,10 @@
       "client_configs": {
         "template_part": {
           "theme": "mybase",
-          "ajxpId": "sidebar_splitter",
+          "id": "sidebar_splitter",
           "ajxpClass": "Pane",
-          "ajxpOptions": "{\"fit\":\"height\",\"fake\":\"option\"}",
-          "$t": "<div id=\"folderPane\" ajxpClass=\"FoldersTree\" ajxpOptions='{\"display\":\"dz\",\"replaceScroller\":true}' ajxpPaneHeader=\"363\" ajxpPaneIcon=\"view_tree.png\" style=\"margin:20px;\"></div><style>#sidebar_splitter{padding-bottom:20px;background-color:#A0C0A4;}</style>"
+          "options": "{\"fit\":\"height\",\"fake\":\"option\"}",
+          "$t": "<div id=\"folderPane\" ajxpClass=\"FoldersTree\" options='{\"display\":\"dz\",\"replaceScroller\":true}' paneHeader=\"363\" paneIcon=\"view_tree.png\" style=\"margin:20px;\"></div><style>#sidebar_splitter{padding-bottom:20px;background-color:#A0C0A4;}</style>"
         }
       },
       "actions": {
@@ -79,8 +79,8 @@
           {
             "name": "copyUrl",
             "gui": {
-              "text": "ajxp_shared.18",
-              "title": "ajxp_shared.19",
+              "text": "shared.18",
+              "title": "shared.19",
               "src": "editcopy.png",
               "accessKey": "",
               "hasAccessKey": "false",
@@ -126,8 +126,8 @@
           {
             "name": "reset_download_counter",
             "gui": {
-              "text": "ajxp_shared.32",
-              "title": "ajxp_shared.33",
+              "text": "shared.32",
+              "title": "shared.33",
               "src": "eraser.png",
               "accessKey": "",
               "hasAccessKey": "false",
@@ -159,7 +159,7 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var baseUrl = ajxpServerAccessPath + \"&get_action=reset_download_counter\";baseUrl = app.getUserSelection().updateFormOrUrl(null, baseUrl);var conn = new Connection(baseUrl);conn.addParameter(\"get_action\", \"reset_download_counter\");conn.onComplete = function(transport){app.actionBar.parseXmlMessage(transport.responseXML);};conn.sendAsync();"
+                "$t": "var baseUrl = serverAccessPath + \"&get_action=reset_download_counter\";baseUrl = app.getUserSelection().updateFormOrUrl(null, baseUrl);var conn = new Connection(baseUrl);conn.addParameter(\"get_action\", \"reset_download_counter\");conn.onComplete = function(transport){app.actionBar.parseXmlMessage(transport.responseXML);};conn.sendAsync();"
               },
               "serverCallback": {
                 "methodName": "switchAction"
@@ -169,8 +169,8 @@
           {
             "name": "clear_expired",
             "gui": {
-              "text": "ajxp_shared.25",
-              "title": "ajxp_shared.26",
+              "text": "shared.25",
+              "title": "shared.26",
               "src": "edit_clear_history.png",
               "accessKey": "",
               "hasAccessKey": "false",
@@ -247,11 +247,11 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var onLoad = function(oForm){$(oForm).down('span[id=\"delete_message\"]').update(MessageHash['ajxp_shared.11']);$(oForm).down('input[name=\"ajxp_mime\"]').value = app.getUserSelection().getUniqueNode().getMime();};modal.showDialogForm('Delete', 'delete_shared_form', onLoad, function(){var oForm = modal.getForm();app.getUserSelection().updateFormOrUrl(oForm);app.actionBar.submitForm(oForm);hideLightBox(true);return false;});"
+                "$t": "var onLoad = function(oForm){$(oForm).down('span[id=\"delete_message\"]').update(I18N['shared.11']);$(oForm).down('input[name=\"mime\"]').value = app.getUserSelection().getUniqueNode().getMime();};modal.showDialogForm('Delete', 'delete_shared_form', onLoad, function(){var oForm = modal.getForm();app.getUserSelection().updateFormOrUrl(oForm);app.actionBar.submitForm(oForm);hideLightBox(true);return false;});"
               },
               "clientForm": {
                 "id": "delete_shared_form",
-                "$t": "<div id=\"delete_shared_form\" action=\"delete\" box_width=\"200\"><span id=\"delete_message\"></span><input type=\"hidden\" name=\"ajxp_mime\" value=\"\"></div>"
+                "$t": "<div id=\"delete_shared_form\" action=\"delete\" box_width=\"200\"><span id=\"delete_message\"></span><input type=\"hidden\" name=\"mime\" value=\"\"></div>"
               },
               "serverCallback": {
                 "methodName": "switchAction"
@@ -262,7 +262,7 @@
       }
     },
     "class_definition": {
-      "filename": "plugins/access.ajxp_shared/class.ajxpSharedAccessDriver.php",
+      "filename": "plugins/access.shared/class.ajxpSharedAccessDriver.php",
       "classname": "ajxpSharedAccessDriver"
     }
   }

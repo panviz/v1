@@ -6,15 +6,15 @@
     "order": "-1",
     "text": "319",
     "title": "320",
-    "icon": "ckeditor_images/html_edit.png",
-    "className": "AjxpCkEditor",
+    "icon": "ckeditor_image/html_edit.png",
+    "className": "CkEditor",
     "mimes": "html,htm",
     "formId": "edit_box",
     "write": "true",
     "label": "CONF_MESSAGE[CKEditor]",
     "description": "CONF_MESSAGE[Wysiwyg HTML Editor, requires separate library to be downloaded.]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "dependencies": {
       "pluginResources": {
         "pluginName": "editor.text"
@@ -31,8 +31,8 @@
             "className": "CKEDITOR"
           },
           {
-            "file": "plugins/editor.ckeditor/class.AjxpCkEditor.js",
-            "className": "AjxpCkEditor"
+            "file": "plugins/editor.ckeditor/class.CkEditor.js",
+            "className": "CkEditor"
           }
         ],
         "img_library": {

@@ -46,7 +46,7 @@ function appletInitialized(uploader){
 	var applet = document.getElementById('jumpLoaderApplet');
 	var origUrl = applet.getUploaderConfig().getUploadUrl();
 	var currentFolder = parent.base64_encode(parent.app.getUserSelection().getContextNode().getPath());
-	applet.getUploaderConfig().setUploadUrl(origUrl + "&dir=" + currentFolder + "&ajxp_sessid=" + clientId);
+	applet.getUploaderConfig().setUploadUrl(origUrl + "&dir=" + currentFolder + "&sessid=" + clientId);
 	applet.getUploaderConfig().setPartitionLength(partitionLength);
 	applet.getUploaderConfig().setMaxFileLength(maxFileLength);
 }
@@ -101,7 +101,7 @@ document.write('<applet name="jumpLoaderApplet" id="jumpLoaderApplet" \
 						height="400" \
 						mayscript> \
 					<param name="gc_loggingLevel" value="ERROR"/> \
-					<param name="uc_uploadUrl" value="'+parent.ajxpServerAccessPath+'&get_action=upload"/> \
+					<param name="uc_uploadUrl" value="'+parent.serverAccessPath+'&get_action=upload"/> \
 					<param name="uc_fileParameterName" value="userfile_0"/> \
 					<param name="ac_fireUploaderStatusChanged" value="true"/> \
 					<param name="ac_fireAppletInitialized" value="true"/> \

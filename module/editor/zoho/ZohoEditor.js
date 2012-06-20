@@ -36,7 +36,7 @@ Class.create("ZohoEditor", View, {
 		this.setOnLoad(true);
 		this.currentNode = userSelection.getUniqueNode();
 		var fName = this.currentNode.getPath();
-		var src = bootstrap.parameters.get('ajxpServerAccess')+"&get_action=post_to_zohoserver&file=" + base64_encode(fName) + "&parent_url=" + base64_encode(getRepName(document.location.href));
+		var src = bootstrap.parameters.get('serverAccess')+"&get_action=post_to_zohoserver&file=" + base64_encode(fName) + "&parent_url=" + base64_encode(getRepName(document.location.href));
 		this.contentMainContainer.src = src;
 		var pe = new PeriodicalExecuter(function(){
 			var href;
@@ -62,7 +62,7 @@ Class.create("ZohoEditor", View, {
 		if(openMessage){
 			waiter.update('<br><br><br>Please wait while opening Zoho editor...<br>');
 		}
-		waiter.insert(new Element("img", {src: ajxpResourcesFolder+'/images/loadingImage.gif'}));
+		waiter.insert(new Element("img", {src: THEME.path+'/image/loadingImage.gif'}));
 		$(this.container).select("#element_overlay")[0].insert(waiter);
 		this.loading = true;
 	},

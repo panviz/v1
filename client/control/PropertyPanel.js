@@ -11,7 +11,7 @@ Class.create("PropertyPanel", {
 	initialize: function(userSelection, htmlElement){
 		this.rights = ['4', '2', '1'];
 		this.accessors = ['u', 'g', 'a'];
-		this.accessLabels = [MessageHash[288], MessageHash[289], MessageHash[290]];
+		this.accessLabels = [I18N[288], I18N[289], I18N[290]];
 		this.rightsLabels = ['r', 'w', 'x'];
 
 		this.htmlElement = $(htmlElement).select("[id='properties_box']")[0];
@@ -104,7 +104,7 @@ Class.create("PropertyPanel", {
 		var recuDiv = new Element('div', {style: 'padding-top:8px;'});
 		var recurBox = new Element('input', {type: 'checkbox', name: 'recursive'}).setStyle({width: '14px',height: '14px',borderWidth: '0'});
 		recuDiv.insert(recurBox);
-		recuDiv.insert(MessageHash[291]);
+		recuDiv.insert(I18N[291]);
 		this.htmlElement.insert(recuDiv);
 		
 		var choices = { "both": "Both", "file": "Files", "dir": "Folders"};

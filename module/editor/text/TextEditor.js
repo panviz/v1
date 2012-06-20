@@ -18,7 +18,7 @@ Class.create("TextEditor", View, {
 		}
 		this.actions.get("downloadFileButton").observe('click', function(){
 			if(!this.currentFile) return;		
-			app.triggerDownload(bootstrap.parameters.get('ajxpServerAccess')+'&action=download&file='+this.currentFile);
+			app.triggerDownload(bootstrap.parameters.get('serverAccess')+'&action=download&file='+this.currentFile);
 			return false;
 		}.bind(this));
 		this.textareaContainer = document.createElement('div');

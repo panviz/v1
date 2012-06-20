@@ -48,8 +48,8 @@ if(!window.soundManager && app.findEditorById("editor.soundmanager")){
                         if(index < links.length-1 ){
                             window.threeSixtyPlayer.handleClick({'target': links[index+1].down("a.sm2_link")});
                         }
-                        if(finishingPlayer.up('.ajxpNodeProvider')){
-                            finishingPlayer.up('.ajxpNodeProvider').removeClassName("SMNodePlaying");
+                        if(finishingPlayer.up('.itemProvider')){
+                            finishingPlayer.up('.itemProvider').removeClassName("SMNodePlaying");
                         }
                     }
                 }catch(e){}
@@ -59,8 +59,8 @@ if(!window.soundManager && app.findEditorById("editor.soundmanager")){
                 try{
                     var playerDiv = smPlayer._360data.oUI360;
                     if(!playerDiv.hasClassName("ui360-vis")) {
-                        if(playerDiv.up('.ajxpNodeProvider')){
-                            playerDiv.up('.ajxpNodeProvider').addClassName("SMNodePlaying");
+                        if(playerDiv.up('.itemProvider')){
+                            playerDiv.up('.itemProvider').addClassName("SMNodePlaying");
                         }
                     }else{
                         playerDiv.removeClassName("ui360-vis-retracted");
@@ -72,8 +72,8 @@ if(!window.soundManager && app.findEditorById("editor.soundmanager")){
                 try{
                     var playerDiv = smPlayer._360data.oUI360;
                     if(!playerDiv.hasClassName("ui360-vis")) {
-                        if(playerDiv.up('.ajxpNodeProvider')){
-                            playerDiv.up('.ajxpNodeProvider').removeClassName("SMNodePlaying");
+                        if(playerDiv.up('.itemProvider')){
+                            playerDiv.up('.itemProvider').removeClassName("SMNodePlaying");
                         }
                     }else{
                         window.setTimeout(function(){
@@ -104,11 +104,11 @@ function hookToFilesList(){
             resManager.load();
         }
         $A(fList.getItems()).each(function(row){
-            if(!row.ajxpNode || row.ajxpNode.getAjxpMime() != "mp3") return;
+            if(!row.item || row.item.getMime() != "mp3") return;
             addVolumeButton();
-            var url = bootstrap.parameters.get('ajxpServerAccess')+'&get_action=audio_proxy&file='+base64_encode(row.ajxpNode.getPath())+ '&fake=extension.mp3';
+            var url = bootstrap.parameters.get('serverAccess')+'&get_action=audio_proxy&file='+base64_encode(row.item.getPath())+ '&fake=extension.mp3';
             var player = new Element("div", {className: "ui360 ui360-micro"}).update(new Element("a", {href: url}).update(""));
-            row.down("span#ajxp_label").setStyle({backgroundImage: 'none'}).insert({top: player});
+            row.down("span#label").setStyle({backgroundImage: 'none'}).insert({top: player});
             threeSixtyPlayer.config.items = [player];
             threeSixtyPlayer.init();
         });
@@ -178,13 +178,13 @@ Class.create("SMPlayer", View, {
 	initialize: function($super, oFormObject){
 	},
 		
-	getPreview : function(ajxpNode, rich){
+	getPreview : function(item, rich){
         if(!window.soundManager || !window.soundManager.enabled){
-            var im = new Element('img', {src:resolveImageSource(ajxpNode.getIcon(),'/images/mimes/ICON_SIZE',64),align:"absmiddle"});
+            var im = new Element('img', {src:resolveImageSource(item.getIcon(),'/image/mime/ICON_SIZE',64),align:"absmiddle"});
             return im;
         }
         addVolumeButton();
-        var url = bootstrap.parameters.get('ajxpServerAccess')+'&get_action=audio_proxy&file='+base64_encode(ajxpNode.getPath());
+        var url = bootstrap.parameters.get('serverAccess')+'&get_action=audio_proxy&file='+base64_encode(item.getPath());
         if(rich){
             url += '&rich_preview=true&fake=extension.mp3';
         }else{
@@ -234,11 +234,11 @@ Class.create("SMPlayer", View, {
 
     },
 
-    getThumbnailSource : function(ajxpNode){
-        return resolveImageSource(ajxpNode.getIcon(),'/images/mimes/ICON_SIZE',64);
+    getThumbnailSource : function(item){
+        return resolveImageSource(item.getIcon(),'/image/mime/ICON_SIZE',64);
     },
 
-    filterElement : function(element, ajxpNode){
+    filterElement : function(element, item){
         
     }
 

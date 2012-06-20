@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ajxp_mixins>
+<mixins>
 	<credentials_consumer>
 		<server_settings uuidAttr="name">
 			<param group="MIXIN_MESSAGE[User Credentials]" name="USER" type="string" label="MIXIN_MESSAGE[User]" description="MIXIN_MESSAGE[User name - Can be overriden on a per-user basis (see users 'Personal Data' tab)]" mandatory="false"/>
@@ -45,4 +45,4 @@
             <param group="MIXIN_MESSAGE[Auth Driver Commons]" name="AJXP_ADMIN_LOGIN" type="string" label="MIXIN_MESSAGE[Admin Login]" description="MIXIN_MESSAGE[For exotic auth drivers, an user ID that must be considered as admin by default.]" mandatory="false"/>
         </server_settings>
     </authdriver_commons>
-</ajxp_mixins>
+</mixins>

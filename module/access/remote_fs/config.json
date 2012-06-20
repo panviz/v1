@@ -4,7 +4,7 @@
     "label": "CONF_MESSAGE[Remote Server (via API)]",
     "description": "CONF_MESSAGE[Access a remote server implementing the AjaXplorer API (most commonly a remote server with another AjaXplorer installed)]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "client_settings": {
       "icon": "plugins/access.remote_fs/remote_fs_icon.png",
       "resources": {
@@ -82,9 +82,9 @@
     "registry_contributions": {
       "client_configs": {
         "template_part": {
-          "ajxpId": "search_container",
+          "id": "search_container",
           "ajxpClass": "SearchEngine",
-          "ajxpOptions": "{}"
+          "options": "{}"
         },
         "component_config": {
           "className": "FilesList",
@@ -93,7 +93,7 @@
             "column": [
               {
                 "messageId": "1",
-                "attributeName": "ajxp_label"
+                "attributeName": "label"
               },
               {
                 "messageId": "2",
@@ -105,7 +105,7 @@
               },
               {
                 "messageId": "4",
-                "attributeName": "ajxp_modiftime"
+                "attributeName": "modiftime"
               }
             ]
           }
@@ -114,7 +114,7 @@
       "external_file": [
         {
           "filename": "plugins/access.fs/fsActions.xml",
-          "include": "actions/*",
+          "include": "action/*",
           "exclude": ""
         },
         {
@@ -128,7 +128,7 @@
         },
         {
           "filename": "plugins/access.remote_fs/additionalActions.xml",
-          "include": "actions/*"
+          "include": "action/*"
         }
       ],
       "actions": {

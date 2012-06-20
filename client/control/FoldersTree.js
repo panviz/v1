@@ -40,18 +40,18 @@ Class.create("FoldersTree", Pane, {
 		var action = function(e){
 			if(!app) return;
 			app.focusOn(thisObject);
-			if(this.ajxpNode){
-				app.actionBar.fireDefaultAction("dir", this.ajxpNode);
+			if(this.item){
+				app.actionBar.fireDefaultAction("dir", this.item);
 			}
 		};
 		
 		var filter = this.createFilter();
-		var fakeRootNode = new Node("/", true, MessageHash[391], "folder.png");
+		var fakeRootNode = new Node("/", true, I18N[391], "folder.png");
 		fakeRootNode._isLoaded = true;
 		this.tree = new AJXPTree(fakeRootNode,  action, filter);		
 				
 		this.treeContainer.update(this.tree.toString());
-		$(this.tree.id).ajxpNode = this.tree.ajxpNode;	
+		$(this.tree.id).item = this.tree.item;	
 		$(this.tree.id).observe("click", function(e){
 			this.action(e);
 			Event.stop(e);
@@ -126,8 +126,8 @@ Class.create("FoldersTree", Pane, {
 		var d = (displayOptions.indexOf("d") > -1);
 		var z = (displayOptions.indexOf("z") > -1);
 		var f = (displayOptions.indexOf("f") > -1);
-		var filter = function(ajxpNode){
-			return (((d && !ajxpNode.isLeaf()) || (f && ajxpNode.isLeaf()) || (z && (ajxpNode.getMime()=="zip" || ajxpNode.getMime()=="ajxp_browsable_archive"))) && (ajxpNode.getParent().getMime() != "ajxp_recycle"));
+		var filter = function(item){
+			return (((d && !item.isLeaf()) || (f && item.isLeaf()) || (z && (item.getMime()=="zip" || item.getMime()=="browsable_archive"))) && (item.getParent().getMime() != "recycle"));
 		};
 		return filter;		
 	},
@@ -196,7 +196,7 @@ Class.create("FoldersTree", Pane, {
 	 */
 	getNodeByPath : function(path){
 		for(var key in webFXTreeHandler.all){
-			if(webFXTreeHandler.all[key] && webFXTreeHandler.all[key].ajxpNode && webFXTreeHandler.all[key].ajxpNode.getPath() == path){
+			if(webFXTreeHandler.all[key] && webFXTreeHandler.all[key].item && webFXTreeHandler.all[key].item.getPath() == path){
 				return webFXTreeHandler.all[key];
 			}
 		}

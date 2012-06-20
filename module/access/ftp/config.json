@@ -5,7 +5,7 @@
     "description": "CONF_MESSAGE[This driver can access a remote FTP server]",
     "mixins": "credentials_consumer,filesystem_commons,slug_provider,template_provider",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "client_settings": {
       "icon": "plugins/access.ftp/icon.png",
       "resources": {
@@ -94,9 +94,9 @@
     "registry_contributions": {
       "client_configs": {
         "template_part": {
-          "ajxpId": "search_container",
+          "id": "search_container",
           "ajxpClass": "SearchEngine",
-          "ajxpOptions": "{}"
+          "options": "{}"
         },
         "component_config": [
           {
@@ -106,7 +106,7 @@
               "column": [
                 {
                   "messageId": "1",
-                  "attributeName": "ajxp_label"
+                  "attributeName": "label"
                 },
                 {
                   "messageId": "2",
@@ -118,7 +118,7 @@
                 },
                 {
                   "messageId": "4",
-                  "attributeName": "ajxp_modiftime"
+                  "attributeName": "modiftime"
                 }
               ]
             }
@@ -135,7 +135,7 @@
       "external_file": [
         {
           "filename": "plugins/access.fs/fsActions.xml",
-          "include": "actions/*",
+          "include": "action/*",
           "exclude": ""
         },
         {
@@ -144,7 +144,7 @@
         },
         {
           "filename": "plugins/access.remote_fs/additionalActions.xml",
-          "include": "actions/*"
+          "include": "action/*"
         },
         {
           "filename": "plugins/access.fs/manifest.xml",

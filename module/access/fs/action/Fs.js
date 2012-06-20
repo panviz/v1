@@ -168,11 +168,11 @@ Class.create("DownloadChunk", Action, {
 			var dObject = oForm.down('div[id="multiple_download_container"]');
 			var legendDiv = oForm.down('div.dialogLegend');
 			legendDiv.next("br").remove();
-			legendDiv.update(MessageHash[399]+'<br>'+MessageHash[401]+'<a href="'+MessageHash[402]+'" target="_blank">'+MessageHash[402]+'</a>');
+			legendDiv.update(I18N[399]+'<br>'+I18N[401]+'<a href="'+I18N[402]+'" target="_blank">'+I18N[402]+'</a>');
 			dObject.insert({before:'\
 				<div class="dialogButtons" id="chunk_dl_form" style="height:36px;"> \
-					<span style="display:inline-block;float:left;margin-top: 11px;margin-left: 4px;margin-right: 4px;">'+MessageHash[400]+'</span> <input type="text" style="float:left;margin-top:5px; text-align:right; width:30px;height:24px;" name="chunk_count" id="chunk_count" value="4"> \
-					<input type="image" style="float:left;" id="dl_form_submit" src="THEME_FOLDER/images/actions/22/dialog_ok_apply.png" height="22" width="22" title="OK" class="dialogButton dialogFocus">\
+					<span style="display:inline-block;float:left;margin-top: 11px;margin-left: 4px;margin-right: 4px;">'+I18N[400]+'</span> <input type="text" style="float:left;margin-top:5px; text-align:right; width:30px;height:24px;" name="chunk_count" id="chunk_count" value="4"> \
+					<input type="image" style="float:left;" id="dl_form_submit" src="THEME_FOLDER/image/action/22/dialog_ok_apply.png" height="22" width="22" title="OK" class="dialogButton dialogFocus">\
 				</div> \
 			'});
 			$("dl_form_submit").observe("click", function(e){
@@ -242,7 +242,7 @@ Class.create("OpenWith", Action, {
 								name:el.text,
 								alt:el.title,
 								isDefault : (index == 0),
-								image:resolveImageSource(el.icon, '/images/actions/ICON_SIZE', 22),
+								image:resolveImageSource(el.icon, '/image/action/ICON_SIZE', 22),
 								callback:function(e){this.apply([el]);}.bind(context)
 						} );
 						index++;
@@ -250,9 +250,9 @@ Class.create("OpenWith", Action, {
 		}
 		if(!index){
 				context.builderMenuItems.push({
-						name:MessageHash[324],
-						alt:MessageHash[324],
-						image:resolveImageSource('button_cancel.png', '/images/actions/ICON_SIZE', 22),
+						name:I18N[324],
+						alt:I18N[324],
+						image:resolveImageSource('button_cancel.png', '/image/action/ICON_SIZE', 22),
 						callback:function(e){}
 				} );
 		}
@@ -315,7 +315,7 @@ Class.create("Mkdir", Action, {
 				var elementToCheck=(oForm['dirname']);
 				if(app.getContextHolder().fileNameExists($(elementToCheck).getValue()))
 				{
-						alert(MessageHash[125]);
+						alert(I18N[125]);
 						return false;
 				}
 				app.actionBar.submitForm(oForm);
@@ -332,7 +332,7 @@ Class.create("Mkfile", Action, {
 				var elementToCheck=(oForm['filename']);
 				if(app.getContextHolder().fileNameExists($(elementToCheck).getValue()))
 				{
-						alert(MessageHash[125]);
+						alert(I18N[125]);
 						return false;
 				}
 				app.actionBar.submitForm(oForm);
@@ -365,7 +365,7 @@ Class.create("Copy", Action, {
 						var user = app.user;
 						var activeRepository = user.getActiveRepository();
 						if(app.getUserSelection().hasDir() && !user.canWrite()){
-							throw new Error(MessageHash[374]);
+							throw new Error(I18N[374]);
 						}
 					}
 					var context = app.actionBar;
@@ -383,7 +383,7 @@ Class.create("Copy", Action, {
 							if(!user.canWrite()){
 								var nodeProvider = new RemoteNodeProvider();
 								nodeProvider.initProvider({tmp_repository_id:firstKey});
-								var rootNode = new Item("/", false, MessageHash[373], "folder.png", nodeProvider);								
+								var rootNode = new Item("/", false, I18N[373], "folder.png", nodeProvider);								
 								this.treeSelector.load(rootNode);
 							}else{
 								this.treeSelector.load();								
@@ -392,13 +392,13 @@ Class.create("Copy", Action, {
 							reposList.each(function(pair){
 								this.treeSelector.appendFilterValue(pair.key, pair.value);
 							}.bind(this)); 
-							if(user.canWrite()) this.treeSelector.appendFilterValue(activeRepository, "&lt;"+MessageHash[372]+"&gt;", 'top');
+							if(user.canWrite()) this.treeSelector.appendFilterValue(activeRepository, "&lt;"+I18N[372]+"&gt;", 'top');
 							this.treeSelector.setFilterSelectedIndex(0);
 							this.treeSelector.setFilterChangeCallback(function(e){
 								externalRepo = this.filterSelector.getValue();
 								var nodeProvider = new RemoteNodeProvider();
 								nodeProvider.initProvider({tmp_repository_id:externalRepo});
-								this.resetRootItem(new Item("/", false, MessageHash[373], "folder.png", nodeProvider));
+								this.resetRootItem(new Item("/", false, I18N[373], "folder.png", nodeProvider));
 							});
 						}else{
 							this.treeSelector.load();
@@ -464,13 +464,13 @@ Class.create("Move", Action, {
 				user.getCrossRepositories().each(function(pair){
 					this.treeSelector.appendFilterValue(pair.key, pair.value.getLabel());
 				}.bind(this));
-				this.treeSelector.appendFilterValue(activeRepository, "&lt;"+MessageHash[372]+"&gt;", 'top');
+				this.treeSelector.appendFilterValue(activeRepository, "&lt;"+I18N[372]+"&gt;", 'top');
 				this.treeSelector.setFilterSelectedIndex(0);
 				this.treeSelector.setFilterChangeCallback(function(e){
 					externalRepo = this.filterSelector.getValue();
 					var nodeProvider = new RemoteNodeProvider();
 					nodeProvider.initProvider({tmp_repository_id:externalRepo});
-					this.resetRootItem(new Item("/", false, MessageHash[373], "folder.png", nodeProvider));
+					this.resetRootItem(new Item("/", false, I18N[373], "folder.png", nodeProvider));
 				});
 			}						
 		}.bind(context);
@@ -483,7 +483,7 @@ Class.create("Move", Action, {
 			var getAction = oForm.down('input[name="get_action"]');
 			var selectedNode = this.treeSelector.getSelectedNode();
 			if(selectedNode == app.getContextNode().getPath()){
-				alert(MessageHash[183]);
+				alert(I18N[183]);
 				return false;
 			}
 			app.getUserSelection().updateFormOrUrl(oForm);						
@@ -523,10 +523,10 @@ Class.create("Move", Action, {
 Class.create("Delete", Action, {
 	execute : function(){
 		var onLoad = function(oForm){
-				var message = MessageHash[177];
+				var message = I18N[177];
 				var repoHasRecycle = app.getContextHolder().getRootNode().getMetadata().get("repo_has_recycle");
 				if(repoHasRecycle && repoHasRecycle == "true" && app.getContextNode().getMime() != "recycle"){
-					message = MessageHash[176];
+					message = I18N[176];
 				}
 					$(oForm).getElementsBySelector('span[id="delete_message"]')[0].innerHTML = message;
 		};

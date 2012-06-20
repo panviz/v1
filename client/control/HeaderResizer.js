@@ -329,10 +329,10 @@ Class.create("HeaderResizer", {
 	createStyleSheet : function(){
 		if(Prototype.Browser.IE){
 			return;
-			if(!window.ajxp_resizer_sheet){
-		        window.ajxp_resizer_sheet = document.createStyleSheet();		    
+			if(!window.resizer_sheet){
+		        window.resizer_sheet = document.createStyleSheet();		    
 			}
-			var sheet = window.ajxp_resizer_sheet;
+			var sheet = window.resizer_sheet;
 	        // Remove previous rules
 	        var rules = sheet.rules;
 	        var len = rules.length;	
@@ -357,9 +357,9 @@ Class.create("HeaderResizer", {
 	removeStyleSheet : function(){
 		if(Prototype.Browser.IE){
 			return;
-			if(window.ajxp_resizer_sheet){
+			if(window.resizer_sheet){
 		        // Remove previous rules
-		        var sheet = window.ajxp_resizer_sheet;
+		        var sheet = window.resizer_sheet;
 		        var rules = sheet.rules;
 		        var len = rules.length;	
 		        for (var i=len-1; i>=0; i--) {
@@ -380,8 +380,8 @@ Class.create("HeaderResizer", {
 		if(Prototype.Browser.IE){
 			return false;
 		}
-		if(window.ajxp_resizer_csstest != undefined){
-			return window.ajxp_resizer_csstest;
+		if(window.resizer_csstest != undefined){
+			return window.resizer_csstest;
 		}
 		var sheet = this.createStyleSheet();
 		var detected = false;
@@ -393,7 +393,7 @@ Class.create("HeaderResizer", {
 			}
 			this.removeStyleSheet();
 		}catch(e){}
-		window.ajxp_resizer_csstest = detected;
+		window.resizer_csstest = detected;
 		return detected;
 	},
 	
@@ -426,7 +426,7 @@ Class.create("HeaderResizer", {
 		label.siblings().each(function(sib){
 			siblingWidth += sib.getWidth();
 		});
-		//if(cell.getAttribute("ajxp_message_id"))console.log(computedWidth + ' // ' + (computedWidth - siblingWidth - parseInt(cellPaddLeft) - parseInt(cellPaddRight) - parseInt(labelPaddLeft) - parseInt(labelPaddRight)));
+		//if(cell.getAttribute("message_id"))console.log(computedWidth + ' // ' + (computedWidth - siblingWidth - parseInt(cellPaddLeft) - parseInt(cellPaddRight) - parseInt(labelPaddLeft) - parseInt(labelPaddRight)));
 		label.setStyle({width: (computedWidth - siblingWidth) + 'px'});
 		//console.log(width + " :: " + computedWidth +" :: "+ (computedWidth - siblingWidth - parseInt(cellPaddLeft) - parseInt(cellPaddRight) - parseInt(labelPaddLeft) - parseInt(labelPaddRight)));
 		if(width) cell.setStyle({width: computedWidth + 'px'});	

@@ -5,9 +5,9 @@
     "description": "CONF_MESSAGE[This plugin will browse the content of a mailbox (imap or pop) and allow to grab emails attachments and copy them to another repository. Requires the PHP IMAP extension.]",
     "mixins": "slug_provider,template_provider",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "client_settings": {
-      "icon": "plugins/access.imap/resources/images/16/mail_folder_inbox.png",
+      "icon": "plugins/access.imap/resources/image/16/mail_folder_inbox.png",
       "resources": {
         "i18n": {
           "namespace": "imap_access",
@@ -119,7 +119,7 @@
       "external_file": [
         {
           "filename": "plugins/access.fs/fsActions.xml",
-          "include": "actions/action[@name='ls'] | actions/action[@name='download'] | actions/action[@name='open_with'] | actions/action[@name='stat'] | actions/action[@name='get_content'] | actions/action[@name='copy']",
+          "include": "action/action[@name='ls'] | action/action[@name='download'] | action/action[@name='open_with'] | action/action[@name='stat'] | action/action[@name='get_content'] | action/action[@name='copy']",
           "exclude": ""
         },
         {

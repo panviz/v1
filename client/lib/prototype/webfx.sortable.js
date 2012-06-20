@@ -214,7 +214,7 @@ SortableTable = Class.create({
 		label.siblings().each(function(sib){
 			siblingWidth += sib.getWidth();
 		});
-		//if(cell.getAttribute("ajxp_message_id"))console.log(computedWidth + ' // ' + (computedWidth - siblingWidth - parseInt(cellPaddLeft) - parseInt(cellPaddRight) - parseInt(labelPaddLeft) - parseInt(labelPaddRight)));
+		//if(cell.getAttribute("message_id"))console.log(computedWidth + ' // ' + (computedWidth - siblingWidth - parseInt(cellPaddLeft) - parseInt(cellPaddRight) - parseInt(labelPaddLeft) - parseInt(labelPaddRight)));
 		label.setStyle({width:(computedWidth - siblingWidth - parseInt(cellPaddLeft) - parseInt(cellPaddRight) - parseInt(labelPaddLeft) - parseInt(labelPaddRight)) + 'px'});
 		if(width) cell.setStyle({width:computedWidth + 'px'});	
 	},

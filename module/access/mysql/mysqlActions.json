@@ -38,7 +38,7 @@
 					"processing" : {
 						"clientCallback" : {
 							"prepareModal" : "true",
-							"$t" : "var path;if(window.actionArguments && window.actionArguments.length>0){path = window.actionArguments[0];if(Object.isString(path)){path = new AjxpNode(path,false,getBaseName(path));}}else{userSelection = application.getUserSelection();if(userSelection && userSelection.isUnique() && (userSelection.hasDir() || userSelection.hasMime([\"zip\"]))){path = userSelection.getUniqueNode();}}if(path){application.updateContextData(path);}"
+							"$t" : "var path;if(window.actionArguments && window.actionArguments.length>0){path = window.actionArguments[0];if(Object.isString(path)){path = new Item(path,false,getBaseName(path));}}else{userSelection = application.getUserSelection();if(userSelection && userSelection.isUnique() && (userSelection.hasDir() || userSelection.hasMime([\"zip\"]))){path = userSelection.getUniqueNode();}}if(path){application.updateContextData(path);}"
 						},
 						"serverCallback" : {
 							"methodName" : "switchAction"
@@ -85,7 +85,7 @@
 					"gui" : {
 						"text" : "sql.1",
 						"title" : "sql.1",
-						"src" : "sql_images/actions/ICON_SIZE/table_new.png",
+						"src" : "sql_image/action/ICON_SIZE/table_new.png",
 						"accessKey" : "folder_access_key",
 						"hasAccessKey" : "false",
 						"context" : {
@@ -109,7 +109,7 @@
 					"processing" : {
 						"clientCallback" : {
 							"prepareModal" : "true",
-							"$t" : "var sTitle = MessageHash[187];var loadFunc = function(oForm){application.actionBar.sqlEditor = new SQLEditor(oForm);application.actionBar.sqlEditor.createTableEditor();};modal.showDialogForm('Create Table', 'mysql_edit_table', loadFunc, null, null, true, true);"
+							"$t" : "var sTitle = I18N[187];var loadFunc = function(oForm){application.actionBar.sqlEditor = new SQLEditor(oForm);application.actionBar.sqlEditor.createTableEditor();};modal.showDialogForm('Create Table', 'mysql_edit_table', loadFunc, null, null, true, true);"
 						},
 						"serverCallback" : {
 							"methodName" : "switchAction"
@@ -120,7 +120,7 @@
 					"gui" : {
 						"text" : "273",
 						"title" : "274",
-						"src" : "sql_images/actions/ICON_SIZE/table_record_new.png",
+						"src" : "sql_image/action/ICON_SIZE/table_record_new.png",
 						"accessKey" : "file_access_key",
 						"hasAccessKey" : "false",
 						"context" : {
@@ -156,7 +156,7 @@
 					"gui" : {
 						"text" : "269",
 						"title" : "270",
-						"src" : "sql_images/actions/ICON_SIZE/table_edit.png",
+						"src" : "sql_image/action/ICON_SIZE/table_edit.png",
 						"accessKey" : "edit_access_key",
 						"hasAccessKey" : "false",
 						"context" : {
@@ -189,7 +189,7 @@
 					"processing" : {
 						"clientCallback" : {
 							"prepareModal" : "true",
-							"$t" : "var currentTable = application.getContextNode().getPath();var sTitle = MessageHash[187]+currentTable;var loadFunc = function(oForm){application.actionBar.sqlEditor = new SQLEditor(oForm);application.actionBar.sqlEditor.createTableEditor(currentTable);};modal.showDialogForm('Edit Table Columns', 'mysql_edit_table', loadFunc, null, null, true, true);"
+							"$t" : "var currentTable = application.getContextNode().getPath();var sTitle = I18N[187]+currentTable;var loadFunc = function(oForm){application.actionBar.sqlEditor = new SQLEditor(oForm);application.actionBar.sqlEditor.createTableEditor(currentTable);};modal.showDialogForm('Edit Table Columns', 'mysql_edit_table', loadFunc, null, null, true, true);"
 						},
 						"clientForm" : {
 							"id" : "mysql_edit_table",
@@ -204,7 +204,7 @@
 					"gui" : {
 						"text" : "51",
 						"title" : "276",
-						"src" : "sql_images/actions/ICON_SIZE/table_record_edit.png",
+						"src" : "sql_image/action/ICON_SIZE/table_record_edit.png",
 						"accessKey" : "edit_access_key",
 						"hasAccessKey" : "false",
 						"context" : {
@@ -252,7 +252,7 @@
 					"gui" : {
 						"text" : "271",
 						"title" : "272",
-						"src" : "sql_images/actions/ICON_SIZE/table_delete.png",
+						"src" : "sql_image/action/ICON_SIZE/table_delete.png",
 						"accessKey" : "delete_access_key",
 						"hasAccessKey" : "false",
 						"specialAccessKey" : "delete",
@@ -285,7 +285,7 @@
 					"processing" : {
 						"clientCallback" : {
 							"prepareModal" : "true",
-							"$t" : "var onLoad = function(oForm){var message = MessageHash[275];$(oForm).getElementsBySelector('span[id=\"delete_message\"]')[0].innerHTML = message;};modal.showDialogForm('Delete', 'delete_form', onLoad, function(){var oForm = modal.getForm();application.getUserSelection().updateFormOrUrl(oForm);application.actionBar.submitForm(oForm);hideLightBox(true);return false;});"
+							"$t" : "var onLoad = function(oForm){var message = I18N[275];$(oForm).getElementsBySelector('span[id=\"delete_message\"]')[0].innerHTML = message;};modal.showDialogForm('Delete', 'delete_form', onLoad, function(){var oForm = modal.getForm();application.getUserSelection().updateFormOrUrl(oForm);application.actionBar.submitForm(oForm);hideLightBox(true);return false;});"
 						},
 						"clientForm" : {
 							"id" : "delete_form",
@@ -300,7 +300,7 @@
 					"gui" : {
 						"text" : "7",
 						"title" : "277",
-						"src" : "sql_images/actions/ICON_SIZE/table_record_delete.png",
+						"src" : "sql_image/action/ICON_SIZE/table_record_delete.png",
 						"accessKey" : "delete_access_key",
 						"hasAccessKey" : "true",
 						"specialAccessKey" : "delete",
@@ -333,7 +333,7 @@
 					"processing" : {
 						"clientCallback" : {
 							"prepareModal" : "true",
-							"$t" : "var onLoad = function(oForm){var message = MessageHash[278];$(oForm).getElementsBySelector('span[id=\"delete_message\"]')[0].innerHTML = message;};modal.showDialogForm('Delete', 'delete_record_form', onLoad, function(){var oForm = modal.getForm();application.getUserSelection().updateFormOrUrl(oForm);application.actionBar.submitForm(oForm);hideLightBox(true);return false;});"
+							"$t" : "var onLoad = function(oForm){var message = I18N[278];$(oForm).getElementsBySelector('span[id=\"delete_message\"]')[0].innerHTML = message;};modal.showDialogForm('Delete', 'delete_record_form', onLoad, function(){var oForm = modal.getForm();application.getUserSelection().updateFormOrUrl(oForm);application.actionBar.submitForm(oForm);hideLightBox(true);return false;});"
 						},
 						"clientForm" : {
 							"id" : "delete_record_form",

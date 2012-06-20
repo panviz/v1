@@ -5,9 +5,9 @@
     "description": "CONF_MESSAGE[This driver can browse and update tables and records in a MySQL database, kind of phpMyAdmin.]",
     "mixins": "slug_provider,template_provider",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "client_settings": {
-      "icon": "plugins/access.mysql/resources/images/mysql_icon.png",
+      "icon": "plugins/access.mysql/resources/image/mysql_icon.png",
       "resources": {
         "js": [
           {
@@ -83,13 +83,13 @@
     "registry_contributions": {
       "external_file": {
         "filename": "plugins/access.mysql/mysqlActions.xml",
-        "include": "actions/*"
+        "include": "action/*"
       },
       "client_configs": {
         "template_part": {
-          "ajxpId": "search_container",
+          "id": "search_container",
           "ajxpClass": "SQLSearchEngine",
-          "ajxpOptions": "{}"
+          "options": "{}"
         },
         "component_config": {
           "className": "InfoPanel",

@@ -22,7 +22,7 @@
  * classes
  */
 Class.create("LocalAPINodeProvider", {
-	__implements : "IAjxpNodeProvider",
+	__implements : "IItemProvider",
 	knownMixinMethods : {observe:'livepipe', stopObserving:'livepipe', observeOnce:'livepipe', notify:'livepipe'},
 	initialize : function(){
 		
@@ -34,7 +34,7 @@ Class.create("LocalAPINodeProvider", {
 	
 	/**
 	 * 
-	 * @param node AjxpNode
+	 * @param node Item
 	 * @param nodeCallback Function
 	 * @param childCallback Function
 	 */
@@ -43,10 +43,10 @@ Class.create("LocalAPINodeProvider", {
 		var children = [];
 		var levelIcon = "folder.png";
 		if(path == "/"){
-			var levelIcon = "jsapi_images/package.png";
+			var levelIcon = "jsapi_image/package.png";
 			children = ["Classes", "Interfaces"];			
 		}else if(path == "/Classes" || path == "/Interfaces"){
-			var levelIcon = (path=="/Classes"?"jsapi_images/class.png":"jsapi_images/interface.png");
+			var levelIcon = (path=="/Classes"?"jsapi_image/class.png":"jsapi_image/interface.png");
 			$$OO_ObjectsRegistry[(path=="/Classes"?'classes':'interfaces')].each(function(pair){
 				children.push(pair.key);
 			});
@@ -54,7 +54,7 @@ Class.create("LocalAPINodeProvider", {
 		}else if(node.getMetadata().get("API_CLASS") || node.getMetadata().get("API_INTERFACE")){
 			var api_class = node.getMetadata().get("API_CLASS");
 			var api_interface = node.getMetadata().get("API_INTERFACE");
-			var levelIcon = "jsapi_images/method.png";
+			var levelIcon = "jsapi_image/method.png";
 			var ooObject = $$OO_ObjectsRegistry[(api_class?'classes':'interfaces')].get((api_class?api_class:api_interface));
 			var proto = ooObject.prototype;
 			var properties = $A();
@@ -82,7 +82,7 @@ Class.create("LocalAPINodeProvider", {
 					parentChildren.push({
 						PATH : superclass,
 						LABEL : '<i>Extends <span class="jsapi_member">' + superclass + '</span></i>',
-						ICON : 'jsapi_images/class.png',
+						ICON : 'jsapi_image/class.png',
 						LEAF : true,
 						METADATA : {memberType:'parent'}					
 					});
@@ -96,7 +96,7 @@ Class.create("LocalAPINodeProvider", {
 					var child = {
 						PATH : el,
 						LABEL : '<i>Implements <span class="jsapi_member">' + el + '</span></i>',
-						ICON : 'jsapi_images/interface.png',
+						ICON : 'jsapi_image/interface.png',
 						LEAF : true,
 						METADATA : {memberType:'interface'}
 					};
@@ -118,21 +118,21 @@ Class.create("LocalAPINodeProvider", {
 					var child = {
 							PATH : key,
 							LABEL:label, 
-							ICON:'jsapi_images/method.png', 
+							ICON:'jsapi_image/method.png', 
 							LEAF:true, 
 							METADATA : {memberType:'method', argumentNames: args}							
 					};
 					if(this.knownMixinMethods[key]){
 						child.LABEL = "<span class='jsapi_jdoc_param'>["+this.knownMixinMethods[key]+"]</span> "+child.LABEL;
-						child.ICON = 'jsapi_images/mixedin_method.png';
+						child.ICON = 'jsapi_image/mixedin_method.png';
 						child.METADATA.memberType = 'mixedin_method';
 						mixedMethods.push(child);
 					}else if(interfacesMethods[key]){
 						var ifName = interfacesMethods[key];
-						child.ICON = 'jsapi_images/inherited_method.png';
+						child.ICON = 'jsapi_image/inherited_method.png';
 						interfacesChildren[ifName].push(child);
 					}else if(parentMethods[key] && (!args.length || args[0] != '$super')){
-						child.ICON = 'jsapi_images/inherited_method.png';
+						child.ICON = 'jsapi_image/inherited_method.png';
 						parentChildren.push(child);
 						child.METADATA.memberType = 'parent_method';
 						child.METADATA.parentClass = parentMethods[key];
@@ -143,7 +143,7 @@ Class.create("LocalAPINodeProvider", {
 					var child = {
 							PATH : key,
 							LABEL:'<span class="jsapi_member">'+key+'</span>', 
-							ICON:'jsapi_images/property.png', 
+							ICON:'jsapi_image/property.png', 
 							LEAF:true, 
 							METADATA:{memberType:'property'}
 					};
@@ -170,7 +170,7 @@ Class.create("LocalAPINodeProvider", {
 				mixedMethods.each(function(el){children.push(el);});
 			}
 		}
-		this.createAjxpNodes(node, $A(children), nodeCallback, childCallback, levelIcon);
+		this.createItems(node, $A(children), nodeCallback, childCallback, levelIcon);
 		if( node.getMetadata().get("API_CLASS") || node.getMetadata().get("API_INTERFACE") ){ 
 			if(!node.getMetadata().get("API_SOURCE")){
 				if(node.getMetadata().get("api_source_loading")) return;
@@ -203,7 +203,7 @@ Class.create("LocalAPINodeProvider", {
 		}
 	},
 	
-	createAjxpNodes : function(node, children, nodeCallback, childCallback, levelIcon){
+	createItems : function(node, children, nodeCallback, childCallback, levelIcon){
 		var path = node.getPath();
 		if(path == "/") path = "";
 		children.each(function(childNode){
@@ -222,7 +222,7 @@ Class.create("LocalAPINodeProvider", {
 					var addMeta = childNode.METADATA; 
 				}
 			}
-			var child = new AjxpNode(
+			var child = new Item(
 					path+"/"+childPath, // PATH 
 					isFile, 		// IS LEAF OR NOT
 					label,		// LABEL			
@@ -254,7 +254,7 @@ Class.create("LocalAPINodeProvider", {
 	
 	/**
 	 * Find javadocs associated with the various members
-	 * @param node AjxpNode
+	 * @param node Item
 	 */
 	enrichChildrenWithJavadocs: function(node){
 		var docs = node.getMetadata().get("API_JAVADOCS");
@@ -315,8 +315,8 @@ Class.create("LocalAPINodeProvider", {
 				comm = comm.substring(0, 200)+'...';
 			}
 			var label = "<span class='jsapi_member'>"+type+" "+getBaseName(node.getPath())+"</span> - <span class='jsapi_maindoc'>"+comm+"</span>";
-			var icon = "jsapi_images/"+type.toLowerCase()+".png";
-			var child = new AjxpNode(
+			var icon = "jsapi_image/"+type.toLowerCase()+".png";
+			var child = new Item(
 					node.getPath(), // PATH 
 					true, 			// IS LEAF OR NOT
 					label,		// LABEL			

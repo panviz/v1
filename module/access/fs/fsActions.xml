@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<registry_contributions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:../core.application/ajxp_registry.xsd">
+<registry_contributions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:../core.application/registry.xsd">
 	<actions>
 		<action name="ls" dirDefault="true">			
 			<gui text="32" title="32" src="fileopen.png"
@@ -143,7 +143,7 @@
                 <serverCallback methodName="switchAction"></serverCallback>
                 </processing>
         </action>
-		<action name="ajxp_link">
+		<action name="link">
 			<gui text="369" title="369" src="ajxp-link.png" hasAccessKey="false">
 				<context selection="true" dir="" recycle="false" actionBar="false" actionBarGroup="get" contextMenu="true" infoPanel="true"/>
 				<selectionContext dir="true" file="false" recycle="false" unique="true"/>
@@ -152,12 +152,12 @@
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
 				]]></clientCallback>
-				<clientForm id="ajxp_link_form"><![CDATA[
-				<div id="ajxp_link_form" title="AJXP_MESSAGE[369]"  box_width="280" action="ajxp_link">
+				<clientForm id="link_form"><![CDATA[
+				<div id="link_form" title="AJXP_MESSAGE[369]"  box_width="280" action="link">
 				<fieldset>
-					<legend ajxp_message_id="296">AJXP_MESSAGE[296]</legend>
-					<input type="text" style="width:200px;margin-right:5px;" id="ajxp_link_container" class="dialogFocus"/>
-                    <a id="email" title="AJXP_MESSAGE[323]"><img style="border:none;" align="absmiddle" src="AJXP_THEME_FOLDER/images/actions/22/mail_generic.png" height="22" width="22"/></a>
+					<legend message_id="296">AJXP_MESSAGE[296]</legend>
+					<input type="text" style="width:200px;margin-right:5px;" id="link_container" class="dialogFocus"/>
+                    <a id="email" title="AJXP_MESSAGE[323]"><img style="border:none;" align="absmiddle" src="AJXP_THEME_FOLDER/image/action/22/mail_generic.png" height="22" width="22"/></a>
                   </fieldset>
 				</div>
 				]]></clientForm>
@@ -399,7 +399,7 @@
 				<html><![CDATA[
 					<div>
 						<div class="folderImage infoPanelImagePreview">
-							<img src="AJXP_THEME_FOLDER/images/mimes/64/#{icon}" height="64" width="64">
+							<img src="AJXP_THEME_FOLDER/image/mime/64/#{icon}" height="64" width="64">
 						</div>
 						<div class="panelHeader infoPanelGroup">#{header_string}</div>
 						<table class="infoPanelTable" cellspacing="0" border="0" cellpadding="0">

@@ -32,11 +32,11 @@ Class.create("OtherEditorChooser", AbstractEditor, {
 	open : function($super, userSelection){
 		$super(userSelection);
 		var node = userSelection.getUniqueNode();
-		var allEditors = this.findActiveEditors(node.getAjxpMime());
+		var allEditors = this.findActiveEditors(node.getMime());
 		var selector = this.element.down('#editor_selector');
         var clearAssocLink = this.element.down('#clear_assoc_link');
         clearAssocLink.observe("click", function(){
-            this.clearAssociations(node.getAjxpMime());
+            this.clearAssociations(node.getMime());
         }.bind(this) );
         if(window.ajxpMobile){
             attachMobileScroll(selector, "vertical");
@@ -47,10 +47,10 @@ Class.create("OtherEditorChooser", AbstractEditor, {
 			var elDiv = new Element('a', {
 				href: '#', 
 				className: (even ? 'even': ''),
-				style: "background-image:url('"+resolveImageSource(el.icon, '/images/actions/ICON_SIZE', 22)+"');background-size:22px;"
+				style: "background-image:url('"+resolveImageSource(el.icon, '/image/action/ICON_SIZE', 22)+"');background-size:22px;"
 				}).update(el.text + '<span>'+el.title+'</span>');
 			even = !even;
-            elDiv.currentMime = node.getAjxpMime();
+            elDiv.currentMime = node.getMime();
 			elDiv.editorData = el;
 			elDiv.observe('click', this.selectEditor.bind(this));
 			selector.insert(elDiv);

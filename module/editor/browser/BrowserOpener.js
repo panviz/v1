@@ -5,7 +5,7 @@ Class.create("BrowserOpener", View, {
 	open : function($super, userSelection){
         var fileName =  app.getUserSelection().getUniqueFileName();
         var node = app.getUserSelection().getUniqueNode();
-        if(node.getAjxpMime() == "url"){
+        if(node.getMime() == "url"){
         	this.openURL(fileName);
         	return;
         } 
@@ -13,7 +13,7 @@ Class.create("BrowserOpener", View, {
         var loc = document.location.href;
         if(loc.indexOf("?") !== -1) loc = loc.substring(0, loc.indexOf("?"));
         var url = loc.substring(0, loc.lastIndexOf('/'));
-        var nonSecureAccessPath = ajxpServerAccessPath.substring(0, ajxpServerAccessPath.lastIndexOf('?'));
+        var nonSecureAccessPath = serverAccessPath.substring(0, serverAccessPath.lastIndexOf('?'));
         var open_file_url = url + "/" + nonSecureAccessPath + "?get_action=open_file&repository_id=" + repo + "&file=" + encodeURIComponent(fileName);
         myRef = window.open(open_file_url);
         if(!Modernizr.boxshadow){

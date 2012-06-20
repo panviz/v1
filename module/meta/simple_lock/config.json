@@ -4,13 +4,13 @@
     "label": "CONF_MESSAGE[Simple Lock]",
     "description": "CONF_MESSAGE[Manual Locking mechanism to avoid concurrent edition]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "class_definition": {
       "filename": "plugins/meta.simple_lock/class.SimpleLockManager.php",
       "classname": "SimpleLockManager"
     },
     "client_settings": {
-      "icon": "plugins/access.mysql/resources/images/mysql_icon.png",
+      "icon": "plugins/access.mysql/resources/image/mysql_icon.png",
       "resources": {
         "i18n": {
           "namespace": "meta.simple_lock",

@@ -14,7 +14,7 @@ Class.create("LocationBar", {
 	 */
 	initialize : function(oElement, options){
 		this.element = oElement;
-		this.element.ajxpPaneObject = this;
+		this.element.paneObject = this;
 		this.realPath = '/';
         this.options = options || {};
 		this.createGui();
@@ -208,7 +208,7 @@ Class.create("LocationBar", {
 	 */
 	setModified : function(bool){
 		this._modified = bool;
-		this.gotoButton.setSrc(resolveImageSource((bool ? this._defaultGotoIcon : this._reloadGotoIcon), '/images/actions/ICON_SIZE', 16));
+		this.gotoButton.setSrc(resolveImageSource((bool ? this._defaultGotoIcon : this._reloadGotoIcon), '/image/action/ICON_SIZE', 16));
 		this._beforeModified = this.currentPath.getValue();
 	},
 	/**
@@ -219,8 +219,8 @@ Class.create("LocationBar", {
 			var parentWidth = $(this.options.flexTo).getWidth();
 			var siblingWidth = 0;
 			this.element.siblings().each(function(s){
-				if(s.ajxpPaneObject && s.ajxpPaneObject.getActualWidth){
-					siblingWidth+=s.ajxpPaneObject.getActualWidth();
+				if(s.paneObject && s.paneObject.getActualWidth){
+					siblingWidth+=s.paneObject.getActualWidth();
 				}else{
 					siblingWidth+=s.getWidth();
 				}

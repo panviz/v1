@@ -67,7 +67,7 @@
 					"column": [
 						{
 							"messageId": "1",
-							"attributeName": "ajxp_label",
+							"attributeName": "label",
 							"sortType": "StringDirFile",
 							"defaultWidth": "48%"
 						},
@@ -86,7 +86,7 @@
 						},
 						{
 							"messageId": "4",
-							"attributeName": "ajxp_modiftime",
+							"attributeName": "modiftime",
 							"sortType": "MyDate",
 							"defaultWidth": "14%"
 						}
@@ -155,7 +155,7 @@
 						}
 					]
 				},
-				"html" : "<div><div class=\"folderImage infoPanelImagePreview\"><img src=\"AJXP_THEME_FOLDER/images/mimes/64/#{icon}\" height=\"64\" width=\"64\"></div><div class=\"panelHeader infoPanelGroup\">#{header_string}</div><table class=\"infoPanelTable\" cellspacing=\"0\" border=\"0\" cellpadding=\"0\"><tr><td class=\"infoPanelLabel\">#{name_string}</td><td class=\"infoPanelValue\">#{basename}</td></tr><tr class=\"even\"><td class=\"infoPanelLabel\">#{modif_string}</td><td class=\"infoPanelValue\">#{formated_date}</td></tr></table></div>"
+				"html" : "<div><div class=\"folderImage infoPanelImagePreview\"><img src=\"AJXP_THEME_FOLDER/image/mime/64/#{icon}\" height=\"64\" width=\"64\"></div><div class=\"panelHeader infoPanelGroup\">#{header_string}</div><table class=\"infoPanelTable\" cellspacing=\"0\" border=\"0\" cellpadding=\"0\"><tr><td class=\"infoPanelLabel\">#{name_string}</td><td class=\"infoPanelValue\">#{basename}</td></tr><tr class=\"even\"><td class=\"infoPanelLabel\">#{modif_string}</td><td class=\"infoPanelValue\">#{formated_date}</td></tr></table></div>"
 			}]
 		}
 	},

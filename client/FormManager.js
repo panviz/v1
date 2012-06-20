@@ -33,17 +33,17 @@ Class.create("FormManager", {
 		parametersDefinitions.each(function(param){		
 			var label = param.get('label');
 			if(param.get('labelId')){
-				label = MessageHash[param.get('labelId')];
+				label = I18N[param.get('labelId')];
 			}
 			var name = param.get('name');
 			var type = param.get('type');
 			var desc = param.get('description');
 			if(param.get('descriptionId')){
-				desc = MessageHash[param.get('descriptionId')];
+				desc = I18N[param.get('descriptionId')];
 			}
-            var group = param.get('group') || MessageHash[439];
+            var group = param.get('group') || I18N[439];
             if(param.get('groupId')){
-                group = MessageHash[param.get('groupId')];
+                group = I18N[param.get('groupId')];
             }
 			var mandatory = false;
 			if(param.get('mandatory') && param.get('mandatory')=='true') mandatory = true;
@@ -54,24 +54,24 @@ Class.create("FormManager", {
 			var element;
 			var disabledString = (disabled ? ' disabled="true" ' : '');
 			if(type == 'string' || type == 'integer' || type == 'array'){
-				element = '<input type="text" ajxp_type="'+type+'" ajxp_mandatory="'+(mandatory ? 'true' : 'false')+'" name="'+name+'" value="'+defaultValue+'"'+disabledString+' class="SF_input">';
+				element = '<input type="text" type="'+type+'" mandatory="'+(mandatory ? 'true' : 'false')+'" name="'+name+'" value="'+defaultValue+'"'+disabledString+' class="SF_input">';
             }else if(type == 'textarea'){
                 if(defaultValue) defaultValue = defaultValue.replace(new RegExp("__LBR__", "g"), "\n");
-                element = '<textarea class="SF_input" style="height:70px;" ajxp_type="'+type+'" ajxp_mandatory="'+(mandatory ? 'true' : 'false')+'" name="'+name+'"'+disabledString+'>'+defaultValue+'</textarea>'
+                element = '<textarea class="SF_input" style="height:70px;" type="'+type+'" mandatory="'+(mandatory ? 'true' : 'false')+'" name="'+name+'"'+disabledString+'>'+defaultValue+'</textarea>'
 		    }else if(type == 'password'){
-				element = '<input type="password" autocomplete="off" ajxp_type="'+type+'" ajxp_mandatory="'+(mandatory ? 'true' : 'false')+'" name="'+name+'" value="'+defaultValue+'"'+disabledString+' class="SF_input">';
+				element = '<input type="password" autocomplete="off" type="'+type+'" mandatory="'+(mandatory ? 'true' : 'false')+'" name="'+name+'" value="'+defaultValue+'"'+disabledString+' class="SF_input">';
 			}else if(type == 'boolean'){
 				var selectTrue, selectFalse;
 				if(defaultValue){
 					if(defaultValue == "true" || defaultValue == "1") selectTrue = true;
 					if(defaultValue == "false" || defaultValue == "0") selectFalse = true;
 				}
-				element = '<input type="radio" ajxp_type="'+type+'" class="SF_box" name="'+name+'" value="true" '+(selectTrue ? 'checked' : '')+''+disabledString+'> '+MessageHash[440];
-				element = element + '<input type="radio" ajxp_type="'+type+'" class="SF_box" name="'+name+'" '+(selectFalse ? 'checked' : '')+' value="false"'+disabledString+'> '+MessageHash[441];
+				element = '<input type="radio" type="'+type+'" class="SF_box" name="'+name+'" value="true" '+(selectTrue ? 'checked' : '')+''+disabledString+'> '+I18N[440];
+				element = element + '<input type="radio" type="'+type+'" class="SF_box" name="'+name+'" '+(selectFalse ? 'checked' : '')+' value="false"'+disabledString+'> '+I18N[441];
 				element = '<div class="SF_input">'+element+'</div>';
 			}else if(type == 'select' && param.get('choices')){
                 var choices = param.get('choices').split(",");
-                element = '<select class="SF_input" name="'+name+'" ajxp_mandatory="'+(mandatory ? 'true' : 'false')+'" >';
+                element = '<select class="SF_input" name="'+name+'" mandatory="'+(mandatory ? 'true' : 'false')+'" >';
                 if(!mandatory) element += '<option value=""></option>';
                 for(var k=0; k < choices.length; k++){
                     var cLabel, cValue;
@@ -157,7 +157,7 @@ Class.create("FormManager", {
         var checkboxesActive = false;
 		form.select('input,textarea').each(function(el){
 			if(el.type == "text" || el.type == "password" || el.nodeName.toLowerCase() == 'textarea'){
-				if(el.getAttribute('ajxp_mandatory') == 'true' && el.value == '' && !el.disabled){
+				if(el.getAttribute('mandatory') == 'true' && el.value == '' && !el.disabled){
 					missingMandatory.push(el);
 				}
 				parametersHash.set(prefix+el.name, el.value);				
@@ -165,8 +165,8 @@ Class.create("FormManager", {
 			else if(el.type=="radio" && el.checked){
 				parametersHash.set(prefix+el.name, el.value)
 			};
-			if(el.getAttribute('ajxp_type')){
-				parametersHash.set(prefix+el.name+'_ajxptype', el.getAttribute('ajxp_type'));
+			if(el.getAttribute('type')){
+				parametersHash.set(prefix+el.name+'_ajxptype', el.getAttribute('type'));
 			}
             if(form.down('[name="SFCB_'+el.name+'"]')){
                 checkboxesActive = true;
@@ -174,7 +174,7 @@ Class.create("FormManager", {
             }
 		});		
 		form.select('select').each(function(el){
-			if(el.getAttribute("ajxp_mandatory") == 'true' && el.getValue() == '' && !el.disabled){
+			if(el.getAttribute("mandatory") == 'true' && el.getValue() == '' && !el.disabled){
 				missingMandatory.push(el);
 			}
 			parametersHash.set(prefix+el.name, el.getValue());

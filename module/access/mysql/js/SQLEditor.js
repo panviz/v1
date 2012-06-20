@@ -121,7 +121,7 @@ Class.create("SQLEditor", {
 			var value = new Hash();
 			this.fields.each(function(fName){
 				if(Prototype.Browser.IE && fName == "ID"){
-					value.set(fName, meta.get("ajxp_sql_"+fName));
+					value.set(fName, meta.get("sql_"+fName));
 				}else{
 					value.set(fName, meta.get(fName));
 				}
@@ -136,7 +136,7 @@ Class.create("SQLEditor", {
 		var oForm = modal.getForm();
 		oForm.getElements().each(function(el){
 			if($A(this.fields).include(el.getAttribute('name'))){
-				el.setAttribute('name', 'ajxp_mysql_'+el.getAttribute('name'));
+				el.setAttribute('name', 'mysql_'+el.getAttribute('name'));
 			}
 		}.bind(this));
 		app.actionBar.submitForm(oForm, true);
@@ -211,7 +211,7 @@ Class.create("SQLEditor", {
 			templateRow.select('input', 'textarea', 'select').invoke('disable');
 			templateRow.setAttribute('enabled', 'false');
 			var activator = new Element('img', {
-				src:ajxpResourcesFolder+'/images/actions/16/encrypted.png',
+				src:THEME.path+'/image/action/16/encrypted.png',
 				height:'16',
 				width:'16',
 				border:'0',
@@ -221,7 +221,7 @@ Class.create("SQLEditor", {
 			templateRow.select('td[new="false"]')[0].update(activator);
 			// Additionnal actions
 			var deleteCol = new Element('img', {
-				src:ajxpResourcesFolder+'/images/actions/16/button_cancel.png',
+				src:THEME.path+'/image/action/16/button_cancel.png',
 				height:'16',
 				width:'16',
 				hspace:'5',
@@ -236,11 +236,11 @@ Class.create("SQLEditor", {
 					if(row.getAttribute('enabled') && row.getAttribute('enabled') == "true"){
 						row.select('input', 'textarea', 'select').invoke('disable');
 						row.setAttribute('enabled', 'false');
-						e.findElement('img').src=ajxpResourcesFolder+'/images/actions/16/encrypted.png';
+						e.findElement('img').src=THEME.path+'/image/action/16/encrypted.png';
 					}else{
 						row.select('input', 'textarea', 'select').invoke('enable');
 						row.setAttribute('enabled', 'true');
-						e.findElement('img').src=ajxpResourcesFolder+'/images/actions/16/decrypted.png';
+						e.findElement('img').src=THEME.path+'/image/action/16/decrypted.png';
 					}
 					Event.stop(e);
 				}else if(e.findElement('img') && e.findElement('img').hasClassName('deleteRow')){
@@ -355,7 +355,7 @@ Class.create("SQLEditor", {
 	setOnLoad : function(){	
 		addLightboxMarkupToElement(this.textareaContainer);
 		var img = document.createElement("img");
-		img.src = ajxpResourcesFolder+"/images/loadingImage.gif";
+		img.src = THEME.path+"/image/loadingImage.gif";
 		$(this.textareaContainer).select("#element_overlay")[0].appendChild(img);
 		this.loading = true;
 	},

@@ -51,11 +51,16 @@ var xml2json = function(files){
 }
 
 var replace = function(files){
+	var exp = 'mimes\/';
+	var sub = 'mime\/';
 	var counter = 0;
 	var process = [];
+	var regxp = new RegExp(exp, 'g');
 	files.forEach(function(file){
-		if (file.match(/\.js|\.txt|\.html|\.css/gi)) {
-			process.push(path + '/module/' + file);
+		if (file.match(/\.js|\.txt|\.html|\.css|\.xml/gi)) {
+			if (!file.match(/parse.js|node_modules/g)){
+				process.push(path + '/' + file);
+			}
 		}
 	})
 	process.forEach(function(file){
@@ -64,21 +69,22 @@ var replace = function(files){
 		var f = new wrench.LineReader(file);
 		while(f.hasNextLine()) {
 			var line = f.getNextLine();
-			var exp = /ajaxplorer/g;
-			if (line.match(exp)){
-				console.log("LINE: " + line);
-				line = line.replace(exp, 'app');
+			if (line.match(regxp)){
+				//console.log("LINE: " + line);
+				var index = line.indexOf(exp);
+				console.log('\x1b[36m'+exp+'\x1b[90m' + line.substr(index+exp.length, 110) + '\x1b[90m');
+				line = line.replace(regxp, sub);
 				changed = true;
 				counter++
 			}
 			data += (line +'\n');
 		}
 		if (changed){
-			console.log(counter + ': '+ file)
+			console.log('\x1b[31m'+counter+'\x1b[32m' + ': '+ file)
 			fs.writeFileSync(file, data);
 		}
 	})
 }
 
-var files = wrench.readdirSyncRecursive('module');
-xml2json(files)
+var files = wrench.readdirSyncRecursive('.');
+replace(files)

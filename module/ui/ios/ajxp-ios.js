@@ -48,8 +48,8 @@ document.observe("app:gui_loaded", function(){
         suffix = "ios";
     }
     $("skipios-redir").href = currentHref + (currentHref.indexOf("?")>-1?"&":"?") + "skip"+suffix.toUpperCase()+"=true";
-    $("message-id-1").update(MessageHash["ios_gui.1."+suffix].replace("%s", app.getPluginConfigs("app").get("APPLICATION_TITLE")));
-    $("ajxpserver-redir").update(MessageHash["ios_gui.2."+suffix].replace("%s", app.getPluginConfigs("app").get("APPLICATION_TITLE")));
-    $("appstore-redir").update(MessageHash["ios_gui.3."+suffix].replace("%s", app.getPluginConfigs("app").get("APPLICATION_TITLE")));
-    $("skipios-redir").update(MessageHash["ios_gui.4."+suffix].replace("%s", app.getPluginConfigs("app").get("APPLICATION_TITLE")));
+    $("message-id-1").update(I18N["ios_gui.1."+suffix].replace("%s", app.getPluginConfigs("app").get("APPLICATION_TITLE")));
+    $("ajxpserver-redir").update(I18N["ios_gui.2."+suffix].replace("%s", app.getPluginConfigs("app").get("APPLICATION_TITLE")));
+    $("appstore-redir").update(I18N["ios_gui.3."+suffix].replace("%s", app.getPluginConfigs("app").get("APPLICATION_TITLE")));
+    $("skipios-redir").update(I18N["ios_gui.4."+suffix].replace("%s", app.getPluginConfigs("app").get("APPLICATION_TITLE")));
 });

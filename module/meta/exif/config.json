@@ -4,13 +4,13 @@
     "label": "CONF_MESSAGE[Exif Metadata]",
     "description": "CONF_MESSAGE[Extracts the EXIF metadata of a JPG image. Used in conjunction with editor.exif]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    "xsi:noNamespaceSchemaLocation": "file:../core.app/ajxp_registry.xsd",
+    "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "class_definition": {
       "filename": "plugins/meta.exif/class.ExifMetaManager.php",
       "classname": "ExifMetaManager"
     },
     "client_settings": {
-      "icon": "plugins/access.mysql/resources/images/mysql_icon.png",
+      "icon": "plugins/access.mysql/resources/image/mysql_icon.png",
       "resources": {
         "i18n": {
           "namespace": "meta.exif",

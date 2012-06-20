@@ -16,11 +16,11 @@ Class.create("Pane", {
 			throw new Error('Cannot find element for Pane : ' + this.__className);
 		}
 		this.options = options || {};
-		this.htmlElement.ajxpPaneObject = this;
-		if(this.htmlElement.getAttribute('ajxpPaneHeader')){
+		this.htmlElement.paneObject = this;
+		if(this.htmlElement.getAttribute('paneHeader')){
 			this.addPaneHeader(
-				this.htmlElement.getAttribute('ajxpPaneHeader'), 
-				this.htmlElement.getAttribute('ajxpPaneIcon'));
+				this.htmlElement.getAttribute('paneHeader'), 
+				this.htmlElement.getAttribute('paneIcon'));
 		}
         if(this.htmlElement && this.options.elementStyle){
             this.htmlElement.setStyle(this.options.elementStyle);
@@ -74,8 +74,8 @@ Class.create("Pane", {
 	scanChildrenPanes : function(element){
 		if(!element.childNodes) return;
 		$A(element.childNodes).each(function(c){
-			if(c.ajxpPaneObject) {
-				this.childrenPanes.push(c.ajxpPaneObject);
+			if(c.paneObject) {
+				this.childrenPanes.push(c.paneObject);
 			}else{
 				this.scanChildrenPanes(c);
 			}
@@ -100,15 +100,15 @@ Class.create("Pane", {
 	 * @param headerIcon String Path for the icon image
 	 */
 	addPaneHeader : function(headerLabel, headerIcon){
-        var header = new Element('div', {className: 'panelHeader', ajxp_message_id: headerLabel}).update(MessageHash[headerLabel]);
+        var header = new Element('div', {className: 'panelHeader', message_id: headerLabel}).update(I18N[headerLabel]);
         if(headerIcon){
-            var ic = resolveImageSource(headerIcon, '/image/actions/ICON_SIZE', 16);
+            var ic = resolveImageSource(headerIcon, '/image/action/ICON_SIZE', 16);
             header.insert({top: new Element("img", {src: ic, className: 'panelHeaderIcon'})});
             header.addClassName('panelHeaderWithIcon');
         }
         if(this.options.headerClose){
-            var ic = resolveImageSource(this.options.headerClose.icon, '/image/actions/ICON_SIZE', 16);
-            var img = new Element("img", {src: ic, className: 'panelHeaderCloseIcon', title: MessageHash[this.options.headerClose.title]});
+            var ic = resolveImageSource(this.options.headerClose.icon, '/image/action/ICON_SIZE', 16);
+            var img = new Element("img", {src: ic, className: 'panelHeaderCloseIcon', title: I18N[this.options.headerClose.title]});
             header.insert({top: img});
             var sp = this.options.headerClose.splitter;
             img.observe("click", function(){

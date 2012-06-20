@@ -57,7 +57,7 @@ Class.create("Splitter", Pane, {
 		else Object.extend(this.options, horizontalOpts);
 		
 		this.htmlElement = $(container);
-		this.htmlElement.ajxpPaneObject = this;
+		this.htmlElement.paneObject = this;
 		
 		this.group = $(container).setStyle({position:'relative'});
 		var divs = this.group.childElements();
@@ -151,12 +151,12 @@ Class.create("Splitter", Pane, {
         document.stopObserving("app:user_logged",this.userLoggedObs);
         document.stopObserving("app:component_config_changed", this.compConfigObs);
         this.splitbar.remove();
-        if(this.paneA.ajxpPaneObject) {
-            this.paneA.ajxpPaneObject.destroy();
+        if(this.paneA.paneObject) {
+            this.paneA.paneObject.destroy();
             this.paneA.remove();
         }
-        if(this.paneB.ajxpPaneObject) {
-            this.paneB.ajxpPaneObject.destroy();
+        if(this.paneB.paneObject) {
+            this.paneB.paneObject.destroy();
             this.paneB.remove();
         }
     },
@@ -176,8 +176,8 @@ Class.create("Splitter", Pane, {
             src:'view_left_close.png',
             text_id:416,
             title_id:415,
-            text:MessageHash[416],
-            title:MessageHash[415],
+            text:I18N[416],
+            title:I18N[415],
             hasAccessKey:false,
             subMenu:false,
             subMenuUpdateImage:false,
@@ -357,11 +357,11 @@ Class.create("Splitter", Pane, {
 		if(this.options.endDrag){
 			this.options.endDrag(this.getCurrentSize());
 		}
-		if($(this.paneA).ajxpPaneObject){
-			$(this.paneA).ajxpPaneObject.resize();
+		if($(this.paneA).paneObject){
+			$(this.paneA).paneObject.resize();
 		}
-		if($(this.paneB).ajxpPaneObject){
-			$(this.paneB).ajxpPaneObject.resize();
+		if($(this.paneB).paneObject){
+			$(this.paneB).paneObject.resize();
 		}
         this.setUserPreference("size", this.getCurrentSize());
 	},
@@ -399,11 +399,11 @@ Class.create("Splitter", Pane, {
 			this.paneB.fire("resize");
 		}
 		if(this.options.onDrag) this.options.onDrag();
-		if($(this.paneA).ajxpPaneObject){
-			$(this.paneA).ajxpPaneObject.resize();
+		if($(this.paneA).paneObject){
+			$(this.paneA).paneObject.resize();
 		}
-		if($(this.paneB).ajxpPaneObject){
-			$(this.paneB).ajxpPaneObject.resize();
+		if($(this.paneB).paneObject){
+			$(this.paneB).paneObject.resize();
 		}		
 	},
 	/**

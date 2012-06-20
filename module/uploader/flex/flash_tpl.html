@@ -75,8 +75,8 @@ function triggerFlashEvent(){
 			break;
 			case "getMessage":
 				var messageId = arguments[1];
-				if(parent && parent.window.MessageHash && messages){
-					var message = parent.window.MessageHash[messages[messageId]];
+				if(parent && parent.window.I18N && messages){
+					var message = parent.window.I18N[messages[messageId]];
 					if(messages[messageId] == 365){
 						message = message.replace("%s","<?php print($confTotalNumber)?>");
 					}
@@ -89,14 +89,14 @@ function triggerFlashEvent(){
 			break;
 			case "getProperty":
 				var pName = arguments[1];
-				var value = parent.getAjxpCookie(pName);
+				var value = parent.getCookie(pName);
 				if(!value) return null;
 				return (value == "true"?true:false);
 			break;
 			case "storeProperty":
 				var pName = arguments[1];
 				var pValue = arguments[2];
-				return parent.setAjxpCookie(pName, pValue);
+				return parent.setCookie(pName, pValue);
 			break;
 			default: 
 			break;
@@ -114,7 +114,7 @@ if(configs.get("ALLOWED_EXTENSIONS") && configs.get("ALLOWED_EXTENSIONS_READABLE
 	flashVarExt = '&fileTypes='+exts.join(";")+'&fileTypeDescription='+escape(configs.get("ALLOWED_EXTENSIONS_READABLE"));
 }
 
-var url = '<?php print($_SERVER['SCRIPT_NAME']);?>?get_action=upload&secure_token='+parent.Connexion.SECURE_TOKEN+'&ajxp_sessid=<?php echo session_id(); ?>';
+var url = '<?php print($_SERVER['SCRIPT_NAME']);?>?get_action=upload&secure_token='+parent.Connexion.SECURE_TOKEN+'&sessid=<?php echo session_id(); ?>';
 
 var FlashObject = "plugins/uploader.flex/FlashFileUpload.swf";
 var FlashVarValue = "<?php echo $FlashVar; ?>" + flashVarExt + "&uploadPage=" + escape(url) + "<?php echo (!empty($pluginConfigs['HTTPS_POLICY_FILE']) ? "&policyFile=".$pluginConfigs['HTTPS_POLICY_FILE'] : ""); ?>";
