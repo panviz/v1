@@ -20,9 +20,9 @@ Class.create("Modal", {
 	 */
 	initForms: function(){
 		this.elementName = 'generic_dialog_box';
-		this.htmlElement = $(this.elementName);
-		this.title = this.htmlElement.select(".dialogTitle")[0];
-		this.dialogContent = this.htmlElement.select(".dialogContent")[0];
+		this.element = $(this.elementName);
+		this.title = this.element.select(".dialogTitle")[0];
+		this.dialogContent = this.element.select(".dialogContent")[0];
 		this.currentForm;
 		this.cachedForms = new Hash();
 		this.iframeIndex = 0;	

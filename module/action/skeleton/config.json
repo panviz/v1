@@ -86,7 +86,6 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "false",
-                "$t": "var confs = app.getPluginConfigs(\"plugin[@name='skeleton']\");var target = confs.get('CUSTOM_BUTTON_TARGET');if(window.confirm(I18N['skeleton.3'].replace('%s', target))){window.open(target, \"my_popup\");}"
               }
             }
           },
@@ -109,7 +108,6 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var dialogLoadFunction = function(){var conn = new Connexion();conn.addParameter(\"get_action\", \"my_skeleton_button_frame\");conn.onComplete = function(transport){$('loaded_content').update(transport.responseText);}conn.sendAsync();};modal.showDialogForm(\"My Link\", \"my_skeleton_form\", dialogLoadFunction);"
               },
               "clientForm": {
                 "id": "my_skeleton_form",

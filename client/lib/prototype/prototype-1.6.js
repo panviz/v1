@@ -1553,6 +1553,7 @@ Ajax.Request = Class.create(Ajax.Base, {
   },
 
   dispatchException: function(exception) {
+											 debugger
     (this.options.onException || Prototype.emptyFunction)(this, exception);
     Ajax.Responders.dispatch('onException', this, exception);
   }
@@ -4634,6 +4635,7 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
   }
 
   function fire(element, eventName, memo, bubble) {
+		console.log(eventName);
     element = $(element);
 
     if (Object.isUndefined(bubble))

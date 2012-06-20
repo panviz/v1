@@ -45,12 +45,12 @@ Class.create("View", Pane, {
 		if(options){
 			var formId = options.formId;
 			this.mime = options.mime;
-			this.prepareHeader(options.text, resolveImageSource(options.icon, '/image/action/ICON_SIZE', 16));
+			this.prepareHeader(options.text, resolveImageSource(options.icon, '/image/actions/ICON_SIZE', 16));
 		}
 		this.defaultActions = new Hash({
-			'fs': '<a id="fsButton"><img src="'+THEME.path+'/image/action/22/window_fullscreen.png"  width="22" height="22" alt="" border="0"><br><span message_id="235"></span></a>',
-			'nofs': '<a id="nofsButton" style="display:none;"><img src="'+THEME.path+'/image/action/22/window_nofullscreen.png"  width="22" height="22" alt="" border="0"><br><span message_id="236"></span></a>',
-			'close': '<a id="closeButton"><img src="'+THEME.path+'/image/action/22/fileclose.png"  width="22" height="22" alt="" border="0"><br><span message_id="86"></span></a>'
+			'fs': '<a id="fsButton"><img src="'+THEME.path+'/image/actions/22/window_fullscreen.png"  width="22" height="22" alt="" border="0"><br><span message_id="235"></span></a>',
+			'nofs': '<a id="nofsButton" style="display:none;"><img src="'+THEME.path+'/image/actions/22/window_nofullscreen.png"  width="22" height="22" alt="" border="0"><br><span message_id="236"></span></a>',
+			'close': '<a id="closeButton"><img src="'+THEME.path+'/image/actions/22/fileclose.png"  width="22" height="22" alt="" border="0"><br><span message_id="86"></span></a>'
 		});
         if(this.editorOptions.actions){
             this.defaultActions = $H(Object.extend(this.defaultActions._object, this.editorOptions.actions));
@@ -597,7 +597,7 @@ Class.create("View", Pane, {
 	 * @returns String
 	 */
 	getThumbnailSource : function(item){
-		return resolveImageSource(item.getIcon(), "/image/mime/ICON_SIZE", 64);
+		return resolveImageSource(item.getIcon(), "/image/mimes/ICON_SIZE", 64);
 	},
 	/**
 	 * Clear all content

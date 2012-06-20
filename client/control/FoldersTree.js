@@ -12,25 +12,24 @@ Class.create("FoldersTree", Pane, {
 	 * @param options Object
 	 */
 	initialize : function ($super, oElement, options)
-	{
+{ 
 		$super(oElement, options);
 		this.treeContainer = new Element('div', {id: 'tree_container', style: 'overflow:auto; height:100%; width:100%;'});
-        if(this.options.replaceScroller){
-            this.scroller = new Element('div', {id: 'tree_scroller', className: 'scroller_track', style: "right:"+(parseInt(oElement.getStyle("marginRight"))-parseInt(oElement.getStyle("paddingRight")))+"px"});
-            this.scroller.insert('<div id="scrollbar_handle" class="scroller_handle"></div>');
-            oElement.insert(this.scroller);
-            this.treeContainer.setStyle({overflow: "hidden"});
-        }
-        this.registeredObservers = $H();
+		if(this.options.replaceScroller){
+				this.scroller = new Element('div', {id: 'tree_scroller', className: 'scroller_track', style: "right:"+(parseInt(oElement.getStyle("marginRight"))-parseInt(oElement.getStyle("paddingRight")))+"px"});
+				this.scroller.insert('<div id="scrollbar_handle" class="scroller_handle"></div>');
+				oElement.insert(this.scroller);
+				this.treeContainer.setStyle({overflow: "hidden"});
+		}
+		this.registeredObservers = $H();
 		oElement.insert(this.treeContainer);
 		disableTextSelection(this.treeContainer);
-        if(this.options.replaceScroller){
-            this.scrollbar = new Control.ScrollBar('tree_container','tree_scroller');
-            var scrollbarLayoutObserver = this.scrollbar.recalculateLayout.bind(this.scrollbar);
-            document.observe("app:tree_change",  scrollbarLayoutObserver);
-            this.registeredObservers.set("app:tree_change", scrollbarLayoutObserver);
-        }
-
+		if(this.options.replaceScroller){
+			this.scrollbar = new Control.ScrollBar('tree_container','tree_scroller');
+			var scrollbarLayoutObserver = this.scrollbar.recalculateLayout.bind(this.scrollbar);
+			document.observe("app:tree_change",  scrollbarLayoutObserver);
+			this.registeredObservers.set("app:tree_change", scrollbarLayoutObserver);
+		}
 
 		this.options = {};
 		if(options){
@@ -46,9 +45,9 @@ Class.create("FoldersTree", Pane, {
 		};
 		
 		var filter = this.createFilter();
-		var fakeRootNode = new Node("/", true, I18N[391], "folder.png");
-		fakeRootNode._isLoaded = true;
-		this.tree = new AJXPTree(fakeRootNode,  action, filter);		
+		var fakeRootItem = new Item("/", true, I18N[391], "folder.png");
+		fakeRootItem._isLoaded = true;
+		this.tree = new Tree(fakeRootItem,  action, filter);		
 				
 		this.treeContainer.update(this.tree.toString());
 		$(this.tree.id).item = this.tree.item;	
@@ -57,7 +56,7 @@ Class.create("FoldersTree", Pane, {
 			Event.stop(e);
 		}.bind(this.tree));
 
-		Droppables.add(this.tree.id);
+		AppDroppables.add(this.tree.id);
 		if(!this.tree.open && !this.tree.loading) {
 			this.tree.toggle();		
 		}
@@ -65,27 +64,31 @@ Class.create("FoldersTree", Pane, {
 			app.focusOn(this);
 		}.bind(this));
 	
-		this.rootNodeId = this.tree.id;
+		this.rootItemId = this.tree.id;
 		this.hasFocus;
 
-        var ctxChangedObs =function(event){
+		var ctxChangedObs = function(event){
+			
 			var path = event.memo.getPath();
 			window.setTimeout(function(e){
+				
 				this.setSelectedPath(path);
 			}.bind(this), 100);
 		}.bind(this);
 		document.observe("app:context_changed",  ctxChangedObs);
         this.registeredObservers.set("app:context_changed", ctxChangedObs);
 
-        var rootNodeObs = function(event){
-			var ajxpRootNode = event.memo;
-			this.tree.setRootNode(ajxpRootNode);
-			this.changeRootLabel(ajxpRootNode.getLabel(), ajxpRootNode.getIcon());
+		var rootItemObs = function(event){
+			
+			var rootItem = event.memo;
+			this.tree.setRootItem(rootItem);
+			this.changeRootLabel(rootItem.getLabel(), rootItem.getIcon());
 		}.bind(this);
-		document.observe("app:root_node_changed", rootNodeObs);
-        this.registeredObservers.set("app:root_node_changed", rootNodeObs);
+		document.observe("app:root_node_changed", rootItemObs);
+        this.registeredObservers.set("app:root_node_changed", rootItemObs);
 
-        var compConfChanged = function(event){
+		var compConfChanged = function(event){
+			
 			if(event.memo.className == "FoldersTree"){
 				var config = event.memo.classConfig.get('all');
 				var options = XPathSelectNodes(config, 'property');
@@ -103,14 +106,14 @@ Class.create("FoldersTree", Pane, {
 	},
 
     destroy : function(){
-        this.registeredObservers.each(function (pair){
-            document.stopObserving(pair.key, pair.value);
-        });
-        if(this.scrollbar) this.scrollbar.destroy();
-        if(this.tree) this.tree.destroy();
-        if(window[this.htmlElement.id]){
-            delete window[this.htmlElement.id];
-        }
+			this.registeredObservers.each(function (pair){
+					document.stopObserving(pair.key, pair.value);
+			});
+			if(this.scrollbar) this.scrollbar.destroy();
+			if(this.tree) this.tree.destroy();
+			if(window[this.htmlElement.id]){
+					delete window[this.htmlElement.id];
+			}
     },
 
 	/**
@@ -137,7 +140,7 @@ Class.create("FoldersTree", Pane, {
 	 */
 	focus: function(){
 		if(webFXTreeHandler.selected)
-		{
+{ 
 			webFXTreeHandler.selected.focus();
 		}
 		webFXTreeHandler.setFocus(true);
@@ -149,7 +152,7 @@ Class.create("FoldersTree", Pane, {
 	 */
 	blur: function(){
 		if(webFXTreeHandler.selected)
-		{
+{ 
 			webFXTreeHandler.selected.blur();
 		}
 		webFXTreeHandler.setFocus(false);
@@ -180,12 +183,12 @@ Class.create("FoldersTree", Pane, {
 	 * @param protoMenu Proto.Menu 
 	 */
 	setContextualMenu : function(protoMenu){
-        Event.observe(this.rootNodeId+'','contextmenu', function(event){
+        Event.observe(this.rootItemId+'','contextmenu', function(event){
             this.select();
             this.action();
             Event.stop(event);
-        }.bind(webFXTreeHandler.all[this.rootNodeId]));
-         protoMenu.addElements('#'+this.rootNodeId+'');
+        }.bind(webFXTreeHandler.all[this.rootItemId]));
+         protoMenu.addElements('#'+this.rootItemId+'');
 		webFXTreeHandler.contextMenu = protoMenu;
 	},
 	
@@ -194,7 +197,7 @@ Class.create("FoldersTree", Pane, {
 	 * @param path String
 	 * @returns WebFXTreeItem
 	 */
-	getNodeByPath : function(path){
+	getItemByPath : function(path){
 		for(var key in webFXTreeHandler.all){
 			if(webFXTreeHandler.all[key] && webFXTreeHandler.all[key].item && webFXTreeHandler.all[key].item.getPath() == path){
 				return webFXTreeHandler.all[key];
@@ -215,8 +218,8 @@ Class.create("FoldersTree", Pane, {
 		var crtPath = "";
 		for(var i=0;i<parts.length;i++){
 			crtPath += "/" + parts[i];
-			var node = this.getNodeByPath(crtPath);
-			if(node && node.childNodes.length){
+			var node = this.getItemByPath(crtPath);
+			if(node && node.childItems.length){
 				node._webfxtree_expand();
 			}			
 		}
@@ -235,9 +238,9 @@ Class.create("FoldersTree", Pane, {
 		var path = new Array();
 		var j = 0;
 		for(i=0; i<splitPath.length; i++)
-		{
+{ 
 			if(splitPath[i] != '') 
-			{
+{ 
 				path[j] = splitPath[i];
 				j++;
 			}
@@ -251,7 +254,7 @@ Class.create("FoldersTree", Pane, {
 	 * @param newIcon String
 	 */
 	changeRootLabel: function(newLabel, newIcon){
-		this.changeNodeLabel(this.tree.id, newLabel, newIcon);	
+		this.changeItemLabel(this.tree.id, newLabel, newIcon);	
 	},
 	
 	/**
@@ -260,12 +263,12 @@ Class.create("FoldersTree", Pane, {
 	 * @param newLabel String
 	 * @param newIcon String
 	 */
-	changeNodeLabel: function(nodeId, newLabel, newIcon){	
+	changeItemLabel: function(nodeId, newLabel, newIcon){	
 		var node = $(nodeId+'-label').update(newLabel);
 		if(newIcon){
-			var realNode = webFXTreeHandler.all[nodeId];
-			realNode.icon = newIcon;
-			realNode.openIcon = newIcon;
+			var realItem = webFXTreeHandler.all[nodeId];
+			realItem.icon = newIcon;
+			realItem.openIcon = newIcon;
 		}
 	}
 });

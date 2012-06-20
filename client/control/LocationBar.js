@@ -161,42 +161,42 @@ Class.create("LocationBar", {
 		}else{
 			var url = this.currentPath.value.stripScripts();
 			if(url == '') return false;	
-			var node = new Node(url, false);
+			var item = new Item(url, false);
 			var parts = url.split("##");
 			if(parts.length == 2){
 				var data = new Hash();
 				data.set("new_page", parts[1]);
 				url = parts[0];
-				node = new Node(url);
-				node.getMetadata().set("paginationData", data);
+				item = new Item(url);
+				item.getMetadata().set("paginationData", data);
 			}
 			// Manually entered, stat path before calling
 			if(!app.pathExists(url)){
 				modal.displayMessage('ERROR','Cannot find : ' + url);
 				this.currentPath.setValue(this._beforeModified);
 			}else{
-				app.actionBar.fireDefaultAction("dir", node);
+				app.actionBar.fireDefaultAction("dir", item);
 			}
 		}
 		return false;
 	},
 	/**
-	 * Observer for node change
-	 * @param newNode Node
+	 * Observer for item change
+	 * @param newItem Item
 	 */
-	updateLocationBar: function (newNode)
+	updateLocationBar: function (newItem)
 	{
-		if(Object.isString(newNode)){
-			newNode = new Node(newNode);
+		if(Object.isString(newItem)){
+			newItem = new Item(newItem);
 		}
-		var newPath = newNode.getPath();
-		if(newNode.getMetadata().get('paginationData')){
-			newPath += "##" + newNode.getMetadata().get('paginationData').get('current');
+		var newPath = newItem.getPath();
+		if(newItem.getMetadata().get('paginationData')){
+			newPath += "##" + newItem.getMetadata().get('paginationData').get('current');
 		}
 		this.realPath = newPath;
 		this.currentLabel = this.realPath;
-		if(getBaseName(newPath) != newNode.getLabel()){
-			this.currentLabel = getRepName(newPath) + '/' + newNode.getLabel();
+		if(getBaseName(newPath) != newItem.getLabel()){
+			this.currentLabel = getRepName(newPath) + '/' + newItem.getLabel();
 		}
 		this.label.update(this.currentLabel);
 		this.currentPath.value = this.realPath;

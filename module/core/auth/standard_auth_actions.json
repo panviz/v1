@@ -32,7 +32,6 @@
 					"processing" : {
 						"clientCallback" : {
 							"prepareModal" : "true",
-							"$t" : "var loginRedirect = AJXP_LOGIN_REDIRECT;if(loginRedirect){document.location.href=loginRedirect;}else{modal.showDialogForm('Log In', ($('login_form')?'login_form':'login_form_dynamic'),function(oForm){if(bootstrap.parameters.get(\"customWording\")){var ttSt = $(\"generic_dialog_box\").down(\"span.titleString\");ttSt.innerHTML = ttSt.innerHTML.replace(\"AjaXplorer\", bootstrap.parameters.get(\"customWording\").title );}application.loadSeedOrCaptcha(oForm.down('#login_seed'), oForm.down('img#captcha_image'), oForm.down('div.dialogLegend'), 'before');if(Prototype.Browser.IE && !Modernizr.borderradius && !oForm.down('input[type=\"text\"]').key_enter_attached){oForm.select('input').invoke(\"observe\", \"keydown\", function(event){if(event.keyCode == Event.KEY_RETURN){var el = Event.findElement(event);if(el.hasClassName('dialogButton')){el.click();}else{el.form.down('input.dialogButton').click();}}});oForm.down('input[type=\"text\"]').key_enter_attached = true;}},function(){var oForm = modal.getForm();var connexion = new Connection();connexion.addParameter('get_action', 'login');connexion.addParameter('userid', oForm.userid.value);connexion.addParameter('login_seed', oForm.login_seed.value);connexion.addParameter('remember_me', (oForm.remember_me.checked?\"true\":\"false\"));if(oForm.login_seed.value != '-1'){connexion.addParameter('password', hex_md5(hex_md5(oForm.password.value)+oForm.login_seed.value));}else{connexion.addParameter('password', oForm.password.value);}if(oForm.captcha_code){connexion.addParameter('captcha_code', oForm.captcha_code.value);}connexion.onComplete = function(transport){application.actionBar.parseXmlMessage(transport.responseXML);if(transport.responseXML && XPathGetSingleNodeText(transport.responseXML.documentElement, \"logging_result/@value\") == \"-4\"){application.loadSeedOrCaptcha(oForm.down('#login_seed'), oForm.down('img#captcha_image'), oForm.down('div.dialogLegend'), 'before');}};connexion.setMethod('put');connexion.sendAsync();oForm.userid.value = '';oForm.password.value = '';return false;});}"
 						},
 						"clientForm" : {
 							"id" : "login_form_dynamic",
@@ -66,7 +65,6 @@
 							"dialogOnOpen" : "$('user_change_ownpass_old').value = $('user_change_ownpass1').value = $('user_change_ownpass2').value = '';// Update pass_seedvar connexion = new Connection();connexion.addParameter(\"get_action\", \"get_seed\");connexion.onComplete = function(transport){$('pass_seed').value = transport.responseText;};connexion.sendSync();new Protopass($('user_change_ownpass1'), {barContainer:$('pwd_strength_container'),barPosition:'bottom'});",
 							"dialogOnComplete" : {
 								"hideDialog" : "false",
-								"$t" : "var userOldPass = null;var userPass = null;var passSeed = null;if($('user_change_ownpass1') && $('user_change_ownpass1').value && $('user_change_ownpass2').value){if($('user_change_ownpass1').value.length < window.bootstrap.parameters.get(\"password_min_length\")){alert(I18N[378]);return false;}if($('user_change_ownpass1').value != $('user_change_ownpass2').value){alert(I18N[238]);return false;}if($('user_change_ownpass_old').value == ''){alert(I18N[239]);return false;}passSeed = $('pass_seed').value;if(passSeed == '-1'){userPass = $('user_change_ownpass1').value;userOldPass = $('user_change_ownpass_old').value;}else{userPass = hex_md5($('user_change_ownpass1').value);userOldPass = hex_md5( hex_md5($('user_change_ownpass_old').value)+$('pass_seed').value);}var onComplete = function(transport){if(userPass != null){if(transport.responseText == 'PASS_ERROR'){alert(I18N[240]);}else if(transport.responseText == 'SUCCESS'){application.displayMessage('SUCCESS', I18N[197]);hideLightBox(true);}}else{application.displayMessage('SUCCESS', I18N[241]);hideLightBox(true);}};var conn = new Connection();conn.addParameter(\"get_action\", \"pass_change\");conn.addParameter(\"old_pass\", userOldPass);conn.addParameter(\"new_pass\", userPass);conn.addParameter(\"pass_seed\", passSeed);conn.onComplete = onComplete;conn.sendAsync();}"
 							},
 							"dialogOnCancel" : {}
 							
@@ -108,7 +106,6 @@
 					"processing" : {
 						"clientCallback" : {
 							"prepareModal" : "false",
-							"$t" : "clearRememberData();var connexion = new Connection();connexion.addParameter('get_action', 'logout');connexion.onComplete = function(transport){application.actionBar.parseXmlMessage(transport.responseXML);};connexion.sendAsync();"
 						},
 						"serverCallback" : {
 							"methodName" : "switchAction"

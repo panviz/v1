@@ -22,7 +22,7 @@ Class.create("Repository", {
 	/**
 	 * @var object
 	 */
-	nodeProviderDef: null,
+	itemProviderDef: null,
 	/**
 	 * @var ResourcesManager
 	 */
@@ -54,7 +54,7 @@ Class.create("Repository", {
 			this.label = I18N[391];
 		}
 		this.id = id;
-		this.icon = THEME.path+'/image/action/16/network-wired.png';
+		this.icon = THEME.path +'/image/actions/16/network-wired.png';
 		this.resourcesManager = new ResourcesManager();
 		if(xmlDef) this.loadFromXml(xmlDef);
 	},
@@ -122,8 +122,8 @@ Class.create("Repository", {
 	/**
 	 * @returns Object
 	 */
-	getNodeProviderDef : function(){
-		return this.nodeProviderDef;
+	getItemProviderDef : function(){
+		return this.itemProviderDef;
 	},
 	
 	/**
@@ -180,8 +180,8 @@ Class.create("Repository", {
 						this.resourcesManager.loadFromXmlNode(subCh);
 					}else if(subCh.nodeName == 'node_provider'){
 						var nodeProviderName = subCh.getAttribute("ajxpClass");
-						var nodeProviderOptions = subCh.getAttribute("options").evalJSON();
-						this.nodeProviderDef = {name: nodeProviderName, options: nodeProviderOptions};
+						var nodeProviderOptions = subCh.getAttribute("ajxpOptions").evalJSON();
+						this.itemProviderDef = {name: nodeProviderName, options: nodeProviderOptions};
 					}
 				}
 			}

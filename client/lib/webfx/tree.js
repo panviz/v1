@@ -12,18 +12,18 @@ function splitOverlayIcons(item){
     return ret;
 }
 
-function AJXPTree(rootNode, sAction, filter) {
+function Tree(rootNode, sAction, filter) {
 	this.WebFXTree = WebFXTree;
 	this.loaded = true;
 	this.item = rootNode;
 	var icon = rootNode.getIcon();
 	if(icon.indexOf(THEME.path+"/") != 0){
-		icon = resolveImageSource(icon, "/image/mime/ICON_SIZE", 16);
+		icon = resolveImageSource(icon, "/image/mimes/ICON_SIZE", 16);
 	}
 	var openIcon = rootNode.getMetadata().get("openicon");
 	if(openIcon){
 		if(openIcon.indexOf(THEME.path+"/") != 0){
-			openIcon = resolveImageSource(openIcon, "/image/mime/ICON_SIZE", 16);
+			openIcon = resolveImageSource(openIcon, "/image/mimes/ICON_SIZE", 16);
 		}
 	}else{
 		openIcon = icon;
@@ -46,21 +46,21 @@ function AJXPTree(rootNode, sAction, filter) {
 	}
 };
 
-AJXPTree.prototype = new WebFXTree;
+Tree.prototype = new WebFXTree;
 
-AJXPTree.prototype._webfxtree_expand = WebFXTree.prototype.expand;
-AJXPTree.prototype.expand = function() {
+Tree.prototype._webfxtree_expand = WebFXTree.prototype.expand;
+Tree.prototype.expand = function() {
 	if(!this.item.fake){
 		this.item.load();
 	}
 	this._webfxtree_expand();
 };
 
-AJXPTree.prototype.destroy = function(){
+Tree.prototype.destroy = function(){
     if(this.item) this.item.stopObserving();
 };
 
-AJXPTree.prototype.setRootNode = function(rootNode){
+Tree.prototype.setAjxpRootNode = function(rootNode){
 	if(this.item){
 		var oldNode = this.item;
 	}
@@ -80,7 +80,7 @@ AJXPTree.prototype.setRootNode = function(rootNode){
 	//this.item.load();
 };
 
-AJXPTree.prototype.attachListeners = function(jsNode, item){
+Tree.prototype.attachListeners = function(jsNode, item){
 	item.observe("child_added", function(childPath){
 		if(item.getMetadata().get('paginationData')){
 			var pData = item.getMetadata().get('paginationData');
@@ -106,10 +106,10 @@ AJXPTree.prototype.attachListeners = function(jsNode, item){
 	item.observe("node_replaced", function(newNode){
 		// Should refresh label / icon
 		if(jsNode.updateIcon){ 
-			var ic = resolveImageSource(item.getIcon(), "/image/mime/ICON_SIZE", 16);
+			var ic = resolveImageSource(item.getIcon(), "/image/mimes/ICON_SIZE", 16);
 			var oic = ic;
 			if(item.getMetadata().get("openicon")){
-				oic = resolveImageSource(item.getMetadata().get("openicon"), "/image/mime/ICON_SIZE", 16);
+				oic = resolveImageSource(item.getMetadata().get("openicon"), "/image/mimes/ICON_SIZE", 16);
 			}
 			jsNode.updateIcon(ic, oic);
             jsNode.overlayIcon = splitOverlayIcons(item);
@@ -130,17 +130,17 @@ AJXPTree.prototype.attachListeners = function(jsNode, item){
 	}.bind(jsNode) );
 };
 
-function AJXPTreeItem(item, sAction, eParent) {
+function TreeItem(item, sAction, eParent) {
 	this.WebFXTreeItem = WebFXTreeItem;
 	this.item = item;
 	var icon = item.getIcon();
 	if(icon.indexOf(THEME.path+"/") != 0){
-		icon = resolveImageSource(icon, "/image/mime/ICON_SIZE", 16);
+		icon = resolveImageSource(icon, "/image/mimes/ICON_SIZE", 16);
 	}
 	var openIcon = item.getMetadata().get("openicon");
 	if(openIcon){
 		if(openIcon.indexOf(THEME.path+"/") != 0){
-			openIcon = resolveImageSource(openIcon, "/image/mime/ICON_SIZE", 16);
+			openIcon = resolveImageSource(openIcon, "/image/mimes/ICON_SIZE", 16);
 		}
 	}else{
 		openIcon = icon;
@@ -152,7 +152,7 @@ function AJXPTreeItem(item, sAction, eParent) {
         sAction,
         eParent,
         icon,
-        (openIcon?openIcon:resolveImageSource("folder_open.png", "/image/mime/ICON_SIZE", 16)),
+        (openIcon?openIcon:resolveImageSource("folder_open.png", "/image/mimes/ICON_SIZE", 16)),
         splitOverlayIcons(item)
     );
 
@@ -169,15 +169,15 @@ function AJXPTreeItem(item, sAction, eParent) {
 	webFXTreeHandler.all[this.id] = this;
 };
 
-AJXPTreeItem.prototype = new WebFXTreeItem;
+TreeItem.prototype = new WebFXTreeItem;
 
-AJXPTreeItem.prototype._webfxtree_expand = WebFXTreeItem.prototype.expand;
-AJXPTreeItem.prototype.expand = function() {
+TreeItem.prototype._webfxtree_expand = WebFXTreeItem.prototype.expand;
+TreeItem.prototype.expand = function() {
 	this.item.load();
 	this._webfxtree_expand();
 };
 
-AJXPTreeItem.prototype.attachListeners = AJXPTree.prototype.attachListeners;
+TreeItem.prototype.attachListeners = Tree.prototype.attachListeners;
 
 
 /*
@@ -188,7 +188,7 @@ function _itemToTree(item, parentNode) {
 	if(parentNode.filter && !parentNode.filter(item)){
 		return false;
 	}
-	var jsNode = new AJXPTreeItem(item, null, parentNode);	
+	var jsNode = new TreeItem(item, null, parentNode);	
 	if(item.isLoaded())
 	{
 		jsNode.loaded = true;

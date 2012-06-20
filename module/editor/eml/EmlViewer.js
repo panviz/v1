@@ -88,7 +88,7 @@ Class.create("EmlViewer", AbstractEditor, {
 			if(!user.canWrite()){
 				var nodeProvider = new RemoteNodeProvider();
 				nodeProvider.initProvider({tmp_repository_id: firstKey});
-				var rootNode = new Item("/", false, I18N[373], "folder.png", nodeProvider);								
+				var rootNode = new AjxpNode("/", false, I18N[373], "folder.png", nodeProvider);								
 				this.treeSelector.load(rootNode);
 			}else{
 				this.treeSelector.load();								
@@ -103,7 +103,7 @@ Class.create("EmlViewer", AbstractEditor, {
 				externalRepo = this.filterSelector.getValue();
 				var nodeProvider = new RemoteNodeProvider();
 				nodeProvider.initProvider({tmp_repository_id: externalRepo});
-				this.resetRootNode(new Item("/", false, I18N[373], "folder.png", nodeProvider));
+				this.resetAjxpRootNode(new AjxpNode("/", false, I18N[373], "folder.png", nodeProvider));
 			});
 		}else{
 			this.treeSelector.load();

@@ -23,7 +23,7 @@ ConfigEditor = Class.create({
 
 		if(!reload){
 			var fieldset = this.form.down('fieldset');
-			var legend = this.createTabbedFieldset(I18N['conf.77'], fieldset.down('#user_acl'), I18N['conf.78'], fieldset.down('#user_personal'));
+			var legend = this.createTabbedFieldset(I18N['ajxp_conf.77'], fieldset.down('#user_acl'), I18N['ajxp_conf.78'], fieldset.down('#user_personal'));
 			fieldset.insert({top:legend});		
 		}
 		this.roleId = null;
@@ -52,9 +52,9 @@ ConfigEditor = Class.create({
 			
 		this.form.down('#rights_pane').remove();
 		this.form.down('#rights_legend').remove();
-		this.form.down('#roles_pane').select('.dialogLegend')[0].update(I18N['conf.83']);
-		this.form.down('#roles_pane').select('span')[1].update(I18N['conf.84']);
-		var url = window.serverAccessPath + '&get_action=batch_users_roles';
+		this.form.down('#roles_pane').select('.dialogLegend')[0].update(I18N['ajxp_conf.83']);
+		this.form.down('#roles_pane').select('span')[1].update(I18N['ajxp_conf.84']);
+		var url = window.ajxpServerAccessPath + '&get_action=batch_users_roles';
 		this.selectionUrl = selection.updateFormOrUrl(null, url);
 		var connection = new Connection(this.selectionUrl);
 		connection.onComplete = function(transport){			
@@ -236,13 +236,13 @@ ConfigEditor = Class.create({
 			writeBox.observe('click', this.changeUserOrRoleRight.bind(this));
 			
 			var rightsCell = new Element('td', {width:'55%', align:'right'});
-			rightsCell.insert(I18N['conf.29'] + ' ');
+			rightsCell.insert(I18N['ajxp_conf.29'] + ' ');
 			rightsCell.insert(readBox);
-			rightsCell.insert(I18N['conf.30'] + ' ');
+			rightsCell.insert(I18N['ajxp_conf.30'] + ' ');
 			rightsCell.insert(writeBox);
 			var tr = new Element('tr', {className:(odd?'odd':'even')});
 			odd = !odd;
-			var titleCell = new Element('td', {width:'45%'}).update('<img src="'+THEME.path+'/image/mime/16/folder_red.png" style="float:left;margin-right:5px;">'+repoLabel);
+			var titleCell = new Element('td', {width:'45%'}).update('<img src="'+ajxpResourcesFolder+'/image/mimes/16/folder_red.png" style="float:left;margin-right:5px;">'+repoLabel);
 			tr.insert(titleCell);
 			tr.insert(rightsCell);
 			rightsTable.insert({bottom:tr});			
@@ -273,14 +273,14 @@ ConfigEditor = Class.create({
 				conn.sendAsync();
 			}.bind(this) );
 		}
-		var actionNodes = XPathSelectNodes(xmlData, 'admin_data/actions_rights/action[@value="false"]');
+		var actionNodes = XPathSelectNodes(xmlData, 'admin_data/action_rights/action[@value="false"]');
 		var disabled = [];
 		for(var i=0;i<actionNodes.length;i++){
 			disabled.push(actionNodes[i].getAttribute('name'));
 		}
 		textfield.value = disabled.join(',');
 		if(clear){
-			app.displayMessage('SUCCESS', I18N['conf.87']);
+			app.displayMessage('SUCCESS', I18N['ajxp_conf.87']);
 		}
 	},
 
@@ -296,7 +296,7 @@ ConfigEditor = Class.create({
             conn.addParameter("role_id", this.roleId);
             conn.addParameter("default_value", $('default_role_cb').checked? "true":"false");
             conn.onComplete = function(transport){
-                app.displayMessage('SUCCESS', I18N['conf.113']);
+                app.displayMessage('SUCCESS', I18N['ajxp_conf.113']);
                 app.fireContextRefresh();
             };
             conn.sendAsync();
@@ -377,7 +377,7 @@ ConfigEditor = Class.create({
 
 			var walletPane = new Element('div', {className:"wallet_pane", id:"wallet_pane_"+repoId});
 			this.addRepositoryUserParams(walletPane, repoId, walletParams, walletValues);
-			wallets.insert(new Element('div', {style:'margin-top: 10px;'}).update(I18N['conf.79']+' "<b>'+ repoLabel + '</b>"'));
+			wallets.insert(new Element('div', {style:'margin-top: 10px;'}).update(I18N['ajxp_conf.79']+' "<b>'+ repoLabel + '</b>"'));
             walletPane.insert('<div style="clear:both"></div>');
 			wallets.insert(walletPane);
 		}
@@ -416,7 +416,7 @@ ConfigEditor = Class.create({
 		var parameters = new Hash();
 		parameters.set('user_id', userId);
 		if(this.formManager.serializeParametersInputs($('custom_params_'+userId), parameters, "DRIVER_OPTION_")){
-			this.displayMessage("ERROR", I18N['conf.36']);
+			this.displayMessage("ERROR", I18N['ajxp_conf.36']);
 			return false;
 		}
 		this.submitForm("edit_user", 'save_custom_user_params', parameters, null);
@@ -427,7 +427,7 @@ ConfigEditor = Class.create({
 		parameters.set('user_id', userId);
 		parameters.set('repository_id', repositoryId);
 		if(this.formManager.serializeParametersInputs($('repo_user_params_'+userId+'_'+repositoryId), parameters, "DRIVER_OPTION_")){
-			this.displayMessage("ERROR", I18N['conf.36']);
+			this.displayMessage("ERROR", I18N['ajxp_conf.36']);
 			return false;
 		}
 		this.submitForm("edit_user", 'save_repository_user_params', parameters, null);
@@ -515,7 +515,7 @@ ConfigEditor = Class.create({
 			return;
 		}
 		if(newPass.value != newPassConf.value){
-			 this.displayMessage('ERROR', I18N['conf.37']);
+			 this.displayMessage('ERROR', I18N['ajxp_conf.37']);
 			 return;
 		}
 		// First get a seed to check whether the pass should be encoded or not.
@@ -534,11 +534,11 @@ ConfigEditor = Class.create({
 		var extraParams = this.form.select('div#custom_pane input');
 		
 		if(login.value == ''){
-			app.displayMessage("ERROR", I18N['conf.38']);
+			app.displayMessage("ERROR", I18N['ajxp_conf.38']);
 			return false;
 		}
 		if(pass.value == '' || passConf.value == '' ){
-			app.displayMessage("ERROR", I18N['conf.39']);
+			app.displayMessage("ERROR", I18N['ajxp_conf.39']);
 			return false;
 		}
 		if(pass.value.length < window.bootstrap.parameters.get("password_min_length")){
@@ -546,7 +546,7 @@ ConfigEditor = Class.create({
 			return false;
 		}
 		if(pass.value != passConf.value){
-			app.displayMessage("ERROR", I18N['conf.37']);
+			app.displayMessage("ERROR", I18N['ajxp_conf.37']);
 			return false;
 		}
 		parameters = new Hash();
@@ -562,7 +562,7 @@ ConfigEditor = Class.create({
 	deleteUser: function(){
 		var chck = this.form.select('[id="delete_confirm"]')[0];
 		if(!chck.checked){
-			this.displayMessage("ERROR", I18N['conf.40']);
+			this.displayMessage("ERROR", I18N['ajxp_conf.40']);
 			return;
 		}
 		parameters = new Hash();
@@ -577,15 +577,15 @@ ConfigEditor = Class.create({
 		var pass = $('new_user_pwd');
 		var passConf = $('new_user_pwd_conf');
 		if(login.value == ''){
-			this.displayMessage("ERROR", I18N['conf.38']);
+			this.displayMessage("ERROR", I18N['ajxp_conf.38']);
 			return;
 		}
 		if(pass.value == '' || passConf.value == ''){
-			this.displayMessage("ERROR", I18N['conf.39']);
+			this.displayMessage("ERROR", I18N['ajxp_conf.39']);
 			return;
 		}
 		if(pass.value != passConf.value){
-			this.displayMessage("ERROR", I18N['conf.37']);
+			this.displayMessage("ERROR", I18N['ajxp_conf.37']);
 			return;
 		}
 		
@@ -604,7 +604,7 @@ ConfigEditor = Class.create({
 	loadRole : function(roleId){
 		this.userId = null;
 		this.roleId = roleId;
-		this.form.down('fieldset').insert({top:new Element('legend').update(I18N["conf.77"])});
+		this.form.down('fieldset').insert({top:new Element('legend').update(I18N["ajxp_conf.77"])});
 		this.form.down('#roles_pane').remove();
 		this.form.down('#rights_legend').remove();		
 		this.form.down('#actions_pane').show();
@@ -795,7 +795,7 @@ ConfigEditor = Class.create({
 		toSubmit.set('DRIVER', this.driverSelector.options[this.driverSelector.selectedIndex].value);
 		var missingMandFields = this.formManager.serializeParametersInputs(this.driverForm, toSubmit, 'DRIVER_OPTION_');
 		if(missingMandatory || missingMandFields){
-			this.displayMessage("ERROR", I18N['conf.36']);
+			this.displayMessage("ERROR", I18N['ajxp_conf.36']);
 			return false;
 		}		
 		this.submitForm('edit_repository', 'create_repository', toSubmit, null, function(){
@@ -845,7 +845,7 @@ ConfigEditor = Class.create({
                 driverParamsHash.push($H({
                     name:'AJXP_PLUGIN_ENABLED',
                     type:'boolean',
-                    label:I18N['conf.104'],
+                    label:I18N['ajxp_conf.104'],
                     description:""
                 }));
             }
@@ -860,21 +860,21 @@ ConfigEditor = Class.create({
                     img.setStyle({width:'220px'});
                     img.setAttribute('src', 'module/'+pluginId+'/'+img.getAttribute('src'));
                 });  
-                var link1 = I18N['conf.107'];
-                var link2 = I18N['conf.108'];
+                var link1 = I18N['ajxp_conf.107'];
+                var link2 = I18N['ajxp_conf.108'];
                 var legend = this.createTabbedFieldset(link1, form, link2, docDiv);
                 optionsPane.update(legend);
                 optionsPane.insert({bottom:form});
                 optionsPane.insert({bottom:docDiv});
             }else{
-                optionsPane.update("<legend>"+I18N['conf.107']+"</legend>");
+                optionsPane.update("<legend>"+I18N['ajxp_conf.107']+"</legend>");
                 optionsPane.insert({bottom:form});
             }
 
 			if(driverParamsHash.size()){
 				this.formManager.createParametersInputs(form, driverParamsHash, true, (paramsValues.size()?paramsValues:null));
 			}else{
-				form.update(I18N['conf.105']);
+				form.update(I18N['ajxp_conf.105']);
 			}
 			
 			modal.refreshDialogPosition();
@@ -917,8 +917,8 @@ ConfigEditor = Class.create({
 		
 		if(!tplParams.length){
 			var metaForm = new Element('div', {className:'driver_form', style:'display:none;'});		
-			var link1 = XPathGetSingleNodeText(xmlData, "admin_data/ajxpdriver/@name").toUpperCase()+' '+ I18N['conf.41'];
-			var link2 = I18N['conf.10'];		
+			var link1 = XPathGetSingleNodeText(xmlData, "admin_data/ajxpdriver/@name").toUpperCase()+' '+ I18N['ajxp_conf.41'];
+			var link2 = I18N['ajxp_conf.10'];		
 			var legend = this.createTabbedFieldset(link1, form, link2, metaForm);
 			optionsPane.update(legend);
 			optionsPane.insert({bottom:form});
@@ -950,7 +950,7 @@ ConfigEditor = Class.create({
                     modal.refreshDialogPosition();
 				}
 			}else{
-				metaForm.update(I18N['conf.88']);
+				metaForm.update(I18N['ajxp_conf.88']);
 			}			
 		}
 		
@@ -961,7 +961,7 @@ ConfigEditor = Class.create({
 		if(data && data.firstChild && data.firstChild.nodeValue){
 			metaSourcesData = data.firstChild.nodeValue.evalJSON();
 			for(var plugId in metaSourcesData){
-				var form = new Element("div", {className:"metaPane"}).update("<img name=\"delete_meta_source\" src=\""+THEME.path+"/image/action/16/editdelete.png\"><img name=\"edit_meta_source\" src=\""+THEME.path+"/image/action/16/filesave.png\"><span class=\"title\">Plugin '"+plugId+"'</span>");
+				var form = new Element("div", {className:"metaPane"}).update("<img name=\"delete_meta_source\" src=\""+ajxpResourcesFolder+"/image/action/16/editdelete.png\"><img name=\"edit_meta_source\" src=\""+ajxpResourcesFolder+"/image/action/16/filesave.png\"><span class=\"title\">Plugin '"+plugId+"'</span>");
 				form._plugId = plugId;
 				var metaDefNodes = XPathSelectNodes(xmlData, 'admin_data/metasources/meta[@id="'+plugId+'"]/param');
 				var driverParamsHash = $A([]);
@@ -973,8 +973,8 @@ ConfigEditor = Class.create({
 				metaPane.insert(form);
 			}
 		}
-		var addForm = new Element("div", {className:"metaPane"}).update("<div style='clear:both;'><img name=\"add_meta_source\" src=\""+THEME.path+"/image/action/16/filesave.png\"><span class=\"title\">"+I18N['conf.11']+"</span></div>");
-		var formEl = new Element("div", {className:"SF_element"}).update("<div class='SF_label'>"+I18N['conf.12']+" :</div>");
+		var addForm = new Element("div", {className:"metaPane"}).update("<div style='clear:both;'><img name=\"add_meta_source\" src=\""+ajxpResourcesFolder+"/image/action/16/filesave.png\"><span class=\"title\">"+I18N['ajxp_conf.11']+"</span></div>");
+		var formEl = new Element("div", {className:"SF_element"}).update("<div class='SF_label'>"+I18N['ajxp_conf.12']+" :</div>");
 		this.metaSelector = new Element("select", {name:'new_meta_source', className:'SF_input'});
 		var choices = XPathSelectNodes(xmlData, 'admin_data/metasources/meta');
 		this.metaSelector.insert(new Element("option", {value:"", selected:"true"}));
@@ -1028,7 +1028,7 @@ ConfigEditor = Class.create({
 		params.set('repository_id', this.currentRepoId);
 		this.formManager.serializeParametersInputs(form, params, "DRIVER_OPTION_");
 		if(params.get('get_action') == 'add_meta_source' && params.get('DRIVER_OPTION_new_meta_source') == ''){
-			alert(I18N['conf.42']);
+			alert(I18N['ajxp_conf.42']);
 			return;
 		}
 		if(params.get('DRIVER_OPTION_new_meta_source')){
@@ -1036,7 +1036,7 @@ ConfigEditor = Class.create({
 			params.unset('DRIVER_OPTION_new_meta_source');
 		}
 		if(params.get('get_action') == 'delete_meta_source'){
-			var res = confirm(I18N['conf.13']);
+			var res = confirm(I18N['ajxp_conf.13']);
 			if(!res) return;
 		}
 		

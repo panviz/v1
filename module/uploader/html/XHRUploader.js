@@ -112,7 +112,7 @@ Class.create("XHRUploader", {
 		this.mainForm.down('#uploadFilesListContainer').setAttribute("rowspan", "1");
 		var totalDiv = new Element('div', {id:'total_files_list'});
 		this.mainForm.down('#optClosButtonsContainer').insert({after:new Element('td', {style:'vertical-align:bottom'}).update(totalDiv)});
-		totalDiv.insert('<img src="'+THEME.path+'/image/action/22/trashcan_empty.png" class="fakeUploadButton fakeOptionButton" id="clear_list_button"\
+		totalDiv.insert('<img src="'+ajxpResourcesFolder+'/images/actions/22/trashcan_empty.png" class="fakeUploadButton fakeOptionButton" id="clear_list_button"\
 			width="22" height="22" style="float:right;margin-top:3px;padding:4px;width:22px;" title="'+I18N[216]+'"/>\
 			<span id="totalStrings">'+I18N[258]+' : 0 '+I18N[259]+' : 0Kb</span>\
 			<div style="padding-top:3px;">\

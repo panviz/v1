@@ -183,8 +183,8 @@ Class.create("Sortable", SortableTable, {
 	 * @returns String
 	 */
 	sortTimes : function(oRow, nColumn){
-        if(oRow.item && oRow.item.getMetadata().get("modiftime")){
-            return oRow.item.getMetadata().get("modiftime");
+        if(oRow.ajxpNode && oRow.ajxpNode.getMetadata().get("modiftime")){
+            return oRow.ajxpNode.getMetadata().get("modiftime");
         }
 	}
 });

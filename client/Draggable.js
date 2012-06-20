@@ -381,7 +381,8 @@ Class.create("Draggable", Draggable, {
 			
 });
 
-var Droppables = {
+//TODO check where should be used?
+var AppDroppables = {
 
 	options : 
 	{

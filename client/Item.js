@@ -4,6 +4,7 @@
 Class.create("Item", {
 	/**
 	 * Constructor
+	 * TODO retrieve metadata from options on creation
 	 * @param path String
 	 * @param isLeaf Boolean
 	 * @param label String

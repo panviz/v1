@@ -41,7 +41,6 @@ Class.create("Application", {
 	 * Event app:loaded is fired at the end.
 	 */
 	init : function(){
-					 debugger
 		//split progress bar on 5 parts
 		modal.setLoadingStepCounts(5);
 		//sync load
@@ -110,12 +109,12 @@ Class.create("Application", {
 			modal.updateLoadingProgress('Actions: Done');
 				
 			if(this.guiLoaded) {
-				this.refreshTemplateParts();
-				this.refreshGuiComponentConfigs();
+				//this.refreshTemplateParts();
+				//this.refreshGuiComponentConfigs();
 			} else {
 				document.observe("app:gui_loaded", function(){
-					this.refreshTemplateParts();
-					this.refreshGuiComponentConfigs();
+					//this.refreshTemplateParts();
+					//this.refreshGuiComponentConfigs();
 				}.bind(this));
 			}
 		this.loadActiveRepository();
@@ -158,27 +157,27 @@ Class.create("Application", {
 					for(var i=compRegistry.length;i>0;i--){
 							var el = compRegistry[i-1];
 							var id = el.id;
-							compRegistry[i-1] = new el['jClass'](el.item, el.options);
+							compRegistry[i-1] = new el['jClass'](el.node, el.options);
 							window[id] = compRegistry[i-1];
 							lastInst = compRegistry[i-1];
 					}
 					if(lastInst){
 							lastInst.resize();
 					}
-					for(var j=0;j<compRegistry.length;j++){
-							var obj = compRegistry[j];
-							if(Class.objectImplements(obj, "IFocusable")){
-									obj.setFocusBehaviour();
-									this._focusables.push(obj);
-							}
-							if(Class.objectImplements(obj, "IContextMenuable")){
-									obj.setContextualMenu(this.contextMenu);
-							}
-							if(Class.objectImplements(obj, "IActionProvider")){
-									if(!this.guiActions) this.guiActions = new Hash();
-									this.guiActions.update(obj.getActions());
-							}
-					}
+					//for(var j=0;j<compRegistry.length;j++){
+							//var obj = compRegistry[j];
+							//if(Class.objectImplements(obj, "IFocusable")){
+									//obj.setFocusBehaviour();
+									//this._focusables.push(obj);
+							//}
+							//if(Class.objectImplements(obj, "IContextMenuable")){
+									//obj.setContextualMenu(this.contextMenu);
+							//}
+							//if(Class.objectImplements(obj, "IActionProvider")){
+									//if(!this.guiActions) this.guiActions = new Hash();
+									//this.guiActions.update(obj.getActions());
+							//}
+					//}
 			}
 	},
 
@@ -202,7 +201,7 @@ Class.create("Application", {
 				}
 			}
 			if(jClass && id && Class.objectImplements(jClass, "IWidget")){
-				componentsRegistry.push({id: id, item: div, jClass: jClass, options: options});
+				componentsRegistry.push({id: id, node: div, jClass: jClass, options: options});
 			}		
 		});
 	},
@@ -489,6 +488,7 @@ Class.create("Application", {
 			this.skipLsHistory = false;
 		}
 		
+									debugger
 		rootItem.load();
 	},
 

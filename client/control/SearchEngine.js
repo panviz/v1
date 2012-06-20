@@ -45,6 +45,7 @@ Class.create("SearchEngine", Pane, {
 	},
 
     updateSearchModeFromRegistry : function(){
+																		 debugger
         if($(this._resultsBoxId)){
             $(this._resultsBoxId).update('');
         }
@@ -79,14 +80,14 @@ Class.create("SearchEngine", Pane, {
 		
 		if(!this.htmlElement) return;
 		
-		this.htmlElement.insert('<div id="search_panel"><div id="search_form"><input style="float:left;" type="text" id="search_txt" name="search_txt" onfocus="blockEvents=true;" onblur="blockEvents=false;"><a href="" id="search_button" message_title_id="184" title="'+I18N[184]+'"><img width="16" height="16" align="absmiddle" src="'+THEME.path+'/image/action/16/search.png" border="0"/></a><a href="" id="stop_search_button" message_title_id="185" title="'+I18N[185]+'"><img width="16" height="16" align="absmiddle" src="'+THEME.path+'/image/action/16/fileclose.png" border="0" /></a></div><div id="search_results"></div></div>');
+		this.htmlElement.insert('<div id="search_panel"><div id="search_form"><input style="float:left;" type="text" id="search_txt" name="search_txt" onfocus="blockEvents=true;" onblur="blockEvents=false;"><a href="" id="search_button" ajxp_message_title_id="184" title="'+I18N[184]+'"><img width="16" height="16" align="absmiddle" src="'+THEME.path+'/image/action/16/search.png" border="0"/></a><a href="" id="stop_search_button" ajxp_message_title_id="185" title="'+I18N[185]+'"><img width="16" height="16" align="absmiddle" src="'+THEME.path+'/image/action/16/fileclose.png" border="0" /></a></div><div id="search_results"></div></div>');
         if(this.htmlElement.down('div.panelHeader')){
             this.htmlElement.down('div#search_panel').insert({top: this.htmlElement.down('div.panelHeader')});
         }
 		
 		this.metaOptions = [];
-		if(this._options && this._options.metaColumns){
-            var cols = this._options.metaColumns;
+		if(this._ajxpOptions && this._ajxpOptions.metaColumns){
+            var cols = this._ajxpOptions.metaColumns;
 			$('search_form').insert({bottom: '<div id="search_meta">'+I18N[344]+' : <span id="search_meta_options"></span></div>'});
 			this.initMetaOption($('search_meta_options'), 'filename', I18N[1], true);
 			for(var key in cols){
@@ -315,7 +316,7 @@ Class.create("SearchEngine", Pane, {
 			if(folderName != "/") folderName += "/";
 			folderName += fileName;
 		}
-        var imgPath = resolveImageSource(icon, '/image/mime/16', 16);
+        var imgPath = resolveImageSource(icon, '/image/mimes/16', 16);
 		var imageString = '<img align="absmiddle" width="16" height="16" src="'+imgPath+'"> ';
 		var stringToDisplay;
 		if(metaFound){

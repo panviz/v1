@@ -1,7 +1,7 @@
 /**
  * Manages the display of the bookmarks menus. Was a "bookmark bar" but is now a Bookmark button and menu
  */
- Class.create("Bookmarks", {
+ Class.create("BookmarksBar", {
 	/**
 	 * Constructor
 	 * @param oElement HTMLElement The main element 
@@ -12,15 +12,15 @@
 		this.bookmarks = $A([]);
 		this.createMenu();
 		document.observe("app:registry_loaded", function(event){
+			debugger
 			this.parseXml(event.memo);
 		}.bind(this) );
 		document.observeOnce("app:actions_loaded", function(){
-			debugger
 			var bmAction = app.actionBar.actions.get('bookmark');
 			this.addBookmarkObject = {
 				name: bmAction.getKeyedText(),
 				alt: bmAction.options.title,
-				image: THEME.path+'/image/action/16/bookmark_add.png',
+				image: THEME.path +'/image/actions/16/bookmark_add.png',
 				callback: function(e){
 					var node = app.getContextNode();
                     node.getMetadata().set('bookmarked', 'true');
@@ -44,11 +44,11 @@
 		this.clear();
 		var childNodes = XPathSelectNodes(registry, "user/bookmarks/bookmark");
 		for (var i=0; i < childNodes.length;i++)
-		{
+{debugger 
 			var bookmark = {
 				name: childNodes[i].getAttribute('title'),
 				alt: childNodes[i].getAttribute('path'),
-				image: THEME.path+'/image/mime/16/folder.png'
+				image: THEME.path +'/image/mimes/16/folder.png'
 			};
 			bookmark.callback = function(e){app.goTo(this.alt);}.bind(bookmark);
 			bookmark.moreActions = this.getContextActions(bookmark.alt, bookmark.name);
@@ -101,7 +101,7 @@
 		var removeAction = {
 				name: I18N[146],
 				alt: I18N[146],
-				image: THEME.path+'/image/action/16/delete_bookmark.png',
+				image: THEME.path +'/image/actions/16/delete_bookmark.png',
 				disabled: false,
 				className: "edit",
 				callback: function(e){
@@ -112,7 +112,7 @@
 		var renameAction = {
 				name: I18N[6],
 				alt: I18N[6],
-				image: THEME.path+'/image/action/16/applix.png',
+				image: THEME.path +'/image/actions/16/applix.png',
 				disabled: false,
 				className: "edit",
 				callback: function(e){
@@ -132,7 +132,7 @@
 	 */
 	toggleRenameForm : function(bmPath, bmTitle){
 		
-		modal.prepareHeader(I18N[225], THEME.path+'/image/action/16/bookmark.png');
+		modal.prepareHeader(I18N[225], THEME.path +'/image/actions/16/bookmark.png');
 	 	var onLoad = function(newForm){
 	 		$(newForm).bm_path.value = bmPath;
 	 		$(newForm).bm_title.value = bmTitle;

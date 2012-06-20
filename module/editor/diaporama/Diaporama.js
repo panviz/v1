@@ -195,7 +195,7 @@ Class.create("Diaporama", View, {
 			var autoFit = app.user.getPreference('diapo_autofit');
 			if(autoFit && autoFit == "true"){
 				this.autoFit = true;
-				this.fitToScreenButton.select('img')[0].src = THEME.path + '/image/action/22/zoom-fit-restore.png';
+				this.fitToScreenButton.select('img')[0].src = ajxpResourcesFolder + '/images/actions/22/zoom-fit-restore.png';
 				this.fitToScreenButton.select('span')[0].update(I18N[326]);
 			}
 		}
@@ -511,7 +511,7 @@ Class.create("Diaporama", View, {
 			id = 326;
 			this.fitToScreen();
 		}
-		this.fitToScreenButton.select('img')[0].src = THEME.path + '/image/action/22/'+src+'.png';
+		this.fitToScreenButton.select('img')[0].src = ajxpResourcesFolder + '/images/actions/22/'+src+'.png';
 		this.fitToScreenButton.select('span')[0].update(I18N[id]);
 		if(app && app.user && !skipSave){
 			app.user.setPreference("diapo_autofit", (this.autoFit ? 'true' : 'false'));

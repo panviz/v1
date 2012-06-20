@@ -27,8 +27,8 @@ Class.create("SVNLogger", {
 		this.element.up('div.dialogContent').setStyle({padding:0});
 		this.element.insert(this.container);	
 		this.template = new Template('<div style="padding: 0px; border: 1px solid rgb(204, 204, 204); margin: 5px 8px 8px 4px;"><div style="padding: 3px; background-color: rgb(238, 238, 238);#{cssStyle}"><b>#{dateString} :</b> #{date} &nbsp;&nbsp;&nbsp;&nbsp;<b>#{revString} :</b> #{revision} &nbsp;&nbsp;&nbsp;&nbsp;<b>#{authString} :</b> #{author}<br></div><div style="padding: 3px;color:#333;word-wrap:break-word;">#{message}</div><div style="text-align: right; padding: 3px;">#{downloadLink}</div></div>');
-		this.downloadTemplate = new Template('<a style="color:#79f;font-weight:bold;" download="'+window.serverAccessPath+'&get_action=svndownload&file=#{fileName}&revision=#{revision}" href="#">#{downloadString}</a>');
-		this.switchTemplate = new Template('<a style="color:#79f;font-weight:bold;" url="'+window.serverAccessPath+'&get_action=svnswitch&revision=#{revision}" href="#">#{switchString}</a>');
+		this.downloadTemplate = new Template('<a style="color:#79f;font-weight:bold;" ajxp_download="'+window.ajxpServerAccessPath+'&get_action=svndownload&file=#{fileName}&revision=#{revision}" href="#">#{downloadString}</a>');
+		this.switchTemplate = new Template('<a style="color:#79f;font-weight:bold;" ajxp_url="'+window.ajxpServerAccessPath+'&get_action=svnswitch&revision=#{revision}" href="#">#{switchString}</a>');
 		this.revMessage = I18N[243];
 		this.authorMessage = I18N[244];
 		this.dateMessage = I18N[245];

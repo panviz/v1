@@ -22,7 +22,7 @@ Class.create("Autocompleter", Autocompleter.Base, {
     this.options.asynchronous  = true;
     this.options.onComplete    = this.onComplete.bind(this);
     this.options.defaultParams = this.options.parameters || null;
-    this.url                   = serverAccessPath+"&get_action=ls&options=dz";
+    this.url                   = '/'+"&get_action=ls&options=dz";
     this.options.paramName	   = "dir";
     this.options.minChars	   = 1;
     //this.options.callback	   = this.parseValueBeforeSending.bind(this);
@@ -55,7 +55,7 @@ Class.create("Autocompleter", Autocompleter.Base, {
   	var token = this.getToken();
   	var dirs = new Array();
 	if( oXmlDoc == null || oXmlDoc.documentElement == null) 
-	{
+{debugger 
 		this.updateChoices('');
 		return;
 	}
@@ -65,9 +65,9 @@ Class.create("Autocompleter", Autocompleter.Base, {
 	var cs = root.childNodes;
 	var l = cs.length;
 	for (var i = 0; i < l; i++) 
-	{
+{debugger 
 		if (cs[i].tagName == "tree") 
-		{
+{debugger 
 			var text = getBaseName(cs[i].getAttribute("filename"));
 			
 			var hasCharAfterSlash = (token.lastIndexOf("/")<token.length-1);
@@ -83,7 +83,7 @@ Class.create("Autocompleter", Autocompleter.Base, {
 		}
 	}
   	if(!dirs.length)
-  	{
+{debugger 
   		 this.updateChoices('');
   		 return;
   	}

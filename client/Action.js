@@ -4,9 +4,9 @@
 Class.create("Action", {
 
 	/**
-	 * @var String Default "/image/action/ICON_SIZE"
+	 * @var String Default "/image/actions/ICON_SIZE"
 	 */
-	__DEFAULT_ICON_PATH : "/image/action/ICON_SIZE",
+	__DEFAULT_ICON_PATH : "/image/actions/ICON_SIZE",
 	
 	/**
 	 * Standard constructor
@@ -400,7 +400,7 @@ Class.create("Action", {
 				menuItems.push({
 					name: itemText,
 					alt: I18N[item.title],
-					image: resolveImageSource(item.src, '/image/action/ICON_SIZE', 22),
+					image: resolveImageSource(item.src, '/image/actions/ICON_SIZE', 22),
 					isDefault: !!(item.isDefault),
 					callback: function(e){this.apply([item]);}.bind(this)
 				});
@@ -427,7 +427,7 @@ Class.create("Action", {
 						menuItems.push({
 							name: action.getKeyedText(),
 							alt: action.options.title,
-							image: resolveImageSource(action.options.src, '/image/action/ICON_SIZE', 16),						
+							image: resolveImageSource(action.options.src, '/image/actions/ICON_SIZE', 16),						
 							callback: function(e){this.apply();}.bind(action)
 						});
 			  		}, this);

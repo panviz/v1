@@ -177,8 +177,8 @@ Class.create("Toolbar", {
 	initCarousel : function(){
 		this.outer = this.element;
 		var origHeight = this.outer.getHeight()-1;
-		this.prev = new Element("a", {className: 'carousel-control', rel: 'prev', style: 'height:'+origHeight+'px;'}).update(new Element('img', {src: THEME.path+'/image/arrow_left.png'}));
-		this.next = new Element("a", {className: 'carousel-control', rel: 'next', style: 'float:right; height:'+origHeight+'px;'}).update(new Element('img', {src: THEME.path+'/image/arrow_right.png'}));
+		this.prev = new Element("a", {className: 'carousel-control', rel: 'prev', style: 'height:'+origHeight+'px;'}).update(new Element('img', {src: THEME.path+'/images/arrow_left.png'}));
+		this.next = new Element("a", {className: 'carousel-control', rel: 'next', style: 'float:right; height:'+origHeight+'px;'}).update(new Element('img', {src: THEME.path+'/images/arrow_right.png'}));
 		this.inner = new Element("div", {id: 'buttons_inner', style: 'width:1000px;'});
 		this.outer.insert({before: this.prev});
 		this.outer.insert({before: this.next});
@@ -243,7 +243,7 @@ Class.create("Toolbar", {
 			this.buildActionBarSubMenu(button, action);// TODO
             button.setStyle({position: 'relative'});
 			var arrowDiv = new Element('div', {className: 'actionbar_arrow_div'});
-			arrowDiv.insert(new Element('img',{src: THEME.path+'/image/arrow_down.png',height: 6,width: 10,border: 0}));
+			arrowDiv.insert(new Element('img',{src: THEME.path+'/images/arrow_down.png',height: 6,width: 10,border: 0}));
 			arrowDiv.imgRef = img;
             button.insert(arrowDiv);
 		}else if(!this.options.skipBubbling) {

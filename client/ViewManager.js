@@ -7,6 +7,7 @@ Class.create("ViewManager", {
 		this._views = $H();
 		this._current = null;
 		this.modal = new Modal();
+		//TODO change event for editor start
 		document.observeOnce("app:component_config_changed", function(event){
 			$$(".view").each(function(element){
 				//TODO mime should be set into editors data while xml parsing

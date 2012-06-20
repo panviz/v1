@@ -51,16 +51,14 @@ var xml2json = function(files){
 }
 
 var replace = function(files){
-	var exp = 'mimes\/';
-	var sub = 'mime\/';
+	var exp = 'ajxp_';
+	var sub = '';
 	var counter = 0;
 	var process = [];
-	var regxp = new RegExp(exp, 'g');
+	var regxp = new RegExp(exp);
 	files.forEach(function(file){
 		if (file.match(/\.js|\.txt|\.html|\.css|\.xml/gi)) {
-			if (!file.match(/parse.js|node_modules/g)){
-				process.push(path + '/' + file);
-			}
+			process.push(path + '/' + file);
 		}
 	})
 	process.forEach(function(file){
@@ -71,8 +69,7 @@ var replace = function(files){
 			var line = f.getNextLine();
 			if (line.match(regxp)){
 				//console.log("LINE: " + line);
-				var index = line.indexOf(exp);
-				console.log('\x1b[36m'+exp+'\x1b[90m' + line.substr(index+exp.length, 110) + '\x1b[90m');
+				console.log(line.substr(line.indexOf(exp)));
 				line = line.replace(regxp, sub);
 				changed = true;
 				counter++
@@ -80,8 +77,8 @@ var replace = function(files){
 			data += (line +'\n');
 		}
 		if (changed){
-			console.log('\x1b[31m'+counter+'\x1b[32m' + ': '+ file)
-			fs.writeFileSync(file, data);
+			console.log(counter + ': '+ file)
+			//fs.writeFileSync(file, data);
 		}
 	})
 }

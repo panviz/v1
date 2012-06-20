@@ -117,10 +117,10 @@ function formatDate(dateObject, format){
 function parseUrl(data) {
 	var matches = $A();
     //var e=/((http|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+\.[^#?\s]+)(#[\w\-]+)?/;
-    var detect=/(((ajxp\.)(\w+)):\/)?\/?([^:\/\s]+)((\/\w+)*\/)(.*)(#[\w\-]+)?/g;
+    var detect=/(((\w+)):\/)?\/?([^:\/\s]+)((\/\w+)*\/)(.*)(#[\w\-]+)?/g;
     var results = data.match(detect);
     if(results && results.length){
-    	var e=/^((ajxp\.(\w+)):\/)?\/?([^:\/\s]+)((\/\w+)*\/)(.*)(#[\w\-]+)?$/;
+    	var e=/^((.(\w+)):\/)?\/?([^:\/\s]+)((\/\w+)*\/)(.*)(#[\w\-]+)?$/;
     	for(var i=0;i<results.length;i++){
     		if(results[i].match(e)){
 		        matches.push({url: RegExp['$&'],
@@ -154,17 +154,17 @@ function setCookie(name, value){
 		path: '/',
 		secure: true
 	});
-	cookieJar.put(''+name, value);	
+	cookieJar.put(name, value);	
 }
 
 function getCookie(name){
 	var cookieJar = new CookieJar({path: '/',secure: true});
-	return cookieJar.get(''+name);	
+	return cookieJar.get(name);	
 }
 
 function deleteCookie(name){
 	var cookieJar = new CookieJar({path: '/',secure: true});
-	cookieJar.remove(''+name);	
+	cookieJar.remove(name);	
 }
 
 function refreshPNGImages(element){
@@ -489,7 +489,7 @@ function getDomNodeText(node){
 	return null;
 }
 
-function ajxpCorners(oElement, cornersString)
+function corners(oElement, cornersString)
 {
 	var tr, tl, bl, br;
 	if(cornersString == null)
@@ -686,7 +686,7 @@ function scrollByTouch(event, direction, targetId){
 }
 
 function attachMobileScroll(targetId, direction){
-	if(!window.ajxpMobile) return;
+	if(!window.mobile) return;
 	if(typeof (targetId) == "string"){
 		var target = $(targetId);
 	}else{

@@ -33,7 +33,6 @@
 		"processing" : {
 			"clientCallback" : {
 				"prepareModal" : "true",
-				"$t" : "var path;if(window.actionArguments && window.actionArguments.length>0){path = window.actionArguments[0];if(Object.isString(path)){path = new Item(path,false,getBaseName(path));}}else{userSelection = application.getUserSelection();if(userSelection && userSelection.isUnique() && (userSelection.hasDir() || userSelection.hasMime([\"zip\"]))){path = userSelection.getUniqueNode();}}if(path){application.updateContextData(path);}"
 			},
 			"serverCallback" : {
 				"methodName" : "switchAction"
@@ -83,7 +82,6 @@
 		"processing" : {
 			"clientCallback" : {
 				"prepareModal" : "true",
-				"$t" : "var completeFunc = function(){var oForm = modal.getForm();if(!application.actionBar.configEditor){application.actionBar.configEditor = new ConfigEditor(oForm);}application.actionBar.configEditor.setForm(oForm);result = application.actionBar.configEditor.submitCreateUser();if(result) hideLightBox();return false;};var loadFunc = function(oForm){if(!application.actionBar.configEditor){application.actionBar.configEditor = new ConfigEditor(oForm);}application.actionBar.configEditor.setForm(oForm);application.actionBar.configEditor.loadCreateUserForm();new Protopass(oForm.down('input[name=\"new_user_pwd\"]'), {barContainer:$('pwd_strength_container'),barPosition:'bottom'});};modal.showDialogForm('Create User', 'create_user_box', loadFunc, completeFunc);"
 			},
 			"clientForm" : {
 				"id" : "create_user_box",
@@ -123,7 +121,6 @@
 		"processing" : {
 			"clientCallback" : {
 				"prepareModal" : "true",
-				"$t" : "modal.showDialogForm('Create Role', 'create_role_box');"
 			},
 			"clientForm" : {
 				"id" : "create_role_box",
@@ -161,12 +158,10 @@
 			"adminOnly" : "true"
 		},
 		"subMenu" : {
-			"dynamicBuilder" : "var context = window.builderContext;context.builderMenuItems = $A([]);context.builderMenuItems.push({name:I18N['conf.90'],alt:I18N[300],isDefault : true,image:resolveImageSource('image/action/22/hdd_external_unmount.png', '',  22),callback:function(e){window.createRepoCmd = \"repository\";this.options.src = 'hdd_external_unmount.png';this.options.title = I18N[300];this.apply();}.bind(context)} );context.builderMenuItems.push({name:I18N['conf.91'],alt:I18N['conf.92'],isDefault : false,image:resolveImageSource('image/action/22/hdd_external_mount.png', '',  22),callback:function(e){window.createRepoCmd = \"template\";this.options.src = 'hdd_external_mount.png';this.options.title = I18N['conf.92'];this.apply();}.bind(context)} );"
 		},
 		"processing" : {
 			"clientCallback" : {
 				"prepareModal" : "true",
-				"$t" : "var loadFunc = function(oForm){application.getUserSelection().updateFormOrUrl(oForm);if(!application.actionBar.configEditor){application.actionBar.configEditor = new ConfigEditor(oForm);}application.actionBar.configEditor.setForm(oForm);application.actionBar.configEditor.initCreateRepoWizard(window.createRepoCmd);};modal.showDialogForm('Create Repository', 'create_repository_box', loadFunc, null, null, false, true);"
 			},
 			"clientForm" : {
 				"id" : "create_repository_box",
@@ -213,7 +208,6 @@
 		"processing" : {
 			"clientCallback" : {
 				"prepareModal" : "false",
-				"$t" : "var callback = function(node, newValue){var conn = new Connexion();conn.addParameter('get_action', 'edit');conn.addParameter('sub_action', 'edit_repository_label');conn.addParameter('repository_id', node.getMetadata().get('repository_id'));conn.addParameter('newLabel', newValue);conn.onComplete = function(transport){application.actionBar.parseXmlMessage(transport.responseXML);};conn.sendSync();};if(application.getUserSelection() && application.getUserSelection().getSelectionSource() && application.getUserSelection().getSelectionSource().switchCurrentLabelToEdition) {application.getUserSelection().getSelectionSource().switchCurrentLabelToEdition(callback);}"
 			},
 			"serverCallback" : {
 				"methodName" : "switchAction"
@@ -259,11 +253,9 @@
 		"processing" : {
 			"clientCallback" : {
 				"prepareModal" : "true",
-				"$t" : "var userSelection =  application.getUserSelection();var loadFunc = function(oForm){application.getUserSelection().updateFormOrUrl(oForm);if(!application.actionBar.configEditor){application.actionBar.configEditor = new ConfigEditor(oForm);}application.actionBar.configEditor.setForm(oForm);application.actionBar.configEditor.loadUsers(userSelection);};modal.showDialogForm('Batch Edition', 'edit_config_box', loadFunc, function(){hideLightBox();}, null, true);"
 			},
 			"clientListener" : {
 				"name" : "selectionChange",
-				"$t" : "if(application){var userSelection = application.getUserSelection();var action = application.getActionBar().getActionByName(\"batch_users_roles\");if(action){if(userSelection.isUnique()){action.selectionContext.dir = true;action.selectionContext.file = false;}else{action.selectionContext.dir = false;action.selectionContext.file = true;}}}"
 			},
 			"serverCallback" : {
 				"methodName" : "switchAction"
@@ -308,7 +300,6 @@
 		"processing" : {
 			"clientCallback" : {
 				"prepareModal" : "true",
-				"$t" : "var userSelection =  application.getUserSelection();var node = userSelection.getUniqueNode();var meta = node.getMetadata();var mime = meta.get(\"mime\");if(mime == \"user\" || mime == \"user_editable\" || mime == \"role\"){var loadFunc = function(oForm){application.getUserSelection().updateFormOrUrl(oForm);if(!application.actionBar.configEditor){application.actionBar.configEditor = new ConfigEditor(oForm);}application.actionBar.configEditor.setForm(oForm);if(mime == \"role\"){application.actionBar.configEditor.loadRole(meta.get(\"text\"));}else{application.actionBar.configEditor.loadUser(meta.get(\"text\"));}};modal.showDialogForm('Edit Online', 'edit_config_box', loadFunc, function(){hideLightBox();}, null, true);}else if(mime == \"plugin\"){var loadFunc = function(oForm){application.getUserSelection().updateFormOrUrl(oForm);if(!application.actionBar.configEditor){application.actionBar.configEditor = new ConfigEditor(oForm);}application.actionBar.configEditor.setForm(oForm);application.actionBar.configEditor.loadPluginConfig(node.getMetadata().get(\"plugin_id\"));};var closeFunc = function(oForm){var toSubmit = new Hash();var configEditor = application.actionBar.configEditor;toSubmit.set(\"plugin_id\", node.getMetadata().get(\"plugin_id\"));var missing = configEditor.formManager.serializeParametersInputs(oForm, toSubmit, 'DRIVER_OPTION_');if(missing){configEditor.displayMessage(\"ERROR\", I18N['conf.36']);}else{configEditor.submitForm('edit', 'edit_plugin_options', toSubmit);hideLightBox();}};modal.showDialogForm('Edit Online', 'edit_repo_box', loadFunc, closeFunc);}else{var loadFunc = function(oForm){application.getUserSelection().updateFormOrUrl(oForm);if(!application.actionBar.configEditor){application.actionBar.configEditor = new ConfigEditor(oForm);}application.actionBar.configEditor.setForm(oForm);application.actionBar.configEditor.loadRepository(meta.get(\"repository_id\"));};var closeFunc = function(){var toSubmit = new Hash();var configEditor = application.actionBar.configEditor;if(!configEditor.currentRepoWriteable){hideLightBox();return;}toSubmit.set(\"repository_id\", configEditor.currentRepoId);var missing = configEditor.formManager.serializeParametersInputs(configEditor.currentForm, toSubmit, 'DRIVER_OPTION_', configEditor.currentRepoIsTemplate);if(missing && !configEditor.currentRepoIsTemplate){configEditor.displayMessage(\"ERROR\", I18N['conf.36']);}else{configEditor.submitForm('edit_repository', 'edit_repository_data', toSubmit, null, function(){this.loadRepList();this.loadUsers();}.bind(configEditor));hideLightBox();}};modal.showDialogForm('Edit Online', 'edit_repo_box', loadFunc, closeFunc);}"
 			},
 			"clientForm" : {
 				"id" : "edit_config_box",
@@ -385,7 +376,6 @@
 		"processing" : {
 			"clientCallback" : {
 				"prepareModal" : "true",
-				"$t" : "var userSelection =  application.getUserSelection();var node = userSelection.getUniqueNode();var meta = node.getMetadata();var deleteMessage, fieldName, fieldValue;if(meta.get(\"mime\") == \"user_editable\"){deleteMessage = I18N['conf.34'];fieldName = \"user_id\";fieldValue = meta.get(\"text\");}else if(meta.get(\"mime\") == \"role\"){deleteMessage = I18N['shared.11'];fieldName = \"role_id\";fieldValue = meta.get(\"text\");}else if(meta.get(\"mime\") == \"shared_file\"){deleteMessage = I18N['shared.11'];fieldName = \"shared_file\";fieldValue = meta.get(\"filename\");}else{deleteMessage = I18N['conf.35'];fieldName = \"repository_id\";fieldValue = meta.get(\"repository_id\");}var onLoad = function(oForm){$(oForm).select('span[id=\"delete_message\"]')[0].update(deleteMessage);var hidden = $(oForm).select('input[type=\"hidden\"]')[0];hidden.setAttribute(\"name\", fieldName);hidden.setAttribute(\"value\", fieldValue);};modal.showDialogForm('Delete', 'delete_config_form', onLoad, function(){var oForm = modal.getForm();application.actionBar.submitForm(oForm);if (userSelection.isMultiple()) {var i = 1;var hidden = $(oForm).select('input[type=\"hidden\"]')[0];while (true) {try {var node = userSelection.getNode(i);var meta = node.getMetadata();var value;if(meta.get(\"mime\") == \"user_editable\"){value = meta.get(\"text\");}else if(meta.get(\"mime\") == \"shared_file\"){value = meta.get(\"filename\");}else{value = meta.get(\"text\");}hidden.setAttribute(\"value\", value);application.actionBar.submitForm(oForm);i++;} catch (e){break;}}}hideLightBox(true);return false;});"
 			},
 			"clientForm" : {
 				"id" : "delete_config_form",
@@ -433,7 +423,6 @@
 		"processing" : {
 			"clientCallback" : {
 				"prepareModal" : "true",
-				"$t" : "var onLoad = function(oForm){var userSelection =  application.getUserSelection();var nodes = userSelection.getSelectedNodes();var firstNode = userSelection.getUniqueNode();var copyDiv = $(oForm).select('textarea[id=\"text_copy\"]')[0];var attributes = ['date','ip','level','user','action','params'];var message = attributes.join(\"\\t\") + \"\\n\\n\";nodes.each(function(node){var meta = node.getMetadata();for(var i=0;i<attributes.length;i++){var attName = attributes[i];if(attName == \"label\") attName = \"text\";message += meta.get(attName) + '\\t';}message += '\\n';});copyDiv.setValue(message);copyDiv.select();};modal.showDialogForm('Delete', 'copy_as_text', onLoad, function(){hideLightBox(true);return false;},null,true);"
 			},
 			"clientForm" : {
 				"id" : "copy_as_text",
