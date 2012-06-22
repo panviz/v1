@@ -71,14 +71,14 @@ Class.create("UserWidget", {
 		var actions = app.actionBar.getActionsForWidget("UserWidget", this.element.id).each(function(action){
 			menuItems.push({
 				name: action.getKeyedText(),
-				alt: action.options.title,
-				image: resolveImageSource(action.options.src, '/image/action/ICON_SIZE', 16),						
+				alt: action.p.title,
+				image: resolveImageSource(action.p.src, '/image/action/ICON_SIZE', 16),						
 				callback: function(e){this.apply();}.bind(action)
 			});			
 		});
 		
 		if(this.menu){
-			this.menu.options.menuItems = menuItems;
+			this.menu.p.menuItems = menuItems;
 			this.menu.refreshList();
 		}else{			
 			this.menu = new Proto.Menu({			

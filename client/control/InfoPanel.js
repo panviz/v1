@@ -8,19 +8,19 @@ Class.create("InfoPanel", Pane, {
 	 * @param $super klass Superclass reference
 	 * @param element HTMLElement
 	 */
-	initialize : function($super, element, options){
-		$super(element, options);
+	initialize : function($super, element, p){
+		$super(element, p);
 		disableTextSelection(element);
         var id = element.id;
         var container = new Element("div", {className: "panelContent", id: "ip_content_"+id});
-        if(options.replaceScroller){
+        if(p.replaceScroller){
             this.scroller = new Element('div', {id: 'ip_scroller_'+id, className: 'scroller_track'});
             this.scroller.insert(new Element('div', {id: 'ip_scrollbar_handle_'+id, className: 'scroller_handle'}));
             this.element.insert(this.scroller);
             container.setStyle({overflow: "hidden"});
         }
         this.element.insert(container);
-        if(options.replaceScroller){
+        if(p.replaceScroller){
             this.scrollbar = new Control.ScrollBar('ip_content_'+id,'ip_scroller_'+id, {fixed_scroll_distance: 50});
         }
         if(window.mobile){
@@ -39,7 +39,7 @@ Class.create("InfoPanel", Pane, {
 			}
 		}.bind(this);
 		this.userLogHandler = this.clearPanels.bind(this);
-		if(!this.options.skipObservers){
+		if(!this.p.skipObservers){
             document.observe("app:actions_refreshed", this.updateHandler );
             document.observe("app:component_config_changed", this.componentConfigHandler );
             document.observe("app:user_logged", this.userLogHandler );
@@ -49,7 +49,7 @@ Class.create("InfoPanel", Pane, {
 	 * Clean destroy of the panel, remove listeners
 	 */
 	destroy : function(){
-        if(!this.options.skipObservers){
+        if(!this.p.skipObservers){
             document.stopObserving("app:actions_refreshed", this.updateHandler );
             document.stopObserving("app:component_config_changed", this.componentConfigHandler );
             document.stopObserving("app:user_logged", this.userLogHandler );
@@ -87,6 +87,7 @@ Class.create("InfoPanel", Pane, {
 	 * Updates content by finding the right template and applying it.
 	 */
 	update : function(objectOrEvent){
+						 debugger
 		if(!this.element) return;
         if(objectOrEvent.__className && objectOrEvent.__className == "Node"){
             var passedNode = objectOrEvent;
@@ -300,7 +301,7 @@ Class.create("InfoPanel", Pane, {
 	 * @param selectionType String 'empty', 'multiple', 'unique'
 	 */
 	addActions : function(selectionType){
-        if(this.options.skipActions) return;
+        if(this.p.skipActions) return;
 		var actions = app.actionBar.getActionsForWidget("InfoPanel", this.element.id);
 		if(!actions.length) return;
 		var actionString = '<div class="panelHeader infoPanelGroup">'+I18N[5]+'</div><div class="infoPanelActions">';
@@ -309,7 +310,7 @@ Class.create("InfoPanel", Pane, {
 			if(selectionType == 'empty' && action.context.selection) return;
 			if(selectionType == 'multiple' && action.selectionContext.unique) return; 
 			if(selectionType == 'unique' && (!action.context.selection || action.selectionContext.multipleOnly)) return;			
-			actionString += '<a href="" onclick="app.actionBar.fireAction(\''+action.options.name+'\');return false;"><img src="'+resolveImageSource(action.options.src, '/image/action/ICON_SIZE', 16)+'" width="16" height="16" align="absmiddle" border="0"> '+action.options.title+'</a>';
+			actionString += '<a href="" onclick="app.actionBar.fireAction(\''+action.p.name+'\');return false;"><img src="'+resolveImageSource(action.p.src, '/image/action/ICON_SIZE', 16)+'" width="16" height="16" align="absmiddle" border="0"> '+action.p.title+'</a>';
 			count++;
 		}.bind(this));
 		actionString += '</div>';
@@ -337,7 +338,7 @@ Class.create("InfoPanel", Pane, {
 				}
 			}
 		}
-		return '<img src="' + resolveImageSource(item.getIcon(), '/image/mimes/ICON_SIZE',64) + '" height="64" width="64">';
+		return '<img src="' + resolveImageSource(item.getIcon(), '/image/mime/ICON_SIZE',64) + '" height="64" width="64">';
 	},
 	/**
 	 * Parses config node

@@ -14,7 +14,6 @@ Class.create("ActionsManager", {
 		
 		this.bgManager = new BackgroundManager(this);		
 		this.subMenus = [];				
-		this.actions = new Hash();
 		this.defaultActions = new Hash();
 		this.toolbars = new Hash();		
 		document.observe("app:context_changed", function(event){
@@ -41,14 +40,14 @@ Class.create("ActionsManager", {
 	
 	/**
 	 * Stores the currently logged user object
-	 * @param oUser User User instance
+	 * @param user Object
 	 */
-	setUser : function(oUser){ 	
-		this.oUser = oUser;
-		if(oUser != null && app  && oUser.id != 'guest' && oUser.getPreference('lang') != null 
-			&& oUser.getPreference('lang') != "" 
-			&& oUser.getPreference('lang') != app.currentLanguage) { 
-			app.loadI18NMessages(oUser.getPreference('lang'));
+	setUser : function(user){ 	
+		this.user = user;
+		if(user != null && app  && user.id != 'guest' && user.getPreference('lang') != null 
+			&& user.getPreference('lang') != "" 
+			&& user.getPreference('lang') != app.currentLanguage) { 
+			app.loadI18NMessages(user.getPreference('lang'));
 		}
 	},
 			
@@ -68,7 +67,7 @@ Class.create("ActionsManager", {
 		var contextActions = new Array();
 		var defaultGroup;
         var contextActionsGroup = {};
-		this.actions.each(function(pair){
+		this._actions.each(function(pair){
 			var action = pair.value;
 			if(!action.context.contextMenu) return;
 			if(actionsSelectorAtt == 'selectionContext' && !action.context.selection) return;
@@ -92,19 +91,19 @@ Class.create("ActionsManager", {
 					if(userSelection.isUnique() && (userSelection.hasDir() || userSelection.hasMime(['browsable_archive']))){
 						defaultAction = 'dir';
 					}
-					if(this.defaultActions.get(defaultAction) && action.options.name == this.defaultActions.get(defaultAction)){
+					if(this.defaultActions.get(defaultAction) && action.p.name == this.defaultActions.get(defaultAction)){
 						isDefault = true;
 					}
 				}
 			}
 			var menuItem = {
 				name: action.getKeyedText(),
-				alt: action.options.title,
-				image: resolveImageSource(action.options.src, '/image/actions/ICON_SIZE', 16),
+				alt: action.p.title,
+				image: resolveImageSource(action.p.src, '/image/action/ICON_SIZE', 16),
 				isDefault: isDefault,
 				callback: function(e){this.apply();}.bind(action)
 			};
-			if(action.options.subMenu){
+			if(action.p.subMenu){
 				menuItem.subMenu = [];
 				if(action.subMenuItems.staticOptions){
 					menuItem.subMenu = action.subMenuItems.staticOptions;
@@ -138,19 +137,6 @@ Class.create("ActionsManager", {
 	},
 	
 	/**
-	 * DEPRECATED, use getActionsForWidget instead!
-	 * @returns $A()
-	 */
-	getInfoPanelActions : function(){
-		var actions = $A([]);
-		this.actions.each(function(pair){
-			var action = pair.value;
-			if(action.context.infoPanel && !action.deny) actions.push(action);
-		});
-		return actions;
-	},
-	
-	/**
 	 * Generic method to get actions for a given component part.
 	 * @param className String 
 	 * @param widgetId String
@@ -158,7 +144,7 @@ Class.create("ActionsManager", {
 	 */
 	getActionsForWidget : function(className, widgetId){
 		var actions = $A([]);
-		this.actions.each(function(pair){
+		this._actions.each(function(pair){
 			var action = pair.value;
 			if(action.context.widgets && (action.context.widgets.include(className+'::'+widgetId)||action.context.widgets.include(className)) && !action.deny) actions.push(action);
 		});
@@ -174,7 +160,7 @@ Class.create("ActionsManager", {
 		if(actionName != null){
 			arguments[0] = actionName;
 			if(actionName == "ls"){
-				var action = this.actions.get(actionName);
+				var action = this._actions.get(actionName);
 				if(action) action.enable(); // Force enable on default action
 			}
 			this.fireAction.apply(this, arguments);
@@ -186,7 +172,7 @@ Class.create("ActionsManager", {
 	 * @param buttonAction String The name of the action
 	 */
 	fireAction : function (buttonAction)	{		
-		var action = this.actions.get(buttonAction);
+		var action = this._actions.get(buttonAction);
 		if(action != null) {
 			var args = $A(arguments);
 			args.shift();
@@ -292,7 +278,7 @@ Class.create("ActionsManager", {
 	 */
 	getDefaultAction : function(defaultName){
 		if(this.defaultActions.get(defaultName)){
-			return this.actions.get(this.defaultActions.get(defaultName));
+			return this._actions.get(this.defaultActions.get(defaultName));
 		}
 		return null;
 	},
@@ -391,7 +377,7 @@ Class.create("ActionsManager", {
 					Connection.SECURE_TOKEN = childs[i].getAttribute("secure_token");
 					var parts = window.serverAccessPath.split("?secure_token");
 					window.serverAccessPath = parts[0] + "?secure_token=" + Connection.SECURE_TOKEN;
-					bootstrap.parameters.set('serverAccess', window.serverAccessPath);
+					bootstrap.p.set('serverAccess', window.serverAccessPath);
 				}
                 if($("generic_dialog_box") && $("generic_dialog_box").down(".login_error")){
                     $("generic_dialog_box").down(".login_error").remove();
@@ -461,7 +447,7 @@ Class.create("ActionsManager", {
 			userSelection = app.getUserSelection();
 			if(userSelection.isEmpty()) userSelection = null;
 		} 
-		this.actions.each(function(pair){
+		this._actions.each(function(pair){
 			pair.value.fireSelectionChange(userSelection);
 		});		
 		document.fire("app:actions_refreshed");
@@ -472,25 +458,22 @@ Class.create("ActionsManager", {
 	 * by triggering app:actions_refreshed event.
 	 */
 	fireContextChange : function(){
-		var crtRecycle = false;
-		var crtInZip = false;
-		var crtIsRoot = false;
-		var crtMime;
-		
 		if(app && app.getContextItem()){ 
-			var crtItem = app.getContextItem();
-			crtRecycle = (crtItem.getMime() == "recycle");
-			crtInZip = crtItem.hasMimeInBranch("browsable_archive");
-			crtIsRoot = crtItem.isRoot();
-			crtMime = crtItem.getMime();			
+			var item = app.getContextItem(),
+					isRecycle = item.getMime() == "recycle",
+					isInZip = item.hasMimeInBranch("browsable_archive") || false,
+					isRoot = item.isRoot() || false,
+					mime = item.getMime();			
 		}	
-		this.actions.each(function(pair){			
-			pair.value.fireContextChange(this.usersEnabled, 
-									 this.oUser, 									 
-									 crtRecycle, 
-									 crtInZip, 
-									 crtIsRoot,
-									 crtMime);
+		this._actions.each(function(name){
+			name.value.fireContextChange({
+				usersEnabled: this.usersEnabled, 
+				user: this.user, 									 
+				isRecycle: isRecycle || false, 
+				isInZip: isInZip, 
+				isRoot: isRoot,
+				mime: mime || ''
+			});
 		}.bind(this));
 		document.fire("app:actions_refreshed");
 	},
@@ -499,10 +482,10 @@ Class.create("ActionsManager", {
 	 * Remove all actions
 	 */
 	removeActions : function(){
-		this.actions.each(function(pair){
+		this._actions.each(function(pair){
 			pair.value.remove();
 		});
-		this.actions = new Hash();
+		this._actions = new Hash();
 		this.clearRegisteredKeys();
 	},
 	
@@ -526,11 +509,12 @@ Class.create("ActionsManager", {
 		}
 		if(app && app.guiActions){
 			app.guiActions.each(function(pair){
-				var act = pair.value;
-				this.registerAction(act);
+				var action = pair.value;
+				this.registerAction(action);
 			}.bind(this));
 		}
-		document.fire("app:actions_loaded", this.actions);
+		document.fire("app:actions_loaded", this._actions);
+										 debugger
 		this.fireContextChange();
 		this.fireSelectionChange();		
 	},
@@ -541,26 +525,26 @@ Class.create("ActionsManager", {
 	 */
 	registerAction : function(action){
 		var actionName = action.__className;
-		this.actions.set(actionName, action);
-		if(action.defaults){
-			for(var key in action.defaults) this.defaultActions.set(key, actionName);
+		this._actions.set(actionName, action);
+		if(action.p.defaults){
+			for(var key in action.p.defaults) this.defaultActions.set(key, actionName);
 		}
-		if(action.options.hasAccessKey){
-			this.registerKey(action.options.accessKey, actionName);
+		if(action.p.hasAccessKey){
+			this.registerKey(action.p.accessKey, actionName);
 		}
-		if(action.options.specialAccessKey){
-			this.registerKey("key_" + action.options.specialAccessKey, actionName);
+		if(action.p.specialAccessKey){
+			this.registerKey("key_" + action.p.specialAccessKey, actionName);
 		}
 		action.setManager(this);
 	},
 	
 	/**
-	 * Find an action by its name
+	 * Find an action by name
 	 * @param actionName String
 	 * @returns Action
 	 */
-	getActionByName : function(actionName){
-		return this.actions.get(actionName);		
+	getAction : function(actionName){
+		return this._actions.get(actionName);		
 	},
 	
 	/**

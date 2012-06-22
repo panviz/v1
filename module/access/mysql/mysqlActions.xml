@@ -19,15 +19,17 @@
 					var path;					
 					if(window.actionArguments && window.actionArguments.length>0){
 						path = window.actionArguments[0];
-						if(Object.isString(path)){path = new Item(path,false,getBaseName(path));}
+						if(Object.isString(path)){
+							path = new Item(path, {"isLeaf": false, "label": getBaseName(path)});
+						}
 					}else{
-						userSelection = application.getUserSelection();
+						userSelection = app.getUserSelection();
 						if(userSelection && userSelection.isUnique() && (userSelection.hasDir() || userSelection.hasMime(["zip"]))){
-							path = userSelection.getUniqueNode();
+							path = userSelection.getUniqueItem();
 						}
 					}
 					if(path){
-						application.updateContextData(path);
+						app.updateContextData(path);
 					}						
 					]]></clientCallback>
 				<serverCallback methodName="switchAction"></serverCallback>
@@ -59,8 +61,8 @@
 				<clientCallback prepareModal="true"><![CDATA[					
 					var sTitle = I18N[187];
 					var loadFunc = function(oForm){
-						application.actionBar.sqlEditor = new SQLEditor(oForm);
-						application.actionBar.sqlEditor.createTableEditor();
+						app.actionBar.sqlEditor = new SQLEditor(oForm);
+						app.actionBar.sqlEditor.createTableEditor();
 					};
 					modal.showDialogForm('Create Table', 'mysql_edit_table', loadFunc, null, null, true, true);
 					]]></clientCallback>
@@ -77,11 +79,11 @@
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
 					var loadFunc = function(oForm){
-						application.actionBar.sqlEditor = new SQLEditor(oForm);
-						application.actionBar.sqlEditor.createRecordEditor();
+						app.actionBar.sqlEditor = new SQLEditor(oForm);
+						app.actionBar.sqlEditor.createRecordEditor();
 					};
 					var completeFunc = function(){
-						application.actionBar.sqlEditor.submitRecordForm();
+						app.actionBar.sqlEditor.submitRecordForm();
 						return false;
 					};
 					modal.showDialogForm('Add Record', 'mysql_edit_record', loadFunc, completeFunc, null);
@@ -99,11 +101,11 @@
 			<rightsContext noUser="true" userLogged="only" read="true" write="true" adminOnly=""></rightsContext>
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
-					var currentTable = application.getContextNode().getPath();
+					var currentTable = app.getContextItem().getPath();
 					var sTitle = I18N[187]+currentTable;
 					var loadFunc = function(oForm){
-						application.actionBar.sqlEditor = new SQLEditor(oForm);
-						application.actionBar.sqlEditor.createTableEditor(currentTable);
+						app.actionBar.sqlEditor = new SQLEditor(oForm);
+						app.actionBar.sqlEditor.createTableEditor(currentTable);
 					};
 					modal.showDialogForm('Edit Table Columns', 'mysql_edit_table', loadFunc, null, null, true, true);
 					]]></clientCallback>
@@ -208,13 +210,13 @@
 			<rightsContext noUser="true" userLogged="only" read="true" write="true" adminOnly=""></rightsContext>
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
-					var userSelection =  application.getUserSelection();					
+					var userSelection =  app.getUserSelection();					
 					var loadFunc = function(oForm){
-						application.actionBar.sqlEditor = new SQLEditor(oForm);
-						application.actionBar.sqlEditor.createRecordEditor(userSelection);
+						app.actionBar.sqlEditor = new SQLEditor(oForm);
+						app.actionBar.sqlEditor.createRecordEditor(userSelection);
 					};
 					var completeFunc = function(){
-						application.actionBar.sqlEditor.submitRecordForm();
+						app.actionBar.sqlEditor.submitRecordForm();
 						return false;
 					};					
 					modal.showDialogForm('Edit Online', 'mysql_edit_record', loadFunc, completeFunc, null);
@@ -242,8 +244,8 @@
 					};
 					modal.showDialogForm('Delete', 'delete_form', onLoad, function(){
 						var oForm = modal.getForm();
-						application.getUserSelection().updateFormOrUrl(oForm);
-						application.actionBar.submitForm(oForm);
+						app.getUserSelection().updateFormOrUrl(oForm);
+						app.actionBar.submitForm(oForm);
 						hideLightBox(true);
 						return false;
 					});
@@ -271,8 +273,8 @@
 					};
 					modal.showDialogForm('Delete', 'delete_record_form', onLoad, function(){
 						var oForm = modal.getForm();
-						application.getUserSelection().updateFormOrUrl(oForm);
-						application.actionBar.submitForm(oForm);
+						app.getUserSelection().updateFormOrUrl(oForm);
+						app.actionBar.submitForm(oForm);
 						hideLightBox(true);
 						return false;
 					});

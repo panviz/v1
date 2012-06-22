@@ -57,6 +57,6 @@ Modal.js
 FormManager.js
 ActivityMonitor.js
 ViewManager.js
-actions/Navigation.js
-actions/Bookmark.js
-actions/Splash.js
+action/Navigation.js
+action/Bookmark.js
+action/Splash.js

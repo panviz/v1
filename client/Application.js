@@ -15,7 +15,7 @@ Class.create("Application", {
 	 */
 	initialize : function(params)
 	{	
-		this.parameters = params;
+		this.p = params;
 		this._initLoadRep = params.get("default_repository") || "";
 		this._initObj = true ;
 		this.usersEnabled = params.get("usersEnabled");
@@ -30,10 +30,10 @@ Class.create("Application", {
 		//this._initDefaultDisp = 'list';
 		this.historyCount = 0;
 		this._guiComponentsConfigs = new Hash();
-		this.ui = params.get("ui");
-		this.appTitle = this.ui.title;
+		this._ui = params.get("ui");
+		this.title = this._ui.title;
 		this.currentLanguage = params.get("currentLanguage");
-		this.element = this.ui.theme.element;
+		this.element = this._ui.theme.element;
 	},
 	
 	/**
@@ -49,9 +49,9 @@ Class.create("Application", {
 		modal.initForms();
 		this._setHistory();
 		this.activityMonitor = new ActivityMonitor(
-			window.bootstrap.parameters.get('session_timeout'), 
-			window.bootstrap.parameters.get('client_timeout'), 
-			window.bootstrap.parameters.get('client_timeout_warning'));
+			window.bootstrap.p.get('session_timeout'), 
+			window.bootstrap.p.get('client_timeout'), 
+			window.bootstrap.p.get('client_timeout_warning'));
 		  
 		this.guiLoaded = false;
 
@@ -76,6 +76,7 @@ Class.create("Application", {
 			document.fire('app:loaded');
 		}, 200);		
 	},
+
 	/**
 	 * Loads the Registry, an image of the application in its current state
 	 * sent by the server.
@@ -90,38 +91,39 @@ Class.create("Application", {
 		}
 		sync ? connection.sendSync() : connection.sendAsync();
 	},
+
 	_onRegistryLoaded : function(transport){
 		var data = transport.responseText.evalJSON();
 		if(data.type == 'registry'){
 			this._registry = data;
 			modal.updateLoadingProgress('Registry: Done');
 			document.fire("app:registry_loaded", this._registry);
-			this.refreshExtensionsRegistry();
+
+			//this.refreshExtensionsRegistry();
+
 			//TODO add user on server to registry
-			//this.logXmlUser(this._registry.user);
-			if(this.user){
-				var repId = this.user.getActiveRepository();
-				var repList = this.user.getRepositoriesList();
-				var repositoryObject = repList.get(repId);
-				if(repositoryObject) repositoryObject.loadResources();
+			if(data.user){
+				this.user = new User(data.user);
+				document.fire("app:user_logged", this.user);
 			}
 			this.actionBar.initActions(this._registry.actions);
 			modal.updateLoadingProgress('Actions: Done');
 				
-			if(this.guiLoaded) {
+			//if(this.guiLoaded) {
 				//this.refreshTemplateParts();
 				//this.refreshGuiComponentConfigs();
-			} else {
-				document.observe("app:gui_loaded", function(){
+			//} else {
+				//document.observe("app:gui_loaded", function(){
 					//this.refreshTemplateParts();
 					//this.refreshGuiComponentConfigs();
-				}.bind(this));
-			}
+				//}.bind(this));
+			//}
 		this.loadActiveRepository();
 		}else if(data.type == "registry_part"){
 			this.refreshXmlRegistryPart(doc);
 		}
 	},
+
 	/**
 	 * Inserts a document fragment retrieved from server inside the full tree.
 	 * The item must contains the xPath attribute to locate it inside the registry.
@@ -164,20 +166,21 @@ Class.create("Application", {
 					if(lastInst){
 							lastInst.resize();
 					}
-					//for(var j=0;j<compRegistry.length;j++){
-							//var obj = compRegistry[j];
-							//if(Class.objectImplements(obj, "IFocusable")){
-									//obj.setFocusBehaviour();
-									//this._focusables.push(obj);
-							//}
-							//if(Class.objectImplements(obj, "IContextMenuable")){
-									//obj.setContextualMenu(this.contextMenu);
-							//}
-							//if(Class.objectImplements(obj, "IActionProvider")){
-									//if(!this.guiActions) this.guiActions = new Hash();
-									//this.guiActions.update(obj.getActions());
-							//}
-					//}
+					debugger
+					for(var j=0;j<compRegistry.length;j++){
+							var obj = compRegistry[j];
+							if(Class.objectImplements(obj, "IFocusable")){
+									obj.setFocusBehaviour();
+									this._focusables.push(obj);
+							}
+							if(Class.objectImplements(obj, "IContextMenuable")){
+									obj.setContextualMenu(this.contextMenu);
+							}
+							if(Class.objectImplements(obj, "IActionProvider")){
+									if(!this.guiActions) this.guiActions = new Hash();
+									this.guiActions.update(obj.getActions());
+							}
+					}
 			}
 	},
 
@@ -216,7 +219,7 @@ Class.create("Application", {
 			this.templatePartsToRestore = $A();
 		}
 		for(var i=0;i<parts.length;i++){
-            if(parts[i].getAttribute("theme") && parts[i].getAttribute("theme") != bootstrap.parameters.get("theme")){
+            if(parts[i].getAttribute("theme") && parts[i].getAttribute("theme") != bootstrap.p.get("theme")){
                 continue;
             }
 			var id = parts[i].getAttribute("id");
@@ -349,42 +352,19 @@ Class.create("Application", {
 	 * Try reading the cookie and sending it to the server
 	 */
 	tryLogUserFromCookie : function(){
-		var connection = new Connection();
 		var rememberData = retrieveRememberData();
 		if(rememberData!=null){
-			connection.addParameter('get_action', 'login');
-			connection.addParameter('userid', rememberData.user);
+		var connection = new Connection('/user/' + rememberData.user);
 			connection.addParameter('password', rememberData.pass);
 			connection.addParameter('cookie_login', 'true');
 			connection.onComplete = function(transport){
-                hideLightBox();
-                this.actionBar.parseXmlMessage(transport.responseXML);
-            }.bind(this);
+				hideLightBox();
+				this.actionBar.parseXmlMessage(transport.responseXML);
+			}.bind(this);
 			connection.sendSync();
 		}
 	},
 			
-	/**
-	 * Translate the XML answer to a new User object
-	 * @param documentElement DOMItem The user fragment
-	 * @param skipEvent Boolean Whether to skip the sending of app:user_logged event.
-	 */
-	logXmlUser: function(documentElement, skipEvent){
-		this.user = null;
-		var userItem = XPathSelectSingleItem(documentElement, "user");
-		if(userItem){
-			var userId = userItem.getAttribute('id');
-			var children = userItem.childItems;
-			if(userId){ 
-				this.user = new User(userId, children);
-			}
-		}
-		if(!skipEvent){
-			document.fire("app:user_logged", this.user);
-		}
-	},
-		
-	
 	/**
 	 * Find the current repository (from the current user) and load it. 
 	 */
@@ -422,12 +402,12 @@ Class.create("Application", {
 		if(!this.user) return;
 		document.observeOnce("app:registry_part_loaded", function(event){
 			if(event.memo != "user/repositories") return;
-			this.logXmlUser(this._registry, true);
+			this.user = new User(this._registry.user);
 			repId = this.user.getActiveRepository();
 			repList = this.user.getRepositoriesList();
 			document.fire("app:repository_list_refreshed", {list: repList,active: repId});			
 		}.bind(this));
-		this.loadXmlRegistry(false, "user/repositories");
+		this.loadRegistry(false, "user/repositories");
 	},
 	
 	/**
@@ -453,9 +433,10 @@ Class.create("Application", {
 				provider.initProvider(providerDef.options);
 			}
 			this._contextHolder.setItemProvider(provider);
-			var rootItem = new Item("/", false, repository.getLabel(), newIcon, provider);
+			var params = {"isLeaf": false, "label": repository.getLabel(), "icon": newIcon}
+			var rootItem = new Item("/", params, provider);
 		}else{
-			var rootItem = new Item("/", false, repository.getLabel(), newIcon);
+			var rootItem = new Item("/", {"isLeaf": false, "label": repository.getLabel(), "icon": newIcon});
 			// Default
 			this._contextHolder.setItemProvider(new RemoteItemProvider());
 		}
@@ -487,8 +468,6 @@ Class.create("Application", {
 		}else{
 			this.skipLsHistory = false;
 		}
-		
-									debugger
 		rootItem.load();
 	},
 
@@ -535,7 +514,7 @@ Class.create("Application", {
 		oThis = this;
 		connection.onComplete = function(transport){
 			this.repositoryId = null;
-			this.loadXmlRegistry();
+			this.loadRegistry();
 		}.bind(this);
 		var root = this._contextHolder.getRootItem();
 		if(root){
@@ -604,27 +583,27 @@ Class.create("Application", {
 	 */
 	refreshExtensionsRegistry : function(){
 		this._extensionsRegistry = {"editor": $A([]), "uploader": $A([])};
-		//var extensions = _.extend(this._registry.editors, this._registry.uploaders);
+		var extensions = _.extend(this._registry.editors, this._registry.uploaders);
 		//TODO set new ResourcesManager for every extension OR use Singleton?
 
-		//for(var i=0;i<extensions.length;i++){
-			//var extensionDefinition = {
-				//id : extensions[i].getAttribute("id"),
-				//xmlItem : extensions[i],
-				//resourcesManager : new ResourcesManager()				
-			//};
-			//this._resourcesRegistry[extensionDefinition.id] = extensionDefinition.resourcesManager;
-            //var resourceItems = XPathSelectItems(extensions[i], "client_settings/resources|dependencies|clientForm");
-			//for(var j=0;j<resourceItems.length;j++){
-				//var child = resourceItems[j];
-				//extensionDefinition.resourcesManager.loadFromXmlItem(child);
-			//}
-			//if(this.initExtension(extensions[i], extensionDefinition)){
-				//this._extensionsRegistry[extensions[i].itemName].push(extensionDefinition);
-			//}
-		//}
+		for(var i=0;i<extensions.length;i++){
+			var extensionDefinition = {
+				id : extensions[i].getAttribute("id"),
+				xmlItem : extensions[i],
+				resourcesManager : new ResourcesManager()				
+			};
+			this._resourcesRegistry[extensionDefinition.id] = extensionDefinition.resourcesManager;
+						var resourceItems = XPathSelectItems(extensions[i], "client_settings/resources|dependencies|clientForm");
+			for(var j=0;j<resourceItems.length;j++){
+				var child = resourceItems[j];
+				extensionDefinition.resourcesManager.loadFromXmlItem(child);
+			}
+			if(this.initExtension(extensions[i], extensionDefinition)){
+				this._extensionsRegistry[extensions[i].itemName].push(extensionDefinition);
+			}
+		}
 		//TODO need load resources
-		//ResourcesManager.prototype.loadAutoLoadResources(this._registry);
+		ResourcesManager.prototype.loadAutoLoadResources(this._registry);
 	},
 	
 	getPluginConfigs : function(pluginQuery){
@@ -696,7 +675,7 @@ Class.create("Application", {
 	 */
 	applyTemplates : function(passedTarget){
 		if(!this._registry) return;
-		var theme = this.ui.theme;
+		var theme = this._ui.theme;
 		var target = $(this.element);
 		var obj = {}; obj['top'] = theme.html;
 		target.insert(obj);
@@ -723,13 +702,11 @@ Class.create("Application", {
     },
 
     /**
-     * Reload all messages from server and trigger updateI18nTags
+     * Reload all messages on language change
      * @param newLanguage String
      */
 	loadI18NMessages: function(newLanguage){
-		var connection = new Connection();
-		connection.addParameter('get_action', 'get_i18n_messages');
-		connection.addParameter('lang', newLanguage);
+		var connection = new Connection('/i18n/' + newLanguage);
 		connection.onComplete = function(transport){
 			if(transport.responseText){
 				var result = transport.responseText.evalScripts();
@@ -740,10 +717,10 @@ Class.create("Application", {
 				this.updateI18nTags();
 				if(this.guiActions){
 					this.guiActions.each(function(pair){
-						pair.value.refreshFromI18NHash();
+						pair.value.setLabel();
 					});
 				}
-				this.loadXmlRegistry();
+				this.loadRegistry();
 				this.fireContextRefresh();
 				this.currentLanguage = newLanguage;
 			}
@@ -772,8 +749,7 @@ Class.create("Application", {
 	 * @param captchaPosition String Position.insert() possible key.
 	 */
 	loadSeedOrCaptcha : function(seedInputField, existingCaptcha, captchaAnchor, captchaPosition){
-		var connection = new Connection();
-		connection.addParameter("get_action", "get_seed");
+		var connection = new Connection("/seed");
 		connection.onComplete = function(transport){
 			if(transport.responseJSON){
 				seedInputField.value = transport.responseJSON.seed;
@@ -820,7 +796,7 @@ Class.create("Application", {
 		}else{
 			document.observe("app:context_changed", function(event){
 				var path = this.getContextItem().getPath();
-				document.title = this.appTitle + ' - '+(getBaseName(path) ? getBaseName(path) : '/');
+				document.title = this.title + ' - '+(getBaseName(path) ? getBaseName(path) : '/');
 			}.bind(this));
 		}
 		document.observe("app:context_changed", function(event){
@@ -849,7 +825,7 @@ Class.create("Application", {
 	 * @returns Integer
 	 */
 	pathToHistoryHash: function(path){
-		document.title = this.appTitle + ' - '+(getBaseName(path) ? getBaseName(path) : '/');
+		document.title = this.title + ' - '+(getBaseName(path) ? getBaseName(path) : '/');
 		if(!this.pathesHash){
 			this.pathesHash = new Hash();
 			this.historyCount = -1;
@@ -980,19 +956,12 @@ Class.create("Application", {
 		this.blockNavigation = false;
 	},
 
-    disableAllKeyBindings : function(){
-       this.blockNavigation = this.blockShortcuts = this.blockEditorShortcuts = true;
-    },
+	disableAllKeyBindings : function(){
+		 this.blockNavigation = this.blockShortcuts = this.blockEditorShortcuts = true;
+	},
 
-    enableAllKeyBindings : function(){
-       this.blockNavigation = this.blockShortcuts = this.blockEditorShortcuts = false;
-    },
-
-	/**
-	 * Unblocks all access keys
-	 */	
-	getActionBar: function(){
-		return this.actionBar;
+	enableAllKeyBindings : function(){
+		 this.blockNavigation = this.blockShortcuts = this.blockEditorShortcuts = false;
 	},
 	
 	/**
@@ -1087,7 +1056,7 @@ Class.create("Application", {
 
 	_setContextMenu : function(){
 		this.contextMenu = new Proto.Menu({
-			resourcesFolder: this.parameters.get('ui').theme.path,
+			resourcesFolder: this.p.get('ui').theme.path,
 		  selector: '', // context menu will be shown when element with class name of "contextmenu" is clicked
 		  className: 'menu desktop', // this is a class which will be attached to menu container (used for css styling)
 		  menuItems: [],
@@ -1096,6 +1065,7 @@ Class.create("Application", {
 		});
 		var protoMenu = this.contextMenu;		
 		protoMenu.options.beforeShow = function(e){
+			debugger
 			this.options.lastElement = Event.element(e);
 			this.options.menuItems = app.actionBar.getContextActions(Event.element(e));
 			this.refreshList();
@@ -1104,6 +1074,7 @@ Class.create("Application", {
 			this.options.lastElement = null;
 		}.bind(protoMenu);
 		document.observe("app:actions_refreshed", function(){
+			//TODO investigate after ProtoMenu.beforeShow
 			if(this.options.lastElement){
 				this.options.menuItems = app.actionBar.getContextActions(this.options.lastElement);
 				this.refreshList();

@@ -47,11 +47,12 @@ var setTheme = function(name){
 }
 
 var ls = {
-	"collection" : {
+	"item" : {
+		"name" : "ROOT",
+		"path" : "/",
 		"params" : {
 			"repo_has_recycle" : true,
 			"is_file" : false,
-			"filename" : "",
 			"mimestring" : "Directory",
 			"icon" : "folder.png",
 			"openicon" : "folder_open.png",
@@ -62,11 +63,12 @@ var ls = {
 			"filesize" : "-",
 			"is_image" : 0
 		},
-		"collection" : {
-			"dir1" : {
+		"collection" : [
+			{
+				"name" : "dir1",
+				"path" : "/dir0",
 				"params" : {
 					"is_file" : false,
-					"filename" : "/dir0",
 					"mimestring" : "Directory",
 					"icon" : "folder.png",
 					"openicon" : "folder_open.png",
@@ -79,10 +81,11 @@ var ls = {
 					"is_image" : 0
 				}
 			},
-			"bird" : {
+			{
+				"name" : "bird",
+				"path" : "/bird.jpg",
 				"params" : {
 					"is_file" : true,
-					"filename" : "/bird.jpg",
 					"mimestring" : "JPG picture",
 					"icon" : "image.png",
 					"openicon" : "folder_open.png",
@@ -99,10 +102,11 @@ var ls = {
 					"readable_dimension" : "660px X 404px"
 				}
 			},
-			"Recycle Bin" : {
+			{
+				"name": "Recycle Bin",
+				"path" : "/recycle_bin",
 				"params" : {
 					"is_file" : false,
-					"filename" : "/recycle_bin",
 					"mimestring" : "Recycle Bin",
 					"mime" : "recycle",
 					"icon" : "trashcan.png",
@@ -116,6 +120,6 @@ var ls = {
 					"is_image" : 0
 				}
 			}
-		}
+		]
 	}
 }

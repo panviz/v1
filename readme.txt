@@ -1,10 +1,20 @@
 			TODO
+
+EventManagement
+	Implement ObjectWithEvent (destroy registered observers on View close)
+
+Check all actions
+	stop on root_item_changed
+
 Application
 
 Rename
 	access modules -> driver?
 	Singleton manager?
 		View, Actions, Background, Resources
+
+Item
+	remove RemoteItemProvider
 
 View
 	move to /view all Panes?

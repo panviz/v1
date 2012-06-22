@@ -13,6 +13,9 @@ extensions.forEach(function(name){
 	registry[type + 's'][name] = extension[type];
 })
 
+//User
+//registry.user = require('./user.json')
+
 var global =
 {
 	"global_param": [

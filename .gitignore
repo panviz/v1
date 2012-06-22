@@ -8,3 +8,8 @@
 /module/ui/main/themes/manager/css/all.css
 /module/editor/ckeditor/ckeditor
 /node_modules
+.dropbox
+desktop.ini
+/tags
+/config/registry.json
+

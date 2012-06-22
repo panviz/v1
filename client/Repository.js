@@ -54,7 +54,7 @@ Class.create("Repository", {
 			this.label = I18N[391];
 		}
 		this.id = id;
-		this.icon = THEME.path +'/image/actions/16/network-wired.png';
+		this.icon = THEME.path +'/image/action/16/network-wired.png';
 		this.resourcesManager = new ResourcesManager();
 		if(xmlDef) this.loadFromXml(xmlDef);
 	},

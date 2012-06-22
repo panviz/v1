@@ -11,23 +11,24 @@ Class.create("Item", {
 	 * @param icon String
 	 * @param iItemProvider IItemProvider
 	 */
-	initialize : function(path, isLeaf, label, icon, iItemProvider){
+	initialize : function(path, params, provider){//isLeaf, label, icon, iItemProvider){
 		this._path = path;
+		var p = params || {};
 		if(this._path && this._path.length && this._path.length > 1){
 			if(this._path[this._path.length-1] == "/"){
 				this._path = this._path.substring(0, this._path.length-1);
 			}
 		}
-		this._metadata = $H();
-		this._isLeaf = isLeaf || false;
-		this._label = label || '';
-		this._icon = icon || '';
+		this._metadata = $H(p.metadata);
+		this._isLeaf = p.isLeaf || false;
+		this._label = p.label || '';
+		this._icon = p.icon || '';
+		this.fake = p.fake || false;
+		this._isLoaded = p.isLoaded || false;
 		this._children = $A([]);
 		this._isRoot = false;
 		
-		this._isLoaded = false;
-		this.fake = false;
-		this._iItemProvider = iItemProvider;
+		this._iItemProvider = provider;
 		
 	},
 	/**
@@ -267,16 +268,15 @@ Class.create("Item", {
 		if(!this.getPath()) return;
 		var pathParts = this.getPath().split("/");
 		var parentItems = $A();
-		var crtPath = "";
+		var currentPath = "";
 		var crtItem, crtParentItem = rootItem;
 		for(var i=0;i<pathParts.length;i++){
 			if(pathParts[i] == "") continue;
-			crtPath = crtPath + "/" + pathParts[i];
-			if(item = crtParentItem.findChildByPath(crtPath)){
+			currentPath = currentPath + "/" + pathParts[i];
+			if(item = crtParentItem.findChildByPath(currentPath)){
 				crtItem = item;
 			}else{
-				crtItem = new Item(crtPath, false, getBaseName(crtPath));
-				crtItem.fake = true;				
+				crtItem = new Item(currentPath, {"isLeaf" : false, 'label' : getBaseName(currentPath), "fake" : true});
 				fakeItems.push(crtItem);
 				crtParentItem.addChild(crtItem);
 			}

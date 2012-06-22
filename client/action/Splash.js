@@ -6,7 +6,7 @@ Class.create("Splash", Action, {
 			function(oForm){
 				var docDiv = $(oForm).down('#docDiv');
 				if(!docDiv.isLoaded){
-					var conn = new Connection(window.serverAccessPath + '&get_action=display_doc&doc_file=CREDITS');
+					var conn = new Connection('/action/display_doc&doc_file=CREDITS');
 					conn.onComplete = function(transport){
 						docDiv.insert({top:transport.responseText});
 						docDiv.isLoaded = true;
@@ -31,4 +31,4 @@ Class.create("Splash", Action, {
 			null, 
 			true, true);		
 	}
-}
+});

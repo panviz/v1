@@ -467,7 +467,7 @@ Class.create("Modal", {
 		this.messageContent.update(message);
 		var container = $('list_view');
 		if(!container){
-			container = $(bootstrap.parameters.get("MAIN_ELEMENT"));
+			container = $(THEME.element);
 		}
 		var containerOffset = Position.cumulativeOffset(container);
 		var containerDimensions = container.getDimensions();

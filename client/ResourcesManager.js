@@ -102,8 +102,8 @@ Class.create("ResourcesManager", {
 			if(typeof(className)!='function' || typeof(className.prototype)!='object'){
 				var conn = new Connection();
 				conn._libUrl = false;
-				if(bootstrap.parameters.get('SERVER_PREFIX_URI')){
-					conn._libUrl = bootstrap.parameters.get('SERVER_PREFIX_URI');
+				if(bootstrap.p.get('SERVER_PREFIX_URI')){
+					conn._libUrl = bootstrap.p.get('SERVER_PREFIX_URI');
 				}
 				conn.loadLibrary(fileName);
 			}
@@ -115,13 +115,13 @@ Class.create("ResourcesManager", {
 	 */
 	loadCSSResource : function(fileName){
 		var head = $$('head')[0];
-        if(bootstrap.parameters.get('SERVER_PREFIX_URI')){
-            fileName = bootstrap.parameters.get('SERVER_PREFIX_URI')+fileName;
+        if(bootstrap.p.get('SERVER_PREFIX_URI')){
+            fileName = bootstrap.p.get('SERVER_PREFIX_URI')+fileName;
         }
 		var cssNode = new Element('link', {
 			type : 'text/css',
 			rel  : 'stylesheet',
-			href : fileName+"?v="+window.bootstrap.parameters.get("ajxpVersion"),
+			href : fileName+"?v="+window.bootstrap.p.get("ajxpVersion"),
 			media : 'screen'
 		});
 		head.insert(cssNode);

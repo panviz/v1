@@ -15,7 +15,7 @@ module.exports = function(app){
 		.use(express.session({ secret: 'faFka1@$aGsja'}))
 	});
 
-	var appSettings = require('./settings.js');
+	var appSettings = require('./settings.json');
 	//TODO don't expose expressjs setting to client
 	_.extend(app.settings, appSettings);
 	//make Global

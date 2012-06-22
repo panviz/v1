@@ -1,27 +1,28 @@
 {
 	"Ls" : {
-		"dirDefault" : "true",
-		"gui" : {
+		"parameters" : {
+			"defaults" : ["dir"],
+			"prepareModal" : "true"
 			"text" : "32",
 			"title" : "32",
 			"src" : "fileopen.png",
-			"accessKey" : "folder_access_key",
-			"context" : {
-				"selection" : "true",
-				"dir" : "",
-				"recycle" : "false",
-				"actionBar" : "false",
-				"actionBarGroup" : "put",
-				"contextMenu" : "true",
-				"infoPanel" : "true"
-			},
-			"selectionContext" : {
-				"dir" : "true",
-				"file" : "true",
-				"recycle" : "false",
-				"unique" : "true",
-				"allowedMimes" : "MIMES_ZIP"
-			}
+			"accessKey" : "folder_access_key"
+		},
+		"context" : {
+			"selection" : "true",
+			"dir" : "",
+			"recycle" : "false",
+			"actionBar" : "false",
+			"actionBarGroup" : "put",
+			"contextMenu" : "true",
+			"infoPanel" : "true"
+		},
+		"selectionContext" : {
+			"dir" : "true",
+			"file" : "true",
+			"recycle" : "false",
+			"unique" : "true",
+			"allowedMimes" : "MIMES_ZIP"
 		},
 		"rightsContext" : {
 			"noUser" : "true",
@@ -31,31 +32,30 @@
 			"adminOnly" : "false"
 		},
 		"processing" : {
-			"clientCallback" : {
-				"prepareModal" : "true"
-			},
 			"serverCallback" : {
 				"methodName" : "switchAction"
 			}
 		}
 	},
 	"Upload" : {
-		"gui" : {
+		"parameters" : {
+			"prepareModal" : "true",
 			"text" : "27",
 			"title" : "27",
 			"src" : "yast_backup.png",
 			"accessKey" : "upload_access_key",
-			"hasAccessKey" : "true",
-			"context" : {
-				"selection" : "false",
-				"dir" : "true",
-				"recycle" : "hidden",
-				"actionBar" : "true",
-				"contextMenu" : "true",
-				"infoPanel" : "false",
-				"actionBarGroup" : "put",
-				"inZip" : "false"
-			}
+			"hasAccessKey" : "true"
+		},
+		"context" : {
+			"selection" : "false",
+			"dir" : "true",
+			"recycle" : "hidden",
+			"actionBar" : "true",
+			"contextMenu" : "true",
+			"infoPanel" : "false",
+			"actionBarGroup" : "put",
+			"inZip" : "false"
+		}
 		},
 		"rightsContext" : {
 			"noUser" : "true",
@@ -65,30 +65,29 @@
 			"adminOnly" : ""
 		},
 		"processing" : {
-			"clientCallback" : {
-				"prepareModal" : "true",
-			},
 			"serverCallback" : {
 				"methodName" : "switchAction"
 			}
 		}
 	},
 	"EmptyRecycle" : {
-		"gui" : {
+		"parameters" : {
+			"prepareModal" : "false",
 			"text" : "220",
 			"title" : "221",
 			"src" : "trashcan_empty.png",
 			"accessKey" : "empty_recycle_access_key",
-			"hasAccessKey" : "true",
-			"context" : {
-				"selection" : "false",
-				"dir" : "true",
-				"recycle" : "only",
-				"actionBar" : "true",
-				"contextMenu" : "true",
-				"infoPanel" : "false",
-				"actionBarGroup" : "change"
-			}
+			"hasAccessKey" : "true"
+		},
+		"context" : {
+			"selection" : "false",
+			"dir" : "true",
+			"recycle" : "only",
+			"actionBar" : "true",
+			"contextMenu" : "true",
+			"infoPanel" : "false",
+			"actionBarGroup" : "change"
+		}
 		},
 		"rightsContext" : {
 			"noUser" : "true",
@@ -98,37 +97,35 @@
 			"adminOnly" : ""
 		},
 		"processing" : {
-			"clientCallback" : {
-				"prepareModal" : "false",
-			},
 			"serverCallback" : {
 				"methodName" : "switchAction"
 			}
 		}
 	},
 	"Download" : {
-		"fileDefault" : "false",
-		"gui" : {
+		"parameters" : {
+			"defaults" : ["file"],
+			"prepareModal" : "true",
 			"text" : "88",
 			"title" : "88",
 			"src" : "download_manager.png",
 			"accessKey" : "download_access_key",
-			"hasAccessKey" : "true",
-			"context" : {
-				"selection" : "true",
-				"dir" : "",
-				"recycle" : "false",
-				"actionBar" : "true",
-				"contextMenu" : "true",
-				"infoPanel" : "true",
-				"actionBarGroup" : "put"
-			},
-			"selectionContext" : {
-				"dir" : "true",
-				"file" : "true",
-				"recycle" : "false",
-				"unique" : "false"
-			}
+			"hasAccessKey" : "true"
+		},
+		"context" : {
+			"selection" : "true",
+			"dir" : "",
+			"recycle" : "false",
+			"actionBar" : "true",
+			"contextMenu" : "true",
+			"infoPanel" : "true",
+			"actionBarGroup" : "put"
+		},
+		"selectionContext" : {
+			"dir" : "true",
+			"file" : "true",
+			"recycle" : "false",
+			"unique" : "false"
 		},
 		"rightsContext" : {
 			"noUser" : "true",
@@ -137,45 +134,40 @@
 			"write" : "false",
 			"adminOnly" : ""
 		},
+		"form" : {
+			"id" : "multi_download_form",
+			"html" : "<div id=\"multi_download_form\" title=\"AJXP_MESSAGE[118]\"  box_width=\"345\"><div class=\"dialogLegend\">AJXP_MESSAGE[119]</div><br/><div id=\"multiple_download_container\"></div><form style=\"display:inline;\" action=\"index.php\" method=\"GET\" id=\"download_form\" target=\"download_iframe\"><input type=\"hidden\" name=\"get_action\" value=\"download\"><input type=\"hidden\" name=\"secure_token\" value=\"\"></form><iframe id=\"download_iframe\" name=\"download_iframe\" style=\"display:none\"></iframe></div>"
+		},
 		"processing" : {
-			"clientCallback" : {
-				"prepareModal" : "true",
-			},
-			"clientForm" : {
-				"id" : "multi_download_form",
-				"$t" : "<div id=\"multi_download_form\" title=\"AJXP_MESSAGE[118]\"  box_width=\"345\"><div class=\"dialogLegend\">AJXP_MESSAGE[119]</div><br/><div id=\"multiple_download_container\"></div><form style=\"display:inline;\" action=\"index.php\" method=\"GET\" id=\"download_form\" target=\"download_iframe\"><input type=\"hidden\" name=\"get_action\" value=\"download\"><input type=\"hidden\" name=\"secure_token\" value=\"\"></form><iframe id=\"download_iframe\" name=\"download_iframe\" style=\"display:none\"></iframe></div>"
-			},
-			"clientListener" : {
-				"name" : "selectionChange",
-			},
 			"serverCallback" : {
 				"methodName" : "switchAction"
 			}
 		}
 	},
 	"Compress" : {
-		"gui" : {
+		"parameters" : {
+			"prepareModal" : "true",
 			"text" : "313",
 			"title" : "314",
 			"src" : "archive_insert.png",
 			"accessKey" : "",
-			"hasAccessKey" : "false",
-			"context" : {
-				"selection" : "true",
-				"dir" : "",
-				"recycle" : "hidden",
-				"actionBar" : "false",
-				"contextMenu" : "true",
-				"infoPanel" : "true",
-				"actionBarGroup" : "get",
-				"inZip" : "false"
-			},
-			"selectionContext" : {
-				"dir" : "true",
-				"file" : "file",
-				"recycle" : "false",
-				"unique" : "false"
-			}
+			"hasAccessKey" : "false"
+		},
+		"context" : {
+			"selection" : "true",
+			"dir" : "",
+			"recycle" : "hidden",
+			"actionBar" : "false",
+			"contextMenu" : "true",
+			"infoPanel" : "true",
+			"actionBarGroup" : "get",
+			"inZip" : "false"
+		},
+		"selectionContext" : {
+			"dir" : "true",
+			"file" : "file",
+			"recycle" : "false",
+			"unique" : "false"
 		},
 		"rightsContext" : {
 			"noUser" : "true",
@@ -184,43 +176,38 @@
 			"write" : "true",
 			"adminOnly" : ""
 		},
+		"form" : {
+			"id" : "compress_form",
+			"html" : "<div id=\"compress_form\" action=\"compress\" box_width=\"200\">AJXP_MESSAGE[315]<br/><input type=\"text\" name=\"archive_name\" value=\"\" id=\"archive_name\" class=\"dialogFocus initFicName\"></div>"
+		},
 		"processing" : {
-			"clientCallback" : {
-				"prepareModal" : "true",
-			},
-			"clientForm" : {
-				"id" : "compress_form",
-				"$t" : "<div id=\"compress_form\" action=\"compress\" box_width=\"200\">AJXP_MESSAGE[315]<br/><input type=\"text\" name=\"archive_name\" value=\"\" id=\"archive_name\" class=\"dialogFocus initFicName\"></div>"
-			},
-			"clientListener" : {
-				"name" : "selectionChange",
-			},
 			"serverCallback" : {
 				"methodName" : "switchAction"
 			}
 		}
 	},
 	"DownloadChunk" : {
-		"gui" : {
+		"parameters" : {
+			"prepareModal" : "true",
 			"text" : "397",
 			"title" : "398",
 			"src" : "download_manager.png",
-			"hasAccessKey" : "false",
-			"context" : {
-				"selection" : "true",
-				"dir" : "",
-				"recycle" : "false",
-				"actionBar" : "false",
-				"contextMenu" : "true",
-				"infoPanel" : "true",
-				"actionBarGroup" : "get"
-			},
-			"selectionContext" : {
-				"dir" : "false",
-				"file" : "true",
-				"recycle" : "false",
-				"unique" : "true"
-			}
+			"hasAccessKey" : "false"
+		},
+		"context" : {
+			"selection" : "true",
+			"dir" : "",
+			"recycle" : "false",
+			"actionBar" : "false",
+			"contextMenu" : "true",
+			"infoPanel" : "true",
+			"actionBarGroup" : "get"
+		},
+		"selectionContext" : {
+			"dir" : "false",
+			"file" : "true",
+			"recycle" : "false",
+			"unique" : "true"
 		},
 		"rightsContext" : {
 			"noUser" : "true",
@@ -229,14 +216,11 @@
 			"write" : "false",
 			"adminOnly" : ""
 		},
+		"form" : {
+			"id" : "multi_download_form",
+			"html" : "<div id=\"multi_download_form\" title=\"AJXP_MESSAGE[118]\"  box_width=\"345\"><div class=\"dialogLegend\">AJXP_MESSAGE[119]</div><br/><div id=\"multiple_download_container\"></div><form style=\"display:inline;\" action=\"index.php\" method=\"GET\" id=\"download_form\" target=\"download_iframe\"><input type=\"hidden\" name=\"get_action\" value=\"download\"><input type=\"hidden\" name=\"secure_token\" value=\"\"></form><iframe id=\"download_iframe\" name=\"download_iframe\" style=\"display:none\"></iframe></div>"
+		},
 		"processing" : {
-			"clientCallback" : {
-				"prepareModal" : "true",
-			},
-			"clientForm" : {
-				"id" : "multi_download_form",
-				"$t" : "<div id=\"multi_download_form\" title=\"AJXP_MESSAGE[118]\"  box_width=\"345\"><div class=\"dialogLegend\">AJXP_MESSAGE[119]</div><br/><div id=\"multiple_download_container\"></div><form style=\"display:inline;\" action=\"index.php\" method=\"GET\" id=\"download_form\" target=\"download_iframe\"><input type=\"hidden\" name=\"get_action\" value=\"download\"><input type=\"hidden\" name=\"secure_token\" value=\"\"></form><iframe id=\"download_iframe\" name=\"download_iframe\" style=\"display:none\"></iframe></div>"
-			},
 			"serverCallback" : {
 				"methodName" : "switchAction"
 			}
@@ -257,32 +241,33 @@
 		}
 	},
 	"OpenWith" : {
-		"fileDefault" : "true",
-		"gui" : {
+		"parameters" : {
+			"defaults" : ["file"],
+			"prepareModal" : "false",
 			"text" : "316",
 			"title" : "316",
 			"src" : "fileopen.png",
 			"accessKey" : "open_with_access",
-			"hasAccessKey" : "true",
-			"context" : {
-				"selection" : "true",
-				"dir" : "",
-				"recycle" : "hidden",
-				"behaviour" : "hidden",
-				"actionBar" : "true",
-				"contextMenu" : "true",
-				"infoPanel" : "false",
-				"actionBarGroup" : "put",
-				"inZip" : "false"
-			},
-			"selectionContext" : {
-				"dir" : "false",
-				"file" : "true",
-				"recycle" : "false",
-				"unique" : "true",
-				"allowedMimes" : "MIMES_EDITABLE",
-				"behaviour" : "hidden"
-			}
+			"hasAccessKey" : "true"
+		},
+		"context" : {
+			"selection" : "true",
+			"dir" : "",
+			"recycle" : "hidden",
+			"behaviour" : "hidden",
+			"actionBar" : "true",
+			"contextMenu" : "true",
+			"infoPanel" : "false",
+			"actionBarGroup" : "put",
+			"inZip" : "false"
+		},
+		"selectionContext" : {
+			"dir" : "false",
+			"file" : "true",
+			"recycle" : "false",
+			"unique" : "true",
+			"allowedMimes" : "MIMES_EDITABLE",
+			"behaviour" : "hidden"
 		},
 		"rightsContext" : {
 			"noUser" : "true",
@@ -292,35 +277,33 @@
 			"adminOnly" : ""
 		},
 		"processing" : {
-			"clientCallback" : {
-				"prepareModal" : "false",
-			},
 			"serverCallback" : {
 				"methodName" : "switchAction"
 			}
 		}
 	},
 	"Link" : {
-		"gui" : {
+		"parameters" : {
+			"prepareModal" : "true",
 			"text" : "369",
 			"title" : "369",
 			"src" : "link.png",
-			"hasAccessKey" : "false",
-			"context" : {
-				"selection" : "true",
-				"dir" : "",
-				"recycle" : "false",
-				"actionBar" : "false",
-				"actionBarGroup" : "get",
-				"contextMenu" : "true",
-				"infoPanel" : "true"
-			},
-			"selectionContext" : {
-				"dir" : "true",
-				"file" : "false",
-				"recycle" : "false",
-				"unique" : "true"
-			}
+			"hasAccessKey" : "false"
+		},
+		"context" : {
+			"selection" : "true",
+			"dir" : "",
+			"recycle" : "false",
+			"actionBar" : "false",
+			"actionBarGroup" : "get",
+			"contextMenu" : "true",
+			"infoPanel" : "true"
+		},
+		"selectionContext" : {
+			"dir" : "true",
+			"file" : "false",
+			"recycle" : "false",
+			"unique" : "true"
 		},
 		"rightsContext" : {
 			"noUser" : "true",
@@ -329,14 +312,11 @@
 			"write" : "false",
 			"adminOnly" : "false"
 		},
+		"form" : {
+			"id" : "link_form",
+			"html" : "<div id=\"link_form\" title=\"AJXP_MESSAGE[369]\"  box_width=\"280\" action=\"link\"><fieldset><legend message_id=\"296\">AJXP_MESSAGE[296]</legend><input type=\"text\" style=\"width:200px;margin-right:5px;\" id=\"link_container\" class=\"dialogFocus\"/><a id=\"email\" title=\"AJXP_MESSAGE[323]\"><img style=\"border:none;\" align=\"absmiddle\" src=\"AJXP_THEME_FOLDER/image/action/22/mail_generic.png\" height=\"22\" width=\"22\"/></a></fieldset></div>"
+		},
 		"processing" : {
-			"clientCallback" : {
-				"prepareModal" : "true",
-			},
-			"clientForm" : {
-				"id" : "link_form",
-				"$t" : "<div id=\"link_form\" title=\"AJXP_MESSAGE[369]\"  box_width=\"280\" action=\"link\"><fieldset><legend message_id=\"296\">AJXP_MESSAGE[296]</legend><input type=\"text\" style=\"width:200px;margin-right:5px;\" id=\"link_container\" class=\"dialogFocus\"/><a id=\"email\" title=\"AJXP_MESSAGE[323]\"><img style=\"border:none;\" align=\"absmiddle\" src=\"AJXP_THEME_FOLDER/image/action/22/mail_generic.png\" height=\"22\" width=\"22\"/></a></fieldset></div>"
-			},
 			"serverCallback" : {
 				"methodName" : "switchAction"
 			}
@@ -385,29 +365,30 @@
 		}
 	},
 	"Restore" : {
-		"gui" : {
+		"parameters" : {
+			"prepareModal" : "true",
 			"text" : "222",
 			"title" : "223",
 			"src" : "folder1_important.png",
 			"accessKey" : "restore_access_key",
-			"hasAccessKey" : "true",
-			"context" : {
-				"selection" : "true",
-				"dir" : "",
-				"recycle" : "only",
-				"actionBar" : "true",
-				"contextMenu" : "true",
-				"infoPanel" : "false",
-				"actionBarGroup" : "change"
-			},
-			"selectionContext" : {
-				"dir" : "true",
-				"file" : "true",
-				"recycle" : "false",
-				"unique" : "true",
-				"image" : "false",
-				"editable" : "false"
-			}
+			"hasAccessKey" : "true"
+		},
+		"context" : {
+			"selection" : "true",
+			"dir" : "",
+			"recycle" : "only",
+			"actionBar" : "true",
+			"contextMenu" : "true",
+			"infoPanel" : "false",
+			"actionBarGroup" : "change"
+		},
+		"selectionContext" : {
+			"dir" : "true",
+			"file" : "true",
+			"recycle" : "false",
+			"unique" : "true",
+			"image" : "false",
+			"editable" : "false"
 		},
 		"rightsContext" : {
 			"noUser" : "true",
@@ -417,31 +398,30 @@
 			"adminOnly" : ""
 		},
 		"processing" : {
-			"clientCallback" : {
-				"prepareModal" : "true",
-			},
 			"serverCallback" : {
 				"methodName" : "switchAction"
 			}
 		}
 	},
 	"Mkdir" : {
-		"gui" : {
+		"parameters" : {
+			"prepareModal" : "true",
 			"text" : "154",
 			"title" : "155",
 			"src" : "folder_new.png",
 			"accessKey" : "folder_access_key",
-			"hasAccessKey" : "true",
-			"context" : {
-				"selection" : "false",
-				"dir" : "true",
-				"recycle" : "hidden",
-				"actionBar" : "true",
-				"contextMenu" : "true",
-				"infoPanel" : "false",
-				"actionBarGroup" : "change",
-				"inZip" : "false"
-			}
+			"hasAccessKey" : "true"
+		},
+		"context" : {
+			"selection" : "false",
+			"dir" : "true",
+			"recycle" : "hidden",
+			"actionBar" : "true",
+			"contextMenu" : "true",
+			"infoPanel" : "false",
+			"actionBarGroup" : "change",
+			"inZip" : "false"
+		}
 		},
 		"rightsContext" : {
 			"noUser" : "true",
@@ -450,36 +430,35 @@
 			"write" : "true",
 			"adminOnly" : ""
 		},
+		"form" : {
+			"id" : "mkdir_form",
+			"html" : "<div id=\"mkdir_form\" action=\"mkdir\" box_width=\"200\">AJXP_MESSAGE[173]<br/><input type=\"text\" name=\"dirname\" size=\"30\" class=\"dialogFocus\"></div>"
+		},
 		"processing" : {
-			"clientCallback" : {
-				"prepareModal" : "true",
-			},
-			"clientForm" : {
-				"id" : "mkdir_form",
-				"$t" : "<div id=\"mkdir_form\" action=\"mkdir\" box_width=\"200\">AJXP_MESSAGE[173]<br/><input type=\"text\" name=\"dirname\" size=\"30\" class=\"dialogFocus\"></div>"
-			},
 			"serverCallback" : {
 				"methodName" : "switchAction"
 			}
 		}
 	},
 	"Mkfile" : {
-		"gui" : {
+		"parameters" : {
+			"prepareModal" : "true",
 			"text" : "156",
 			"title" : "157",
 			"src" : "filenew.png",
 			"accessKey" : "file_access_key",
-			"hasAccessKey" : "true",
-			"context" : {
-				"selection" : "false",
-				"dir" : "true",
-				"recycle" : "hidden",
-				"actionBar" : "false",
-				"contextMenu" : "true",
-				"infoPanel" : "false",
-				"actionBarGroup" : "change",
-				"inZip" : "false"
-			}
+			"hasAccessKey" : "true"
+		},
+		"context" : {
+			"selection" : "false",
+			"dir" : "true",
+			"recycle" : "hidden",
+			"actionBar" : "false",
+			"contextMenu" : "true",
+			"infoPanel" : "false",
+			"actionBarGroup" : "change",
+			"inZip" : "false"
+		}
 		},
 		"rightsContext" : {
 			"noUser" : "true",
@@ -488,44 +467,42 @@
 			"write" : "true",
 			"adminOnly" : ""
 		},
+		"form" : {
+			"id" : "mkfile_form",
+			"html" : "<div id=\"mkfile_form\" action=\"mkfile\" box_width=\"200\">AJXP_MESSAGE[174]<br/><input type=\"text\" name=\"filename\" size=\"30\" class=\"dialogFocus\"></div>"
+		},
 		"processing" : {
-			"clientCallback" : {
-				"prepareModal" : "true",
-			},
-			"clientForm" : {
-				"id" : "mkfile_form",
-				"$t" : "<div id=\"mkfile_form\" action=\"mkfile\" box_width=\"200\">AJXP_MESSAGE[174]<br/><input type=\"text\" name=\"filename\" size=\"30\" class=\"dialogFocus\"></div>"
-			},
 			"serverCallback" : {
 				"methodName" : "switchAction"
 			}
 		}
 	},
 	"Rename" : {
-		"gui" : {
+		"parameters" : {
+			"prepareModal" : "true",
 			"text" : "6",
 			"title" : "158",
 			"src" : "applix.png",
 			"accessKey" : "rename_access_key",
-			"hasAccessKey" : "true",
-			"context" : {
-				"selection" : "true",
-				"dir" : "",
-				"recycle" : "hidden",
-				"actionBar" : "true",
-				"contextMenu" : "true",
-				"infoPanel" : "false",
-				"actionBarGroup" : "change",
-				"inZip" : "false"
-			},
-			"selectionContext" : {
-				"dir" : "true",
-				"file" : "true",
-				"recycle" : "false",
-				"unique" : "true",
-				"image" : "false",
-				"editable" : "false"
-			}
+			"hasAccessKey" : "true"
+		},
+		"context" : {
+			"selection" : "true",
+			"dir" : "",
+			"recycle" : "hidden",
+			"actionBar" : "true",
+			"contextMenu" : "true",
+			"infoPanel" : "false",
+			"actionBarGroup" : "change",
+			"inZip" : "false"
+		},
+		"selectionContext" : {
+			"dir" : "true",
+			"file" : "true",
+			"recycle" : "false",
+			"unique" : "true",
+			"image" : "false",
+			"editable" : "false"
 		},
 		"rightsContext" : {
 			"noUser" : "true",
@@ -535,39 +512,37 @@
 			"adminOnly" : ""
 		},
 		"processing" : {
-			"clientCallback" : {
-				"prepareModal" : "true",
-			},
 			"serverCallback" : {
 				"methodName" : "switchAction"
 			}
 		}
 	},
 	"Copy" : {
-		"ctrlDragndropDefault" : "true",
-		"gui" : {
+		"parameters" : {
+			"defaults" : ["ctrlDragndrop"],
+			"prepareModal" : "true",
 			"text" : "66",
 			"title" : "159",
 			"src" : "editcopy.png",
 			"accessKey" : "copy_access_key",
-			"hasAccessKey" : "true",
-			"context" : {
-				"selection" : "true",
-				"dir" : "",
-				"recycle" : "hidden",
-				"actionBar" : "true",
-				"contextMenu" : "true",
-				"infoPanel" : "false",
-				"actionBarGroup" : "change"
-			},
-			"selectionContext" : {
-				"dir" : "true",
-				"file" : "true",
-				"recycle" : "false",
-				"unique" : "false",
-				"image" : "false",
-				"editable" : "false"
-			}
+			"hasAccessKey" : "true"
+		},
+		"context" : {
+			"selection" : "true",
+			"dir" : "",
+			"recycle" : "hidden",
+			"actionBar" : "true",
+			"contextMenu" : "true",
+			"infoPanel" : "false",
+			"actionBarGroup" : "change"
+		},
+		"selectionContext" : {
+			"dir" : "true",
+			"file" : "true",
+			"recycle" : "false",
+			"unique" : "false",
+			"image" : "false",
+			"editable" : "false"
 		},
 		"rightsContext" : {
 			"noUser" : "true",
@@ -576,48 +551,43 @@
 			"write" : "true",
 			"adminOnly" : ""
 		},
+		"form" : {
+			"id" : "copymove_form",
+			"html" : "<div id=\"copymove_form\" action=\"copy\" box_width=\"272\"><input type=\"hidden\" name=\"dest_node\" value=\"\"/><div class=\"dialogLegend\">AJXP_MESSAGE[175]</div><select id=\"external_repository\" name=\"dest_repository_id\" style=\"width: 248px; font-size: 12px; height: 21px; margin-top:5px; margin-bottom:7px; border: 1px solid #ccc;\"></select><div style=\"height:200px; width:246px; padding: 0px 0px; border: 1px solid #ccc;\"><div id=\"treeCopy\" style=\"height:194px; padding: 3px 2px; overflow:auto; text-align:left;\" class=\"treeCopyContainer\"></div></div><input type=\"text\" name=\"dest\" value=\"/\" readonly  style=\"width:248px; border: 1px solid #ccc; margin-top:7px; margin-bottom:2px;background-image:none;\"/></div>"
+		},
 		"processing" : {
-			"clientCallback" : {
-				"prepareModal" : "true",
-			},
-			"clientForm" : {
-				"id" : "copymove_form",
-				"$t" : "<div id=\"copymove_form\" action=\"copy\" box_width=\"272\"><input type=\"hidden\" name=\"dest_node\" value=\"\"/><div class=\"dialogLegend\">AJXP_MESSAGE[175]</div><select id=\"external_repository\" name=\"dest_repository_id\" style=\"width: 248px; font-size: 12px; height: 21px; margin-top:5px; margin-bottom:7px; border: 1px solid #ccc;\"></select><div style=\"height:200px; width:246px; padding: 0px 0px; border: 1px solid #ccc;\"><div id=\"treeCopy\" style=\"height:194px; padding: 3px 2px; overflow:auto; text-align:left;\" class=\"treeCopyContainer\"></div></div><input type=\"text\" name=\"dest\" value=\"/\" readonly  style=\"width:248px; border: 1px solid #ccc; margin-top:7px; margin-bottom:2px;background-image:none;\"/></div>"
-			},
-			"clientListener" : {
-				"name" : "contextChange",
-			},
 			"serverCallback" : {
 				"methodName" : "switchAction"
 			}
 		}
 	},
 	"Move" : {
-		"dragndropDefault" : "true",
-		"gui" : {
+		"parameters" : {
+			"defaults" : ["dragndrop"],
+			"prepareModal" : "true",
 			"text" : "70",
 			"title" : "160",
 			"src" : "editpaste.png",
 			"accessKey" : "move_access_key",
-			"hasAccessKey" : "true",
-			"context" : {
-				"selection" : "true",
-				"dir" : "",
-				"recycle" : "hidden",
-				"actionBar" : "true",
-				"contextMenu" : "true",
-				"infoPanel" : "false",
-				"actionBarGroup" : "change",
-				"inZip" : "false"
-			},
-			"selectionContext" : {
-				"dir" : "true",
-				"file" : "true",
-				"recycle" : "false",
-				"unique" : "false",
-				"image" : "false",
-				"editable" : "false"
-			}
+			"hasAccessKey" : "true"
+		},
+		"context" : {
+			"selection" : "true",
+			"dir" : "",
+			"recycle" : "hidden",
+			"actionBar" : "true",
+			"contextMenu" : "true",
+			"infoPanel" : "false",
+			"actionBarGroup" : "change",
+			"inZip" : "false"
+		},
+		"selectionContext" : {
+			"dir" : "true",
+			"file" : "true",
+			"recycle" : "false",
+			"unique" : "false",
+			"image" : "false",
+			"editable" : "false"
 		},
 		"rightsContext" : {
 			"noUser" : "true",
@@ -627,40 +597,38 @@
 			"adminOnly" : ""
 		},
 		"processing" : {
-			"clientCallback" : {
-				"prepareModal" : "true",
-			},
 			"serverCallback" : {
 				"methodName" : "switchAction"
 			}
 		}
 	},
 	"Delete" : {
-		"gui" : {
+		"parameters" : {
+			"prepareModal" : "true",
 			"text" : "7",
 			"title" : "161",
 			"src" : "editdelete.png",
 			"accessKey" : "delete_access_key",
 			"hasAccessKey" : "true",
-			"specialAccessKey" : "delete",
-			"context" : {
-				"selection" : "true",
-				"dir" : "",
-				"recycle" : "false",
-				"actionBar" : "true",
-				"contextMenu" : "true",
-				"infoPanel" : "false",
-				"actionBarGroup" : "change",
-				"inZip" : "false"
-			},
-			"selectionContext" : {
-				"dir" : "true",
-				"file" : "true",
-				"recycle" : "false",
-				"unique" : "false",
-				"image" : "false",
-				"editable" : "false"
-			}
+			"specialAccessKey" : "delete"
+		},
+		"context" : {
+			"selection" : "true",
+			"dir" : "",
+			"recycle" : "false",
+			"actionBar" : "true",
+			"contextMenu" : "true",
+			"infoPanel" : "false",
+			"actionBarGroup" : "change",
+			"inZip" : "false"
+		},
+		"selectionContext" : {
+			"dir" : "true",
+			"file" : "true",
+			"recycle" : "false",
+			"unique" : "false",
+			"image" : "false",
+			"editable" : "false"
 		},
 		"rightsContext" : {
 			"noUser" : "true",
@@ -669,45 +637,43 @@
 			"write" : "true",
 			"adminOnly" : ""
 		},
+		"form" : {
+			"id" : "delete_form",
+			"html" : "<div id=\"delete_form\" action=\"delete\" box_width=\"200\"><span id=\"delete_message\"></span></div>"
+		},
 		"processing" : {
-			"clientCallback" : {
-				"prepareModal" : "true",
-			},
-			"clientForm" : {
-				"id" : "delete_form",
-				"$t" : "<div id=\"delete_form\" action=\"delete\" box_width=\"200\"><span id=\"delete_message\"></span></div>"
-			},
 			"serverCallback" : {
 				"methodName" : "switchAction"
 			}
 		}
 	},
 	"Chmod" : {
-		"gui" : {
+		"parameters" : {
+			"prepareModal" : "true",
 			"text" : "287",
 			"title" : "287",
 			"src" : "ksysv.png",
 			"accessKey" : "",
-			"hasAccessKey" : "false",
-			"context" : {
-				"selection" : "true",
-				"dir" : "true",
-				"recycle" : "hidden",
-				"behaviour" : "hidden",
-				"actionBar" : "false",
-				"contextMenu" : "true",
-				"infoPanel" : "true",
-				"actionBarGroup" : "change",
-				"inZip" : "false"
-			},
-			"selectionContext" : {
-				"dir" : "true",
-				"file" : "true",
-				"recycle" : "false",
-				"unique" : "false",
-				"allowedMimes" : "",
-				"behaviour" : "hidden"
-			}
+			"hasAccessKey" : "false"
+		},
+		"context" : {
+			"selection" : "true",
+			"dir" : "true",
+			"recycle" : "hidden",
+			"behaviour" : "hidden",
+			"actionBar" : "false",
+			"contextMenu" : "true",
+			"infoPanel" : "true",
+			"actionBarGroup" : "change",
+			"inZip" : "false"
+		},
+		"selectionContext" : {
+			"dir" : "true",
+			"file" : "true",
+			"recycle" : "false",
+			"unique" : "false",
+			"allowedMimes" : "",
+			"behaviour" : "hidden"
 		},
 		"rightsContext" : {
 			"noUser" : "true",
@@ -716,14 +682,11 @@
 			"write" : "true",
 			"adminOnly" : ""
 		},
+		"form" : {
+			"id" : "properties_box",
+			"html" : "<div id=\"properties_box\" action=\"chmod\" box_width=\"180\"></div>"
+		},
 		"processing" : {
-			"clientCallback" : {
-				"prepareModal" : "true",
-			},
-			"clientForm" : {
-				"id" : "properties_box",
-				"$t" : "<div id=\"properties_box\" action=\"chmod\" box_width=\"180\"></div>"
-			},
 			"serverCallback" : {
 				"methodName" : "switchAction"
 			}

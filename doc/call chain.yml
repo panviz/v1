@@ -1,0 +1,27 @@
+ViewManager:
+Modal:
+Bootstrap:
+  "dom:loaded":
+    "loadBootConfig":
+      init:
+        Application:
+          ActionsManager:
+            observe: "app:context_changed", "app:selection_changed", "app:user_logged"
+        app.init:
+          observe: "app:context_changed"
+          "loadRegistry":
+            fire: "app:registry_loaded"
+            User:
+            fire: "app:user_logged"
+            actionBar.initActions
+              Action:
+              fire: "app:actions_loaded"
+              TODO
+            loadActiveRepository
+          buildGUI
+          window.observe: "resize"
+          initWidgets
+          fire: "app:gui_loaded"
+          fire: "app:actions_loaded"
+          setTimeout.fire: "app:loaded"
+          .

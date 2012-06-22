@@ -1041,26 +1041,26 @@ Class.create("List", SelectableElements, {
                 }).update(metaData.get('text'));
 
                 var backgroundPosition = '4px 2px';
-                var backgroundImage = 'url("'+resolveImageSource(metaData.get('icon'), "/image/mimes/ICON_SIZE", 16)+'")';
+                var backgroundImage = 'url("'+resolveImageSource(metaData.get('icon'), "/image/mime/ICON_SIZE", 16)+'")';
                 if(metaData.get('overlay_icon') && Modernizr.multiplebgs){
                     var ovIcs = metaData.get('overlay_icon').split(',');
                     switch(ovIcs.length){
                         case 1:
                             backgroundPosition = '14px 11px, 4px 2px';
-                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/image/mimes/ICON_SIZE", 16)+'")';
+                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/image/mime/ICON_SIZE", 16)+'")';
                         break;
                         case 2:
                             backgroundPosition = '2px 11px, 14px 11px, 4px 2px';
-                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[1], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/image/mimes/ICON_SIZE", 16)+'")';
+                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[1], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/image/mime/ICON_SIZE", 16)+'")';
                         break;
                         case 3:
                             backgroundPosition = '14px 2px, 2px 11px, 14px 11px, 4px 2px';
-                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[1], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[2], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/image/mimes/ICON_SIZE", 16)+'")';
+                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[1], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[2], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/image/mime/ICON_SIZE", 16)+'")';
                         break;
                         case 4:
                         default:
                             backgroundPosition = '2px 2px, 14px 2px, 2px 11px, 14px 11px, 4px 2px';
-                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[1], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[2], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[3], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/image/mimes/ICON_SIZE", 16)+'")';
+                            backgroundImage = 'url("'+resolveImageSource(ovIcs[0], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[1], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[2], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(ovIcs[3], "/image/overlays/ICON_SIZE", 8)+'"), url("'+resolveImageSource(metaData.get('icon'), "/image/mime/ICON_SIZE", 16)+'")';
                         break;
                     }
                 }
@@ -1483,11 +1483,11 @@ Class.create("List", SelectableElements, {
 		var selNode = selRaw[0].Item;
 		if(selNode.isLeaf())
 		{
-			app.getActionBar().fireDefaultAction("file");
+			app.actionBar.fireDefaultAction("file");
 		}
 		else
 		{
-			app.getActionBar().fireDefaultAction("dir", selNode);
+			app.actionBar.fireDefaultAction("dir", selNode);
 		}
 	},
 

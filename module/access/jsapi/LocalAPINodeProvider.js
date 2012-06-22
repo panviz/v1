@@ -21,7 +21,7 @@
  * A local implementation that explore currently defined
  * classes
  */
-Class.create("LocalAPINodeProvider", {
+Class.create("LocalAPIItemProvider", {
 	__implements : "IItemProvider",
 	knownMixinMethods : {observe:'livepipe', stopObserving:'livepipe', observeOnce:'livepipe', notify:'livepipe'},
 	initialize : function(){
@@ -34,28 +34,28 @@ Class.create("LocalAPINodeProvider", {
 	
 	/**
 	 * 
-	 * @param node Item
-	 * @param nodeCallback Function
+	 * @param item Item
+	 * @param itemCallback Function
 	 * @param childCallback Function
 	 */
-	loadNode : function(node, nodeCallback, childCallback){
-		var path = node.getPath();
+	loadItem : function(item, itemCallback, childCallback){
+		var path = item.getPath();
 		var children = [];
 		var levelIcon = "folder.png";
 		if(path == "/"){
 			var levelIcon = "jsapi_image/package.png";
 			children = ["Classes", "Interfaces"];			
 		}else if(path == "/Classes" || path == "/Interfaces"){
-			var levelIcon = (path=="/Classes"?"jsapi_image/class.png":"jsapi_image/interface.png");
-			$$OO_ObjectsRegistry[(path=="/Classes"?'classes':'interfaces')].each(function(pair){
+			var levelIcon = (path=="/Classes" ? "jsapi_image/class.png" : "jsapi_image/interface.png");
+			$$OO_ObjectsRegistry[(path=="/Classes" ? 'classes' : 'interfaces')].each(function(pair){
 				children.push(pair.key);
 			});
 			children.sort();
-		}else if(node.getMetadata().get("API_CLASS") || node.getMetadata().get("API_INTERFACE")){
-			var api_class = node.getMetadata().get("API_CLASS");
-			var api_interface = node.getMetadata().get("API_INTERFACE");
+		}else if(item.getMetadata().get("API_CLASS") || item.getMetadata().get("API_INTERFACE")){
+			var api_class = item.getMetadata().get("API_CLASS");
+			var api_interface = item.getMetadata().get("API_INTERFACE");
 			var levelIcon = "jsapi_image/method.png";
-			var ooObject = $$OO_ObjectsRegistry[(api_class?'classes':'interfaces')].get((api_class?api_class:api_interface));
+			var ooObject = $$OO_ObjectsRegistry[(api_class ? 'classes' : 'interfaces')].get((api_class ? api_class : api_interface));
 			var proto = ooObject.prototype;
 			var properties = $A();
 			var methods = $A();
@@ -170,56 +170,56 @@ Class.create("LocalAPINodeProvider", {
 				mixedMethods.each(function(el){children.push(el);});
 			}
 		}
-		this.createItems(node, $A(children), nodeCallback, childCallback, levelIcon);
-		if( node.getMetadata().get("API_CLASS") || node.getMetadata().get("API_INTERFACE") ){ 
-			if(!node.getMetadata().get("API_SOURCE")){
-				if(node.getMetadata().get("api_source_loading")) return;
-				node.getMetadata().set("api_source_loading", true);
+		this.createItems(item, $A(children), itemCallback, childCallback, levelIcon);
+		if( item.getMetadata().get("API_CLASS") || item.getMetadata().get("API_INTERFACE") ){ 
+			if(!item.getMetadata().get("API_SOURCE")){
+				if(item.getMetadata().get("api_source_loading")) return;
+				item.getMetadata().set("api_source_loading", true);
 				var conn = new Connection();
 				conn.setParameters({
 					get_action : 'get_js_source',
-					object_type : (node.getMetadata().get("API_CLASS")?'class':'interface'),
-					object_name : getBaseName(node.getPath())
+					object_type : (item.getMetadata().get("API_CLASS") ? 'class' : 'interface'),
+					object_name : getBaseName(item.getPath())
 				});
 				conn.onComplete = function(transport){
-					node.getMetadata().set("API_SOURCE", transport.responseText);
-					node.getMetadata().set("API_JAVADOCS", this.parseJavadocs(transport.responseText));
-					node.notify("api_source_loaded");
-					this.enrichChildrenWithJavadocs(node);
-					node.getMetadata().set("api_source_loading", false);
-					node.setLoaded(true);
+					item.getMetadata().set("API_SOURCE", transport.responseText);
+					item.getMetadata().set("API_JAVADOCS", this.parseJavadocs(transport.responseText));
+					item.notify("api_source_loaded");
+					this.enrichChildrenWithJavadocs(item);
+					item.getMetadata().set("api_source_loading", false);
+					item.setLoaded(true);
 				}.bind(this);
 				conn.onError = function(){
-					node.getMetadata().set("api_source_loading", false);
-					node.setLoaded(true);
+					item.getMetadata().set("api_source_loading", false);
+					item.setLoaded(true);
 				};
 				conn.sendAsync();
 			}else{
-				this.enrichChildrenWithJavadocs(node);
-				node.setLoaded(true);
+				this.enrichChildrenWithJavadocs(item);
+				item.setLoaded(true);
 			}
 		}else{
-			node.setLoaded(true);
+			item.setLoaded(true);
 		}
 	},
 	
-	createItems : function(node, children, nodeCallback, childCallback, levelIcon){
-		var path = node.getPath();
+	createItems : function(item, children, itemCallback, childCallback, levelIcon){
+		var path = item.getPath();
 		if(path == "/") path = "";
-		children.each(function(childNode){
+		children.each(function(childItem){
 			var label, icon, isFile, childPath;
-			if(typeof(childNode) == "string"){
-				label = childNode;
+			if(typeof(childItem) == "string"){
+				label = childItem;
 				icon = levelIcon;
 				isFile = false;
 				childPath = label;
-			}else if(typeof(childNode) == "object"){
-				label = childNode.LABEL;
-				icon = (childNode.ICON?childNode.ICON:levelIcon);
-				childPath = (childNode.PATH?childNode.PATH:label);
-				isFile = childNode.LEAF;
-				if(childNode.METADATA){
-					var addMeta = childNode.METADATA; 
+			}else if(typeof(childItem) == "object"){
+				label = childItem.LABEL;
+				icon = (childItem.ICON ? childItem.ICON : levelIcon);
+				childPath = (childItem.PATH ? childItem.PATH : label);
+				isFile = childItem.LEAF;
+				if(childItem.METADATA){
+					var addMeta = childItem.METADATA; 
 				}
 			}
 			var child = new Item(
@@ -229,7 +229,7 @@ Class.create("LocalAPINodeProvider", {
 					icon, 		// ICON
 					this			// Keep the same provider!		
 					);		
-			node.addChild(child);
+			item.addChild(child);
 			var metadata = $H();
 			metadata.set("text", label);
 			metadata.set("icon", icon);
@@ -247,27 +247,27 @@ Class.create("LocalAPINodeProvider", {
 			}
 		}.bind(this) );
 
-		if(nodeCallback){
-			nodeCallback(node);
+		if(itemCallback){
+			itemCallback(item);
 		}
 	} ,
 	
 	/**
 	 * Find javadocs associated with the various members
-	 * @param node Item
+	 * @param item Item
 	 */
-	enrichChildrenWithJavadocs: function(node){
-		var docs = node.getMetadata().get("API_JAVADOCS");
-		var children = node.getChildren();
+	enrichChildrenWithJavadocs: function(item){
+		var docs = item.getMetadata().get("API_JAVADOCS");
+		var children = item.getChildren();
 		//console.log(docs);
 		var changes = false;
-		children.each(function(childNode){
-			var memberKey = getBaseName(childNode.getPath());
+		children.each(function(childItem){
+			var memberKey = getBaseName(childItem.getPath());
 			var vDesc = null;
 			if(docs[memberKey]){
 				changes = true;
-				var meta = childNode.getMetadata();
-				var crtLabel = childNode._label;
+				var meta = childItem.getMetadata();
+				var crtLabel = childItem._label;
 				if(docs[memberKey].main){
 					crtLabel = crtLabel.replace("<span", '<span title="'+docs[memberKey].main.replace(/"/g, '\'')+'"');
 				}
@@ -290,7 +290,7 @@ Class.create("LocalAPINodeProvider", {
 						$A(meta.get("argumentNames")).each(function(arg){							
 							if(docs[memberKey].keywords["param"][arg]){
 								pValue = docs[memberKey].keywords["param"][arg];
-								pType = (pValue.split(" ").length?pValue.split(" ")[0].strip():'');
+								pType = (pValue.split(" ").length ? pValue.split(" ")[0].strip() : '');
 								pDesc = pValue.substring(pType.length+1).replace(/"/g, '\'');
 								arg = '<span class="jsapi_jdoc_param">'+pType+'</span> <span title="'+pDesc+'">'+arg+'</span>';
 							}
@@ -300,38 +300,38 @@ Class.create("LocalAPINodeProvider", {
 					}
 				}
 				if(docs[memberKey].main || vDesc){
-					vDesc = vDesc?vDesc:docs[memberKey].main; 
+					vDesc = vDesc ? vDesc : docs[memberKey].main; 
 					crtLabel = crtLabel + '<span class="jsapi_commentfull">'+vDesc+'</span>';
 				}
 				
-				childNode._label = crtLabel;
+				childItem._label = crtLabel;
 				meta.set("text", crtLabel);
 			}
 		});
 		if(docs["Class"] || docs["Interface"]){
-			var type = (docs["Class"]?'Class':'Interface');
+			var type = (docs["Class"] ? 'Class' : 'Interface');
 			var comm = docs[type].main;
 			if(comm.length > 200){
 				comm = comm.substring(0, 200)+'...';
 			}
-			var label = "<span class='jsapi_member'>"+type+" "+getBaseName(node.getPath())+"</span> - <span class='jsapi_maindoc'>"+comm+"</span>";
+			var label = "<span class='jsapi_member'>"+type+" "+getBaseName(item.getPath())+"</span> - <span class='jsapi_maindoc'>"+comm+"</span>";
 			var icon = "jsapi_image/"+type.toLowerCase()+".png";
-			var child = new Item(
-					node.getPath(), // PATH 
-					true, 			// IS LEAF OR NOT
-					label,		// LABEL			
-					icon, 	// ICON
-					this			// Keep the same provider!		
-			);
-			var metadata = $H();
-			metadata.set("text", label);
-			metadata.set("icon", icon);
-			metadata.set("API_OBJECT_NODE", true);
-			child.setMetadata(metadata);
+			var metadata = {
+				"text": label;
+				"icon": icon;
+				"API_OBJECT_NODE": true
+			}
+			var child = new Item(item.getPath(), {
+					"isLeaf": true,
+					"label": label,
+					"icon": icon,
+					"metadata": metadata
+			}, this); // Keep the same provider!
+
 			// ADD MANUALLY AT THE TOP
-			child.setParent(node);
-			node._children.unshift(child);
-			node.notify("child_added", child.getPath());
+			child.setParent(item);
+			item._children.unshift(child);
+			item.notify("child_added", child.getPath());
 
 			changes = true;
 		}

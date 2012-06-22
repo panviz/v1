@@ -1,6 +1,9 @@
+#!/usr/bin/env node
+
 var fs = require('fs'),
 		util = require('util'),
 		wrench = require('wrench'),
+		//works under linux
 		//parser = require('xml2json'),
 		path = process.cwd();
 
@@ -38,21 +41,21 @@ var php2Json = function(files){
 
 var xml2json = function(files){
 	files.forEach(function(file){
-		if (file.match(/.*action.*\.xml$/gi)) {
-			var filename = path + '/module/' + file;
+		if (file.match(/user.xml$/g)) {
+			var filename = path + '/config/' + file;
 			console.log(filename);
 			var xml = fs.readFileSync(filename);
-			//var data = parser.toJson(xml)
+			var data = parser.toJson(xml)
 			//add formatting
-			//var data = JSON.stringify(data, null, '');
-			//fs.writeFileSync(filename.replace(/\.xml$/,'.json'), data)
+			var data = JSON.stringify(data, null, '');
+			fs.writeFileSync(filename.replace(/\.xml$/,'.json'), data)
 		}
 	})
 }
 
 var replace = function(files){
-	var exp = 'ajxp_';
-	var sub = '';
+	var exp = 'actions\/';
+	var sub = 'action\/';
 	var counter = 0;
 	var process = [];
 	var regxp = new RegExp(exp);
@@ -69,7 +72,8 @@ var replace = function(files){
 			var line = f.getNextLine();
 			if (line.match(regxp)){
 				//console.log("LINE: " + line);
-				console.log(line.substr(line.indexOf(exp)));
+				var index = line.indexOf(exp);
+				console.log('\x1b[36m'+exp+'\x1b[90m' + line.substr(index+exp.length, 110) + '\x1b[90m');
 				line = line.replace(regxp, sub);
 				changed = true;
 				counter++
@@ -77,8 +81,8 @@ var replace = function(files){
 			data += (line +'\n');
 		}
 		if (changed){
-			console.log(counter + ': '+ file)
-			//fs.writeFileSync(file, data);
+			console.log('\x1b[31m'+counter+'\x1b[32m' + ': '+ file)
+			fs.writeFileSync(file, data);
 		}
 	})
 }

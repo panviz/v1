@@ -18,12 +18,12 @@ function Tree(rootNode, sAction, filter) {
 	this.item = rootNode;
 	var icon = rootNode.getIcon();
 	if(icon.indexOf(THEME.path+"/") != 0){
-		icon = resolveImageSource(icon, "/image/mimes/ICON_SIZE", 16);
+		icon = resolveImageSource(icon, "/image/mime/ICON_SIZE", 16);
 	}
 	var openIcon = rootNode.getMetadata().get("openicon");
 	if(openIcon){
 		if(openIcon.indexOf(THEME.path+"/") != 0){
-			openIcon = resolveImageSource(openIcon, "/image/mimes/ICON_SIZE", 16);
+			openIcon = resolveImageSource(openIcon, "/image/mime/ICON_SIZE", 16);
 		}
 	}else{
 		openIcon = icon;
@@ -106,10 +106,10 @@ Tree.prototype.attachListeners = function(jsNode, item){
 	item.observe("node_replaced", function(newNode){
 		// Should refresh label / icon
 		if(jsNode.updateIcon){ 
-			var ic = resolveImageSource(item.getIcon(), "/image/mimes/ICON_SIZE", 16);
+			var ic = resolveImageSource(item.getIcon(), "/image/mime/ICON_SIZE", 16);
 			var oic = ic;
 			if(item.getMetadata().get("openicon")){
-				oic = resolveImageSource(item.getMetadata().get("openicon"), "/image/mimes/ICON_SIZE", 16);
+				oic = resolveImageSource(item.getMetadata().get("openicon"), "/image/mime/ICON_SIZE", 16);
 			}
 			jsNode.updateIcon(ic, oic);
             jsNode.overlayIcon = splitOverlayIcons(item);
@@ -135,12 +135,12 @@ function TreeItem(item, sAction, eParent) {
 	this.item = item;
 	var icon = item.getIcon();
 	if(icon.indexOf(THEME.path+"/") != 0){
-		icon = resolveImageSource(icon, "/image/mimes/ICON_SIZE", 16);
+		icon = resolveImageSource(icon, "/image/mime/ICON_SIZE", 16);
 	}
 	var openIcon = item.getMetadata().get("openicon");
 	if(openIcon){
 		if(openIcon.indexOf(THEME.path+"/") != 0){
-			openIcon = resolveImageSource(openIcon, "/image/mimes/ICON_SIZE", 16);
+			openIcon = resolveImageSource(openIcon, "/image/mime/ICON_SIZE", 16);
 		}
 	}else{
 		openIcon = icon;
@@ -152,7 +152,7 @@ function TreeItem(item, sAction, eParent) {
         sAction,
         eParent,
         icon,
-        (openIcon?openIcon:resolveImageSource("folder_open.png", "/image/mimes/ICON_SIZE", 16)),
+        (openIcon?openIcon:resolveImageSource("folder_open.png", "/image/mime/ICON_SIZE", 16)),
         splitOverlayIcons(item)
     );
 

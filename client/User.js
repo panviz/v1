@@ -1,115 +1,71 @@
 /**
- * Abstraction of the currently logged user. Can be a "fake" user when users management
- * system is disabled
+ * User management
  */
 Class.create("User", {
 
 	/**
-	 * @var String
+	 * @param data Json
 	 */
-	id: undefined,
-	/**
-	 * @var String
-	 */
-	activeRepository: undefined,
-	/**
-	 * @var Boolean
-	 */
-	read: false,
-	/**
-	 * @var Boolean
-	 */
-	write: false,
-	/**
-	 * @var Boolean
-	 */	
-	crossRepositoryCopy: false,	
-	/**
-	 * @var $H()
-	 */
-	preferences: undefined,
-	/**
-	 * @var $H()
-	 */
-	repositories: undefined,
-	/**
-	 * @var $H()
-	 */
-	crossRepositories: undefined,
-	/**
-	 * @var $H()
-	 */
-	repoIcons: undefined,
-	/**
-	 * @var $H()
-	 */
-	repoSearchEngines: undefined,
-	/**
-	 * @var Boolean
-	 */
-	isAdmin: false,
-
-	/**
-	 * Constructor
-	 * @param id String The user unique id
-	 * @param xmlDef XMLNode Registry Fragment
-	 */
-	initialize : function(id, xmlDef){
-		this.id = id;
-		this.preferences = new Hash();
+	initialize : function(data){
+		this.id = data.id;
+		this._preferences = $H(data.preferences);
 		this.repositories = new Hash();
 		this.crossRepositories = new Hash();
-		this.repoIcon = new Hash();
-		this.repoSearchEngines = new Hash();
-		if(xmlDef) this.loadFromXml(xmlDef);
+		this._repoIcon = new Hash();
+		this._repoSearchEngines = new Hash();
+		this.setRepositoriesList(repositories);
+		this.isAdmin = data.roles.include('admin');
+		// Make sure it happens at the end
+		if(data.active_repo){
+			this.setActiveRepository(data.active_repo);
+		}
 	},
 
 	/**
 	 * Set current repository
-	 * @param id String
-	 * @param read Boolean
-	 * @param write Boolean
+	 * @param p {id, read, write}
 	 */
-	setActiveRepository : function (id, read, write){
-		this.activeRepository = id;
-		this.read = !!(read=="1");
-		this.write = !!(write=="1");
+	setActiveRepository : function (p){
+		this._activeRepository = p.id;
+		this._permissions.read = p.read || false;
+		this._permissions.write = p.write || false;
 		if(this.repositories.get(id)){
-			this.crossRepositoryCopy = this.repositories.get(id).allowCrossRepositoryCopy;
+			this._permissions.copiable = this.repositories.get(id).copiable;
 		}
 		if(this.crossRepositories.get(id)){
-			this.crossRepositories.unset(id);
+			this._crossRepositories.unset(id);
 		}
+		this.activeRepository.loadResources();
 	},
 	/**
 	 * Gets the current active repository
 	 * @returns String
 	 */
 	getActiveRepository : function(){
-		return this.activeRepository;
+		return this._activeRepository;
 	},
 	/**
-	 * Whether current repo is allowed to be read
+	 * Rights to read active repository
 	 * @returns Boolean
 	 */
-	canRead : function(){
-		return this.read;
-	},
-	
-	/**
-	 * Whether current repo is allowed to be written
-	 * @returns Boolean
-	 */
-	canWrite : function(){
-		return this.write;
+	readable : function(){
+		return this._permissions.read;
 	},
 	
 	/**
-	 * Whether current repo is allowed to be cross-copied
+	 * Rights to write active repository
 	 * @returns Boolean
 	 */
-	canCrossRepositoryCopy : function(){
-		return this.crossRepositoryCopy;
+	writable : function(){
+		return this._permissions.write;
+	},
+	
+	/**
+	 * Rights to copy active repository
+	 * @returns Boolean
+	 */
+	copiable : function(){
+		return this._permissions.copiable;
 	},
 	
 	/**
@@ -147,40 +103,36 @@ Class.create("User", {
 	 * @param prefValue Mixed
 	 * @param toJSON Boolean Whether to convert the value to JSON representation
 	 */
-	setPreference : function(prefName, prefValue, toJSON){
-		if(toJSON){
-			prefValue = Object.toJSON(prefValue);
-		}
-		this.preferences.set(prefName, prefValue);
+	setPreference : function(name, value){
+		this._preferences.set(name, value);
 	},
 	
 	/**
-	 * Set the repositories as a bunch
+	 * Init user's repositories
 	 * @param repoHash $H()
 	 */
-	setRepositoriesList : function(repoHash){
-		this.repositories = repoHash;
-		// filter repositories once for all
-		this.crossRepositories = new Hash();
-		this.repositories.each(function(pair){
-			if(pair.value.allowCrossRepositoryCopy){
-				this.crossRepositories.set(pair.key, pair.value);
+	setRepositoriesList : function(data){
+		data.each(function(repo){
+			var newRepo = new Repository(repo);
+			this.repositories.set(repo.id, newRepo);
+			if(repo.copiable){
+				this._crossRepositories.set(repo.id, newRepo);
 			}
-		}.bind(this) );
+		})
 	},
 	/**
 	 * Whether there are any repositories allowing crossCopy
 	 * @returns Boolean
 	 */
 	hasCrossRepositories : function(){
-		return (this.crossRepositories.size());
+		return (this._crossRepositories.size());
 	},
 	/**
 	 * Get repositories allowing cross copy
 	 * @returns {Hash}
 	 */
 	getCrossRepositories : function(){
-		return this.crossRepositories;
+		return this._crossRepositories;
 	},
 	/**
 	 * Get the current repository Icon
@@ -188,7 +140,7 @@ Class.create("User", {
 	 * @returns String
 	 */
 	getRepositoryIcon : function(repoId){
-		return this.repoIcon.get(repoId);
+		return this._repoIcon.get(repoId);
 	},
 	/**
 	 * Get the repository search engine
@@ -196,99 +148,40 @@ Class.create("User", {
 	 * @returns String
 	 */
 	getRepoSearchEngine : function(repoId){
-		return this.repoSearchEngines.get(repoId);
+		return this._repoSearchEngines.get(repoId);
+	},
+
+	savePreference : function(name){
+		if(!this.preferences.get(name)) return;
+		var connection = new Connection('/user/preferences');
+        connection.setMethod('post');
+		connection.addParameter("name_" + 0, name);
+		connection.addParameter("value_" + 0, this._preferences.get(name));
+		connection.sendAsync();
 	},
 	/**
-	 * Send the preference to the server for saving
-	 * @param prefName String
-	 */
-	savePreference : function(prefName){
-		if(!this.preferences.get(prefName)) return;
-		var conn = new Connection();
-        conn.setMethod('post');
-		conn.addParameter("get_action", "save_user_pref");
-		conn.addParameter("pref_name_" + 0, prefName);
-		conn.addParameter("pref_value_" + 0, this.preferences.get(prefName));
-		conn.sendAsync();
-	},
-	/**
-	 * Send all preferences to the server. If oldPass, newPass and seed are set, also save pass.
+	 * Send all _preferences to the server. If oldPass, newPass and seed are set, also save pass.
 	 * @param oldPass String
 	 * @param newPass String
 	 * @param seed String
-	 * @param onCompleteFunc Function
+	 * @param onComplete Function
 	 */
-	savePreferences : function(oldPass, newPass, seed, onCompleteFunc){
-		var conn = new Connection();
-		conn.addParameter("get_action", "save_user_pref");
+	savePreferences : function(oldPass, newPass, seed, onComplete){
+		var connection = new Connection('/user/preferences');
 		var i=0;
-		this.preferences.each(function(pair){
-			conn.addParameter("pref_name_"+i, pair.key);
-			conn.addParameter("pref_value_"+i, pair.value);
+		this._preferences.each(function(pair){
+			connection.addParameter("name_"+i, pair.key);
+			connection.addParameter("value_"+i, pair.value);
 			i++;
 		});
 		if(oldPass && newPass)
 		{
-			conn.addParameter("pref_name_"+i, "password");
-			conn.addParameter("pref_value_"+i, newPass);
-			conn.addParameter("crt", oldPass);
-			conn.addParameter("pass_seed", seed);
+			connection.addParameter("name"+i, "password");
+			connection.addParameter("value_"+i, newPass);
+			connection.addParameter("crt", oldPass);
+			connection.addParameter("pass_seed", seed);
 		}
-		conn.onComplete = onCompleteFunc;
-		conn.sendAsync();
-	}, 
-	/**
-	 * Parse the registry fragment to load this user
-	 * @param userNodes DOMNode
-	 */
-	loadFromXml: function(userNodes){
-	
-		var repositories = new Hash();
-		for(var i=0; i<userNodes.length;i++)
-		{
-			if(userNodes[i].nodeName == "active_repo")
-			{
-				var activeNode = userNodes[i];
-			}
-			else if(userNodes[i].nodeName == "repositories")
-			{
-				for(j=0;j<userNodes[i].childNodes.length;j++)
-				{
-					var repoChild = userNodes[i].childNodes[j];
-					if(repoChild.nodeName == "repo") {	
-						var repository = new Repository(repoChild.getAttribute("id"), repoChild);
-						repositories.set(repoChild.getAttribute("id"), repository);
-					}
-				}
-				this.setRepositoriesList(repositories);
-			}
-			else if(userNodes[i].nodeName == "preferences")
-			{
-				for(j=0;j<userNodes[i].childNodes.length;j++)
-				{
-					var prefChild = userNodes[i].childNodes[j];
-					if(prefChild.nodeName == "pref") {
-						var value = prefChild.getAttribute("value");
-						if(!value && prefChild.firstChild){
-							// Retrieve value from CDATA
-							value = prefChild.firstChild.nodeValue;
-						}
-						this.setPreference(prefChild.getAttribute("name"), value);
-					}
-				}					
-			}
-			else if(userNodes[i].nodeName == "special_rights")
-			{
-				var attr = userNodes[i].getAttribute("is_admin");
-				if(attr && attr == "1") this.isAdmin = true;
-			}
-		}
-		// Make sure it happens at the end
-		if(activeNode){
-			this.setActiveRepository(activeNode.getAttribute('id'), 
-									activeNode.getAttribute('read'), 
-									activeNode.getAttribute('write'));
-			
-		}
+		connection.onComplete = onComplete;
+		connection.sendAsync();
 	}
 });

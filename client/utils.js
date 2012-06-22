@@ -48,8 +48,8 @@ function resolveImageSource(src, defaultPath, size){
 	var radic = src.substring(0,src.indexOf("/"));
 	if(window.ImageLibraries[radic]){
 		var src = src.replace(radic, window.ImageLibraries[radic]);
-        if(bootstrap.parameters.get("SERVER_PREFIX_URI")){
-            src = bootstrap.parameters.get("SERVER_PREFIX_URI") + src;
+        if(bootstrap.p.get("SERVER_PREFIX_URI")){
+            src = bootstrap.p.get("SERVER_PREFIX_URI") + src;
         }
 		return (size ? src.replace("ICON_SIZE", size) : src);
 	}else{
@@ -360,8 +360,8 @@ function loadXPathReplacer(){
 	if(document.createExpression) return;
 	var conn = new Connection();
 	conn._libUrl = false;
-	if(bootstrap.parameters.get('SERVER_PREFIX_URI')){
-		conn._libUrl = bootstrap.parameters.get('SERVER_PREFIX_URI');
+	if(bootstrap.p.get('SERVER_PREFIX_URI')){
+		conn._libUrl = bootstrap.p.get('SERVER_PREFIX_URI');
 	}
 	conn.loadLibrary('plugins/gui.ajax/res/js/lib/xpath/javascript-xpath-cmp.js');	
 }

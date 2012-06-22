@@ -1,7 +1,3 @@
-/*
- * Default application settings
- */
-module.exports = 
 {
 	"debug" : true,
 	"settings_path" : "settings.json",
@@ -26,6 +22,6 @@ module.exports =
 		"iconWidth" : "250px",
 		"iconHeight" : "50px",
 		"iconOnly" : true,
-		"titleFontSize" : "",
+		"titleFontSize" : ""
 	}
 }

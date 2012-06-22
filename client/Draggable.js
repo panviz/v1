@@ -125,7 +125,7 @@ Class.create("Draggable", Draggable, {
 			$(this._clone).addClassName("draggable");
 			$(this._clone).addClassName('multiple_selection_draggable');
 			this._clone.setAttribute('user_selection', 'true');
-			$(bootstrap.parameters.get("MAIN_ELEMENT")).insert(this._clone);
+			$(THEME.element).insert(this._clone);
 			this.original = this.element;
 			this.element = this._clone;			
 			var max = Math.min(nodes.length,5);
@@ -163,8 +163,8 @@ Class.create("Draggable", Draggable, {
 		if(this.options.starteffect){
 			this.options.starteffect(this.element);
 		}
-		this.dndAction = app.getActionBar().getDefaultAction('dragndrop');
-		this.ctrlDndAction = app.getActionBar().getDefaultAction('ctrldragndrop');			
+		this.dndAction = app.actionBar.getDefaultAction('dragndrop');
+		this.ctrlDndAction = app.actionBar.getDefaultAction('ctrldragndrop');			
     },
 
 

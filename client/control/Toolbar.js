@@ -6,32 +6,32 @@ Class.create("Toolbar", {
 	/**
 	 * Constructor
 	 * @param oElement Element The dom node
-	 * @param options Object The toolbar options. Contains a buttonRenderer and a toolbarsList array.
+	 * @param p Object The toolbar p. Contains a buttonRenderer and a toolbarsList array.
 	 */
-	initialize : function(oElement, options){
+	initialize : function(oElement, p){
 		this.element = oElement;		
 		this.element.paneObject = this;
-		this.options = Object.extend({
+		this.p = Object.extend({
 			buttonRenderer : 'this',
             skipBubbling: false,
 			toolbarsList : $A(['default', 'put', 'get', 'change', 'user', 'remote'])
-		}, options || {});
-		var renderer = this.options.buttonRenderer;
+		}, p || {});
+		var renderer = this.p.buttonRenderer;
 		if(renderer == 'this'){
-			this.options.buttonRenderer = this;
+			this.p.buttonRenderer = this;
 		}else{
-			this.options.buttonRenderer = new renderer();
+			this.p.buttonRenderer = new renderer();
 		}
 		this.toolbars = $H();
 		this.initCarousel();
-        if(this.options.styles){
+        if(this.p.styles){
             this.buildActionBarStylingMenu();
-            this.style = this.options.defaultStyle;
+            this.style = this.p.defaultStyle;
             document.observe("app:user_logged", function(){
                 if(app.user && app.user.getPreference("action_bar_style")){
                     this.style = app.user.getPreference("action_bar_style");
                 }else{
-                    this.style = this.options.defaultStyle;
+                    this.style = this.p.defaultStyle;
                 }
                 this.switchStyle(false, true);
             }.bind(this));
@@ -39,6 +39,7 @@ Class.create("Toolbar", {
 		attachMobileScroll(oElement.id, "horizontal");
 		document.observe("app:actions_loaded", this.actionsLoaded.bind(this));
 		document.observe("app:actions_refreshed", this.refreshToolbarsSeparator.bind(this));
+		debugger
         this.componentConfigHandler = function(event){
             if(event.memo.className == "Toolbar"){
                 this.parseComponentConfig(event.memo.classConfig.get('all'));
@@ -65,7 +66,7 @@ Class.create("Toolbar", {
         var config = XPathSelectSingleNode(domNode, 'property[@name="style"]');
         if(config){
             var value = config.getAttribute("value");
-            if(this.options.styles && this.options.styles[value]){
+            if(this.p.styles && this.p.styles[value]){
                 this.style = value;
                 this.switchStyle();
             }
@@ -97,7 +98,7 @@ Class.create("Toolbar", {
 			}			
 		}.bind(this));
 		var crtCount = 0;
-		var toolbarsList = this.options.toolbarsList;
+		var toolbarsList = this.p.toolbarsList;
 		toolbarsList.each(function(toolbar){			
 			var tBar = this.initToolbar(toolbar);			
 			if(tBar && tBar.actionsCount){				
@@ -210,43 +211,43 @@ Class.create("Toolbar", {
 	 */
 	renderToolbarAction : function(action){
 		var button = new Element('a', {
-			href: action.options.name,
-			id: action.options.name +'_button'
+			href: action.p.name,
+			id: action.p.name +'_button'
 		}).observe('click', function(e){
 			Event.stop(e);
-			if(this.options.subMenu){
+			if(this.p.subMenu){
 				//this.subMenu.show(e);
 			}else{
 				this.apply();
 			}
 		}.bind(action));
-        var icSize = (this.options.defaultIconSize?this.options.defaultIconSize: 22);
-        if(this.options.stylesImgSizes && this.style && this.options.stylesImgSizes[this.style]){
-            icSize = this.options.stylesImgSizes[this.style];
+        var icSize = (this.p.defaultIconSize?this.p.defaultIconSize: 22);
+        if(this.p.stylesImgSizes && this.style && this.p.stylesImgSizes[this.style]){
+            icSize = this.p.stylesImgSizes[this.style];
         }
-		var imgPath = resolveImageSource(action.options.src,action.__DEFAULT_ICON_PATH, icSize);
+		var imgPath = resolveImageSource(action.p.src,action.__DEFAULT_ICON_PATH, icSize);
 		var img = new Element('img', {
-			id: action.options.name +'_button_icon',
+			id: action.p.name +'_button_icon',
             className: 'actionbar_button_icon',
 			src: imgPath,
 			width: icSize,
 			height: icSize,
 			border: 0,
-			alt: action.options.title,
-			title: action.options.title,
-            'data-action-src': action.options.src
+			alt: action.p.title,
+			title: action.p.title,
+            'data-action-src': action.p.src
 		});
-		var titleSpan = new Element('span', {id: action.options.name+'_button_label',className: 'actionbar_button_label'});
+		var titleSpan = new Element('span', {id: action.p.name+'_button_label',className: 'actionbar_button_label'});
 		button.insert(img).insert(titleSpan.update(action.getKeyedText()));
 		//this.elements.push(this.button);
-		if(action.options.subMenu){
+		if(action.p.subMenu){
 			this.buildActionBarSubMenu(button, action);// TODO
             button.setStyle({position: 'relative'});
 			var arrowDiv = new Element('div', {className: 'actionbar_arrow_div'});
 			arrowDiv.insert(new Element('img',{src: THEME.path+'/images/arrow_down.png',height: 6,width: 10,border: 0}));
 			arrowDiv.imgRef = img;
             button.insert(arrowDiv);
-		}else if(!this.options.skipBubbling) {
+		}else if(!this.p.skipBubbling) {
 			button.observe("mouseover", function(){
 				this.buttonStateHover(button, action);
 			}.bind(this) );
@@ -254,7 +255,7 @@ Class.create("Toolbar", {
 				this.buttonStateOut(button, action);
 			}.bind(this) );
 		}
-        if(!this.options.skipBubbling){
+        if(!this.p.skipBubbling){
             img.setStyle("width:18px; height:18px; margin-top:8px;");
         }
 		button.hide();
@@ -282,15 +283,15 @@ Class.create("Toolbar", {
 			button.removeClassName("disabled");
 		}.bind(this));
 		action.observe("submenu_active", function(submenuItem){
-			if(!submenuItem.src || !action.options.subMenuUpdateImage) return;
-			var images = button.select('img[id="'+action.options.name +'_button_icon"]');
+			if(!submenuItem.src || !action.p.subMenuUpdateImage) return;
+			var images = button.select('img[id="'+action.p.name +'_button_icon"]');
 			if(!images.length) return;
             icSize = 22;
-            if(this.options.stylesImgSizes && this.style && this.options.stylesImgSizes[this.style]){
-                icSize = this.options.stylesImgSizes[this.style];
+            if(this.p.stylesImgSizes && this.style && this.p.stylesImgSizes[this.style]){
+                icSize = this.p.stylesImgSizes[this.style];
             }
 			images[0].src = resolveImageSource(submenuItem.src, action.__DEFAULT_ICON_PATH,icSize);
-			action.options.src = submenuItem.src;
+			action.p.src = submenuItem.src;
 		}.bind(this));
 	},
 	
@@ -312,16 +313,16 @@ Class.create("Toolbar", {
 		  zIndex: 2000		  
 		});	
 		var titleSpan = button.select('span')[0];	
-		subMenu.options.beforeShow = function(e){
+		subMenu.p.beforeShow = function(e){
 			button.addClassName("menuAnchorSelected");
-			if(!this.options.skipBubbling) this.buttonStateHover(button, action);
+			if(!this.p.skipBubbling) this.buttonStateHover(button, action);
 		  	if(action.subMenuItems.dynamicBuilder){
 		  		action.subMenuItems.dynamicBuilder(subMenu);
 		  	}
 		}.bind(this);		
-		subMenu.options.beforeHide = function(e){
+		subMenu.p.beforeHide = function(e){
 			button.removeClassName("menuAnchorSelected");
-			if(!this.options.skipBubbling) this.buttonStateOut(button, action);
+			if(!this.p.skipBubbling) this.buttonStateOut(button, action);
 		}.bind(this);
 		if(!this.element.subMenus) this.element.subMenus = $A([]);
 		this.element.subMenus.push(subMenu);
@@ -343,7 +344,7 @@ Class.create("Toolbar", {
           parent: this.element,
           menuItems: [],
           beforeShow: function(){
-              this.stylingMenu.options.menuItems = this.listStyleMenuItems();
+              this.stylingMenu.p.menuItems = this.listStyleMenuItems();
           }.bind(this),
           fade: true,
           zIndex: 2000
@@ -353,9 +354,9 @@ Class.create("Toolbar", {
     listStyleMenuItems : function(){
         var items = [];
         var oThis = this;
-        for(var k in this.options.styles){
+        for(var k in this.p.styles){
             items.push({
-                name: this.options.styles[k],
+                name: this.p.styles[k],
                 alt: k,
                 image: resolveImageSource((k == this.style ? 'button_ok.png' : 'transp.png'),Action.prototype.__DEFAULT_ICON_PATH, 16),
                 isDefault: (k == this.style),
@@ -381,13 +382,13 @@ Class.create("Toolbar", {
         var actBar = this.element.up("div.action_bar");
 
         var applyResize = function(){
-            for(var k in this.options.styles){
+            for(var k in this.p.styles){
                 if(k!=style) this.element.parentNode.removeClassName(k);
             }
             this.element.parentNode.addClassName(style);
-            if(this.options.stylesImgSizes && this.options.stylesImgSizes[style]){
+            if(this.p.stylesImgSizes && this.p.stylesImgSizes[style]){
                 this.element.select("img.actionbar_button_icon").each(function(img){
-                    img.src = resolveImageSource(img.getAttribute("data-action-src"),Action.prototype.__DEFAULT_ICON_PATH, this.options.stylesImgSizes[style]);
+                    img.src = resolveImageSource(img.getAttribute("data-action-src"),Action.prototype.__DEFAULT_ICON_PATH, this.p.stylesImgSizes[style]);
                 }.bind(this));
             }
             if(parent.paneObject) parent.paneObject.resize();
@@ -397,9 +398,9 @@ Class.create("Toolbar", {
             }
         }.bind(this);
 
-        if(this.options.stylesBarSizes && this.options.stylesBarSizes[style]){
+        if(this.p.stylesBarSizes && this.p.stylesBarSizes[style]){
             new Effect.Morph(actBar, {
-                style: 'height:'+this.options.stylesBarSizes[style]+'px',
+                style: 'height:'+this.p.stylesBarSizes[style]+'px',
                 duration: 0.5,
                 afterFinish: applyResize,
                 afterUpdate: function(){
@@ -422,7 +423,7 @@ Class.create("Toolbar", {
 	buttonStateHover : function(button, action){		
 		if(button.hasClassName('disabled')) return;
 		if(button.hideTimeout) clearTimeout(button.hideTimeout);
-		new Effect.Morph(button.select('img[id="'+action.options.name +'_button_icon"]')[0], {
+		new Effect.Morph(button.select('img[id="'+action.p.name +'_button_icon"]')[0], {
 			style: 'width:22px; height:22px; margin-top: 3px;',
 			duration: 0.08,
 			transition: Effect.Transitions.sinoidal,
@@ -438,7 +439,7 @@ Class.create("Toolbar", {
 	buttonStateOut : function(button, action){
 		if(button.hasClassName('disabled')) return;
 		button.hideTimeout = setTimeout(function(){				
-			new Effect.Morph(button.select('img[id="'+action.options.name +'_button_icon"]')[0], {
+			new Effect.Morph(button.select('img[id="'+action.p.name +'_button_icon"]')[0], {
 				style: 'width:18px; height:18px; margin-top:8px;',
 				duration: 0.2,
 				transition: Effect.Transitions.sinoidal,

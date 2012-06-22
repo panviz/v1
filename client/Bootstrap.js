@@ -6,7 +6,7 @@ Class.create("Bootstrap", {
 	/**
 	 * @var $H()
 	 */
-	parameters: $H({}),
+	p: $H({}),
 	/**
 	 * @var connection - class variable 
 	 */
@@ -16,9 +16,9 @@ Class.create("Bootstrap", {
 	 * @param startParameters Object The options
 	 */
 	initialize : function(options){
-		this.parameters = $H(options);
-		if(this.parameters.get("ALERT")){
-			window.setTimeout(function(){alert(this.parameters.get("ALERT"));}.bind(this),0);
+		this.p = $H(options);
+		if(this.p.get("ALERT")){
+			window.setTimeout(function(){alert(this.p.get("ALERT"));}.bind(this),0);
 		}		
 		Event.observe(document, 'dom:loaded', this._onDomLoaded.bind(this));
 		document.observe('app:actions_loaded', this._onActionsLoaded.bind(this));
@@ -28,35 +28,35 @@ Class.create("Bootstrap", {
 	 * Real loading action
 	 */
 	loadBootConfig : function(){
-		var url = this.parameters.get('url')+(this.parameters.get("debugMode") ? '&debug=true' : '');
-		if(this.parameters.get('SERVER_PREFIX_URI')){
-			url += '&server_prefix_uri=' + this.parameters.get('SERVER_PREFIX_URI');
+		var url = this.p.get('url')+(this.p.get("debugMode") ? '&debug=true' : '');
+		if(this.p.get('SERVER_PREFIX_URI')){
+			url += '&server_prefix_uri=' + this.p.get('SERVER_PREFIX_URI');
 		}
 		connection = new Connection(url);
 		connection.onComplete = this._onSettingsLoaded.bind(this);
 		connection.sendSync();
 	},
 	
-	refreshContextVariablesAndInit : function(connection){
-		if(this.parameters.get('SECURE_TOKEN') && !Connection.SECURE_TOKEN){
-			Connection.SECURE_TOKEN = this.parameters.get('SECURE_TOKEN');
+	init : function(connection){
+		if(this.p.get('SECURE_TOKEN') && !Connection.SECURE_TOKEN){
+			Connection.SECURE_TOKEN = this.p.get('SECURE_TOKEN');
 		}
 
 		// Refresh window variable
-		window.THEME = this.parameters.get('ui').theme;
+		window.THEME = this.p.get('ui').theme;
 		var cssRes = THEME.cssResources;
 		if(cssRes) cssRes.each(this.loadCSSResource.bind(this));
-		if(this.parameters.get('additional_js_resource')){
-			connection.loadLibrary(this.parameters.get('additional_js_resource?v='+this.parameters.get("version")));
+		if(this.p.get('additional_js_resource')){
+			connection.loadLibrary(this.p.get('additional_js_resource?v='+this.p.get("version")));
 		}
 		this.insertLoaderProgress();
-		if(!this.parameters.get("debug")){
-			connection.loadLibrary("app.js?v="+this.parameters.get("version"));
+		if(!this.p.get("debug")){
+			connection.loadLibrary("app.js?v="+this.p.get("version"));
 		}
-		window.I18N = this.parameters.get("i18n");
+		window.I18N = this.p.get("i18n");
 		document.fire("app:boot_loaded");
-		window.app = new Application(this.parameters);
-		$('version_span').update(' - Version '+this.parameters.get("version") + ' - '+ this.parameters.get("versionDate"));
+		window.app = new Application(this.p);
+		$('version_span').update(' - Version '+this.p.get("version") + ' - '+ this.p.get("versionDate"));
 		window.app.init();		
 	},
 	
@@ -110,20 +110,20 @@ Class.create("Bootstrap", {
 		});
 		head.insert(cssNode);
 	},
-	//prototype event
+	//TODO WTF?
 	_onDomLoaded : function(){
 			var startedFromOpener = false;
 			try{
 					if(window.opener && window.opener.bootstrap){
-							this.parameters = window.opener.bootstrap.parameters;
+							this.p = window.opener.bootstrap.p;
 							// Handle queryString case, as it's not passed via settings.json
 							var qParams = document.location.href.toQueryParams();
 							if(qParams['external_selector_type']){
-									this.parameters.set('SELECTOR_DATA', {type: qParams['external_selector_type'], data: qParams});
+									this.p.set('SELECTOR_DATA', {type: qParams['external_selector_type'], data: qParams});
 							}else{
-									if(this.parameters.get('SELECTOR_DATA')) this.parameters.unset('SELECTOR_DATA');
+									if(this.p.get('SELECTOR_DATA')) this.p.unset('SELECTOR_DATA');
 							}
-							this.refreshContextVariablesAndInit(new Connection());
+							this.init(new Connection());
 							startedFromOpener = true;
 					}
 			}catch(e){
@@ -156,33 +156,35 @@ Class.create("Bootstrap", {
 			}
 			return;
 		}
-		this.parameters.update(data);
+		this.p.update(data);
 		
-		if(this.parameters.get('SECURE_TOKEN')){
-			Connection.SECURE_TOKEN = this.parameters.get('SECURE_TOKEN');
+		if(this.p.get('SECURE_TOKEN')){
+			Connection.SECURE_TOKEN = this.p.get('SECURE_TOKEN');
 		}
-		if(this.parameters.get('SERVER_PREFIX_URI')){
-			this.parameters.set('serverAccess', this.parameters.get('SERVER_PREFIX_URI') + this.parameters.get('serverAccess') + '?' + (Connection.SECURE_TOKEN ? 'secure_token=' + Connection.SECURE_TOKEN : ''));
+		if(this.p.get('SERVER_PREFIX_URI')){
+			this.p.set('serverAccess', this.p.get('SERVER_PREFIX_URI') + this.p.get('serverAccess') + '?' + (Connection.SECURE_TOKEN ? 'secure_token=' + Connection.SECURE_TOKEN : ''));
 		}else{
-			this.parameters.set('serverAccess', this.parameters.get('serverAccess') + '?' + (Connection.SECURE_TOKEN ? 'secure_token=' + Connection.SECURE_TOKEN : ''));
+			this.p.set('serverAccess', this.p.get('serverAccess') + '?' + (Connection.SECURE_TOKEN ? 'secure_token=' + Connection.SECURE_TOKEN : ''));
 		}
 		
-		this.refreshContextVariablesAndInit(connection);
+		this.init(connection);
 		
 	},
+	//TODO SELECTOR_DATA is set _onDomLoaded
 	_onActionsLoaded : function(){
-		if(!this.parameters.get("SELECTOR_DATA") && app.actionBar.actions.get("ext_select")){
-			app.actionBar.actions.unset("ext_select");
+		var extSelect = app.actionBar.getAction("ext_select");
+		if(!this.p.get("SELECTOR_DATA") && extSelect){
+			extSelect.unset("ext_select");
 			app.actionBar.fireContextChange();
 			app.actionBar.fireSelectionChange();	
-		}else if(this.parameters.get("SELECTOR_DATA")){
+		}else if(this.p.get("SELECTOR_DATA")){
 			app.actionBar.defaultActions.set("file", "ext_select");
 		}
 	},
 	_onApplicationLoaded : function(){
-		if(this.parameters.get("SELECTOR_DATA")){
+		if(this.p.get("SELECTOR_DATA")){
 				app.actionBar.defaultActions.set("file", "ext_select");
-				app.actionBar.selectorData = new Hash(this.parameters.get("SELECTOR_DATA"));	    		
+				app.actionBar.selectorData = new Hash(this.p.get("SELECTOR_DATA"));	    		
 		}
 	}
 });

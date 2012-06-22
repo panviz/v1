@@ -242,7 +242,7 @@ ConfigEditor = Class.create({
 			rightsCell.insert(writeBox);
 			var tr = new Element('tr', {className:(odd?'odd':'even')});
 			odd = !odd;
-			var titleCell = new Element('td', {width:'45%'}).update('<img src="'+ajxpResourcesFolder+'/image/mimes/16/folder_red.png" style="float:left;margin-right:5px;">'+repoLabel);
+			var titleCell = new Element('td', {width:'45%'}).update('<img src="'+ajxpResourcesFolder+'/image/mime/16/folder_red.png" style="float:left;margin-right:5px;">'+repoLabel);
 			tr.insert(titleCell);
 			tr.insert(rightsCell);
 			rightsTable.insert({bottom:tr});			
@@ -510,7 +510,7 @@ ConfigEditor = Class.create({
 	changePassword: function(){
 		var newPass = $('new_pass');
 		var newPassConf = $('new_pass_confirm');
-		if(newPass.value == '' || newPass.value.length < window.bootstrap.parameters.get("password_min_length")){
+		if(newPass.value == '' || newPass.value.length < window.bootstrap.p.get("password_min_length")){
 			this.displayMessage('ERROR', I18N[378]);
 			return;
 		}
@@ -541,7 +541,7 @@ ConfigEditor = Class.create({
 			app.displayMessage("ERROR", I18N['ajxp_conf.39']);
 			return false;
 		}
-		if(pass.value.length < window.bootstrap.parameters.get("password_min_length")){
+		if(pass.value.length < window.bootstrap.p.get("password_min_length")){
 			app.displayMessage("ERROR", I18N[378]);
 			return false;
 		}

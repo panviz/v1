@@ -107,7 +107,7 @@ Class.create("Pane", {
             header.addClassName('panelHeaderWithIcon');
         }
         if(this.options.headerClose){
-            var ic = resolveImageSource(this.options.headerClose.icon, '/image/actions/ICON_SIZE', 16);
+            var ic = resolveImageSource(this.options.headerClose.icon, '/image/action/ICON_SIZE', 16);
             var img = new Element("img", {src: ic, className: 'panelHeaderCloseIcon', title: I18N[this.options.headerClose.title]});
             header.insert({top: img});
             var sp = this.options.headerClose.splitter;

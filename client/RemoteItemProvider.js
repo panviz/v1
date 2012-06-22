@@ -39,7 +39,6 @@ Class.create("RemoteItemProvider", {
 		}
 		connection.onComplete = function (transport){
 			try{				
-				debugger
 				this.parseItems(item, transport, itemCallback, childCallback);
 			}catch(e){
 				if(app) app.displayMessage('ERROR', 'Loading error:'+e.message);
@@ -56,47 +55,36 @@ Class.create("RemoteItemProvider", {
 	 * @param childCallback Function
 	 */
 	parseItems : function(origItem, transport, itemCallback, childCallback){
-		if(!transport.responseJSON || !transport.responseJSON.collection) return;
-		var rootItem = transport.responseJSON.collection;
-		var children = rootItem.collection;
-		var contextItem = new Item(rootItem.params);
+		if(!transport.responseJSON || !transport.responseJSON.item) return;
+		var root = transport.responseJSON.item;
+		var children = root.collection;
+		var contextItem = new Item(root.path, {"metadata": root.params});
 		
 		origItem.replaceBy(contextItem);
 		
-		// CHECK FOR MESSAGE OR ERRORS
-		var errorItem = XPathSelectSingleItem(rootItem, "error|message");
-		if(errorItem){
-			if(errorItem.itemName == "message") type = errorItem.getAttribute('type');
-			if(type == "ERROR"){
-				origItem.notify("error", errorItem.firstChild.itemValue + '(Source:'+origItem.getPath()+')');				
-			}			
-		}
+		if(root.error){
+			origItem.notify("error", root.error + '(Source:'+origItem.getPath()+')');
+		}			
 		
-		// CHECK FOR PAGINATION DATA
-		var paginationItem = XPathSelectSingleItem(rootItem, "pagination");
-		if(paginationItem){
-			var paginationData = new Hash();
-			$A(paginationItem.attributes).each(function(att){
-				paginationData.set(att.itemName, att.itemValue);
-			}.bind(this));
+		if(root.pagination){
+			var paginationData = new Hash(root.pagination);
 			origItem.getMetadata().set('paginationData', paginationData);
 		}else if(origItem.getMetadata().get('paginationData')){
+			//remove pagination on last page recieved
 			origItem.getMetadata().unset('paginationData');
 		}
 
 		// CHECK FOR COMPONENT CONFIGS CONTEXTUAL DATA
-		var configs = XPathSelectSingleItem(rootItem, "client_configs");
-		if(configs){
-			origItem.getMetadata().set('client_configs', configs);
-		}		
+		//var configs = XPathSelectSingleItem(root, "client_configs");
+		//if(configs){
+			//origItem.getMetadata().set('client_configs', configs);
+		//}		
 
-		// NOW PARSE CHILDREN
-		var children = XPathSelectItems(rootItem, "tree");
-		children.each(function(childItem){
-			var child = new Item(childItem);
-			origItem.addChild(child);
+		children.each(function(child){
+			var item = new Item(child.path, {"metadata": child.params});
+			origItem.addChild(item);
 			if(childCallback){
-				childCallback(child);
+				childCallback(item);
 			}
 		}.bind(this) );
 

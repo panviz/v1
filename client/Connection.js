@@ -54,7 +54,7 @@ Class.create("Connection", {
      * Show a small loader
      */
     showLoader : function(){
-        if(!$('Connection-loader') && window.bootstrap.parameters.get("theme")){
+        if(!$('Connection-loader') && window.bootstrap.p.get("theme")){
             var img = new Element("img", {
                 src: THEME.path +"/image/connexion-loader.gif",
                 id: 'Connection-loader',
@@ -168,8 +168,8 @@ Class.create("Connection", {
 	 * @param onLoadedCode Function Callback
 	 */
 	loadLibrary : function(fileName, onLoadedCode){
-		if(window.bootstrap && window.bootstrap.parameters.get("version") && fileName.indexOf("?")==-1){
-				fileName += "?v="+window.bootstrap.parameters.get("version");
+		if(window.bootstrap && window.bootstrap.p.get("version") && fileName.indexOf("?")==-1){
+				fileName += "?v="+window.bootstrap.p.get("version");
 		}
 		var path = (this._libUrl ? this._libUrl +'/'+ fileName : fileName);
 		new Ajax.Request(path,

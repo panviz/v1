@@ -114,7 +114,7 @@
       "external_file": [
         {
           "filename": "module/gcaccess.fs/fsActions.xml",
-          "include": "actions/*",
+          "include": "action/*",
           "exclude": ""
         },
         {
@@ -128,7 +128,7 @@
         },
         {
           "filename": "module/gcaccess.remote_fs/additionalActions.xml",
-          "include": "actions/*"
+          "include": "action/*"
         }
       ],
       "actions": {

@@ -19,15 +19,17 @@
 					var path;					
 					if(window.actionArguments && window.actionArguments.length>0){
 						path = window.actionArguments[0];
-						if(Object.isString(path)){path = new Item(path,false,getBaseName(path));}
+						if(Object.isString(path)){
+							path = new Item(path, {"isLeaf": false, "label": getBaseName(path)});
+						}
 					}else{
-						userSelection = application.getUserSelection();
+						userSelection = app.getUserSelection();
 						if(userSelection && userSelection.isUnique() && (userSelection.hasDir() || userSelection.hasMime(["zip"]))){
-							path = userSelection.getUniqueNode();
+							path = userSelection.getUniqueItem();
 						}
 					}
 					if(path){
-						application.updateContextData(path);
+						app.updateContextData(path);
 					}						
 					]]></clientCallback>
 				<serverCallback methodName="switchAction"></serverCallback>
@@ -55,20 +57,20 @@
 				<clientCallback prepareModal="true"><![CDATA[
 					var completeFunc = function(){
 						var oForm = modal.getForm();
-						if(!application.actionBar.configEditor){
-							application.actionBar.configEditor = new ConfigEditor(oForm);
+						if(!app.actionBar.configEditor){
+							app.actionBar.configEditor = new ConfigEditor(oForm);
 						}
-						application.actionBar.configEditor.setForm(oForm);
-						result = application.actionBar.configEditor.submitCreateUser();
+						app.actionBar.configEditor.setForm(oForm);
+						result = app.actionBar.configEditor.submitCreateUser();
 						if(result) hideLightBox();
 						return false;
 					};
 					var loadFunc = function(oForm){
-						if(!application.actionBar.configEditor){
-							application.actionBar.configEditor = new ConfigEditor(oForm);
+						if(!app.actionBar.configEditor){
+							app.actionBar.configEditor = new ConfigEditor(oForm);
 						}	
-						application.actionBar.configEditor.setForm(oForm);
-						application.actionBar.configEditor.loadCreateUserForm();
+						app.actionBar.configEditor.setForm(oForm);
+						app.actionBar.configEditor.loadCreateUserForm();
 						
 						new Protopass(oForm.down('input[name="new_user_pwd"]'), {
 							barContainer:$('pwd_strength_container'),
@@ -161,12 +163,12 @@
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
 					var loadFunc = function(oForm){
-						application.getUserSelection().updateFormOrUrl(oForm);
-						if(!application.actionBar.configEditor){
-							application.actionBar.configEditor = new ConfigEditor(oForm);
+						app.getUserSelection().updateFormOrUrl(oForm);
+						if(!app.actionBar.configEditor){
+							app.actionBar.configEditor = new ConfigEditor(oForm);
 						}
-						application.actionBar.configEditor.setForm(oForm);
-						application.actionBar.configEditor.initCreateRepoWizard(window.createRepoCmd);
+						app.actionBar.configEditor.setForm(oForm);
+						app.actionBar.configEditor.initCreateRepoWizard(window.createRepoCmd);
 					};				
 					modal.showDialogForm('Create Repository', 'create_repository_box', loadFunc, null, null, false, true);
 					]]></clientCallback>
@@ -206,19 +208,19 @@
 			<rightsContext noUser="true" userLogged="only" read="true" write="true" adminOnly=""></rightsContext>
 			<processing>
 				<clientCallback prepareModal="false"><![CDATA[
-					var callback = function(node, newValue){						
+					var callback = function(item, newValue){						
 						var conn = new Connexion();
 						conn.addParameter('get_action', 'edit');
 						conn.addParameter('sub_action', 'edit_repository_label');
-						conn.addParameter('repository_id', node.getMetadata().get('repository_id'));
+						conn.addParameter('repository_id', item.getMetadata().get('repository_id'));
 						conn.addParameter('newLabel', newValue);
 						conn.onComplete = function(transport){
-							application.actionBar.parseXmlMessage(transport.responseXML);
+							app.actionBar.parseXmlMessage(transport.responseXML);
 						};
 						conn.sendSync();
 					};
 
-					if(application.getUserSelection() && application.getUserSelection().getSelectionSource() && application.getUserSelection().getSelectionSource().switchCurrentLabelToEdition) {application.getUserSelection().getSelectionSource().switchCurrentLabelToEdition(callback);}
+					if(app.getUserSelection() && app.getUserSelection().getSelectionSource() && app.getUserSelection().getSelectionSource().switchCurrentLabelToEdition) {app.getUserSelection().getSelectionSource().switchCurrentLabelToEdition(callback);}
 					]]></clientCallback>
 				<serverCallback methodName="switchAction"></serverCallback>
 				</processing>
@@ -233,21 +235,21 @@
 			<rightsContext noUser="true" userLogged="only" read="true" write="true" adminOnly=""></rightsContext>
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
-					var userSelection =  application.getUserSelection();
+					var userSelection =  app.getUserSelection();
 					var loadFunc = function(oForm){
-						application.getUserSelection().updateFormOrUrl(oForm);
-						if(!application.actionBar.configEditor){
-							application.actionBar.configEditor = new ConfigEditor(oForm);
+						app.getUserSelection().updateFormOrUrl(oForm);
+						if(!app.actionBar.configEditor){
+							app.actionBar.configEditor = new ConfigEditor(oForm);
 						}						
-						application.actionBar.configEditor.setForm(oForm);
-						application.actionBar.configEditor.loadUsers(userSelection);
+						app.actionBar.configEditor.setForm(oForm);
+						app.actionBar.configEditor.loadUsers(userSelection);
 					};
 					modal.showDialogForm('Batch Edition', 'edit_config_box', loadFunc, function(){hideLightBox();}, null, true);					
 				]]></clientCallback>
 				<clientListener name="selectionChange"><![CDATA[
-				if(application){
-					var userSelection = application.getUserSelection();
-					var action = application.getActionBar().getActionByName("batch_users_roles");
+				if(app){
+					var userSelection = app.getUserSelection();
+					var action = app.actionBar.getAction("batch_users_roles");
 					if(action){
 						if(userSelection.isUnique()){
 							action.selectionContext.dir = true;
@@ -272,37 +274,37 @@
 			<rightsContext noUser="true" userLogged="only" read="true" write="true" adminOnly=""></rightsContext>
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
-					var userSelection =  application.getUserSelection();
-					var node = userSelection.getUniqueNode();
-					var meta = node.getMetadata();
+					var userSelection =  app.getUserSelection();
+					var item = userSelection.getUniqueItem();
+					var meta = item.getMetadata();
 					var mime = meta.get("mime");
 					if(mime == "user" || mime == "user_editable" || mime == "role"){
 						var loadFunc = function(oForm){
-							application.getUserSelection().updateFormOrUrl(oForm);
-							if(!application.actionBar.configEditor){
-								application.actionBar.configEditor = new ConfigEditor(oForm);
+							app.getUserSelection().updateFormOrUrl(oForm);
+							if(!app.actionBar.configEditor){
+								app.actionBar.configEditor = new ConfigEditor(oForm);
 							}						
-							application.actionBar.configEditor.setForm(oForm);
+							app.actionBar.configEditor.setForm(oForm);
 							if(mime == "role"){
-								application.actionBar.configEditor.loadRole(meta.get("text"));
+								app.actionBar.configEditor.loadRole(meta.get("text"));
 							}else{
-								application.actionBar.configEditor.loadUser(meta.get("text"));
+								app.actionBar.configEditor.loadUser(meta.get("text"));
 							}
 						};
 						modal.showDialogForm('Edit Online', 'edit_config_box', loadFunc, function(){hideLightBox();}, null, true);
 					}else if(mime == "plugin"){
 						var loadFunc = function(oForm){
-							application.getUserSelection().updateFormOrUrl(oForm);
-							if(!application.actionBar.configEditor){
-								application.actionBar.configEditor = new ConfigEditor(oForm);
+							app.getUserSelection().updateFormOrUrl(oForm);
+							if(!app.actionBar.configEditor){
+								app.actionBar.configEditor = new ConfigEditor(oForm);
 							}						
-							application.actionBar.configEditor.setForm(oForm);
-							application.actionBar.configEditor.loadPluginConfig(node.getMetadata().get("plugin_id"));							
+							app.actionBar.configEditor.setForm(oForm);
+							app.actionBar.configEditor.loadPluginConfig(item.getMetadata().get("plugin_id"));							
 						};
 						var closeFunc = function(oForm){
 							var toSubmit = new Hash();
-							var configEditor = application.actionBar.configEditor;
-							toSubmit.set("plugin_id", node.getMetadata().get("plugin_id"));
+							var configEditor = app.actionBar.configEditor;
+							toSubmit.set("plugin_id", item.getMetadata().get("plugin_id"));
 							var missing = configEditor.formManager.serializeParametersInputs(oForm, toSubmit, 'DRIVER_OPTION_');
 							if(missing){
 								configEditor.displayMessage("ERROR", I18N['conf.36']);
@@ -314,16 +316,16 @@
 						modal.showDialogForm('Edit Online', 'edit_repo_box', loadFunc, closeFunc);
 					}else{
 						var loadFunc = function(oForm){
-							application.getUserSelection().updateFormOrUrl(oForm);
-							if(!application.actionBar.configEditor){
-								application.actionBar.configEditor = new ConfigEditor(oForm);
+							app.getUserSelection().updateFormOrUrl(oForm);
+							if(!app.actionBar.configEditor){
+								app.actionBar.configEditor = new ConfigEditor(oForm);
 							}						
-							application.actionBar.configEditor.setForm(oForm);
-							application.actionBar.configEditor.loadRepository(meta.get("repository_id"));							
+							app.actionBar.configEditor.setForm(oForm);
+							app.actionBar.configEditor.loadRepository(meta.get("repository_id"));							
 						};
 						var closeFunc = function(){
 							var toSubmit = new Hash();
-							var configEditor = application.actionBar.configEditor;
+							var configEditor = app.actionBar.configEditor;
 							if(!configEditor.currentRepoWriteable){
 								hideLightBox();
 								return;
@@ -436,9 +438,9 @@
 			<rightsContext noUser="true" userLogged="only" read="true" write="true" adminOnly=""></rightsContext>
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
-					var userSelection =  application.getUserSelection();
-					var node = userSelection.getUniqueNode();
-					var meta = node.getMetadata();
+					var userSelection =  app.getUserSelection();
+					var item = userSelection.getUniqueItem();
+					var meta = item.getMetadata();
 					var deleteMessage, fieldName, fieldValue;
 					if(meta.get("mime") == "user_editable"){
 						deleteMessage = I18N['conf.34'];
@@ -465,14 +467,14 @@
 					};
 					modal.showDialogForm('Delete', 'delete_config_form', onLoad, function(){
 						var oForm = modal.getForm();						
-						application.actionBar.submitForm(oForm);
+						app.actionBar.submitForm(oForm);
                         if (userSelection.isMultiple()) {
                            var i = 1; 
 	   		    	       var hidden = $(oForm).select('input[type="hidden"]')[0];
                            while (true) {
                               try {
-                                  var node = userSelection.getNode(i);
-                                  var meta = node.getMetadata();
+                                  var item = userSelection.getItem(i);
+                                  var meta = item.getMetadata();
                                   var value;
                                   if(meta.get("mime") == "user_editable"){
                                   	value = meta.get("text");
@@ -482,7 +484,7 @@
                                   	value = meta.get("text");
                                   }
                                   hidden.setAttribute("value", value);
-            					  application.actionBar.submitForm(oForm);
+            					  app.actionBar.submitForm(oForm);
                                   i++;
                               } catch (e) 
                               {
@@ -514,14 +516,14 @@
 			<processing>
 				<clientCallback prepareModal="true"><![CDATA[
 					var onLoad = function(oForm){
-						var userSelection =  application.getUserSelection();
-						var nodes = userSelection.getSelectedNodes();
-						var firstNode = userSelection.getUniqueNode();						
+						var userSelection =  app.getUserSelection();
+						var items = userSelection.getSelectedItems();
+						var firstItem = userSelection.getUniqueItem();						
 		   		    	var copyDiv = $(oForm).select('textarea[id="text_copy"]')[0];
 		   		    	var attributes = ['date','ip','level','user','action','params'];
 			   		    var message = attributes.join("\t") + "\n\n";
-		   		    	nodes.each(function(node){	
-		   		    		var meta = node.getMetadata();	   		    		
+		   		    	items.each(function(item){	
+		   		    		var meta = item.getMetadata();	   		    		
 		   		    		for(var i=0;i<attributes.length;i++){
 		   		    			var attName = attributes[i];
 		   		    			if(attName == "label") attName = "text";
@@ -559,7 +561,7 @@
 				<html><![CDATA[
 				<div style="padding:10px;">
 					<div class="folderImage">
-						<img src="AJXP_THEME_FOLDER/image/mimes/64/#{icon}" height="64" width="64">
+						<img src="AJXP_THEME_FOLDER/image/mime/64/#{icon}" height="64" width="64">
 					</div>
 					<b>#{name_string}</b> : #{text}
 				</div>
@@ -573,7 +575,7 @@
 				<html><![CDATA[
 					<div style="padding:10px;">
 						<div class="folderImage">
-							<img src="AJXP_THEME_FOLDER/image/mimes/64/#{icon}" height="64" width="64">
+							<img src="AJXP_THEME_FOLDER/image/mime/64/#{icon}" height="64" width="64">
 						</div>
 						<b>#{name_string}</b> : #{text}
 					</div>
@@ -586,7 +588,7 @@
 				<html><![CDATA[
 					<div style="padding:10px;">
 						<div class="folderImage">
-							<img src="AJXP_THEME_FOLDER/image/mimes/64/admin.png" height="64" width="64">
+							<img src="AJXP_THEME_FOLDER/image/mime/64/admin.png" height="64" width="64">
 						</div>
 					</div>
 				]]></html>

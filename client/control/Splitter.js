@@ -183,7 +183,7 @@ Class.create("Splitter", Pane, {
             subMenuUpdateImage:false,
             callback: function(){
                 var state = oThis.toggleFolding();
-                app.actionBar.getActionByName("folding_action").setIconSrc('view_left_'+ (state?'right':'close') + '.png');
+                app.actionBar.getAction("folding_action").setIcon('view_left_'+ (state?'right':'close') + '.png');
             },
             listeners : {
                 init:function(){

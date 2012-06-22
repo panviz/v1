@@ -45,8 +45,7 @@ Class.create("FoldersTree", Pane, {
 		};
 		
 		var filter = this.createFilter();
-		var fakeRootItem = new Item("/", true, I18N[391], "folder.png");
-		fakeRootItem._isLoaded = true;
+		var fakeRootItem = new Item("/", {"isLeaf": true, "label": I18N[391], "icon": "folder.png", "isLoaded": true});
 		this.tree = new Tree(fakeRootItem,  action, filter);		
 				
 		this.treeContainer.update(this.tree.toString());
@@ -68,24 +67,27 @@ Class.create("FoldersTree", Pane, {
 		this.hasFocus;
 
 		var ctxChangedObs = function(event){
+			debugger
 			
 			var path = event.memo.getPath();
 			window.setTimeout(function(e){
+				debugger
 				
 				this.setSelectedPath(path);
 			}.bind(this), 100);
 		}.bind(this);
 		document.observe("app:context_changed",  ctxChangedObs);
-        this.registeredObservers.set("app:context_changed", ctxChangedObs);
+		this.registeredObservers.set("app:context_changed", ctxChangedObs);
 
 		var rootItemObs = function(event){
+			debugger
 			
 			var rootItem = event.memo;
 			this.tree.setRootItem(rootItem);
 			this.changeRootLabel(rootItem.getLabel(), rootItem.getIcon());
 		}.bind(this);
-		document.observe("app:root_node_changed", rootItemObs);
-        this.registeredObservers.set("app:root_node_changed", rootItemObs);
+		document.observe("app:root_item_changed", rootItemObs);
+		this.registeredObservers.set("app:root_item_changed", rootItemObs);
 
 		var compConfChanged = function(event){
 			
@@ -101,7 +103,7 @@ Class.create("FoldersTree", Pane, {
 			}
 		}.bind(this);
 		document.observe("app:component_config_changed",  compConfChanged);
-        this.registeredObservers.set("app:component_config_changed", compConfChanged);
+		this.registeredObservers.set("app:component_config_changed", compConfChanged);
 		
 	},
 

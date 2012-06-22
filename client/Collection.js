@@ -97,7 +97,6 @@ Class.create("Collection", {
 		this._root = root;
 		this._root.setRoot();
 		this._root.observe("child_added", function(c){
-				//console.log(c);
 		});
 		document.fire("app:root_item_changed", this._root);
 		this.setContextItem(this._root);

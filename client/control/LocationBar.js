@@ -161,7 +161,7 @@ Class.create("LocationBar", {
 		}else{
 			var url = this.currentPath.value.stripScripts();
 			if(url == '') return false;	
-			var item = new Item(url, false);
+			var item = new Item(url, {"isLeaf": false});
 			var parts = url.split("##");
 			if(parts.length == 2){
 				var data = new Hash();

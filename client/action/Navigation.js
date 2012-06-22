@@ -2,15 +2,15 @@ Class.create("UpDir", Action, {
 	execute : function(){
 		app.fireContextUp();
 	}
-}
+});
 
 Class.create("Refresh", Action, {
 	execute : function(){
 		app.fireContextRefresh();
 	}
-}
+});
 
-Class.create("Refresh", Action, {
+Class.create("ExtSelect", Action, {
 	execute : function(){
 		var userSelection = app.getUserSelection();
 		if((userSelection.isUnique() && !userSelection.hasDir()))
@@ -30,4 +30,4 @@ Class.create("Refresh", Action, {
 			}
 		}
 	}
-}
+});

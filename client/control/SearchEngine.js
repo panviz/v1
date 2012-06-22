@@ -316,7 +316,7 @@ Class.create("SearchEngine", Pane, {
 			if(folderName != "/") folderName += "/";
 			folderName += fileName;
 		}
-        var imgPath = resolveImageSource(icon, '/image/mimes/16', 16);
+        var imgPath = resolveImageSource(icon, '/image/mime/16', 16);
 		var imageString = '<img align="absmiddle" width="16" height="16" src="'+imgPath+'"> ';
 		var stringToDisplay;
 		if(metaFound){

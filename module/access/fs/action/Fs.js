@@ -3,7 +3,9 @@ Class.create("Ls", Action, {
 		var path;					
 		if(window.actionArguments && window.actionArguments.length>0){
 			path = window.actionArguments[0];
-			if(Object.isString(path)){path = new Item(path,false,getBaseName(path));}
+			if(Object.isString(path)){
+				path = new Item(path, {"isLeaf" : false, "label" : getBaseName(path)});
+			}
 		}else{
 			userSelection = app.getUserSelection();
 			if(userSelection && userSelection.isUnique() && (userSelection.hasDir() || userSelection.hasMime("MIMES_ZIP".split(",")))){
@@ -21,7 +23,7 @@ Class.create("Upload", Action, {
 		var uploaders = app.getActiveExtensionByType("uploader");
 		if(uploaders.length){
 			var uploader = uploaders[0];
-			if(app.actionBar.getActionByName("trigger_remote_copy")){
+			if(app.actionBar.getAction("trigger_remote_copy")){
 											modal.setCloseAction(function(){
 													app.fireContextRefresh();
 													var bgManager = app.actionBar.bgManager;
@@ -99,13 +101,13 @@ Class.create("Download", Action, {
 	onSelectionChange : function(){
 		if(app){
 			var userSelection = app.getUserSelection();
-			var action = app.getActionBar().getActionByName("download");
+			var action = app.actionBar.getAction("download");
 			if(zipEnabled && multipleFilesDownloadEnabled){
 				if(action){
 					if((userSelection.isUnique() && !userSelection.hasDir()) || userSelection.isEmpty()){
-						action.setIconSrc('download_manager.png');
+						action.setIcon('download_manager.png');
 					}else{
-						action.setIconSrc('accessories-archiver.png');
+						action.setIcon('accessories-archiver.png');
 					}
 				}
 			}else{
@@ -149,7 +151,7 @@ Class.create("Compress", Action, {
 	onSelectionChange : function(){
 		if(app){
 			var userSelection = app.getUserSelection();
-			var action = app.getActionBar().getActionByName("compress");
+			var action = app.actionBar.getAction("compress");
 			if(!zipEnabled || !multipleFilesDownloadEnabled){
 				if(action){
 					if(userSelection.isUnique()) action.selectionContext.multipleOnly = true;
@@ -217,8 +219,8 @@ Class.create("OpenWith", Action, {
 				app.loadEditorResources(editorData.resourcesManager);
 				modal.openEditorDialog(editorData);
 		}else{
-				if(app.actionBar.getActionByName("download")){
-						app.actionBar.getActionByName("download").apply();
+				if(app.actionBar.getAction("download")){
+						app.actionBar.getAction("download").apply();
 				}
 		}
 	},
@@ -424,7 +426,7 @@ Class.create("Copy", Action, {
 	},
 	onContextChange : function(){
 		if(app){
-			var action = app.getActionBar().getActionByName("copy");
+			var action = app.actionBar.getAction("copy");
 			if(action){
 				action.rightsContext.write = true;
 				var user = app.user;
@@ -436,10 +438,10 @@ Class.create("Copy", Action, {
 				}
 				if(app.getContextNode().hasMimeInBranch("browsable_archive")){
 					action.setLabel(247, 248);
-					action.setIconSrc('ark_extract.png');
+					action.setIcon('ark_extract.png');
 				}else{
 					action.setLabel(66, 159);
-					action.setIconSrc('editcopy.png');
+					action.setIcon('editcopy.png');
 				}
 			}
 		}

@@ -3,35 +3,27 @@
  */
 Class.create("Action", {
 
-	/**
-	 * @var String Default "/image/actions/ICON_SIZE"
-	 */
-	__DEFAULT_ICON_PATH : "/image/actions/ICON_SIZE",
+	__DEFAULT_ICON_PATH : "/image/action/ICON_SIZE",
 	
-	/**
-	 * Standard constructor
-	 */
-	initialize : function(){
-		this.options = Object.extend({
-			name: '',
-			src: '',
+	initialize : function(p){
+		this.p = Object.extend({
 			text: '',
 			title: '',
-			text_id: '',
-			title_id: '',
+			icon: '',
 			hasAccessKey: false,
 			accessKey: '',
 			subMenu: false,
 			subMenuUpdateImage: false,
 			subMenuUpdateTitle: false,
-			callbackCode: '',
 			callbackDialogNode: null,
 			callback: Prototype.emptyFunction,
 			prepareModal: false, 
-			listeners: [],
 			formId: undefined, 
 			formCode: undefined
-			}, arguments[0] || { });
+		}, p.parameters);
+		this.text = I18N[this.p.text];
+		this.title = I18N[this.p.title];
+
 		this.context = Object.extend({
 			selection: true,
 			dir: false,
@@ -45,7 +37,7 @@ Class.create("Action", {
 			contextMenu: false,
 			widgets: null,
 			infoPanel: false			
-			}, arguments[1] || { });
+		}, p.context);
 			
 		this.selectionContext = Object.extend({			
 			dir: false,
@@ -55,7 +47,8 @@ Class.create("Action", {
 			allowedMimes: $A([]),			
 			unique: true,
 			multipleOnly: false
-			}, arguments[2] || { });
+		}, p.selectionContext);
+
 		this.rightsContext = Object.extend({			
 			noUser: true,
 			userLogged: true,
@@ -63,21 +56,25 @@ Class.create("Action", {
 			read: true,
 			write: false,
 			adminOnly: false
-			}, arguments[3] || { });
+		}, p.rightsContext);
+
 		this.subMenuItems = Object.extend({
 			staticItems: null,
 			dynamicItems: null,
-			dynamicBuilderCode: null
-		}, arguments[4] || {});
+		}, p.subMenuItems);
+
 		this.elements = new Array();
 		this.contextHidden = false;
 		this.deny = false;
 		if(this.context.subMenu){
-			if(!this.options.actionBar){
+			if(!this.p.actionBar){
 				alert('Warning, wrong action definition. Cannot use a subMenu if not displayed in the actionBar!');			
 			}
 		}
-		
+
+		if (p.form){
+			this._insertForm(p.form)
+		};
 	}, 
 	
 	/**
@@ -86,7 +83,7 @@ Class.create("Action", {
 	 */
 	setManager : function(manager){
 		this.manager = manager;
-		if(this.options.subMenu){
+		if(this.p.subMenu){
 			if(this.subMenuItems.staticItems){
 				this.buildSubmenuStaticItems();
 			}
@@ -94,18 +91,15 @@ Class.create("Action", {
 				this.prepareSubmenuDynamicBuilder();
 			}
 		}
-		if(this.options.listeners['init']){				
+		if(this.init){
 			try{
 				window.listenerContext = this;
-				if(Object.isString(this.options.listeners['init'])){
-					this.options.listeners['init'].evalScripts();
-				}else{
-					this.options.listeners['init']();
-				}
-			}catch(e){
+				this.init();
+			}
+			catch(e){
 				alert(e);
 			}
-		}		
+		}
 	},
 	
 	/**
@@ -113,23 +107,23 @@ Class.create("Action", {
 	 */
 	apply : function(){
 		if(this.deny) return;
-        document.fire("app:beforeApply-"+this.options.name);
-		if(this.options.prepareModal){
+        document.fire("app:beforeApply-"+this.p.name);
+		if(this.p.prepareModal){
 			modal.prepareHeader(
-				this.options.title, 
-				resolveImageSource(this.options.src,this.__DEFAULT_ICON_PATH, 16)
+				this.p.title, 
+				resolveImageSource(this.p.icon,this.__DEFAULT_ICON_PATH, 16)
 			);
 		}
 		window.actionArguments = $A([]);
 		if(arguments[0]) window.actionArguments = $A(arguments[0]);
-		if(this.options.callbackCode) {
+		if(this.execute) {
 			try{
-				this.options.callbackCode.evalScripts();
+				this.execute();
 			}catch(e){
 				app.displayMessage('ERROR', e.message);
 			}
-		}else if(this.options.callbackDialogNode){
-			var node = this.options.callbackDialogNode;
+		}else if(this.p.callbackDialogNode){
+			var node = this.p.callbackDialogNode;
 			var dialogFormId = node.getAttribute("dialogOpenForm");
 			var okButtonOnly = !!(node.getAttribute("dialogOkButtonOnly") === "true");
 			var skipButtons = !!(node.getAttribute("dialogSkipButtons") === "true");
@@ -148,74 +142,69 @@ Class.create("Action", {
 			var onCancelNode = XPathSelectSingleNode(node, "dialogOnCancel");
 			if(onCancelNode && onCancelNode.firstChild) var onCancelFunc = new Function("oForm", onCancelNode.firstChild.nodeValue);
 			
-			this.options.callback = function(){
+			this.p.callback = function(){
 				modal.showDialogForm('Dialog', dialogFormId, onOpenFunc, onCompleteFunc, onCancelFunc, okButtonOnly, skipButtons);
 			};
-			this.options.callback();
-			this.options.callbackDialogNode = null;
-		}else if(this.options.callback){
-			this.options.callback();
+			this.p.callback();
+			this.p.callbackDialogNode = null;
+		}else if(this.p.callback){
+			this.p.callback();
 		}
-		if(this.options.subMenu && arguments[0] && arguments[0][0]){
+		if(this.p.subMenu && arguments[0] && arguments[0][0]){
 			this.notify("submenu_active", arguments[0][0]);
 		}
 		window.actionArguments = null;
-        document.fire("app:afterApply-"+this.options.name);
+        document.fire("app:afterApply-"+this.p.name);
 	},
 		
 	/**
 	 * Updates the action status on context change
 	 * @returns void
 	 */
-	fireContextChange : function(){
-		if(arguments.length < 4) return;
-		var usersEnabled = arguments[0];
-		var crtUser = arguments[1];
-		var crtIsRecycle = arguments[2];
-		var crtInZip = arguments[3];
-		var crtIsRoot = arguments[4];
-		var crtMime = arguments[5] || '';
-		if(this.options.listeners["contextChange"]){
+	fireContextChange : function(p){
+		//TODO return on required params missing only
+		if (Object.keys(p).length < 4) return;
+		if(this.onContextChange){
 			window.listenerContext = this;
-			this.options.listeners["contextChange"].evalScripts();			
+			this.onContextChange();
 		}		
 		var rightsContext = this.rightsContext;
-		if(!rightsContext.noUser && !usersEnabled){
+		if(!rightsContext.noUser && !p.usersEnabled){
 			return this.hideForContext();				
 		}
-		if((rightsContext.userLogged == 'only' && crtUser == null) ||
-			(rightsContext.guestLogged && rightsContext.guestLogged=='hidden' & crtUser!=null && crtUser.id=='guest')){
+		if((rightsContext.userLogged == 'only' && p.user == null) ||
+			(rightsContext.guestLogged && rightsContext.guestLogged=='hidden' & p.user!=null && p.user.id=='guest')){
 			return this.hideForContext();
 		}
-		if(rightsContext.userLogged == 'hidden' && crtUser != null && !(crtUser.id=='guest' && rightsContext.guestLogged && rightsContext.guestLogged=='show') ){
+		if(rightsContext.userLogged == 'hidden' && p.user != null && !(p.user.id=='guest' && rightsContext.guestLogged && rightsContext.guestLogged=='show') ){
 			return this.hideForContext();
 		}
-		if(rightsContext.adminOnly && (crtUser == null || !crtUser.isAdmin)){
+		if(rightsContext.adminOnly && (p.user == null || !p.user.isAdmin)){
 			return this.hideForContext();
 		}
-		if(rightsContext.read && crtUser != null && !crtUser.canRead()){
+		if(rightsContext.read && p.user != null && !p.user.canRead()){
 			return this.hideForContext();
 		}
-		if(rightsContext.write && crtUser != null && !crtUser.canWrite()){
+		if(rightsContext.write && p.user != null && !p.user.canWrite()){
 			return this.hideForContext();
 		}
 		if(this.context.allowedMimes.length){
-			if( !this.context.allowedMimes.include("*") && !this.context.allowedMimes.include(crtMime)){
+			if( !this.context.allowedMimes.include("*") && !this.context.allowedMimes.include(p.mime)){
 				return this.hideForContext();
 			}
 		}
 		if(this.context.recycle){
-			if(this.context.recycle == 'only' && !crtIsRecycle){
+			if(this.context.recycle == 'only' && !p.isRecycle){
 				return this.hideForContext();				
 			}
-			if(this.context.recycle == 'hidden' && crtIsRecycle){
+			if(this.context.recycle == 'hidden' && p.isRecycle){
 				return this.hideForContext();
 			}
 		}
-		if(!this.context.inZip && crtInZip){
+		if(!this.context.inZip && p.isInZip){
 			return this.hideForContext();
 		}
-		if(!this.context.root && crtIsRoot){
+		if(!this.context.root && p.isRoot){
 			return this.hideForContext();
 		}
 		this.showForContext();				
@@ -226,9 +215,9 @@ Class.create("Action", {
 	 * Upates the action status on selection change
 	 */
 	fireSelectionChange : function(){
-		if(this.options.listeners["selectionChange"]){
+		if(this.onSelectionChange){
 			window.listenerContext = this;
-			this.options.listeners["selectionChange"].evalScripts();			
+			this.selectionChange();			
 		}
 		if(arguments.length < 1 
 			|| this.contextHidden 
@@ -274,117 +263,6 @@ Class.create("Action", {
 	},
 		
 	/**
-	 * Parses an XML fragment to configure this action
-	 * @param xmlNode Node XML Fragment describing the action
-	 */
-	createFromXML : function(xmlNode){
-		this.options.name = xmlNode.getAttribute('name');
-		for(var i=0; i<xmlNode.childNodes.length;i++){
-			var node = xmlNode.childNodes[i];
-			var defaultAttributes = $H({
-				dir: "dirDefault", 
-				file: "fileDefault", 
-				dragndrop: "dragndropDefault",
-				ctrldragndrop: "ctrlDragndropDefault",
-				expire: "expireDefault"
-			});
-			defaultAttributes.each(function(att){
-				if(xmlNode.getAttribute(att.value) && xmlNode.getAttribute(att.value) == "true"){
-					if(!this.defaults) this.defaults = {};
-					this.defaults[att.key] = true;
-				}
-			}.bind(this));
-			if(node.nodeName == "processing"){
-				for(var j=0; j<node.childNodes.length; j++){
-					var processNode = node.childNodes[j];
-					if(processNode.nodeName == "clientForm"){
-						this.options.formId = processNode.getAttribute("id");
-						this.options.formCode = processNode.firstChild.nodeValue;
-						this.insertForm();
-					}else if(processNode.nodeName == "clientCallback"){						
-						if(processNode.getAttribute('prepareModal') && processNode.getAttribute('prepareModal') == "true"){
-							this.options.prepareModal = true;						
-						}
-						if(processNode.getAttribute('dialogOpenForm')){
-							this.options.callbackDialogNode = processNode;
-						}else if(processNode.firstChild){
-							this.options.callbackCode = '<script>'+processNode.firstChild.nodeValue+'</script>';
-						}
-					}else if(processNode.nodeName == "clientListener" && processNode.firstChild){						
-						this.options.listeners[processNode.getAttribute('name')] = '<script>'+processNode.firstChild.nodeValue+'</script>';
-					}
-				}
-			}else if(node.nodeName == "gui"){
-				this.options.text_id = node.getAttribute('text');
-				this.options.title_id = node.getAttribute('title');
-				this.options.text = I18N[node.getAttribute('text')] || 'not_found';
-				this.options.title = I18N[node.getAttribute('title')] || 'not_found';
-				this.options.src = node.getAttribute('src');								
-				if(node.getAttribute('hasAccessKey') && node.getAttribute('hasAccessKey') == "true"){
-					this.options.accessKey = node.getAttribute('accessKey');
-					this.options.hasAccessKey = true;
-				}
-				if(node.getAttribute('specialAccessKey')){
-					this.options.specialAccessKey = node.getAttribute('specialAccessKey');
-				}
-				for(var j=0; j<node.childNodes.length;j++){
-					if(node.childNodes[j].nodeName == "context"){
-						this.attributesToObject(this.context, node.childNodes[j]);
-						if(this.context.widgets){
-							this.context.widgets = $A(this.context.widgets.split(','));
-						}else{
-							this.context.widgets = $A();
-						}
-						// Backward compatibility
-						if(this.context.infoPanel) this.context.widgets.push('InfoPanel');
-						if(this.context.actionBar) this.context.widgets.push('ActionsToolbar');
-					}
-					else if(node.childNodes[j].nodeName == "selectionContext"){
-						this.attributesToObject(this.selectionContext, node.childNodes[j]);
-					}
-				}
-							
-			}else if(node.nodeName == "rightsContext"){
-				this.attributesToObject(this.rightsContext, node);
-			}else if(node.nodeName == "subMenu"){
-				this.options.subMenu = true;
-				if(node.getAttribute("updateImageOnSelect") && node.getAttribute("updateImageOnSelect") == "true"){
-					this.options.subMenuUpdateImage = true;
-				}
-				if(node.getAttribute("updateTitleOnSelect") && node.getAttribute("updateTitleOnSelect") == "true"){
-					this.options.subMenuUpdateTitle = true;
-				}
-				for(var j=0;j<node.childNodes.length;j++){
-					if(node.childNodes[j].nodeName == "staticItems" || node.childNodes[j].nodeName == "dynamicItems"){
-						this.subMenuItems[node.childNodes[j].nodeName] = [];
-						for(var k=0;k<node.childNodes[j].childNodes.length;k++){
-							if(node.childNodes[j].childNodes[k].nodeName == "item"){
-								var item = {};
-								for(var z=0;z<node.childNodes[j].childNodes[k].attributes.length;z++){
-									var attribute = node.childNodes[j].childNodes[k].attributes[z];
-									item[attribute.nodeName] = attribute.nodeValue;
-								}
-								this.subMenuItems[node.childNodes[j].nodeName].push(item);
-							}
-						}
-					}else if(node.childNodes[j].nodeName == "dynamicBuilder"){
-						this.subMenuItems.dynamicBuilderCode = '<script>'+node.childNodes[j].firstChild.nodeValue+'</script>';
-					}
-				}
-			}
-		}
-		if(!this.options.hasAccessKey) return;
-		if(this.options.accessKey == '' 
-			|| !I18N[this.options.accessKey] 
-			|| this.options.text.indexOf(I18N[this.options.accessKey]) == -1)
-		{
-			this.options.accessKey == this.options.text.charAt(0);
-		}else{
-			this.options.accessKey = I18N[this.options.accessKey];
-		}		
-	}, 
-	
-	/**
 	 * Creates the submenu items
 	 */
 	buildSubmenuStaticItems : function(){
@@ -392,15 +270,15 @@ Class.create("Action", {
 		if(this.subMenuItems.staticItems){
 			this.subMenuItems.staticItems.each(function(item){
 				var itemText = I18N[item.text];
-				if(item.hasAccessKey && (item.hasAccessKey=='true' || item.hasAccessKey===true) && I18N[item.accessKey]){
-					itemText = this.getKeyedText(I18N[item.text],true,I18N[item.accessKey]);
+				if(item.hasAccessKey && I18N[item.accessKey]){
+					itemText = this.getKeyedText(I18N[item.text], true, I18N[item.accessKey]);
 					if(!this.subMenuItems.accessKeys) this.subMenuItems.accessKeys = [];
-					this.manager.registerKey(I18N[item.accessKey],this.options.name, item.command);					
+					this.manager.registerKey(I18N[item.accessKey],this.p.name, item.command);					
 				}
 				menuItems.push({
 					name: itemText,
 					alt: I18N[item.title],
-					image: resolveImageSource(item.src, '/image/actions/ICON_SIZE', 22),
+					image: resolveImageSource(item.icon, '/image/action/ICON_SIZE', 22),
 					isDefault: !!(item.isDefault),
 					callback: function(e){this.apply([item]);}.bind(this)
 				});
@@ -415,9 +293,9 @@ Class.create("Action", {
 	prepareSubmenuDynamicBuilder : function(){		
 		this.subMenuItems.dynamicBuilder = function(protoMenu){
 			setTimeout(function(){
-				if(this.subMenuItems.dynamicBuilderCode){
+				if(this.subMenu){
 					window.builderContext = this;
-					this.subMenuItems.dynamicBuilderCode.evalScripts();
+					this.subMenu();
 					var menuItems = this.builderMenuItems || [];					
 				}else{
 			  		var menuItems = [];
@@ -426,13 +304,13 @@ Class.create("Action", {
 			  			if(action.deny) return;
 						menuItems.push({
 							name: action.getKeyedText(),
-							alt: action.options.title,
-							image: resolveImageSource(action.options.src, '/image/actions/ICON_SIZE', 16),						
+							alt: action.p.title,
+							image: resolveImageSource(action.p.icon, '/image/action/ICON_SIZE', 16),						
 							callback: function(e){this.apply();}.bind(action)
 						});
 			  		}, this);
 				}
-			  	protoMenu.options.menuItems = menuItems;
+			  	protoMenu.p.menuItems = menuItems;
 			  	protoMenu.refreshList();
 			}.bind(this),0);
 		}.bind(this);		
@@ -442,10 +320,10 @@ Class.create("Action", {
 	 * Refresh icon image source
 	 * @param newSrc String The image source. Can reference an image library
 	 */
-	setIconSrc : function(newSrc){
-		this.options.src = newSrc;
-		if($(this.options.name +'_button_icon')){
-			$(this.options.name +'_button_icon').src = resolveImageSource(this.options.src,this.__DEFAULT_ICON_PATH, 22);
+	setIcon : function(newSrc){
+		this.p.icon = newSrc;
+		if($(this.p.name +'_button_icon')){
+			$(this.p.name +'_button_icon').src = resolveImageSource(this.p.icon, this.__DEFAULT_ICON_PATH, 22);
 		}		
 	},
 	
@@ -455,39 +333,14 @@ Class.create("Action", {
 	 * @param newTitle String the new tooltip
 	 */
 	setLabel : function(newLabel, newTitle){
-		this.options.text = I18N[newLabel];
-		if($(this.options.name+'_button_label')){
-			$(this.options.name+'_button_label').update(this.getKeyedText());
+		this.p.text = I18N[newLabel || this.p.text];
+		if($(this.p.name+'_button_label')){
+			$(this.p.name+'_button_label').update(this.getKeyedText());
 		}
-		if(!newTitle) return;
-		this.options.title = I18N[newTitle];
-		if($(this.options.name+'_button_icon')){
-			$(this.options.name+'_button_icon').title = this.options.title;
+		this.p.title = I18N[newTitle || this.p.title];
+		if($(this.p.name+'_button_icon')){
+			$(this.p.name+'_button_icon').title = this.p.title;
 		}
-	},
-	
-	/**
-	 * Grab its label from the i18n I18N
-	 */
-	refreshFromI18NHash : function(){
-		var text; var title;
-		this.setLabel(this.options.text_id, this.options.title_id);
-	},
-	
-	/**
-	 * Return data necessary to build InfoPanel
-	 * @returns Hash
-	 */
-	toInfoPanel : function(){
-		return this.options;
-	},
-	
-	/**
-	 * Return necessary data to buid contextual menu
-	 * @returns Hash
-	 */
-	toContextMenu : function(){
-		return this.options;
 	},
 	
 	/**
@@ -551,8 +404,8 @@ Class.create("Action", {
 			$(el).remove();
 		}.bind(this));		
 		this.elements = new Array();
-		if(this.options.formId && $('all_forms').select('[id="'+this.options.formId+'"]').length){
-			$('all_forms').select('[id="'+this.options.formId+'"]')[0].remove();
+		if(this.p.form && $('all_forms').select('[id="'+this.p.form.id+'"]').length){
+			$('all_forms').select('[id="'+this.p.form.id+'"]')[0].remove();
 		}
 	},
 	
@@ -564,16 +417,10 @@ Class.create("Action", {
 	 * @returns String
 	 */
 	getKeyedText : function(displayString, hasAccessKey, accessKey){
-		if(!displayString){
-			displayString = this.options.text;
-		}
-		if(!hasAccessKey){
-			hasAccessKey = this.options.hasAccessKey;
-		}
-		if(!accessKey){
-			accessKey = this.options.accessKey;
-		}
-		if(!hasAccessKey) return displayString;
+		displayString = displayString || this.p.text;
+		accessKey = accessKey || this.p.accessKey;
+
+		if(!hasAccessKey && this.p.hasAccessKey) return displayString;
 		var keyPos = displayString.toLowerCase().indexOf(accessKey.toLowerCase());
 		if(keyPos==-1){
 			return displayString + ' (<u>' + accessKey + '</u>)';
@@ -591,32 +438,10 @@ Class.create("Action", {
 	/**
 	 * Inserts Html FORM declared by manifest in the all_forms div.
 	 */
-	insertForm : function(){
-		if(!this.options.formCode || !this.options.formId) return;
-		if($('all_forms').select('[id="'+this.options.formId+'"]').length) return;
-		$('all_forms').insert(this.options.formCode);
-	},
-	
-	/**
-	 * Utilitary function to transform XML Node attributes into Object mapping keys.
-	 * @param object Object The target object
-	 * @param node Node The source node
-	 */
-	attributesToObject : function(object, node){
-		Object.keys(object).each(function(key){
-			if(node.getAttribute(key)){
-				value = node.getAttribute(key);
-				if(value == 'true') value = true;
-				else if(value == 'false') value = false;
-				if(key == 'allowedMimes'){
-					if(value && value.split(',').length){
-						value = $A(value.split(','));
-					}else{
-						value = $A([]);
-					}					
-				}
-				this[key] = value;
-			}
-		}.bind(object));
+	_insertForm : function(form){
+		this.p.formId = form.id;
+		if($('all_forms').select('[id="'+ form.id +'"]').length) return;
+		$('all_forms').insert(form.html);
 	}
+	
 });
