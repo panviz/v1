@@ -206,8 +206,8 @@ Class.create("CodeMirrorEditor", AbstractEditor, {
 
         this.element.observe("view:resize", function(event){
             if(this.goingToFullScreen) return;
-            fitHeightToBottom($(this.contentMainContainer), $(modal.elementName));
-            fitHeightToBottom($(this.element), $(modal.elementName));
+            fitHeightToBottom($(this.contentMainContainer), $($modal.elementName));
+            fitHeightToBottom($(this.element), $($modal.elementName));
             fitHeightToBottom(this.codeMirror.wrapping);
         }.bind(this));
 	},
@@ -247,8 +247,8 @@ Class.create("CodeMirrorEditor", AbstractEditor, {
 				if(fsMode){
 					fitHeightToBottom($(this.contentMainContainer));
 				}else{
-					fitHeightToBottom($(this.contentMainContainer), $(modal.elementName));
-					fitHeightToBottom($(this.element), $(modal.elementName));
+					fitHeightToBottom($(this.contentMainContainer), $($modal.elementName));
+					fitHeightToBottom($(this.element), $($modal.elementName));
 				}
 			}.bind(this), this.options);			
 	},

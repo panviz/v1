@@ -76,7 +76,7 @@ Class.create("ExifCellRenderer", {
 				'ol_center' : {latitude:parseFloat(latitude),longitude:parseFloat(longitude)}
 			}));
 			app.loadEditorResources(editorData.resourcesManager);
-			modal.openEditorDialog(editorData);
+			$modal.openEditorDialog(editorData);
 		}
 		
 	}

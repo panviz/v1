@@ -1,20 +1,20 @@
 			TODO
 
+Application
+	Create ControlFul
+
 EventManagement
 	Implement ObjectWithEvent (destroy registered observers on View close)
 
-Check all actions
+Check all actions call chain
 	stop on root_item_changed
 
-Application
-
 Rename
-	access modules -> driver?
+	access modules -> Provider for Client, Driver for Server
 	Singleton manager?
-		View, Actions, Background, Resources
+		Background -> 
 
 Item
-	remove RemoteItemProvider
 
 View
 	move to /view all Panes?
@@ -35,7 +35,18 @@ Modal and View should implement one Interface with methods: ?
 List or Table
 	make inherited from View
 
+Search
+	Search bar and Search engine
+
 Server
+	add path helpers
 	create file on 'save' if missing
 
-	search all TODO notes in code
+check all methods and variables Privacy
+search all TODO notes in code
+
+Module
+	connect
+		http
+
+Publish wrench update and Prototype embed

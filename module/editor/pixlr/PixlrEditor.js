@@ -10,9 +10,9 @@ Class.create("PixlrEditor", AbstractEditor, {
 		this.element =  $(oFormObject);
 		this.defaultActions = new Hash();		
 		this.createTitleSpans();
-		modal.setCloseAction(function(){this.close();}.bind(this));
+		$modal.setCloseAction(function(){this.close();}.bind(this));
 		this.container = $(oFormObject).select('div[id="pixlrContainer"]')[0];
-		fitHeightToBottom($(this.container), $(modal.elementName));
+		fitHeightToBottom($(this.container), $($modal.elementName));
 		this.contentMainContainer = new Element("iframe", {			
 			style: "border:none;width:"+this.container.getWidth()+"px;"
 		});						

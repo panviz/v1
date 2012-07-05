@@ -117,7 +117,7 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var loadFunc = function(oForm){app.actionBar.svnLogger = new SVNLogger($(oForm));app.actionBar.svnLogger.open();};var closeFunc = function(){app.actionBar.svnLogger.close();hideLightBox();return false;};modal.showDialogForm('SVN', 'svnlog_box', loadFunc, closeFunc, null, true, true);"
+                "$t": "var loadFunc = function(oForm){app.actionBar.svnLogger = new SVNLogger($(oForm));app.actionBar.svnLogger.open();};var closeFunc = function(){app.actionBar.svnLogger.close();hideLightBox();return false;};$modal.showDialogForm('SVN', 'svnlog_box', loadFunc, closeFunc, null, true, true);"
               },
               "clientForm": {
                 "id": "svnlog_box",
@@ -155,7 +155,7 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var loadFunc = function(oForm){app.actionBar.svnLogger = new SVNLogger($(oForm));app.actionBar.svnLogger.open(true);};var closeFunc = function(){app.actionBar.svnLogger.close();hideLightBox();return false;};modal.showDialogForm('SVN', 'svnlog_box', loadFunc, closeFunc, null, true, true);"
+                "$t": "var loadFunc = function(oForm){app.actionBar.svnLogger = new SVNLogger($(oForm));app.actionBar.svnLogger.open(true);};var closeFunc = function(){app.actionBar.svnLogger.close();hideLightBox();return false;};$modal.showDialogForm('SVN', 'svnlog_box', loadFunc, closeFunc, null, true, true);"
               }
             }
           },

@@ -33,7 +33,7 @@ Class.create("EmlViewer", AbstractEditor, {
 		this.contentMainContainer = this.textareaContainer;
 		this.textareaContainer.setStyle({width: '100%', overflow: 'auto'});	
 		this.element.insert(this.textareaContainer);
-		fitHeightToBottom($(this.textareaContainer), $(modal.elementName));
+		fitHeightToBottom($(this.textareaContainer), $($modal.elementName));
 		// LOAD FILE NOW
 		this.loadFileContent(fileName);
 		if(window.ajxpMobile){
@@ -86,9 +86,8 @@ Class.create("EmlViewer", AbstractEditor, {
 				reposList.set(pair.key, pair.value.getLabel());								
 			}.bind(this));
 			if(!user.canWrite()){
-				var nodeProvider = new RemoteNodeProvider();
-				nodeProvider.initProvider({tmp_repository_id: firstKey});
-				var rootNode = new AjxpNode("/", false, I18N[373], "folder.png", nodeProvider);								
+				var provider = new RemoteNodeProvider({tmp_repository_id: firstKey});
+				var rootNode = new AjxpNode("/", false, I18N[373], "folder.png", provider);								
 				this.treeSelector.load(rootNode);
 			}else{
 				this.treeSelector.load();								
@@ -101,9 +100,8 @@ Class.create("EmlViewer", AbstractEditor, {
 			this.treeSelector.setFilterSelectedIndex(0);
 			this.treeSelector.setFilterChangeCallback(function(e){
 				externalRepo = this.filterSelector.getValue();
-				var nodeProvider = new RemoteNodeProvider();
-				nodeProvider.initProvider({tmp_repository_id: externalRepo});
-				this.resetAjxpRootNode(new AjxpNode("/", false, I18N[373], "folder.png", nodeProvider));
+				var provider = new ItemProvider({tmp_repository_id: externalRepo});
+				this.resetAjxpRootNode(new AjxpNode("/", false, I18N[373], "folder.png", provider));
 			});
 		}else{
 			this.treeSelector.load();
@@ -307,7 +305,7 @@ Class.create("EmlViewer", AbstractEditor, {
 			}		
 		}
 		
-		fitHeightToBottom($(this.textareaContainer), $(modal.elementName));
+		fitHeightToBottom($(this.textareaContainer), $($modal.elementName));
 		this.removeOnLoad(this.textareaContainer);
 	},	
 	

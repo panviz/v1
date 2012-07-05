@@ -62,7 +62,7 @@ Class.create("OtherEditorChooser", AbstractEditor, {
 		if(!event.target.editorData) return;
 		app.loadEditorResources(event.target.editorData.resourcesManager);
 		hideLightBox();
-		modal.openEditorDialog(event.target.editorData);
+		$modal.openEditorDialog(event.target.editorData);
         this.createAssociation(event.target.currentMime, event.target.editorData.editorClass);
 	},
 

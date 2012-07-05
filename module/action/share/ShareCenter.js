@@ -114,7 +114,7 @@ Class.create("ShareCenter", {
             var publicUrl = serverAccessPath+'&get_action=share&sub_action=delegate_repo';
             publicUrl = userSelection.updateFormOrUrl(null,publicUrl);
             var conn = new Connection(publicUrl);
-            conn.setParameters(modal.getForm().serialize(true));
+            conn.setParameters($modal.getForm().serialize(true));
             if(this._currentRepositoryId){
                 conn.addParameter("repository_id", this._currentRepositoryId);
             }
@@ -140,13 +140,13 @@ Class.create("ShareCenter", {
         if(window.bootstrap.parameters.get("usersEditable") == false){
             app.displayMessage('ERROR', I18N[394]);
         }else{
-            modal.showDialogForm('Get', 'share_folder_form', loadFunc, submitFunc, closeFunc);
+            $modal.showDialogForm('Get', 'share_folder_form', loadFunc, submitFunc, closeFunc);
         }
     },
 
     shareFile : function(userSelection){
 
-        modal.showDialogForm(
+        $modal.showDialogForm(
             'Get',
             'share_form',
             function(oForm){
@@ -205,13 +205,13 @@ Class.create("ShareCenter", {
 
     performUnshareAction : function(){
         var userSelection = app.getUserSelection();
-        modal.getForm().down("img#stop_sharing_indicator").src=window.THEME.path+"/image/autocompleter-loader.gif";
+        $modal.getForm().down("img#stop_sharing_indicator").src=window.THEME.path+"/image/autocompleter-loader.gif";
         var conn = new Connection();
         conn.addParameter("get_action", "unshare");
         conn.addParameter("file", userSelection.getUniqueNode().getPath());
         conn.addParameter("element_type", userSelection.getUniqueNode().isLeaf()?"file":"repository");
         conn.onComplete = function(){
-            var oForm = modal.getForm();
+            var oForm = $modal.getForm();
             if(oForm.down('div#generate_publiclet')){
                 oForm.down('div#generate_publiclet').stopObserving("click");
             }
@@ -227,7 +227,7 @@ Class.create("ShareCenter", {
         conn.addParameter("get_action", "reset_counter");
         conn.addParameter("file", app.getUserSelection().getUniqueNode().getPath());
         conn.onComplete = function(){
-            modal.getForm().down('span#downloaded_times').update('0');
+            $modal.getForm().down('span#downloaded_times').update('0');
         };
         conn.sendAsync();
     },
@@ -235,7 +235,7 @@ Class.create("ShareCenter", {
     generatePublicLinkCallback : function(){
         var userSelection = app.getUserSelection();
         if(!userSelection.isUnique() || (userSelection.hasDir() && !userSelection.hasMime($A(['browsable_archive'])))) return;
-        var oForm = $(modal.getForm());
+        var oForm = $($modal.getForm());
         oForm.down('img#generate_image').src = window.THEME.path+"/image/autocompleter-loader.gif";
         var publicUrl = window.serverAccessPath+'&get_action=share';
         publicUrl = userSelection.updateFormOrUrl(null,publicUrl);
@@ -255,13 +255,13 @@ Class.create("ShareCenter", {
             new Effect.Fade(oForm.down('fieldset[id="share_generate"]'), {
                 duration:0.5,
                 afterFinish : function(){
-                    modal.refreshDialogAppearance();
+                    $modal.refreshDialogAppearance();
                     new Effect.Appear(oForm.down('fieldset[id="share_result"]'), {
                         duration:0.5,
                         afterFinish : function(){
                             cont.select();
-                            modal.refreshDialogAppearance();
-                            modal.setCloseAction(function(){
+                            $modal.refreshDialogAppearance();
+                            $modal.setCloseAction(function(){
                                 app.fireContextRefresh();
                             });
                         }

@@ -16,11 +16,22 @@ Bootstrap:
             actionBar.initActions
               Action:
               fire: "app:actions_loaded"
-              TODO
+              fireContextChange
+              fireSelectionChange
             loadActiveRepository
+              loadRepository
+                repository.loadResources
+                _contextHolder.setRootItem
+                  fire: "app:root_item_changed"
+                  setContextItem
+                    fire: "app:context_changed"
+                rootItem.load
+                  TODO
+              fire: "app:repository_list_refreshed"
           buildGUI
           window.observe: "resize"
           initWidgets
+            TODO
           fire: "app:gui_loaded"
           fire: "app:actions_loaded"
           setTimeout.fire: "app:loaded"

@@ -16,7 +16,7 @@
 					if(loginRedirect){
 						document.location.href=loginRedirect;
 					}else{
-						modal.showDialogForm('Log In', ($('login_form')?'login_form':'login_form_dynamic'), 
+						$modal.showDialogForm('Log In', ($('login_form')?'login_form':'login_form_dynamic'), 
 						function(oForm){
 						    if(bootstrap.parameters.get("customWording")){
                                 var ttSt = $("generic_dialog_box").down("span.titleString");
@@ -38,7 +38,7 @@
 							}
 						}, 
 						function(){
-							var oForm = modal.getForm();
+							var oForm = $modal.getForm();
 							var connection = new Connection();
 							connection.addParameter('get_action', 'login');
 							connection.addParameter('userid', oForm.userid.value);

@@ -1,7 +1,7 @@
 {
 	"name" : "desktop",
-	"resources_path" : "/client",
-	"js_path" : "/client",
+	"resources_path" : "/app",
+	"js_path" : "/app",
 	"widget" : {
 		"name": "widget",
 		"element": "widget",
@@ -10,15 +10,15 @@
 	"themes" : {
 		"mybase" : {
 			"name" : "MyBase",
-			"path" : "/client/theme/mybase",
+			"path" : "/app/theme/mybase",
 			"element" : "desktop",
-			"template" : "/client/theme/mybase/html/template.html"
+			"template" : "/app/theme/mybase/html/template.html"
 		},
 		"manager" : {
 			"name" : "Manager",
-			"path" : "/client/theme/mybase",
+			"path" : "/app/theme/mybase",
 			"element" : "desktop",
-			"template" : "/client/theme/manager/html/template.html"
+			"template" : "/app/theme/manager/html/template.html"
 		}
 	},
 	"hooks": {

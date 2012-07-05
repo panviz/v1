@@ -1,10 +1,9 @@
+lib/ext-all.js
 lib/prototype/prototype.js
 lib/prototype/prototype.livepipe.js
-lib/prototype/prototype.oo.js
-lib/underscore.js
+lib/prototype/lang/prototype.oo.js
 lib/modernizr/modernizr.min.js
-lib/prototype/jsProgressBarHandler.js
-Connection.js
+../client/Connection.js
 lib/md5/md5.js
 utils.js
-Bootstrap.js
+../client/Boot.js

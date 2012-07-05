@@ -29,7 +29,7 @@ Class.create("ExifEditor", AbstractEditor, {
 		// LOAD FILE NOW
 		this.contentMainContainer = new Element("div", {id: "exifContainer",style: "overflow: auto;font-family: Trebuchet MS"});
 		this.element.insert(this.contentMainContainer);
-		fitHeightToBottom($(this.contentMainContainer), $(modal.elementName));
+		fitHeightToBottom($(this.contentMainContainer), $($modal.elementName));
 		this.updateTitle(getBaseName(fileName));
 		this.loadFileContent(fileName);
 	},

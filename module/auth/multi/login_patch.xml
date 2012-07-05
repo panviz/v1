@@ -7,7 +7,7 @@
 	if(loginRedirect){
 		document.location.href=loginRedirect;
 	}else{
-		modal.showDialogForm('Log In', ($('login_form')?'login_form':'login_form_dynamic'), 
+		$modal.showDialogForm('Log In', ($('login_form')?'login_form':'login_form_dynamic'), 
 		function(oForm){
 			if(!$('auth_source')){
 				var auth_chooser = '<div class="SF_element"> \
@@ -35,7 +35,7 @@
 			}
 		}, 
 		function(){
-			var oForm = modal.getForm();
+			var oForm = $modal.getForm();
 			var connection = new Connexion();
 			connection.addParameter('get_action', 'login');
 			var selectedSource = oForm.auth_source.value;

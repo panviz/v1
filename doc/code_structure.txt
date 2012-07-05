@@ -14,14 +14,10 @@ Item		abstract item to be worked with
 
 Collection								collection of Items, represents selection object, data model as well
 
-Application								loads registry, builds app gui
-	.initExtension					load extension configuration from manifest.xml
-	.initWidgets 						initialization GUI method
-		.window[id] = compRegistry[i-1];	//window will contain access to all GUI components classes
+Application								loads registry, builds gui app
 	.guiCompRegistry 				array of GUI components
 	.guiActions 						Hash
 	.contextMenu						Proto.Menu
-	.actionBar							ActionsManager
 	.getUserSelection				Collection
 	.getContextNode					Abstract Item (current path)
 	.getContextHolder				Collection - contains current selection, path, repo

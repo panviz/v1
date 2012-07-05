@@ -217,7 +217,7 @@ Class.create("Diaporama", View, {
             if(this.splitter) this.splitter.options.fitParent = this.element.up(".dialogBox");
             this.resize();
         }.bind(this));
-		fitHeightToBottom(this.imgContainer, $(modal.elementName), 3);
+		fitHeightToBottom(this.imgContainer, $($modal.elementName), 3);
 		// Fix imgContainer
 		if(Prototype.Browser.IE){
 			this.IEorigWidth = this.element.getWidth();
@@ -250,7 +250,7 @@ Class.create("Diaporama", View, {
 				fitHeightToBottom(this.imgContainer, this.element);
 				if(this.IEorigWidth) this.imgContainer.setStyle({width: this.element.getWidth()});
 			}else{
-				fitHeightToBottom(this.imgContainer, $(modal.elementName), 3);
+				fitHeightToBottom(this.imgContainer, $($modal.elementName), 3);
 				if(this.IEorigWidth) this.imgContainer.setStyle({width: this.IEorigWidth});
 			}
 		}

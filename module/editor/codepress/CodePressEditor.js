@@ -42,7 +42,7 @@ Class.create("CodePressEditor", TextEditor, {
 		this.textarea.setAttribute('wrap', 'off');	
 		this.element.appendChild(this.textareaContainer);
 		this.textareaContainer.appendChild(this.textarea);
-		fitHeightToBottom($(this.textarea), $(modal.elementName));
+		fitHeightToBottom($(this.textarea), $($modal.elementName));
 		// LOAD FILE NOW
 		this.loadFileContent(fileName);
 		if(window.ajxpMobile){
@@ -73,7 +73,7 @@ Class.create("CodePressEditor", TextEditor, {
 		this.contentMainContainer = this.textarea.parentNode;
 		this.element.observe("view:close", function(){
 			this.cpCodeObject.close();
-			modal.clearContent(modal.dialogContent);		
+			$modal.clearContent(modal.dialogContent);		
 		}, this );			
 		this.removeOnLoad(this.textareaContainer);
 				

@@ -126,7 +126,7 @@
             "processing": {
               "clientCallback": {
                 "prepareModal": "true",
-                "$t": "var selectedMime = getMimeType(app.getUserSelection().getUniqueNode());var editors = app.findEditorsForMime(selectedMime);var editorData;if(editors.length){editorData = editors[0];}if(editorData){app.loadEditorResources(editorData.resourcesManager);modal.openEditorDialog(editorData);}else{alert('no data found!');}"
+                "$t": "var selectedMime = getMimeType(app.getUserSelection().getUniqueNode());var editors = app.findEditorsForMime(selectedMime);var editorData;if(editors.length){editorData = editors[0];}if(editorData){app.loadEditorResources(editorData.resourcesManager);$modal.openEditorDialog(editorData);}else{alert('no data found!');}"
               },
               "serverCallback": {
                 "methodName": "switchAction"

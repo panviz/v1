@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Graph</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="icon" type="image/x-png" href="<%= settings.ui.theme.path %>/image/html-folder.png">
+		<%- link_tag(settings.ui.theme.path + '/css/list.txt') %>
+		<%- include_tag('/config/boot_list.txt') %>
+		<%- include_tag('/config/list.txt') %>
+		<link rel="stylesheet" type="text/css" href="app/control/progressBar/main.css">
+	</head>
+	<body bgcolor="#FFFFFF" text="#000000" marginheight="0" marginwidth="0" leftmargin="0" topmargin="0"  style="overflow:hidden;">		
+		<div id="loadingOverlay" style="background-color:#555555; opacity:0.2;"></div>
+		<div id="progressBox" class="dialogBox" style="width: 320px;display:block; top:30%; z-index:2002; left:40%; position:absolute; background-color:#fff; padding:0;">
+			<div align="left" class="dialogContent" style="color:#676965; font-family:Trebuchet MS,sans-serif; font-size:11px; font-weight:normal; left:10px; padding:10px;">
+				<div>The web data-browser<span id="version_span"></span></div>
+				by Dmitra.
+			</div>
+		</div>
+	<div id="desktop" jClass="Pane" options='{"fit": "height","fitParent": "window","fitMarginBottom": "$(\"optional_bottom_div\").getHeight()"}'></div>
+		<%- body %>
+	</body>
+</html>

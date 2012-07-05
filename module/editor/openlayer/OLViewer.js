@@ -19,7 +19,7 @@ Class.create("OLViewer", View, {
 		this.contentMainContainer = this.mapDiv;
 		this.initFilterBar(item.getMime() == 'wms_layer');
 		this.element.insert(this.mapDiv);
-		fitHeightToBottom($(this.mapDiv), $(modal.elementName));
+		fitHeightToBottom($(this.mapDiv), $($modal.elementName));
         
 		var result = this.createOLMap(item, 'openlayer_map', false, true);
 		this.olMap = result.MAP;
@@ -36,7 +36,7 @@ Class.create("OLViewer", View, {
 	resize : function ($super, size){
 		$super(size);
 		if(!this.fullScreenMode){
-			fitHeightToBottom($(this.mapDiv), $(modal.elementName));
+			fitHeightToBottom($(this.mapDiv), $($modal.elementName));
 		}
 		if(this.olMap){
 			this.olMap.updateSize();
@@ -106,13 +106,13 @@ Class.create("OLViewer", View, {
 	toggleFilterBar : function(){
 		if(this.filterBarShown){
 			new Effect.BlindUp(this.filterBar, {duration: 0.1,scaleMode: 'contents',afterFinish : function(){
-				fitHeightToBottom($(this.mapDiv), $(modal.elementName));
+				fitHeightToBottom($(this.mapDiv), $($modal.elementName));
 				this.resize();			
 			}.bind(this) });
 			this.filterBarShown = false;
 		}else{
 			new Effect.BlindDown(this.filterBar, {duration: 0.1,scaleMode: 'contents',afterFinish : function(){
-				fitHeightToBottom($(this.mapDiv), $(modal.elementName));
+				fitHeightToBottom($(this.mapDiv), $($modal.elementName));
 				this.resize();			
 			}.bind(this) });
 			this.filterBarShown = true;

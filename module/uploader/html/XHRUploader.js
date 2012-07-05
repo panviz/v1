@@ -171,11 +171,11 @@ Class.create("XHRUploader", {
 		totalPane.insert({after:optionPane});
 		optionPane.showPane = function(){
 			totalPane.hide();optionPane.show();
-			modal.refreshDialogAppearance();
+			$modal.refreshDialogAppearance();
 		}
 		optionPane.hidePane = function(){
 			totalPane.show();optionPane.hide();
-			modal.refreshDialogAppearance();
+			$modal.refreshDialogAppearance();
 		}
 		optionPane.autoSendCheck.observe("click", function(e){				
 			var autoSendOpt = optionPane.autoSendCheck.checked;

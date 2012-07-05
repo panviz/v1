@@ -1,5 +1,5 @@
 /**
- * AjaXplorer encapsulation of Ajax.Request
+ * TODO Use app/API?
  */
 Class.create("Connection", {
 
@@ -50,33 +50,33 @@ Class.create("Connection", {
 		}
 	},
 
-    /**
-     * Show a small loader
-     */
-    showLoader : function(){
-        if(!$('Connection-loader') && window.bootstrap.p.get("theme")){
-            var img = new Element("img", {
-                src: THEME.path +"/image/connexion-loader.gif",
-                id: 'Connection-loader',
-                style: 'position:absolute; top:2px; right:2px; z-index:40000; display:none;'});
-            $$('body')[0].insert(img);
-        }
-        if($('Connection-loader')) $('Connection-loader').show();
-    },
+	/**
+	 * Show a small loader
+	 */
+	showLoader : function(){
+		if(!$('Connection-loader') && window.THEME){
+			var img = new Element("img", {
+			src: THEME.path +"/image/connexion-loader.gif",
+			id: 'Connection-loader',
+			style: 'position:absolute; top:2px; right:2px; z-index:40000; display:none;'});
+			$$('body')[0].insert(img);
+		}
+		if($('Connection-loader')) $('Connection-loader').show();
+	},
 
-    /**
-     * Hide a small loader
-     */
-    hideLoader : function(){
-        if($('Connection-loader'))$('Connection-loader').hide();
-    },
+	/**
+	 * Hide a small loader
+	 */
+	hideLoader : function(){
+		if($('Connection-loader'))$('Connection-loader').hide();
+	},
 
 	/**
 	 * Send Asynchronously
 	 */
 	sendAsync : function(){	
 		this.addSecureToken();
-        this.showLoader();
+			this.showLoader();
 		new Ajax.Request(this._baseUrl, 
 		{
 			method: this._method,
@@ -90,7 +90,7 @@ Class.create("Connection", {
 	 */
 	sendSync : function(){	
 		this.addSecureToken();
-        this.showLoader();
+			this.showLoader();
 		new Ajax.Request(this._baseUrl, 
 		{
 			method: this._method,

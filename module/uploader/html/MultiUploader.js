@@ -98,7 +98,7 @@ Class.create("MultiUploader", {
 			$('uploadBrowseButton').show();
 			$('uploadSendButton').show();
 		}
-		modal.setCloseAction(function(){
+		$modal.setCloseAction(function(){
 			if(Prototype.Browser.IE){
 				$(document.body).insert($('uploadBrowseButton'));
 				$(document.body).insert($('uploadSendButton'));

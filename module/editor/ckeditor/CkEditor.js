@@ -70,7 +70,7 @@ Class.create("CkEditor", TextEditor, {
 		this.textarea.setAttribute('wrap', 'off');	
 		this.element.insert(this.textareaContainer);
 		this.textareaContainer.appendChild(this.textarea);
-		fitHeightToBottom(this.textareaContainer, $(modal.elementName));
+		fitHeightToBottom(this.textareaContainer, $($modal.elementName));
 		this.reloadEditor('content');
 		this.element.observe("view:close", function(){
 			CKEDITOR.instances.content.destroy();
