@@ -11,12 +11,12 @@ Prototype = {
 };
 
 files.forEach(function(path) {
-	var code = fs.readFileSync(protoPath + path);
-	vm.runInThisContext(code, path);
+  var code = fs.readFileSync(protoPath + path);
+  vm.runInThisContext(code, path);
 })
 
 module.exports = {
-	Object : Object
+  Object : Object
 , Function : Function
 , $break : $break
 , Enumerable : Enumerable

@@ -1,172 +1,172 @@
 {
-	"UpDir" : {
-		"parameters" : {
-			"text" : "Parent",
-			"title" : "Parent directory",
-			"icon" : "up.png",
-			"hasAccessKey" : true,
-			"accessKey" : "parent_access_key",
-			"prepareModal" : false
-		},
-		"context" : {
-			"selection" : false,
-			"dir" : false,
-			"recycle" : false,
-			"actionBar" : false,
-			"contextMenu" : false,
-			"infoPanel" : false,
-			"actionBarGroup" : "default"
-		},
-		"rightsContext" : {
-			"noUser" : true,
-			"userLogged" : "only",
-			"read" : true,
-			"write" : false,
-			"adminOnly" : ""
-		}
-	},
-	"Refresh" : {
-		"parameters" : {
-			"text" : "Refresh",
-			"title" : "Refresh",
-			"icon" : "reload.png",
-			"hasAccessKey" : true,
-			"accessKey" : "refresh_access_key",
-			"prepareModal" : false
-		},
-		"context" : {
-			"selection" : false,
-			"dir" : true,
-			"recycle" : false,
-			"actionBar" : false,
-			"contextMenu" : true,
-			"infoPanel" : false
-		},
-		"rightsContext" : {
-			"noUser" : true,
-			"userLogged" : "only",
-			"read" : true,
-			"write" : false,
-			"adminOnly" : ""
-		}
-	},
-	"ExtSelect" : {
-		"parameters" : {
-			"text" : "Select",
-			"title" : "Select the current file",
-			"icon" : "download_manager.png",
-			"accessKey" : "",
-			"hasAccessKey" : false
-		},
-		"context" : {
-			"selection" : true,
-			"dir" : "",
-			"recycle" : false,
-			"actionBar" : true,
-			"contextMenu" : true,
-			"infoPanel" : true,
-			"actionBarGroup" : "put",
-			"inZip" : false
-		},
-		"selectionContext" : {
-			"dir" : true,
-			"file" : true,
-			"recycle" : false,
-			"unique" : false
-		},
-		"rightsContext" : {
-			"noUser" : true,
-			"userLogged" : "only",
-			"read" : true,
-			"write" : false,
-			"adminOnly" : ""
-		}
-	},
-	"Bookmark" : {
-		"parameters" : {
-			"text" : "Bookmark",
-			"title" : "Add current location to MyBookmarks",
-			"icon" : "bookmark.png",
-			"hasAccessKey" : true,
-			"accessKey" : "bookmarks_access_key",
-			"prepareModal" : false
-		},
-		"context" : {
-			"selection" : false,
-			"dir" : true,
-			"recycle" : "hidden",
-			"actionBar" : false,
-			"contextMenu" : true,
-			"infoPanel" : false,
-			"actionBarGroup" : "default"
-		},
-		"rightsContext" : {
-			"noUser" : true,
-			"userLogged" : "only",
-			"read" : true,
-			"write" : false,
-			"adminOnly" : ""
-		}
-	},
-	"DeleteBookmark" : {
-		"parameters" : {
-			"text" : "New Dir",
-			"title" : "Create new directory",
-			"icon" : "folder_new.png",
-			"accessKey" : "folder_access_key",
-			"prepareModal" : false
-		},
-		"context" : {
-			"selection" : false,
-			"dir" : "",
-			"recycle" : false,
-			"actionBar" : false,
-			"contextMenu" : false,
-			"infoPanel" : false
-		}
-	},
-	"RenameBookmark" : {
-		"parameters" : {
-			"text" : "New Dir",
-			"title" : "Create new directory",
-			"icon" : "folder_new.png",
-			"accessKey" : "folder_access_key",
-			"prepareModal" : false
-		},
-		"context" : {
-			"selection" : false,
-			"dir" : "",
-			"recycle" : false,
-			"actionBar" : false,
-			"contextMenu" : false,
-			"infoPanel" : false
-		},
-		"form" : {
-			"id" : "rename_bookmark",
-			"html" : "<div id=\"rename_bookmark\" action=\"get_bookmarks\" box_width=\"200\"><input type=\"text\" name=\"bm_title\" value=\"\" id=\"bm_title\" class=\"dialogFocus\"><input type=\"hidden\" name=\"bm_path\" value=\"\"></div>"
-		}
-	},
-	"Splash" : {
-		"parameters" : {
-			"text" : "166",
-			"title" : "167",
-			"icon" : "info.png",
-			"hasAccessKey" : true,
-			"accessKey" : "about_access_key",
-			"prepareModal" : true
-		},
-		"context" : {
-			"selection" : false,
-			"dir" : "",
-			"recycle" : false,
-			"actionBar" : true,
-			"contextMenu" : false,
-			"infoPanel" : false,
-			"actionBarGroup" : "user"
-		},
-		"form" : {
-			"id" : "splash_form",
-			"html" : "<div id=\"splash_form\" box_width=\"455\" box_padding=\"0\"><div id=\"docDiv\" style=\"padding:5px;overflow:auto;height:300px;\"><div class=\"dialogButtons\" style=\"text-align:right;padding-right:6px;\"><input type=\"image\" src=\"/image/action/22/dialog_close.png\" width=\"16\" height=\"16\" class=\"dialogButton\"/></div></div></div>"
-		}
-	}
+  "UpDir" : {
+    "parameters" : {
+      "text" : "Parent",
+      "title" : "Parent directory",
+      "icon" : "up.png",
+      "hasAccessKey" : true,
+      "accessKey" : "parent_access_key",
+      "prepareModal" : false
+    },
+    "context" : {
+      "selection" : false,
+      "dir" : false,
+      "recycle" : false,
+      "actionBar" : false,
+      "contextMenu" : false,
+      "infoPanel" : false,
+      "actionBarGroup" : "default"
+    },
+    "rightsContext" : {
+      "noUser" : true,
+      "userLogged" : "only",
+      "read" : true,
+      "write" : false,
+      "adminOnly" : ""
+    }
+  },
+  "Refresh" : {
+    "parameters" : {
+      "text" : "Refresh",
+      "title" : "Refresh",
+      "icon" : "reload.png",
+      "hasAccessKey" : true,
+      "accessKey" : "refresh_access_key",
+      "prepareModal" : false
+    },
+    "context" : {
+      "selection" : false,
+      "dir" : true,
+      "recycle" : false,
+      "actionBar" : false,
+      "contextMenu" : true,
+      "infoPanel" : false
+    },
+    "rightsContext" : {
+      "noUser" : true,
+      "userLogged" : "only",
+      "read" : true,
+      "write" : false,
+      "adminOnly" : ""
+    }
+  },
+  "ExtSelect" : {
+    "parameters" : {
+      "text" : "Select",
+      "title" : "Select the current file",
+      "icon" : "download_manager.png",
+      "accessKey" : "",
+      "hasAccessKey" : false
+    },
+    "context" : {
+      "selection" : true,
+      "dir" : "",
+      "recycle" : false,
+      "actionBar" : true,
+      "contextMenu" : true,
+      "infoPanel" : true,
+      "actionBarGroup" : "put",
+      "inZip" : false
+    },
+    "selectionContext" : {
+      "dir" : true,
+      "file" : true,
+      "recycle" : false,
+      "unique" : false
+    },
+    "rightsContext" : {
+      "noUser" : true,
+      "userLogged" : "only",
+      "read" : true,
+      "write" : false,
+      "adminOnly" : ""
+    }
+  },
+  "Bookmark" : {
+    "parameters" : {
+      "text" : "Bookmark",
+      "title" : "Add current location to MyBookmarks",
+      "icon" : "bookmark.png",
+      "hasAccessKey" : true,
+      "accessKey" : "bookmarks_access_key",
+      "prepareModal" : false
+    },
+    "context" : {
+      "selection" : false,
+      "dir" : true,
+      "recycle" : "hidden",
+      "actionBar" : false,
+      "contextMenu" : true,
+      "infoPanel" : false,
+      "actionBarGroup" : "default"
+    },
+    "rightsContext" : {
+      "noUser" : true,
+      "userLogged" : "only",
+      "read" : true,
+      "write" : false,
+      "adminOnly" : ""
+    }
+  },
+  "DeleteBookmark" : {
+    "parameters" : {
+      "text" : "New Dir",
+      "title" : "Create new directory",
+      "icon" : "folder_new.png",
+      "accessKey" : "folder_access_key",
+      "prepareModal" : false
+    },
+    "context" : {
+      "selection" : false,
+      "dir" : "",
+      "recycle" : false,
+      "actionBar" : false,
+      "contextMenu" : false,
+      "infoPanel" : false
+    }
+  },
+  "RenameBookmark" : {
+    "parameters" : {
+      "text" : "New Dir",
+      "title" : "Create new directory",
+      "icon" : "folder_new.png",
+      "accessKey" : "folder_access_key",
+      "prepareModal" : false
+    },
+    "context" : {
+      "selection" : false,
+      "dir" : "",
+      "recycle" : false,
+      "actionBar" : false,
+      "contextMenu" : false,
+      "infoPanel" : false
+    },
+    "form" : {
+      "id" : "rename_bookmark",
+      "html" : "<div id=\"rename_bookmark\" action=\"get_bookmarks\" box_width=\"200\"><input type=\"text\" name=\"bm_title\" value=\"\" id=\"bm_title\" class=\"dialogFocus\"><input type=\"hidden\" name=\"bm_path\" value=\"\"></div>"
+    }
+  },
+  "Splash" : {
+    "parameters" : {
+      "text" : "166",
+      "title" : "167",
+      "icon" : "info.png",
+      "hasAccessKey" : true,
+      "accessKey" : "about_access_key",
+      "prepareModal" : true
+    },
+    "context" : {
+      "selection" : false,
+      "dir" : "",
+      "recycle" : false,
+      "actionBar" : true,
+      "contextMenu" : false,
+      "infoPanel" : false,
+      "actionBarGroup" : "user"
+    },
+    "form" : {
+      "id" : "splash_form",
+      "html" : "<div id=\"splash_form\" box_width=\"455\" box_padding=\"0\"><div id=\"docDiv\" style=\"padding:5px;overflow:auto;height:300px;\"><div class=\"dialogButtons\" style=\"text-align:right;padding-right:6px;\"><input type=\"image\" src=\"/image/action/22/dialog_close.png\" width=\"16\" height=\"16\" class=\"dialogButton\"/></div></div></div>"
+    }
+  }
 }

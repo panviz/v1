@@ -245,7 +245,7 @@ Array.from = $A;
    *      // copy -> ['A', 'B', 'C'];
   **/
   function compact() {
-    return this.select(function(value) {
+    return this.filter(function(value) {
       return value != null;
     });
   }
@@ -293,7 +293,7 @@ Array.from = $A;
   **/
   function without() {
     var values = slice.call(arguments, 0);
-    return this.select(function(value) {
+    return this.filter(function(value) {
       return !values.include(value);
     });
   }
@@ -605,6 +605,31 @@ Array.from = $A;
   if (arrayProto.map) {
     map = wrapNative(Array.prototype.map);
   }
+
+  /**
+	 *  Same as map, but:
+   *  Returns the result of applying `iterator` to each item in the array for truthy values
+  **/
+  function select(iterator){
+    if (this == null) throw new TypeError();
+    iterator = iterator || Prototype.K;
+
+    var object = Object(this);
+    var results = [], context = arguments[1], n = 0;
+
+    for (var i = 0, length = object.length >>> 0; i < length; i++) {
+      if (i in object) {
+        var result = iterator.call(context, object[i], i, object);
+        if (result) results.push(result);
+      }
+      n++;
+    }
+    return results;
+  }
+  
+  if (arrayProto.select) {
+    select = wrapNative(Array.prototype.select);
+  }
   
   /**
    *  Array#filter(iterator[, context]) -> Array
@@ -747,7 +772,7 @@ Array.from = $A;
     
     map:       map,
     collect:   map,
-    select:    filter,
+    select:    select,
     filter:    filter,
     findAll:   filter,
     some:      some,

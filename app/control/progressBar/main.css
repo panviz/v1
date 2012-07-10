@@ -1,49 +1,49 @@
 .x-progress-default .x-progress-bar {
-	border-right-color: #6594CF;
-	border-top-color: #C6D8ED;
-	background-image: none;
-	background-color: #73A3E0;
-	background-image: -webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#B2CCEE),color-stop(50%,#88B1E5),color-stop(51%,#73A3E0),color-stop(100%,#5E96DB));
-	background-image: -webkit-linear-gradient(top,#B2CCEE,#88B1E5 50%,#73A3E0 51%,#5E96DB);
+  border-right-color: #6594CF;
+  border-top-color: #C6D8ED;
+  background-image: none;
+  background-color: #73A3E0;
+  background-image: -webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#B2CCEE),color-stop(50%,#88B1E5),color-stop(51%,#73A3E0),color-stop(100%,#5E96DB));
+  background-image: -webkit-linear-gradient(top,#B2CCEE,#88B1E5 50%,#73A3E0 51%,#5E96DB);
 }
 .x-progress-bar {
-	height: 18px;
-	overflow: hidden;
-	position: absolute;
-	width: 0;
-	-moz-border-radius: 0;
-	-webkit-border-radius: 0;
-	-o-border-radius: 0;
-	-ms-border-radius: 0;
-	-khtml-border-radius: 0;
-	border-radius: 0;
-	border-right: 1px solid;
-	border-top: 1px solid;
+  height: 18px;
+  overflow: hidden;
+  position: absolute;
+  width: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  -o-border-radius: 0;
+  -ms-border-radius: 0;
+  -khtml-border-radius: 0;
+  border-radius: 0;
+  border-right: 1px solid;
+  border-top: 1px solid;
 }
 .x-progress-default {
-	border-color: #6594CF;
+  border-color: #6594CF;
 }
 
 .x-progress {
-	position: relative;
-	border-width: 1px;
-	border-style: solid;
-	-moz-border-radius: 0;
-	-webkit-border-radius: 0;
-	-o-border-radius: 0;
-	-ms-border-radius: 0;
-	-khtml-border-radius: 0;
-	border-radius: 0;
-	overflow: hidden;
-	height: 20px;
+  position: relative;
+  border-width: 1px;
+  border-style: solid;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  -o-border-radius: 0;
+  -ms-border-radius: 0;
+  -khtml-border-radius: 0;
+  border-radius: 0;
+  overflow: hidden;
+  height: 20px;
 }
 .x-progress-text {
-	overflow: hidden;
-	position: absolute;
-	padding: 0 5px;
-	height: 18px;
-	font-weight: bold;
-	font-size: 11px;
-	line-height: 16px;
-	text-align: center;
+  overflow: hidden;
+  position: absolute;
+  padding: 0 5px;
+  height: 18px;
+  font-weight: bold;
+  font-size: 11px;
+  line-height: 16px;
+  text-align: center;
 }

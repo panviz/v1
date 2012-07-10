@@ -1,40 +1,40 @@
-module									should contain server and client side logic alongside
+module                  should contain server and client side logic alongside
 
-Bootstrap								loads settings.json
-	
+Bootstrap               loads settings.json
+  
 window
-	.bootstrap
-	.app									client application
-	.THEME								current theme, default is "MyBase"
-	.I18n
+  .bootstrap
+  .app                  client application
+  .THEME                current theme, default is "MyBase"
+  .I18n
 
-Item		abstract item to be worked with
-				can be file, contact, calendar date, note, etc
-	.getPath()						//
+Item    abstract item to be worked with
+        can be file, contact, calendar date, note, etc
+  .getPath()            //
 
-Collection								collection of Items, represents selection object, data model as well
+Collection                collection of Items, represents selection object, data model as well
 
-Application								loads registry, builds gui app
-	.guiCompRegistry 				array of GUI components
-	.guiActions 						Hash
-	.contextMenu						Proto.Menu
-	.getUserSelection				Collection
-	.getContextNode					Abstract Item (current path)
-	.getContextHolder				Collection - contains current selection, path, repo
+Application               loads registry, builds gui app
+  .guiCompRegistry        array of GUI components
+  .guiActions             Hash
+  .contextMenu            Proto.Menu
+  .getUserSelection       Collection
+  .getContextNode         Abstract Item (current path)
+  .getContextHolder       Collection - contains current selection, path, repo
 
-View											widget to display Items
-	List
-		Table or List or Thumbnails
-			.fill								fill table with rows
-	Graph
+View                      widget to display Items
+  List
+    Table or List or Thumbnails
+      .fill               fill table with rows
+  Graph
 
 ActionsManager
-	.actions								Action
+  .actions                Action
 Action
-	Ls
+  Ls
 
-InfoPanel									Details for Item
+InfoPanel                 Details for Item
 
-TextEditor.klass		//
+TextEditor.klass    //
 
 

@@ -2,7 +2,7 @@
  * Encapsulation of the Prototype Autocompleter for AjaXplorer purposes.
  * Should be ported for local provides
  */
-Class.create("Autocompleter", Autocompleter.Base, {
+Class.create("Autocompleter", {
   /**
    * Constructor
    * @param element HTMLElement
@@ -11,21 +11,21 @@ Class.create("Autocompleter", Autocompleter.Base, {
    * @param options Object
    */
   initialize : function(element, update, url, options) {
-  	if(Object.isString(update) && !$(update)){
-  		document.getElementsByTagName('body')[0].appendChild(new Element('div', {
-  			id: update,
-  			className: "autocomplete",
-  			style: "position:absolute; display:none;"
-  		}));
-  	}
+    if(Object.isString(update) && !$(update)){
+      document.getElementsByTagName('body')[0].appendChild(new Element('div', {
+        id: update,
+        className: "autocomplete",
+        style: "position:absolute; display:none;"
+      }));
+    }
     this.baseInitialize(element, update, options);
     this.options.asynchronous  = true;
     this.options.onComplete    = this.onComplete.bind(this);
     this.options.defaultParams = this.options.parameters || null;
     this.url                   = '/'+"&get_action=ls&options=dz";
-    this.options.paramName	   = "dir";
-    this.options.minChars	   = 1;
-    //this.options.callback	   = this.parseValueBeforeSending.bind(this);
+    this.options.paramName     = "dir";
+    this.options.minChars    = 1;
+    //this.options.callback    = this.parseValueBeforeSending.bind(this);
   },
 
   /**
@@ -51,49 +51,49 @@ Class.create("Autocompleter", Autocompleter.Base, {
    * @param request Ajax.Transport
    */
   onComplete : function(request) {
-  	var oXmlDoc = request.responseXML;
-  	var token = this.getToken();
-  	var dirs = new Array();
-	if( oXmlDoc == null || oXmlDoc.documentElement == null) 
+    var oXmlDoc = request.responseXML;
+    var token = this.getToken();
+    var dirs = new Array();
+  if( oXmlDoc == null || oXmlDoc.documentElement == null) 
 {debugger 
-		this.updateChoices('');
-		return;
-	}
-	
-	var root = oXmlDoc.documentElement;
-	// loop through all tree children
-	var cs = root.childNodes;
-	var l = cs.length;
-	for (var i = 0; i < l; i++) 
+    this.updateChoices('');
+    return;
+  }
+  
+  var root = oXmlDoc.documentElement;
+  // loop through all tree children
+  var cs = root.childNodes;
+  var l = cs.length;
+  for (var i = 0; i < l; i++) 
 {debugger 
-		if (cs[i].tagName == "tree") 
+    if (cs[i].tagName == "tree") 
 {debugger 
-			var text = getBaseName(cs[i].getAttribute("filename"));
-			
-			var hasCharAfterSlash = (token.lastIndexOf("/")<token.length-1);
-			if(!hasCharAfterSlash){
-				dirs[dirs.length] = text;
-			}else{
-				var afterSlash = token.substring(token.lastIndexOf("/")+1, token.length);
-				//console.log(text+'vs'+afterSlash);
-				if(text.indexOf(afterSlash) ==0){
-					dirs[dirs.length] = text;
-				}
-			}
-		}
-	}
-  	if(!dirs.length)
+      var text = getBaseName(cs[i].getAttribute("filename"));
+      
+      var hasCharAfterSlash = (token.lastIndexOf("/")<token.length-1);
+      if(!hasCharAfterSlash){
+        dirs[dirs.length] = text;
+      }else{
+        var afterSlash = token.substring(token.lastIndexOf("/")+1, token.length);
+        //console.log(text+'vs'+afterSlash);
+        if(text.indexOf(afterSlash) ==0){
+          dirs[dirs.length] = text;
+        }
+      }
+    }
+  }
+    if(!dirs.length)
 {debugger 
-  		 this.updateChoices('');
-  		 return;
-  	}
-  	var responseText = '<ul>';
-  	dirs.each(function(dir){
-  		value = token.substring(0, token.lastIndexOf("/")+1);
-  		responseText += '<li>'+value+dir+'</li>';
-  	});
-  	responseText += '</ul>';
-  	this.updateChoices(responseText);
+       this.updateChoices('');
+       return;
+    }
+    var responseText = '<ul>';
+    dirs.each(function(dir){
+      value = token.substring(0, token.lastIndexOf("/")+1);
+      responseText += '<li>'+value+dir+'</li>';
+    });
+    responseText += '</ul>';
+    this.updateChoices(responseText);
   }
     
 });

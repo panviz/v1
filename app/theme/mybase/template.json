@@ -1,0 +1,50 @@
+{
+	"layout": {
+		"type": "border",
+		"padding": 5
+	},
+	"defaults": {
+		"collapsible": true,
+		"split": true
+	},
+	"components": [
+		{
+			"id": "Toolbar",
+			"control": "Toolbar",
+			"options": {
+				"region": "north",
+				"height": 100,
+				"minHeight": 60
+			},
+      "components": [
+        {
+          "control": "RepositorySelect"
+        },{
+          "control": "AddressBar"
+        },{
+          "id": "UserStatus",
+          "control": "UserStatus"
+        }
+      ]
+    },
+    {
+      "id": "GridView",
+      "control": "GridView",
+      "options": {
+        "region": "west"
+      }
+    },
+    {
+      "control": "DetailsView",
+      "options": {
+        "region": "center"
+      }
+    },
+    {
+      "control": "GraphView",
+      "options": {
+        "region": "east"
+      }
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 var path = require('path');
 
-	//Global
+  //Global
 fs = require('fs');
 isServer = true;
 ROOT_PATH = path.join(__dirname, '/..');

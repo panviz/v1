@@ -86,6 +86,7 @@
    *  which implements Prototype's (much more complex) DOM extension mechanism.
   **/
   function extend(destination, source) {
+		if (!destination) destination = {};
     for (var property in source)
       destination[property] = source[property];
     return destination;
