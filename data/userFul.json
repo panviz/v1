@@ -1,0 +1,94 @@
+[
+  {
+    "id": 1,
+    "name": "dmitra",
+    "password": "secret",
+    "email": "admin@intelliart.net",
+    "active_repo" : {
+      "id" : 1,
+      "write" : true,
+      "read" : true
+    },
+    "repositories" : [{
+      "provider" : "fs",
+      "id" : "0",
+      "copiable" : "true",
+      "repositorySlug" : "default",
+      "label" : "Default"
+    }, {
+      "provider" : "fs",
+      "id" : "1",
+      "copiable" : "true",
+      "repositorySlug" : "my-files",
+      "label" : "Personal"
+    }, {
+      "provider" : "shared",
+      "id" : "shared",
+      "repositorySlug" : "shared-elements",
+      "label" : "Shared Elements"
+    }, {
+      "provider" : "conf",
+      "id" : "conf",
+      "repositorySlug" : "settings",
+      "label" : "Settings"
+    }
+    ],
+    "preferences" : [{
+        "name" : "display",
+        "value" : ""
+      }, {
+        "name" : "lang",
+        "value" : ""
+      }, {
+        "name" : "diapo_autofit",
+        "value" : ""
+      }, {
+        "name" : "sidebar_splitter_size",
+        "value" : ""
+      }, {
+        "name" : "vertical_splitter_size",
+        "value" : ""
+      }, {
+        "name" : "history_last_repository",
+        "value" : ""
+      }, {
+        "name" : "pending_folder",
+        "value" : ""
+      }, {
+        "name" : "thumb_size",
+        "value" : ""
+      }, {
+        "name" : "module_preferences",
+        "value" : ""
+      }, {
+        "name" : "upload_auto_send",
+        "value" : ""
+      }, {
+        "name" : "upload_auto_close",
+        "value" : ""
+      }, {
+        "name" : "upload_existing",
+        "value" : ""
+      }, {
+        "name" : "action_bar_style",
+        "value" : ""
+      }, {
+        "name" : "ls_history",
+        "$t" : {"conf" : "/config/module/auth"}
+      }, {
+        "name" : "columns_size"
+      }, {
+        "name" : "columns_visibility"
+      }, {
+        "name" : "gui_preferences"
+      }
+    ],
+    "roles" : ["admin"]
+  }
+, {
+    "id": 2,
+    "name": "tania",
+    "password": "111",
+    "email": "st_ta@ukr.net"
+  }
+]

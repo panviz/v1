@@ -110,7 +110,6 @@ var Enumerable = (function() {
     try {
       this._each(iterator, context);
     } catch (e) {
-			console.trace()
       if (e != $break) throw e;
     }
     return this;

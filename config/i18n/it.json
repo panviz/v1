@@ -27,7 +27,7 @@
 "22" : "Script PHP",
 "23" : "File",
 "24" : "Cartella superiore",
-"25" : "Invia uno o pi&ugrave; file (max. ".ConfService::getConf('UPLOAD_MAX_NUMBER').") nella cartella : ",
+"25" : "Invia uno o pi&ugrave; file (max. %s) nella cartella : ",
 "26" : "Crea una nuova cartella in: ",
 "27" : "Carica",
 "28" : "Crea un nuovo file in in: ",

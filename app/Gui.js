@@ -1,23 +1,28 @@
 /*
+ * ControlFul - GUI Controls management
  * Mediator between application GUI and Controls implementation
- * add dispose
  */
-Class.create("Gui", {
-  //__implements : "Manager",
+Class.create("Gui", Reactive, {
   
-  initialize : function(element, template){
+  initialize : function($super, p, store){
+    $super(store)
     //Controls instances
     this._controls = $H();
-    this._template = template;
-    this._defaults = template.defaults;
+    this.ui = p.ui;
+    // TODO Use Template class for Server to respond to Client Gui?
+    if (isServer) return
+    this.get('main', {}, this.initControls.bind(this))
+  },
 
-    //Initialize controls
+  // Initialize controls
+  initControls : function(template){
+    this._defaults = template.defaults;
     //TODO set controls to layout in viewport for performance
     var hasId = function(component){
       return component.id;
     }
-    var initControls = Functional.processTree("components", hasId, this._initControl.bind(this))
-    var controlsTree = initControls(template)
+    var processTemplate = Functional.processTree("components", hasId, this._initControl.bind(this))
+    var controlsTree = processTemplate(template)
 
     var getExtControls = function(component){
       if (component.id){
@@ -25,7 +30,7 @@ Class.create("Gui", {
       }
     }
 
-    //TODO Viewport should be created while template process in initControls as Display control?
+    //TODO Viewport should be created while template process in processTemplate as Display control?
     template.items = template.components.select(getExtControls).flatten()
     //Container for all controls
     this.viewport = Ext.create('Ext.Viewport', template);
@@ -47,6 +52,20 @@ Class.create("Gui", {
     var control = component.control = new jClass(options);
     this._controls.set(component.id, control);
     return component;
+  },
+
+  // Deprecated
+  setUI : function(name){
+    var name = name || "desktop";
+    var config = require(ROOT_PATH + '/config/' + name)
+    Object.extend(this.ui, config);
+  },
+
+  // Deprecated
+  setTheme : function(name){
+    var name = name || 'mybase';
+    var ui = this.ui;
+    ui.theme = ui.themes[name];
   },
 
   /**
@@ -181,7 +200,7 @@ Class.create("Gui", {
   /*
    * Get Control from registry
    */
-  get : function(id){
+  getControl : function(id){
     return this._controls.get(id);
   }
 })

@@ -11,15 +11,17 @@ lib/scriptaculous/src/dragdrop.js
 lib/scriptaculous/src/controls.js
 lib/scriptaculous/src/slider.js
 lib/sockjs-0.3.min.js
-User.js
+ORM.js
+Store.js
+Reactive.js
+model/Item.js
+model/User.js
 UserFul.js
 Repository.js
 Action.js
 ActionFul.js
 Gui.js
 ExtensionFul.js
-Registry.js
-Item.js
 Application.js
 control/RepositorySelect.js
 control/AddressBar.js
@@ -36,3 +38,4 @@ FormManager.js
 ActivityMonitor.js
 action/Navigation.js
 action/Splash.js
+action/User.js

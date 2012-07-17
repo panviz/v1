@@ -1,5 +1,5 @@
 /**
- * Can be called directly using app.actionBar.
+ * Action Factory
  */
 Class.create("ActionFul", {
   
@@ -542,7 +542,7 @@ Class.create("ActionFul", {
    * @param actionName String
    * @returns Action
    */
-  getAction : function(actionName){
+  get : function(actionName){
     return this._actions.get(actionName);   
   },
   

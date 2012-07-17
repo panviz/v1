@@ -1,0 +1,17 @@
+{
+  "development": {
+    "name": "local"
+  , "port" : 80
+  , "host": "localhost"
+  }
+,"production": {
+    "name": "production"
+  , "port" : 80
+  , "host": "intelliart.net"
+  }
+, "test": {
+    "name": "test"
+  , "port" : 3000
+  , "host": "localhost"
+  }
+}

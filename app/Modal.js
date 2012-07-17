@@ -4,19 +4,53 @@
  */
 Class.create("Modal", {
 
-  /**
-   * @var Boolean Current state of the page. If true, calls the updateLoadingProgress
-   */
-  pageLoading: true,
-  /**
-   * Constructor
-   */
-  initialize: function(){
+  initialize: function(p){
+    var p = p || {};
+    this._window = Ext.create('Ext.window.Window', {
+      title: p.title || 'Modal',
+      height: 200,
+      width: 350,
+      layout: {
+        type: 'vbox'
+      }
+    });
   },
+
+  /*
+   * @param form Object
+   * @param size Object width and height of modal window
+   * @param title String window header name
+   */
+  show : function(form, size, title){
+    var win = this._window;
+    win.items.add(form);
+    win.setSize(size);
+    win.setTitle(title);
+    win.show();
+  },
+  hide : function(){
+    this._window.hide()
+  },
+
+  showBooting : function(p){
+    //TODO get template from Registry
+    //TODO retrive from settings bootstrap.p.get("version") bootstrap.p.get("versionDate"));
+    //var html = '<div>The web data-browser<span id="versionSpan">Version: {version} - {versionDate}</span></div>by Dmitra.'
+    var text = 'The web data-browser by Dmitra';
+    var extText = Ext.create('Ext.draw.Text',{
+      text: text,
+      height: 20
+    })
+    this._createLoaderBar(p.steps);
+    this._window.items.add(extText);
+    this._window.items.add(this._progressBar);
+    this.show()
+  },
+
   /**
    * Find the forms
    */
-  initForms: function(){
+  initForms : function(){
     this.elementName = 'generic_dialog_box';
     this.element = $(this.elementName);
     this.title = this.element.select(".dialogTitle")[0];
@@ -25,13 +59,18 @@ Class.create("Modal", {
     this.cachedForms = new Hash();
     this.iframeIndex = 0; 
   },
+
+  // @param error Error
+  error : function(error){
+    this.displayMessage(error.msg);
+  },
   
   /**
    * Compute dialogContent html
    * @param sTitle String Title of the popup
    * @param sIconSrc String Source icon
    */
-  prepareHeader: function(sTitle, sIconSrc){
+  prepareHeader : function(sTitle, sIconSrc){
     var hString = "<span class=\"titleString\">";
     if(sIconSrc != "") hString = "<span class=\"titleString\"><img src=\""+sIconSrc.replace('22', '16')+"\" width=\"16\" height=\"16\" align=\"top\"/>&nbsp;";
     var closeBtn = '<img id="$modal.loseBtn" style="cursor:pointer; float:right; margin-top:2px;" src="'+THEME.path+'/image/action/16/window_close.png" />';  
@@ -49,7 +88,7 @@ Class.create("Modal", {
    * @param bOkButtonOnly Boolean Wether to hide cancel button
    * @param skipButtons Boolean Wether to hide all buttons
    */
-  showDialogForm: function(sTitle, sFormId, fOnLoad, fOnComplete, fOnCancel, bOkButtonOnly, skipButtons){
+  showDialogForm : function(sTitle, sFormId, fOnLoad, fOnComplete, fOnCancel, bOkButtonOnly, skipButtons){
     this.clearContent(this.dialogContent);
     //this.title.innerHTML = sTitle;
     var newForm;
@@ -163,7 +202,7 @@ Class.create("Modal", {
    * @param boxHeight String Height in pixel or in percent
    * @param skipShadow Boolean Do not add a shadow
    */
-  showContent: function(elementName, boxWidth, boxHeight, skipShadow, boxAutoResize){
+  showContent : function(elementName, boxWidth, boxHeight, skipShadow, boxAutoResize){
     app.disableShortcuts();
     app.disableNavigation();
     app.blurAll();
@@ -273,7 +312,7 @@ Class.create("Modal", {
    * Returns the current form, the real one.
    * @returns HTMLForm
    */
-  getForm: function() {
+  getForm : function() {
     return this.currentForm;
   },
   /**
@@ -281,7 +320,7 @@ Class.create("Modal", {
    * @param checkHeight Boolean
    * @param elementToScroll HTMLElement
    */
-  refreshDialogPosition: function(checkHeight, elementToScroll){
+  refreshDialogPosition : function(checkHeight, elementToScroll){
     var winWidth = document.viewport.getWidth();
     var winHeight = document.viewport.getHeight();
         var element = $(this.elementName);
@@ -333,7 +372,7 @@ Class.create("Modal", {
    * Clear all content
    * @param object HTMLElement The current form
    */
-  clearContent: function(object){
+  clearContent : function(object){
     // REMOVE CURRENT FORM, IF ANY
     if(object.select("form").length)
     {
@@ -357,7 +396,7 @@ Class.create("Modal", {
    * @param position String Position.insert() allowed key.
    * @returns HTMLElement
    */
-  addSubmitCancel: function(oForm, fOnCancel, bOkButtonOnly, position){
+  addSubmitCancel : function(oForm, fOnCancel, bOkButtonOnly, position){
     var contDiv = new Element('div', {className: 'dialogButtons'});
     var okButton = new Element('input', {
       type: 'image',
@@ -431,7 +470,7 @@ Class.create("Modal", {
   /**
    * Close the Message
    */
-  closeMessageDiv: function(){
+  closeMessageDiv : function(){
     if(this.messageDivOpen)
     {
       new Effect.Fade(this.messageBox);
@@ -441,7 +480,7 @@ Class.create("Modal", {
   /**
    * Timer for automatically closing the message
    */
-  tempoMessageDivClosing: function(){
+  tempoMessageDivClosing : function(){
     this.messageDivOpen = true;
     setTimeout('$modal.closeMessageDiv()', 6000);
   },
@@ -450,7 +489,8 @@ Class.create("Modal", {
    * @param messageType String ERROR or SUCCESS
    * @param message String Content of the message
    */
-  displayMessage: function(messageType, message){
+  //TODO handle Error classes
+  displayMessage : function(messageType, message){
     if(!this.messageBox){
       this.messageBox = new Element("div", {title: I18N[98],id: "message_div",className: "messageBox"});
       $(document.body).insert(this.messageBox);
@@ -497,14 +537,14 @@ Class.create("Modal", {
    * Callback to be called on close
    * @param func Function
    */
-  setCloseAction: function(func){
+  setCloseAction : function(func){
     this.closeFunction = func;
   },
   
   /**
    * Close action. Remove shadow if any, call close callback if any.
    */
-  close: function(){  
+  close : function(){  
     Shadower.deshadow($(this.elementName));
     if(this.closeFunction){
        this.closeFunction();
@@ -532,9 +572,8 @@ Class.create("Modal", {
     //TODO update view title (from editor)
   },
 
-  showLoader : function(stepCount){
+  _createLoaderBar : function(stepCount){
     var bar = this._progressBar = Ext.create('Ext.ProgressBar', {
-      renderTo: 'progressBox',
       width: 300,
       text:'Initializing...'
     });
@@ -552,8 +591,7 @@ Class.create("Modal", {
     bar.updateText(text)
     bar.updateProgress(bar.currentStep/bar.stepCount)
     if (bar.currentStep == bar.stepCount){
-      $('progressBox').hide();
-      $('loadingOverlay').hide();
+      this.hide();
     }
   }
 });

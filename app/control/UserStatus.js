@@ -4,18 +4,19 @@
 Class.create("UserStatus", {
 
 	initialize: function(p){
-		this.logoutButton = Ext.create('Ext.Button', {
-			text: "Logout",
-			scale: p.size,
-			handler: function() {
-        alert('TODO imlement Logout!');
-      }
-    });
+    var action = $act.get("loginAction");
     this.loginButton = Ext.create('Ext.Button', {
       text: "Login",
-      scale: p.size,
-      handler: function() {
-        alert('TODO imlement Login!');
+			scale: p.buttonSize,
+      handler: function(){
+        action.execute;
+      }
+    });
+		this.logoutButton = Ext.create('Ext.Button', {
+			text: "Logout",
+			scale: p.buttonSize,
+			handler: function(){
+        action.undo;
       }
     });
 

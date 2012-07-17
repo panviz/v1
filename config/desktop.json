@@ -1,0 +1,15 @@
+{
+  "name" : "desktop",
+  "themes" : {
+    "mybase" : {
+      "name" : "MyBase",
+      "path" : "/client/theme/mybase",
+      "element" : "desktop"
+    },
+    "manager" : {
+      "name" : "Manager",
+      "path" : "/client/theme/manager",
+      "element" : "desktop"
+    }
+  }
+}

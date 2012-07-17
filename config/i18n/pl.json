@@ -27,7 +27,7 @@
 "22" : "Skrypt PHP",
 "23" : "Plik",
 "24" : "Katalog wyżej",
-"25" : "Wgraj na serwer jeden lub więcej plików (max. ".ConfService::getConf('UPLOAD_MAX_NUMBER').") w katalogu: ",
+"25" : "Wgraj na serwer jeden lub więcej plików (max. %s) w katalogu: ",
 "26" : "Utwórz nowy katalog w: ",
 "27" : "Wgraj",
 "28" : "Utwórz nowy plik w: ",

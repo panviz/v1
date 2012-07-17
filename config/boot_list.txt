@@ -1,5 +1,5 @@
-lib/ext/all.js
-lib/functional/recursion.js
+lib/ext/ext-all.js
+lib/Functional/recursion.js
 lib/prototype/lang/prototype.js
 lib/prototype/lang/object.js
 lib/prototype/lang/function.js
@@ -17,7 +17,7 @@ lib/prototype/lang/template.js
 lib/prototype/lang/prototype.oo.js
 lib/prototype/prototype.js
 lib/prototype/prototype.livepipe.js
-../client/Connection.js
 lib/md5/md5.js
-utils.js
-../client/Boot.js
+Util.js
+Proxy.js
+../client/boot.js

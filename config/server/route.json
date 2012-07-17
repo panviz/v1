@@ -1,0 +1,5 @@
+[
+  ["/", "get", "root.index"]
+, ["/login", "post", "root.index"]
+, ["/logout", "get", "root.logout"]
+]

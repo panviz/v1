@@ -15,6 +15,16 @@ Class.create("ExtensionFul", {
     this.formContainer = 'all_forms';
     this.resources = {};
   },
+
+  /*
+   * @return Array
+   */
+  _loadExtensions : function(names){
+    names.forEach(function(name){
+      this._extensions[name] = (Extension.load(name));
+    })
+  },
+
   /**
    * Adds a Javascript resource
    * @param fileName String

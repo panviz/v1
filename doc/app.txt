@@ -1,4 +1,7 @@
-Server is built on NodeJS with expressjs utilizing MVC pattern for server-client communication.
+Server is built on NodeJS
+ExpressJS is used to serve static content and some other
+SockJS is websocket server for server-client communication
+
 Application structure is based on modules and can be easily extended.
   It is highly configurable and have multiple conventions, such as following:
     Module

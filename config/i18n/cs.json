@@ -27,7 +27,7 @@
 "22" : "PHP script",
 "23" : "Soubor",
 "24" : "Nadřazená složka",
-"25" : "Nahrát jeden nebo více souborů (max. ".ConfService::getConf('UPLOAD_MAX_NUMBER').") do složky : ",
+"25" : "Nahrát jeden nebo více souborů (max. %s) do složky : ",
 "26" : "Vytvořit novou složku v : ",
 "27" : "Nahrát",
 "28" : "Vytvořit nový soubor v : ",

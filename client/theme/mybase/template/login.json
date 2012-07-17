@@ -1,0 +1,31 @@
+{
+  "name": "loginForm",
+  "labelWidth": 80,
+  "header": false, 
+  "bodyPadding": 5,
+  "height": 100,
+  "width": 300,
+  "layout": "anchor",
+  "defaultType": "textfield",
+  "monitorValid": true,
+  "items": [{ 
+    "id": "usernameField",
+    "fieldLabel": "Username", 
+    "name": "username", 
+    "allowBlank": false 
+  },{ 
+    "id": "passwordField",
+    "fieldLabel": "Password", 
+    "name": "password", 
+    "inputType": "password", 
+    "allowBlank": false 
+  }],
+  "buttons": [{
+      "text": "Reset"
+    }, {
+      "text": "Submit",
+      "formBind": true,
+      "disabled": true
+    }
+  ]
+}

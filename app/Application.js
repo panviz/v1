@@ -1,5 +1,6 @@
 /**
- * Manages managers for [Action, Extension, View], templates, Controls
+ * Object pool of application managers
+ * TODO Need responsible class for i18n?
  */
 Class.create("Application", {
 
@@ -7,57 +8,40 @@ Class.create("Application", {
   blockShortcuts: false,
   blockNavigation: false,
 
-  initialize : function(p)
+  initialize : function()
   { 
-    this.p = p;
-
     //TODO set context from registry?
     //@var Item
     this._context = null;
     this._focusables = [];
-    //@var Json
-    this._registry = p.get("registry");
-    this._ui = p.get("ui");
 
     //Public
-    this.historyCount = 0;
-    this.title = this._ui.title;
-    this.currentLanguage = p.get("currentLanguage");
-    this.element = this._ui.theme.element;
-    this.actionBar = new ActionFul(p.get("usersEnabled"));
-    this.gui = new Gui(this.element, THEME.template);
-    this.extensionFul = new ExtensionFul();
-    this.display = new Display();
-    this.registry = new Registry(p.get("socketPath"));
-    
-    //set Global shortcuts
-    $display = this.display;
+    //this.historyCount = 0;
+    this.currentLanguage = $set.currentLanguage;
+    $orm = this.orm          = new ORM();
+    $act = this.actionFul    = new ActionFul();
+    $gui = this.gui          = new Gui($set);
+    $ext = this.extensionFul = new ExtensionFul();
+    $display = this.display  = new Display();
     $modal = $display.modal;
-    //TODO rename actionBar
-    $act = this.actionBar;
-    $ext = this.extensionFul;
-    $gui = this.gui;
-    $reg = this.registry;
-  
-    $modal.initForms();
+    // Application has many users and only one is current
+    $users = this.userFul    = new UserFul();
+    $i18n = this.i18n        = $set.i18n;
+
     //TODO update progress bar from right places
-    //show progress bar with ? steps
-    $modal.showLoader(2);
-    //this.refreshExtensionsRegistry();
+    $modal.showBooting({steps: 2});
 
     //listener on repository:loaded
     document.observe("app:context_changed", this._onContextChanged.bind(this));
-    //this.actionBar.initActions(this._registry.actions);
     $modal.updateLoadingProgress('Actions: Done');
       
     this._setHistory();
+    //Automatically logout user on session timeout
     this.activityMonitor = new ActivityMonitor(
       window.bootstrap.p.get('session_timeout'), 
       window.bootstrap.p.get('client_timeout'), 
       window.bootstrap.p.get('client_timeout_warning'));
       
-    //this.refreshTemplateParts();
-    //this.refreshGuiComponentConfigs();
     $modal.updateLoadingProgress('User Interface: Done');
 
     document.fire('app:loaded');
@@ -465,5 +449,4 @@ Class.create("Application", {
   focusLast : function(){
     if(this._lastFocused) this.focusOn(this._lastFocused);
   }
-  
 });

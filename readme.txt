@@ -1,33 +1,27 @@
       TODO
 
-Prototype
-  replace prototype.js with bunch of files
+Client
 
-Application
-  Create ControlFul
+Server
+  Js files buncher & minifier
+    Remove code in 'isServer' blocks
+    Remove methods with @server comment
+  add path helpers
+  create item on 'save' if missing
 
 EventManagement
   Implement ObjectWithEvent (destroy registered observers on View close)
-
-Check all actions call chain
-  stop on root_item_changed
-
-Rename
-  access modules -> Provider for Client, Driver for Server
-  Singleton manager?
-    Background -> 
+  OR extend prototype to add events on Object
 
 Item
 
 View
-  move to /view all Panes?
   
 View.Editor
   Does View contains Editor? or Editor is a View?
   move action_bar to Main toolbar like Tridion.RibbonToolbar
   open empty Editor if .txt file missing
-  open selected file on 'file' action
-  Commands are called Actions and are set from html links
+  open selected item on 'item' action
 
 Modal and View should implement one Interface with methods: ?
   showDialogForm & _initGUI
@@ -41,9 +35,13 @@ List or Table
 Search
   Search bar and Search engine
 
-Server
-  add path helpers
-  create file on 'save' if missing
+  ------------- Minor
+Revise
+  FormManager
+  BackgroundManager
+  Model
+  Driver
+  ActivityMonitor
 
 check all methods and variables Privacy
 search all TODO notes in code
@@ -52,4 +50,7 @@ Module
   connect
     http
 
-Publish wrench update and Prototype embed
+Prototype
+  fully replace prototype.js with bunch of files
+
+Publish wrench update
