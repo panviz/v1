@@ -1,13 +1,13 @@
 /*
+ * ReactiveProvider
  * Implements instant messaging between this and remote instances
- * implements : "ReactiveProvider"
  */
 Class.create("Proxy", {
 
-  // Client has one callback per datatype
+  // Client has one callback per dataId
   _cbs : {},
 
-  //@server Server has many clients for one datatype
+  //@server Server has many clients for one dataId
   _subscribers : {},
 
   /*
@@ -15,22 +15,8 @@ Class.create("Proxy", {
    */
   initialize : function(p){
     this.url = p.socketPath;
-
-    //TODO add User on auth
-    //this._registry.user.preferences = User.getPreferences();
-
-    //var repositories = User.getRepositories();
-
-    ////TODO
-    ////Extract names and load providers
-    //var names = [];
-    //repositories.each(function(repo){
-      //names.push(_registry.user.repositories);
-    //})
-    ////_registry.user.repositories = ;
-
-    //this._loadExtensions(names);
     var self = this;
+
     if (isServer){
       this._socket = require('sockjs').createServer();
       this._socket.installHandlers($app.server, {prefix: this.url});
@@ -39,7 +25,9 @@ Class.create("Proxy", {
       this._socket.on('connection', function(conn){
         //conn.write(JSON.stringify(this.p))
         conn.on('data', function(message){
-          self._onServer(conn, message)
+          var data = new Parcel(conn);
+          data.recieve(message);
+          self._onServer(data);
         })
       });
     }else{
@@ -65,68 +53,96 @@ Class.create("Proxy", {
    */
   get : function(model, name, options, cb){
           debugger
-    var request = {model: model, name: name};
+    var request = new Parcel(this._socket);
+    request.model = model;
+    request.name = name;
     //TODO use connection callID
-    var datatype = model+name;
-    request.get = true;
+    request.action = "get";
     request.options = options;
-    this._socket.send(JSON.stringify(request));
+    request.send();
 
-    this._cbs[datatype] = cb;
+    this._cbs[request.id] = cb;
   },
 
   /*
+   */
+  put : function(model, name, options, cb){
+  },
+
+  /*
+   * Client message is always PUT
    * @param model
    * @param e String stringified object
    */
   _onMessage : function(e){
                  debugger
-    var data = JSON.parse(e.data)
+    var data = new Parcel(e.data)
 
     // Model requests its data
-    if (data.model){
-      var datatype = data.model+data.name;
-      this._cbs[datatype](data.data)
+    if (data.id){
+      this._cbs[data.id](data.content)
+      // On error Remove update model callback
+      if (data.error) this._cbs[data.id] = undefined;
     }
     // Other messages
     if (data.registry) this._registry = data.registry;
   },
 
-  /*
-   * @server
+  /* @server
+   * @param data Parcel
    * TODO check manager exists
    * TODO options should specify access level to information based on user role
    */
-  _onServer : function(conn, e){
+  _onServer : function(data){
                 debugger
-    var data = JSON.parse(e)
-    var parseRequest = function(userData){
-      userData = userData || {id: conn.id};
-      var onGet = data.get ? this.reply : this.broadcast;
+    var parseRequest = function(user){
       var manager = $app[data.model];
-      //TODO get access rights
-      var options = {user: userData};
-      manager.get(data.name, options, onGet.bind(this, conn, data, options))
+      data.addressee = user;
+
+      if (data.action == "get"){
+        manager.get(data.name, data.options, this.send.bind(this, data))
+      }
+      else if (data.action = "put"){
+        var diff = manager.put(data.name, data.content, this.send.bind(this, data))
+        this.broadcast(data, diff);
+      }
     }
-    if (data.get || data.put){
-      $user.store.find(parseRequest.bind(this), data.SECURE_TOKEN, "token");
+
+    if (data.action){
+      $user.store.find(parseRequest.bind(this), data.content.SECURE_TOKEN, "token");
     } else {
       // Proceed with other message types
     }
   },
 
-  // Save requester to send him updates later if record exists
-  reply : function(conn, data, options, record){
+  /* @server
+   * Save addressee to send him updates later if record exists
+   * @param conn Requester's connection
+   * @param data Json reply to send to user
+   * @param diff Json Content diff to send
+   */
+  send : function(data, diff){
             debugger
-    if (record.name){
-      data.data = record;
-      var datatype = data.model+record.name;
-      if (!this._subscribers[datatype]) this._subscribers[datatype] = [];
-      this._subscribers[datatype].push(options.user.id);
+    if (diff){
+      data.content = diff;
+      var followers = this._subscribers[data.id] || {}
+      followers[data.addressee.id] = data.conn;
     }
-    conn.write(JSON.stringify(data));
+    data.send();
   },
 
-  broadcast : function(conn, data, options, record){
+  /* @server
+   */
+  broadcast : function(data, diff){
+    if (diff){
+      data.name = record.name;
+      data.content = record
+      this._subscribers[data.id].forEach(function(follower){
+        // Skip Sender on data propagation
+        if (data.addressee.id == follower.id) return;
+        data.conn = subscriber.conn;
+        data.send();
+      })
+    }
   }
 })

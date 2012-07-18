@@ -19,5 +19,6 @@ lib/prototype/prototype.js
 lib/prototype/prototype.livepipe.js
 lib/md5/md5.js
 Util.js
+Parcel.js
 Proxy.js
 ../client/boot.js

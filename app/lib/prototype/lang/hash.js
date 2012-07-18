@@ -260,6 +260,20 @@ var Hash = Class.create(Enumerable, (function() {
   }
 
   /**
+   * Returns object without properties shared with callee
+   */
+  function diff(object) {
+    var result = {};
+    var self = this;
+    object.keys().forEach(function(key){
+      if (self._object[key] != object._object[key]){
+        result[key] = object._object[key];
+      }
+    })
+    return result;
+  }
+
+  /**
    *  Hash#update(object) -> Hash
    *  - object (Object | Hash): The object to merge with this hash to produce
    *    the resulting hash.
@@ -395,6 +409,7 @@ var Hash = Class.create(Enumerable, (function() {
     values:                 values,
     index:                  index,
     merge:                  merge,
+    diff:                   diff,
     update:                 update,
     toQueryString:          toQueryString,
     inspect:                inspect,

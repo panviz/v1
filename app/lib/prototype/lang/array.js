@@ -362,6 +362,22 @@ Array.from = $A;
     });
   }
 
+  /**
+   *  Array#diff(array) -> Array
+   *  - array (Array): A collection of values.
+   *  Returns an array containing items that is not present in callee array
+  **/
+  function diff(array){
+    var diff = [];
+    this.forEach(function(n){ 
+      if (!array.detect(function(o){
+        return o == n;
+      })){
+        diff.push[o]
+      }
+    })
+  }
+
   /** alias of: Array#clone
    *  Array#toArray() -> Array
   **/
@@ -790,6 +806,7 @@ Array.from = $A;
     reverse:   reverse,
     uniq:      uniq,
     intersect: intersect,
+    diff:      diff,
     clone:     clone,
     toArray:   clone,
     size:      size,

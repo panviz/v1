@@ -23,6 +23,9 @@ Class.create("Store", {
     }
   },
 
+  /*
+   * @param id Number
+   */
   findById : function(onFind, id){
     var idx = id - 1;
     if (this._local[idx]) {
@@ -32,11 +35,16 @@ Class.create("Store", {
     }
   },
 
-  find : function(onFind, value, type){
-    if (!type) return findById(onFind, value);
+  /*
+   * @param type String column name
+   * @param key String key to search records by
+   * @returns Json record
+   */
+  find : function(onFind, key, type){
+    if (!type) return findById(onFind, key);
 
     var findFunc = this._uniqColumns.include(type) ? Enumerable.find : Enumerable.findAll;
-    var iterator = function(r){ return r[type] == value};
+    var iterator = function(r){ return r[type] == key};
     var record = findFunc.call(this._local, iterator);
 
     if (record) return onFind(record);
@@ -47,7 +55,32 @@ Class.create("Store", {
     onFind(result);
   },
 
-  save : function(name, data){
-    Object.extend(this._local[name], data)
+  /*
+   * @param diff Object with data to save into the record
+   * @param name String record name to be updated
+   * @returns Json difference in record between previous and current
+   */
+  save : function(onSave, name, diff){
+           debugger
+    var s = [{name: "main", v:'hi'}]//this._local;
+    var previous;
+    for (var i=0; i < s.length; i++){
+      debugger
+      if (s[i].name == name){
+       previous = $H(s[i]).clone(); break;
+      }
+    }
+
+    if (previous){
+      //TODO delete property from object in store if it is empty in diff
+      s[i] = Object.extend(s[i], diff)
+      var current = $H(s[i]);
+
+      var diff = previous.diff(current);
+      onSave(diff);
+    } else {
+      s.push(diff)
+    }
+    return diff;
   }
 })

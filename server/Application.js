@@ -3,6 +3,7 @@ const express       = require('express')
   , errors        = require('../config/server/errors')
   require(ROOT_PATH + '/app/Error');
   require(ROOT_PATH + '/app/Util');
+  require(ROOT_PATH + '/app/Parcel');
   require(ROOT_PATH + '/app/Proxy');
   require(ROOT_PATH + '/app/ORM');
   require(ROOT_PATH + '/app/Reactive');
