@@ -1,6 +1,7 @@
 /*
  * ControlFul - GUI Controls management
  * Mediator between application GUI and Controls implementation
+ * Templates manager
  */
 Class.create("Gui", Reactive, {
   

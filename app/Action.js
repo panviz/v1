@@ -6,6 +6,7 @@ Class.create("Action", {
   __DEFAULT_ICON_PATH : "/image/action/ICON_SIZE",
   
   initialize : function(p){
+    //TODO load config on Action initialization
     this.p = Object.extend({
       text: '',
       title: '',
@@ -72,81 +73,21 @@ Class.create("Action", {
       }
     }
 
-    if (p.form){
-      this._insertForm(p.form)
-    };
   }, 
-  
-  /**
-   * Sets the manager for this action
-   * @param manager ActionsManager
-   */
-  setManager : function(manager){
-    this.manager = manager;
-    if(this.p.subMenu){
-      if(this.subMenuItems.staticItems){
-        this.buildSubmenuStaticItems();
-      }
-      if(this.subMenuItems.dynamicItems || this.subMenuItems.dynamicBuilderCode){
-        this.prepareSubmenuDynamicBuilder();
-      }
-    }
-    if(this.init){
-      try{
-        window.listenerContext = this;
-        this.init();
-      }
-      catch(e){
-        alert(e);
-      }
-    }
-  },
   
   /**
    * Execute the action code
    */
   apply : function(){
     if(this.deny) return;
-        document.fire("app:beforeApply-"+this.p.name);
-    if(this.p.prepareModal){
-      $modal.prepareHeader(
-        this.p.title, 
-        resolveImageSource(this.p.icon,this.__DEFAULT_ICON_PATH, 16)
-      );
-    }
+    document.fire("app:beforeApply-"+this.p.name);
     window.actionArguments = $A([]);
-    if(arguments[0]) window.actionArguments = $A(arguments[0]);
     if(this.execute) {
       try{
         this.execute();
       }catch(e){
-        app.displayMessage('ERROR', e.message);
+        $app.displayMessage('ERROR', e.message);
       }
-    }else if(this.p.callbackDialogNode){
-      var node = this.p.callbackDialogNode;
-      var dialogFormId = node.getAttribute("dialogOpenForm");
-      var okButtonOnly = !!(node.getAttribute("dialogOkButtonOnly") === "true");
-      var skipButtons = !!(node.getAttribute("dialogSkipButtons") === "true");
-      
-      var onOpenFunc = null; var onCompleteFunc = null; var onCancelFunc = null;
-      var onOpenNode = XPathSelectSingleNode(node, "dialogOnOpen");
-      if(onOpenNode && onOpenNode.firstChild) var onOpenFunc = new Function("oForm", onOpenNode.firstChild.nodeValue);
-      var onCompleteNode = XPathSelectSingleNode(node, "dialogOnComplete");
-      if(onCompleteNode && onCompleteNode.firstChild) {
-        var completeCode = onCompleteNode.firstChild.nodeValue;
-        if(onCompleteNode.getAttribute("hideDialog") === "true"){
-          completeCode += "hideLightBox(true);";
-        }
-        var onCompleteFunc = new Function("oForm", completeCode);
-      }
-      var onCancelNode = XPathSelectSingleNode(node, "dialogOnCancel");
-      if(onCancelNode && onCancelNode.firstChild) var onCancelFunc = new Function("oForm", onCancelNode.firstChild.nodeValue);
-      
-      this.p.callback = function(){
-        $modal.showDialogForm('Dialog', dialogFormId, onOpenFunc, onCompleteFunc, onCancelFunc, okButtonOnly, skipButtons);
-      };
-      this.p.callback();
-      this.p.callbackDialogNode = null;
     }else if(this.p.callback){
       this.p.callback();
     }
@@ -154,12 +95,11 @@ Class.create("Action", {
       this.notify("submenu_active", arguments[0][0]);
     }
     window.actionArguments = null;
-        document.fire("app:afterApply-"+this.p.name);
+    document.fire("app:afterApply-"+this.p.name);
   },
     
   /**
    * Updates the action status on context change
-   * @returns void
    */
   fireContextChange : function(p){
     //TODO return on required params missing only
@@ -399,14 +339,6 @@ Class.create("Action", {
    * To be called when removing
    */
   remove : function(){
-    // Remove all elements and forms from html
-    this.elements.each(function(el){
-      $(el).remove();
-    }.bind(this));    
-    this.elements = new Array();
-    if(this.p.form && $('all_forms').select('[id="'+this.p.form.id+'"]').length){
-      $('all_forms').select('[id="'+this.p.form.id+'"]')[0].remove();
-    }
   },
   
   /**
@@ -416,32 +348,6 @@ Class.create("Action", {
    * @param accessKey String The key to underline
    * @returns String
    */
-  getKeyedText : function(displayString, hasAccessKey, accessKey){
-    displayString = displayString || this.p.text;
-    accessKey = accessKey || this.p.accessKey;
-
-    if(!hasAccessKey && this.p.hasAccessKey) return displayString;
-    var keyPos = displayString.toLowerCase().indexOf(accessKey.toLowerCase());
-    if(keyPos==-1){
-      return displayString + ' (<u>' + accessKey + '</u>)';
-    }
-    if(displayString.charAt(keyPos) != accessKey){
-      // case differ
-      accessKey = displayString.charAt(keyPos);
-    }
-    returnString = displayString.substring(0,displayString.indexOf(accessKey));
-    returnString += '<u>'+accessKey+'</u>';
-    returnString += displayString.substring(displayString.indexOf(accessKey)+1, displayString.length);
-    return returnString;
-  },
-  
-  /**
-   * Inserts Html FORM declared by manifest in the all_forms div.
-   */
-  _insertForm : function(form){
-    this.p.formId = form.id;
-    if($('all_forms').select('[id="'+ form.id +'"]').length) return;
-    $('all_forms').insert(form.html);
-  }
+  getKeyedText : function(displayString, hasAccessKey, accessKey){}
   
 });
