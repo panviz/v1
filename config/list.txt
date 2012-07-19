@@ -1,3 +1,23 @@
+lib/ext/ext-all.js
+lib/Functional/recursion.js
+lib/prototype/client.core.js
+lib/prototypeJS/lang/object.js
+lib/prototypeJS/lang/function.js
+lib/prototypeJS/lang/enumerable.js
+lib/prototypeJS/lang/array.js
+lib/prototypeJS/lang/string.js
+lib/prototypeJS/lang/number.js
+lib/prototypeJS/lang/regexp.js
+lib/prototypeJS/lang/date.js
+lib/prototypeJS/lang/class.js
+lib/prototypeJS/lang/range.js
+lib/prototypeJS/lang/hash.js
+lib/prototypeJS/lang/periodical_executer.js
+lib/prototypeJS/lang/template.js
+lib/prototypeJS/lang/prototype.oo.js
+lib/prototype/prototype.client.js
+lib/prototype/prototype.livepipe.js
+lib/md5/md5.js
 interface/Control.js
 interface/Provider.js
 interface/Focusable.js
@@ -11,6 +31,9 @@ lib/scriptaculous/src/dragdrop.js
 lib/scriptaculous/src/controls.js
 lib/scriptaculous/src/slider.js
 lib/sockjs-0.3.min.js
+Util.js
+Parcel.js
+Proxy.js
 ORM.js
 Store.js
 Reactive.js
@@ -22,7 +45,6 @@ Action.js
 ActionFul.js
 Gui.js
 ExtensionFul.js
-Application.js
 control/RepositorySelect.js
 control/AddressBar.js
 control/UserStatus.js
@@ -39,3 +61,4 @@ ActivityMonitor.js
 action/Navigation.js
 action/Splash.js
 action/User.js
+../client/Application.js

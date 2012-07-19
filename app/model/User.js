@@ -5,12 +5,12 @@ Class.create("User", Reactive, {
 
   /**
    */
-  initialize : function(name, password){
+  initialize : function($super, name, password){
     $super();
     if (name){
       this.name = name;
       this.roles = ['guest'];
-      this.get(name, this.update.bind(this))
+      this.get(name, {}, this.update.bind(this))
     }
 
     if (password){

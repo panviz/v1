@@ -28,8 +28,10 @@ Class.create("Modal", {
     win.setTitle(title);
     win.show();
   },
+
   hide : function(){
-    this._window.hide()
+    this._window.removeAll();
+    this._window.hide();
   },
 
   showBooting : function(p){
@@ -44,7 +46,7 @@ Class.create("Modal", {
     this._createLoaderBar(p.steps);
     this._window.items.add(extText);
     this._window.items.add(this._progressBar);
-    this.show()
+    this._window.show()
   },
 
   /**
@@ -62,7 +64,7 @@ Class.create("Modal", {
 
   // @param error Error
   error : function(error){
-    this.displayMessage(error.msg);
+    alert(error);
   },
   
   /**

@@ -6,7 +6,7 @@ var path = require('path');
 fs = require('fs');
 isServer = true;
 ROOT_PATH = path.join(__dirname, '/..');
-require(ROOT_PATH + '/app/lib/prototype/server');
+require(ROOT_PATH + '/app/lib/prototypeJS/prototype');
 //require(ROOT_PATH + '/app/Application');
 require('./Application')
 

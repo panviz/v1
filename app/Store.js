@@ -47,12 +47,10 @@ Class.create("Store", {
     var iterator = function(r){ return r[type] == key};
     var record = findFunc.call(this._local, iterator);
 
-    if (record) return onFind(record);
-    // Server Storage should return a value
-    if (isServer){
-      var result = new NotFound(name);
-    } else { var result = null}
-    onFind(result);
+    if (!record && isServer){
+      throw NotFound(key);
+    }
+    onFind(record);
   },
 
   /*
@@ -61,11 +59,9 @@ Class.create("Store", {
    * @returns Json difference in record between previous and current
    */
   save : function(onSave, name, diff){
-           debugger
-    var s = [{name: "main", v:'hi'}]//this._local;
+    var s = this._local;
     var previous;
     for (var i=0; i < s.length; i++){
-      debugger
       if (s[i].name == name){
        previous = $H(s[i]).clone(); break;
       }
@@ -77,10 +73,10 @@ Class.create("Store", {
       var current = $H(s[i]);
 
       var diff = previous.diff(current);
-      onSave(diff);
     } else {
       s.push(diff)
     }
+    onSave(diff);
     return diff;
   }
 })

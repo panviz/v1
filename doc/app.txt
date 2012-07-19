@@ -1,14 +1,34 @@
-Server is built on NodeJS
-ExpressJS is used to serve static content and some other
-SockJS is websocket server for server-client communication
+/server  Server 
+  is built on NodeJS
+  ExpressJS is used to serve static content and some other
+  SockJS is websocket server for server-client communication
 
-Application structure is based on modules and can be easily extended.
-  It is highly configurable and have multiple conventions, such as following:
-    Module
-      Localization files -> i18n folder
-      images -> image folder
+/client  Client only resources 
+  Bootstrap, resources, theme, gui templates, etc
+  /theme/name  Theme
+    The interface has default theme, which can be entirely customized.
+    /css
+    /image
+    /template
 
-Client application is loaded with Bootstrap
-"ui.main" is default interface for browser access.
-Uses HTML5 and PrototypeJS.
-The interface has default theme, which can be entirely customized.
+/app  Application
+  /app/lib  Libraries
+    /prototypeJS - port of prototype to nodeJS
+    /Functional - functional programming in JS
+
+/module  Module
+  Extensibility model is built on modules and can be easily extended.
+  There are multiple conventions for extensions:
+    Type  see the list of directories
+    Name  Module name
+    /type/name/i18n  Localization files
+    /type/name/image  images
+    /type/name/config.json  configuration
+
+
+/config  Configuration
+  Application is highly configurable 
+  /i18n/en.json  application internationalization
+  /server  environments, routes, etc
+  /settings.json  application defaults
+

@@ -7,19 +7,25 @@ Class.create("Parcel", {
   action: "",
 
   // name of Reactive class on Client & Server
-  model : "",
+  model: "",
 
   // unique record identifier
-  name : "",
+  name: "",
 
   // unique parcel identifier
-  id : "",
+  id: "",
 
   // Connection object which can send this parcel
-  conn : {},
+  conn: null,
 
   // Parcel content
-  content : {},
+  content: null,
+
+  // Error is provided if content missing
+  error: null,
+
+  // id of user which requested this parcel
+  addressee: null,
 
   /*
    * Parcel can be initialized empty or with Connection or message content or both
@@ -44,7 +50,8 @@ Class.create("Parcel", {
     this.action = msg.action || "get";
     this.model = msg.model;
     this.name = msg.name;
-    this.content = msg.content || {};
+    this.error = msg.error;
+    this.content = msg.content;
     this.options = msg.options || {};
   },
 
@@ -57,6 +64,7 @@ Class.create("Parcel", {
         action: this.action,
         model: this.model,
         name: this.name,
+        error: this.error,
         content: this.content,
         options: this.options
       });

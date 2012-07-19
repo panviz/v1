@@ -2,10 +2,7 @@
  * Toolbar to display actions buttons
  */
 Class.create("Toolbar", {
-	/**
-	 * Constructor
-   * @param p Object The toolbar p. Contains a buttonRenderer and a toolbarsList array.
-   */
+
   initialize : function(p){
     this.bar = Ext.create('Ext.Toolbar', {
       region: p.region,

@@ -1,12 +1,11 @@
 Class.create("Login", Action, {
 
   execute : function(){
-    var template = $gui.get('login', {}, onLoad);
-
-    var onLoad = function(){
+    var onLoad = function(template){
       var onSubmit = function(formData){
-        var user = new User(login, password);
+        var user = new User(formData.username, formData.password);
       }
+      //TODO addListener on user:auth event
       var onAuth = function(user){
         $user.setCurrentUser(user);
       }
@@ -14,7 +13,6 @@ Class.create("Login", Action, {
       //items of Login panel
       // Specific attributes for the text fields for username / password. 
       // The "name" attribute defines the name of variables sent to the server.
-      template
       onClickReset = function() {
           this.up('form').getForm().reset();
       };
@@ -25,11 +23,21 @@ Class.create("Login", Action, {
         }
       }
       var loginForm = Ext.create('Ext.form.Panel', template);
+
+      var buttonsToolbar = loginForm.getDockedItems()[0];
+      var resetBtn = buttonsToolbar.getComponent('reset');
+      var submitBtn = buttonsToolbar.getComponent('submit');
+      resetBtn.on('click', onClickReset);
+      submitBtn.on('click', onClickSubmit);
+      
       var size = {width: 300, height: 140}
       var title = "Please, login";
       $modal.show(loginForm, size, title)
     }
+
+    $gui.get('loginForm', {}, onLoad);
   },
+
   old : function(){
     var loginRedirect = AJXP_LOGIN_REDIRECT;
     if(loginRedirect){

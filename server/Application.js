@@ -25,7 +25,8 @@ Class.create("Application", {
     var s = this.server = express.createServer()
     $orm = this.orm = new ORM();
 
-    $user = this.userFul = new UserFul();
+    // As there is no current user
+    $user = this.user = new UserFul();
 
     // Load Expressjs config
     this.configure();
@@ -105,8 +106,8 @@ Class.create("Application", {
 
   run : function(){
     var s = this.server;
-    // Create Reactive Messaging Server
-    $proxy = this.proxy = new Proxy(this.p, s);
+    // Create Reactive Messanger
+    $proxy = this.proxy = new Proxy(this.p.socketPath);
     s.listen(this.env.port);
     console.log('\x1b[36mGraph\x1b[90m v%s\x1b[0m running as \x1b[1m%s\x1b[0m on http://%s:%d'
       , this.p.version

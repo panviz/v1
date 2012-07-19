@@ -5,12 +5,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="icon" type="image/x-png" href="<%= settings.ui.theme.path %>/image/html-folder.png">
     <%- link_tag(settings.ui.theme.path + '/css/list.txt') %>
-    <%- include_tag('/config/boot_list.txt') %>
     <%- include_tag('/config/list.txt') %>
     <link rel="stylesheet" type="text/css" href="/client/resources/css/ext-all.css">
   </head>
   <body>   
-    <script>$set = <%- JSON.stringify(settings) %></script>
+    <script>
+      $set = <%- JSON.stringify(settings) %>
+      app = new Application();
+    </script>
     <div id="desktop"></div>
   </body>
 </html>

@@ -17,9 +17,11 @@ Class.create("Reactive", {
    * @param name unique identifier of record
    * @param options may have token - role identifier
    * if token is valid - returns data based on access rights
+   * TODO options should specify access level to information based on user role
    */
   get : function(name, options, callback){
     var self = this;
+
     /* @server never enters onLoad
      * @param data 
      */
@@ -35,7 +37,7 @@ Class.create("Reactive", {
     var onFind = function(data){
       // On missing record
       // Client storage returns null, so request goes to Remote
-      // Remote storage return NotFound Error
+      // Remote storage throws NotFound Error
       if (data){
         // TODO Reduce data by user access level
         //if (options.addressee ){    //how to evaluate data availability?
@@ -64,10 +66,12 @@ Class.create("Reactive", {
       var onSave = callback;
     } else {
       var onSave = function(diff){
-        var onLoad = function(data){
-          callback(data);
+        // Do not send if data not changed
+        if (diff){
+          $proxy.put(self.__className.toLowerCase(), name, diff, callback)
+        }else{
+          callback()
         }
-        $proxy.put(self.__className.toLowerCase(), name, diff, onLoad)
       }
     }
 

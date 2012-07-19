@@ -4,13 +4,11 @@
 Class.create("UserStatus", {
 
 	initialize: function(p){
-    var action = $act.get("loginAction");
+    var action = this.action = new Login({});//$act.get("loginAction");
     this.loginButton = Ext.create('Ext.Button', {
       text: "Login",
 			scale: p.buttonSize,
-      handler: function(){
-        action.execute;
-      }
+      handler: action.execute
     });
 		this.logoutButton = Ext.create('Ext.Button', {
 			text: "Logout",

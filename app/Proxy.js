@@ -13,25 +13,22 @@ Class.create("Proxy", {
   /*
    * Start websocket messaging
    */
-  initialize : function(p){
-    this.url = p.socketPath;
+  initialize : function(url){
     var self = this;
 
     if (isServer){
       this._socket = require('sockjs').createServer();
-      this._socket.installHandlers($app.server, {prefix: this.url});
+      this._socket.installHandlers($app.server, {prefix: url});
 
       //Send registry on connection established
       this._socket.on('connection', function(conn){
         //conn.write(JSON.stringify(this.p))
         conn.on('data', function(message){
-          var data = new Parcel(conn);
-          data.recieve(message);
-          self._onServer(data);
+          self._onServer(conn, message);
         })
       });
     }else{
-      var socket = this._socket = new SockJS(this.url);
+      var socket = this._socket = new SockJS(url);
       socket.onopen = function() {
         document.fire("proxy:connected");
       };
@@ -80,9 +77,13 @@ Class.create("Proxy", {
 
     // Model requests its data
     if (data.id){
-      this._cbs[data.id](data.content)
-      // On error Remove update model callback
-      if (data.error) this._cbs[data.id] = undefined;
+      if (data.content) this._cbs[data.id](data.content);
+      // On Error Remove update model callback
+      if (data.error){
+        this._cbs[data.id](data.error);
+        // TODO on NotFound error leave callback for future updates
+        this._cbs[data.id] = undefined;
+      }
     }
     // Other messages
     if (data.registry) this._registry = data.registry;
@@ -90,26 +91,38 @@ Class.create("Proxy", {
 
   /* @server
    * @param data Parcel
-   * TODO check manager exists
-   * TODO options should specify access level to information based on user role
    */
-  _onServer : function(data){
+  _onServer : function(conn, message){
+    var data = new Parcel(conn);
+    data.recieve(message);
                 debugger
-    var parseRequest = function(user){
+    var parseRequest = function(addressee){
+      data.addressee = addressee;
+      //TODO create $app.getManager()
       var manager = $app[data.model];
-      data.addressee = user;
 
-      if (data.action == "get"){
-        manager.get(data.name, data.options, this.send.bind(this, data))
-      }
-      else if (data.action = "put"){
-        var diff = manager.put(data.name, data.content, this.send.bind(this, data))
-        this.broadcast(data, diff);
+      if (manager){
+        if (data.action == "get"){
+          try{manager.get(data.name, data.options, this.send.bind(this, data))}
+          catch(e){data.error = e; this.send(data)}
+        }
+        else if (data.action = "put"){
+          var diff = manager.put(data.name, data.content, this.send.bind(this, data))
+          this.broadcast(data, diff);
+        }
+      } else {
+        data.error = "Model not supported";
+        this.send(data);
       }
     }
 
     if (data.action){
-      $user.store.find(parseRequest.bind(this), data.content.SECURE_TOKEN, "token");
+      // Set addressee as logged user Id or connection Id
+      if (data.content){
+        $user.store.find(parseRequest.bind(this), data.content.SECURE_TOKEN, "token");
+      } else {
+        parseRequest.call(this, data.conn.id);
+      }
     } else {
       // Proceed with other message types
     }
@@ -126,7 +139,7 @@ Class.create("Proxy", {
     if (diff){
       data.content = diff;
       var followers = this._subscribers[data.id] || {}
-      followers[data.addressee.id] = data.conn;
+      followers[data.addressee] = data.conn;
     }
     data.send();
   },
@@ -139,7 +152,7 @@ Class.create("Proxy", {
       data.content = record
       this._subscribers[data.id].forEach(function(follower){
         // Skip Sender on data propagation
-        if (data.addressee.id == follower.id) return;
+        if (data.addressee == follower.id) return;
         data.conn = subscriber.conn;
         data.send();
       })
