@@ -1,5 +1,5 @@
 /*
- * ReactiveProvider
+ * Reactive Proxy
  * Implements instant messaging between this and remote instances
  */
 Class.create("Proxy", {
@@ -41,14 +41,12 @@ Class.create("Proxy", {
 
   /*
    * Makes remote call of given model
-   * If item exists - return it (it is definitely up to date)
-   * Else load it
    * Save callback to trigger it on same data update
    * @param model String name of the Model
    * @param id to pass Model.get on remote side
    * @param cb Function callback
    */
-  get : function(model, name, options, cb){
+  get : function(cb, model, name, options){
           debugger
     var request = new Parcel(this._socket);
     request.model = model;
@@ -63,7 +61,9 @@ Class.create("Proxy", {
 
   /*
    */
-  put : function(model, name, options, cb){
+  put : function(cb, model, name, content, options){
+    debugger
+    var request = new Parcel(this._socket);
   },
 
   /*
@@ -103,11 +103,11 @@ Class.create("Proxy", {
 
       if (manager){
         if (data.action == "get"){
-          try{manager.get(data.name, data.options, this.send.bind(this, data))}
+          try{manager.get(this.send.bind(this, data), data.name, data.options)}
           catch(e){data.error = e; this.send(data)}
         }
         else if (data.action = "put"){
-          var diff = manager.put(data.name, data.content, this.send.bind(this, data))
+          var diff = manager.put(this.send.bind(this, data), data.name, data.content, data.options)
           this.broadcast(data, diff);
         }
       } else {

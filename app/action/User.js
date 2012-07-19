@@ -38,7 +38,7 @@ Class.create("Login", Action, {
       $modal.show(loginForm, size, title)
     }
 
-    $gui.get('loginForm', {}, onLoad);
+    $gui.get(onLoad, 'loginForm');
   },
 
   /*

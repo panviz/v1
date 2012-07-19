@@ -1,9 +1,10 @@
 /*
+ * Reactive Provider
+ * Storage mapper
  * Implements instant record update with only two methods:
  * Get - retrieves data from Remote by uniq identifier "name"
  * Put - send new, null, or updated record to Remote
  * Is responsible for access restrictions
- * Storage mapper
  */
 Class.create("Reactive", {
 
@@ -13,13 +14,14 @@ Class.create("Reactive", {
 
   /*
    * Find record in local storage first
-   * if name only specified - returns record's public representation
+   * If item exists - return it (it is definitely up to date)
+   * Else load it
+   * if no options specified - returns record's public representation
    * @param name unique identifier of record
+   * TODO options should specify addressee or access rights?
    * @param options may have token - role identifier
-   * if token is valid - returns data based on access rights
-   * TODO options should specify access level to information based on user role
    */
-  get : function(name, options, callback){
+  get : function(callback, name, options){
     var self = this;
 
     /* @server never enters onLoad
@@ -40,7 +42,11 @@ Class.create("Reactive", {
       // Remote storage throws NotFound Error
       if (data){
         // TODO Reduce data by user access level
-        //if (options.addressee ){    //how to evaluate data availability?
+        //if (options.addressee ){
+          //var onUser = function(data){
+            //evaluate user rights
+          //}
+          //$user.store.findById(onUser, addressee)
           //var data = data;
         //} else {
           //var data = self._public.map(function(key){
@@ -49,7 +55,7 @@ Class.create("Reactive", {
         //}
         callback(data);
       } else {
-        $proxy.get(self.__className.toLowerCase(), name, options, onLoad)
+        $proxy.get(onLoad, self.__className.toLowerCase(), name, options)
       }
     }
     this.store.find(onFind, name, "name")
@@ -59,7 +65,7 @@ Class.create("Reactive", {
    * Saves changes locally first then sync with remote
    * @returns Json difference in record between previous and current
    */
-  put : function(name, content, callback){
+  put : function(callback, name, content, options){
     var self = this;
 
     if (isServer){
@@ -68,13 +74,14 @@ Class.create("Reactive", {
       var onSave = function(diff){
         // Do not send if data not changed
         if (diff){
-          $proxy.put(self.__className.toLowerCase(), name, diff, callback)
+          $proxy.put(callback, self.__className.toLowerCase(), name, diff)
         }else{
           callback()
         }
       }
     }
 
+    //TODO check access rights
     return this.store.save(onSave, name, content);
   }
 })

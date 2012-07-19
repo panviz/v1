@@ -12,7 +12,7 @@ Class.create("Gui", Reactive, {
     this.ui = p.ui;
     // TODO Use Template class for Server to respond to Client Gui?
     if (isServer) return
-    this.get('main', {}, this.initControls.bind(this))
+    this.get(this.initControls.bind(this), 'main')
   },
 
   // Initialize controls

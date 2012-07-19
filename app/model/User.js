@@ -7,16 +7,16 @@ Class.create("User", Reactive, {
    */
   initialize : function($super, name, password){
     $super();
-    if (name){
-      this.name = name;
-      this.roles = ['guest'];
-      this.get(name, {}, this.update.bind(this))
-    }
 
     if (password){
       var p = {};
       p.password = password;
       this.put(name, p, this.update.bind(this))
+    }
+    else if (name){
+      this.name = name;
+      this.roles = ['guest'];
+      this.get(this.update.bind(this), name)
     }
   },
 
