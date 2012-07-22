@@ -3,12 +3,12 @@ Class.create("Login", Action, {
   execute : function(){
     var onLoad = function(template){
       var onSubmit = function(formData){
-        //TODO encrypt password before sending with seed
+        //TODO encrypt password with seed before sending
         //TODO add remember_me option
         //TODO add captcha if third attempt
         var user = new User(formData.username, formData.password);
       }
-      //TODO addListener on user:auth event
+      //TODO addListener on "user:auth" event
       var onAuth = function(user){
         $user.setCurrentUser(user);
       }

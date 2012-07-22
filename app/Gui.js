@@ -5,6 +5,8 @@
  */
 Class.create("Gui", Reactive, {
   
+  public : "all",
+
   initialize : function($super, p, store){
     $super(store)
     //Controls instances

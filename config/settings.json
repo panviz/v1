@@ -1,6 +1,6 @@
 {
   "debug" : true,
-  "socketPath" : "/registry",
+  "socketPath" : "/reactive",
   "default_repository": "/",
   "loggedUser" : false,
   "locale" : "en",

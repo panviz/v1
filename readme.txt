@@ -1,5 +1,6 @@
       TODO
-
+Make tests for Core classes
+  
 Client
 
 Server

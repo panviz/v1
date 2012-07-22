@@ -89,6 +89,7 @@
     "id": 2,
     "name": "tania",
     "password": "111",
-    "email": "st_ta@ukr.net"
+    "email": "st_ta@ukr.net",
+    "roles" : ["guest"]
   }
 ]

@@ -9,9 +9,8 @@ Class.create("User", Reactive, {
     $super();
 
     if (password){
-      var p = {};
-      p.password = password;
-      this.put(name, p, this.update.bind(this))
+      var p = {password: password};
+      this.put(this.update.bind(this), name, null, p)
     }
     else if (name){
       this.name = name;
@@ -23,7 +22,8 @@ Class.create("User", Reactive, {
   update : function(data){
     var data = data || {};
     this.id = data.id;
-    this._preferences = $H(data.preferences);
+    this.p = $H(data.preferences);
+    this.p.set("SECURE_TOKEN", data.SECURE_TOKEN)
     this.repositories = new Hash();
     this.crossRepositories = new Hash();
     this._repoIcon = new Hash();
@@ -35,6 +35,7 @@ Class.create("User", Reactive, {
       this.loadActiveRepository()
     }
     if (this.id) document.fire("user:updated");
+    if (data.SECURE_TOKEN) document.fire("user:auth");
   },
 
   /**

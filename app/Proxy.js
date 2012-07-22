@@ -7,6 +7,7 @@ Class.create("Proxy", {
   // Client has one callback per dataId
   _cbs : {},
 
+  //TODO persist followers
   //@server Server has many clients for one dataId
   _subscribers : {},
 
@@ -43,32 +44,26 @@ Class.create("Proxy", {
    * Makes remote call of given model
    * Save callback to trigger it on same data update
    * @param model String name of the Model
-   * @param id to pass Model.get on remote side
+   * @param name record identifier to pass Model.get on remote side
    * @param cb Function callback
    */
-  get : function(cb, model, name, options){
-          debugger
+  send : function(cb, action, model, name, options){
     var request = new Parcel(this._socket);
+    request.action = action;
     request.model = model;
     request.name = name;
-    //TODO use connection callID
-    request.action = "get";
-    request.options = options;
+    if (options){
+      request.options = options;
+      request.content = options.content;
+    }
     request.send();
 
+    //TODO use connection callID
     this._cbs[request.id] = cb;
   },
 
   /*
-   */
-  put : function(cb, model, name, content, options){
-    debugger
-    var request = new Parcel(this._socket);
-  },
-
-  /*
    * Client message is always PUT
-   * @param model
    * @param e String stringified object
    */
   _onMessage : function(e){
@@ -78,50 +73,53 @@ Class.create("Proxy", {
     // Model requests its data
     if (data.id){
       if (data.content) this._cbs[data.id](data.content);
+
       // On Error Remove update model callback
       if (data.error){
         this._cbs[data.id](data.error);
-        // TODO on NotFound error leave callback for future updates
-        this._cbs[data.id] = undefined;
+
+        // on NotFound error leave callback for future updates
+        if (data.error != "Not Found") this._cbs[data.id] = undefined;
       }
     }
     // Other messages
-    if (data.registry) this._registry = data.registry;
   },
 
   /* @server
    * @param data Parcel
    */
   _onServer : function(conn, message){
-    var data = new Parcel(conn);
-    data.recieve(message);
                 debugger
-    var parseRequest = function(addressee){
-      data.addressee = addressee;
+    var data = new Parcel(conn, message);
+    // @param obj logged user or connection
+    if (data.action){
       //TODO create $app.getManager()
       var manager = $app[data.model];
 
       if (manager){
         if (data.action == "get"){
-          try{manager.get(this.send.bind(this, data), data.name, data.options)}
-          catch(e){data.error = e; this.send(data)}
+          try{
+            manager.get(this.subscribe.bind(this, data), data.name, data.options);
+          }
+          catch(e){
+            if (e != "Not Found") throw(e);
+            data.error = e;
+            this.subscribe(data);
+          }
         }
         else if (data.action = "put"){
-          var diff = manager.put(this.send.bind(this, data), data.name, data.content, data.options)
-          this.broadcast(data, diff);
+          try{
+            manager.put(this.broadcast.bind(this, data), data.name, data.content, data.options)
+          }
+          catch(e){
+            if (e != "Not Found") throw(e);
+            data.error = e;
+            this.subscribe(data);
+          }
         }
       } else {
         data.error = "Model not supported";
-        this.send(data);
-      }
-    }
-
-    if (data.action){
-      // Set addressee as logged user Id or connection Id
-      if (data.content){
-        $user.store.find(parseRequest.bind(this), data.content.SECURE_TOKEN, "token");
-      } else {
-        parseRequest.call(this, data.conn.id);
+        data.send(data);
       }
     } else {
       // Proceed with other message types
@@ -129,31 +127,32 @@ Class.create("Proxy", {
   },
 
   /* @server
-   * Save addressee to send him updates later if record exists
-   * @param conn Requester's connection
-   * @param data Json reply to send to user
+   * Save recipient to send him updates later if record exists
+   * @param data packaged Parcel to send to user
    * @param diff Json Content diff to send
    */
-  send : function(data, diff){
-            debugger
-    if (diff){
-      data.content = diff;
-      var followers = this._subscribers[data.id] || {}
-      followers[data.addressee] = data.conn;
-    }
+  subscribe : function(data, diff){
+    data.content = diff;
+    var followers = this._subscribers;
+    if (!followers[data.id]) followers[data.id] = $H();
+    followers[data.id].set(data.recipient, data.conn);
     data.send();
   },
 
   /* @server
    */
   broadcast : function(data, diff){
+    this.subscribe(data, diff);
+    var sender  = data.recipient;
+
     if (diff){
-      data.name = record.name;
-      data.content = record
-      this._subscribers[data.id].forEach(function(follower){
-        // Skip Sender on data propagation
-        if (data.addressee == follower.id) return;
-        data.conn = subscriber.conn;
+      data.content = diff;
+      var followers = this._subscribers[data.id];
+      followers.keys().forEach(function(followerId){
+        // Skip sender
+        if (followerId == sender) return;
+        data.recipient = followerId;
+        data.conn = followers.get(followerId);
         data.send();
       })
     }
