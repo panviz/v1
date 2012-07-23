@@ -14,12 +14,15 @@ Class.create("Util", {
     if (isServer){
       var names = fs.readdirSync(path);
       names.forEach(function(name){
-        var ns = name.split('.');
-        var key = ns[0], extension = ns[1];
-        if (extension){
-          result[key] = require(path + '/' + name);
+        var item = path+'/'+name;
+        if (fs.statSync(item).isFile()){
+          var ns = name.split('.');
+          var key = ns[0];
+          var extension = ns.without(key)[ns.length-1];
+          key = ns.without(extension).join('.');
+          result[key] = require(item);
         } else {
-          result[key] = $util.requireAll(path + '/' + name);
+          result[key] = $util.requireAll(item);
         }
       })
       return result;

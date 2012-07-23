@@ -48,8 +48,8 @@ Class.create("Repository", {
   initialize : function(id, p){
     debugger
     this.p = p;
-    if(I18N){
-      this._label = I18N[391];
+    if($i18n){
+      this._label = $i18n[391];
     }
     this._id = id;
     this._icon = THEME.path +'/image/action/16/network-wired.png';

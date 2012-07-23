@@ -75,6 +75,7 @@ Class.create("Gui", Reactive, {
    * Creates Controls Classes on temlate load
    * @var htmlElement HtmlElement
    */
+  // Deprecated
   initFromHtmlTemplate : function(htmlElement){
     //Controls instances
     var controls = this._controls = $H();
