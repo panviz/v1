@@ -1,6 +1,5 @@
 /node_modules
-/app/lib/Functional
-/app/lib/prototypeJS
+/app/lib
 /module/editor/ckeditor/ckeditor
 /client/resources/
 /client/theme/mybase/image

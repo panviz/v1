@@ -110,7 +110,7 @@ Class.create("Parcel", {
 
   /* @server
    * Restrict incoming or outgoing message for sender or recipient respectively 
-   * @param direction of Parcel delivery
+   * @param addressee of Parcel delivery
    */
   _secureFor : function(addressee){
     if (!this.content) return

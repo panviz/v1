@@ -1,0 +1,47 @@
+{
+  "name": "Graph",
+  "homepage": "http://intelliart.net/Graph",
+  "version": "0.0.1",
+  "description": "All data integration service",
+  "maintainers": [
+    {
+     "name": "Dmitra",
+     "email": "k@dmitra.com",
+     "web": "http://www.dmitra.com" 
+    } 
+  ],
+  "bugs": {
+    "mail": "admin@intelliart.net",
+    "web": "http://www.bitbucket.org/dmitra/graph/issues" 
+  },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://bitbucket.org/dmitra/graph.git" 
+    } 
+  ],
+  "dependencies": {
+    "nodejs": "0.6.18",
+    "ejs": "0.7.1",
+    "express": "2.5.4",
+    "sockjs": "0.3.1",
+    "extjs": "4.1.0",
+    "sockjs-client": {
+      "url": "http://cdn.sockjs.org/sockjs-0.3.min.js",
+    },
+    "prototypeJS": {
+      "url": "https://github.com/Dmitra/PrototypeJS-for-NodeJS.git"
+    },
+    "Functional": {
+      "url": "https://github.com/Dmitra/Functional.git"
+    }
+  }, 
+  "optionalDependencies": {
+    "wrench": "1.3.9",
+    "xml2js": "0.1.14"
+  },
+  "os": ["linux", "macos", "win"],
+  "engines": {
+    "node": "*"
+  },
+}

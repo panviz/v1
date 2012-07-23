@@ -18,6 +18,7 @@
 
 /module  Module
   Extensibility model is built on modules and can be easily extended.
+  should contain server and client side logic alongside
   There are multiple conventions for extensions:
     Type  see the list of directories
     Name  Module name
@@ -32,3 +33,15 @@
   /server  environments, routes, etc
   /settings.json  application defaults
 
+Global shortcuts to Application properties
+  $app  Application itself
+  $util   Utils
+  $proxy  Reactive Provider
+  $orm    Object Relationship Mapper
+  $act    Actions manager
+  $gui    Controls manager
+  $ext    Extensions manager
+  $display
+  $modal  Modal window
+  $users  Users manager
+  $i18n   Internationalization messages

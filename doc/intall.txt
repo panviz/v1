@@ -1,0 +1,15 @@
+Install following dependencies manually
+  Extjs
+    Put ext-all.js into /app/ext
+    And copy /resources into /client
+  Sockjs-client
+    Download dependency file and put it in /lib under sockjs.js name
+  Md5
+  Scriptaculous
+  Prototype plugins
+
+Configuration
+  Edit files in /config folder
+
+Run
+  server/boot.js

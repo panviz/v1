@@ -16,7 +16,7 @@ EventManagement
 
 Item
 
-View
+View is a Module
   
 View.Editor
   Does View contains Editor? or Editor is a View?
@@ -48,9 +48,11 @@ check all methods and variables Privacy
 search all TODO notes in code
 
 Module
-  connect
-    http
-
+  Modules can be dependent on others
+    provider.dropbox -> fs
+    bookmark -> persistent storage like fs, mysql, mongo
+    git -> svc
+  
 Prototype
   fully replace prototype.js with bunch of files
 
