@@ -502,7 +502,7 @@ Class.create("View", {
    * Refreshes the title
    */
   refreshFullScreenTitle : function(){
-    document.title = "AjaXplorer - " + this.title.select('span.titleString')[0].replace("&nbsp;","");
+    document.title = "Graph - " + this.title.select('span.titleString')[0].replace("&nbsp;","");
   },
   /**
    * View show exit fullscreen mode

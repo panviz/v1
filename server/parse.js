@@ -10,7 +10,7 @@ var fs = require('fs'),
 var test = function(files){
   var counter = 0;
   files.forEach(function(file){
-    if (file.match(/ajaxplorer/gi)) {
+    if (file.match(/test/gi)) {
       var filename = path + '/module/' + file;
       var f = new wrench.LineReader(filename);
       console.log(counter + filename)

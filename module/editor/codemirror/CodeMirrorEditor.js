@@ -1,5 +1,5 @@
 /*
- * Ajaxplorer wrapper for CodeMirror
+ * CodeMirror wrapper
  */
 Class.create("CodeMirrorEditor", AbstractEditor, {
 

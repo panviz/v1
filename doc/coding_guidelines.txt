@@ -9,7 +9,7 @@ Name begins with "_" indicates private
 Name begins with on indicates Listener(Observer)
 
   Event
-namespaces are separated with semicolon; words - with underscore e.g.: "ajaxplorer:context_changed"
+namespaces are separated with semicolon; words - with underscore e.g.: "app:context_changed"
 Document events where they are listened, as firing place should be a single
 
   Object

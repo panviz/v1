@@ -2,7 +2,7 @@
   "ajxpdriver": {
     "name": "conf",
     "label": "CONF_MESSAGE[Admin Driver]",
-    "description": "CONF_MESSAGE[Access AjaXplorer configuration data.]",
+    "description": "CONF_MESSAGE[Access Graph configuration data.]",
     "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
     "xsi:noNamespaceSchemaLocation": "file:../core.app/registry.xsd",
     "client_settings": {

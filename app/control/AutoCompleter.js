@@ -1,5 +1,5 @@
 /**
- * Encapsulation of the Prototype Autocompleter for AjaXplorer purposes.
+ * Encapsulation of the Prototype Autocompleter for Graph purposes.
  * Should be ported for local provides
  */
 Class.create("Autocompleter", {
