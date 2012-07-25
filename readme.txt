@@ -16,22 +16,12 @@ EventManagement
 
 Item
 
-View is a Module
-  
-View.Editor
-  Does View contains Editor? or Editor is a View?
-  move action_bar to Main toolbar like Tridion.RibbonToolbar
-  open empty Editor if .txt file missing
-  open selected item on 'item' action
-
-Modal and View should implement one Interface with methods: ?
-  showDialogForm & _initGUI
-  prepareHeader
-  title
-  clearContent
-
-List or Table
-  make inherited from View
+Modal
+  should implement one Interface with View?
+    showDialogForm & _initGUI
+    prepareHeader
+    title
+    clearContent
 
 Search
   Search bar and Search engine
@@ -43,6 +33,7 @@ Revise
   Model
   Driver
   ActivityMonitor
+  ORM
 
 check all methods and variables Privacy
 search all TODO notes in code
@@ -52,8 +43,16 @@ Module
     provider.dropbox -> fs
     bookmark -> persistent storage like fs, mysql, mongo
     git -> svc
+  View is a Module
+  View.Editor
+    Does View contains Editor? or Editor is a View?
+    move action_bar to Main toolbar like Tridion.RibbonToolbar
+    open empty Editor if .txt file missing
+    open selected item on 'item' action
+
   
 Prototype
   fully replace prototype.js with bunch of files
+  remove common libraries from git repository
 
 Publish wrench update

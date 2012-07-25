@@ -3,7 +3,7 @@
  * Container for location components, go to parent, refresh.
  */
 Class.create("AddressBar", Field, {
-  __implements : ["Control", "Focusable"],
+  __implements : ["Focusable"],
   _defaultGotoIcon : 'media-playback-start.png',
   _reloadGotoIcon : 'reload.png',
   _modified : false,

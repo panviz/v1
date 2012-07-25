@@ -37,9 +37,8 @@ Class.create("Application", {
     $orm = this.orm          = new ORM();
     $act = this.actionFul    = new ActionFul();
     $gui = this.gui          = new Gui($set);
-    $ext = this.extensionFul = new ExtensionFul();
-    $display = this.display  = new Display();
-    $modal = $display.modal;
+    $modal = $gui.modal;
+    $mod = this.modular      = new Modular();
     // Application has many users and only one is current
     $users = this.userFul    = new UserFul();
     $i18n = this.i18n        = $set.i18n;

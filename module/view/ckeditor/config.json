@@ -1,0 +1,16 @@
+{
+  "name": "ckeditor",
+  "enabled": "false",
+  "openable": "true",
+  "order": "-1",
+  "text": "319",
+  "title": "320",
+  "mimes": "html,htm",
+  "formId": "edit_box",
+  "write": "true",
+  "label": "CKEditor",
+  "description": "Wysiwyg HTML Editor, requires separate library to be downloaded.",
+  "dependencies": [
+    "texteditor"
+  ]
+}

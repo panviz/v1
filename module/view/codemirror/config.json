@@ -1,0 +1,10 @@
+{
+  "name": "codemirror",
+  "openable": "true",
+  "text": "",
+  "title": "",
+  "mimes": "xml,html,htm,js,json,css,php,phtml,sparql,txt,py,c#,java,jsp,sql,cgi,pl,inc,xsl,",
+  "formId": "codemirror_box",
+  "label": "Source Viewer",
+  "description": "Syntax Highlighter for all major code source files",
+}

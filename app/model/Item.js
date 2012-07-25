@@ -1,7 +1,7 @@
 /**
  * Abstract container for data
  */
-Class.create("Item", {
+Class.create("Item", Reactive, {
   /**
    * Constructor
    * TODO retrieve metadata from options on creation

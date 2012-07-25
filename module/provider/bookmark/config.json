@@ -1,0 +1,7 @@
+{
+  "id": "provider.bookmark",
+  "name": "bookmark",
+  "label": "Bookmarks storage",
+  "description": "",
+  "templates": {}
+}

@@ -12,7 +12,7 @@ Class.create("ActionFul", {
     this._actions = new Hash();
     this.usersEnabled = bUsersEnabled;
     
-    this.bgManager = new BackgroundManager(this);   
+    this.bgManager = new Tasker(this);   
     this.subMenus = [];       
     this.defaultActions = new Hash();
     this.toolbars = new Hash();   

@@ -24,12 +24,11 @@ Class.create("User", Reactive, {
     this.id = data.id;
     this.p = $H(data.preferences);
     this.p.set("SECURE_TOKEN", data.SECURE_TOKEN)
-    this.repositories = new Hash();
-    this.crossRepositories = new Hash();
-    this._repoIcon = new Hash();
-    this._repoSearchEngines = new Hash();
     this.roles = data.roles || ['guest'];
-    if (data.repositories) this.setRepositoriesList(data.repositories);
+
+    this.providers = new Hash();
+    //this.crossRepositories = new Hash();
+    if (data.providers) this.setRepositoriesList(data.providers);
     if(data.active_repo){
       this.setActiveRepository(data.active_repo);
       this.loadActiveRepository()

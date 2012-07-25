@@ -1,0 +1,6 @@
+{
+  "name": "admin",
+  "label": "Admin area",
+  "description": "Access Application configuration data.",
+  "templates": {}
+}

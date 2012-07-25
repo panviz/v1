@@ -1,7 +1,8 @@
 /*
  * ControlFul - GUI Controls management
  * Mediator between application GUI and Controls implementation
- * Templates manager
+ * View Manager
+ * Template manager
  */
 Class.create("Gui", Reactive, {
   
@@ -9,11 +10,16 @@ Class.create("Gui", Reactive, {
 
   initialize : function($super, p, store){
     $super(store)
+    // TODO Use Template class for Server to respond to Client Gui?
+    if (isServer) return
+
     //Controls instances
     this._controls = $H();
     this.ui = p.ui;
-    // TODO Use Template class for Server to respond to Client Gui?
-    if (isServer) return
+    this._views = $H();
+    //TODO change to focused?
+    this._current = null;
+    this.modal = new Modal();
     this.get(this.initControls.bind(this), 'main')
   },
 
@@ -39,7 +45,6 @@ Class.create("Gui", Reactive, {
     this.viewport = Ext.create('Ext.Viewport', template);
   },
 
-
   _initControl : function(component){
     var jClass = Class.getByName(component.control);
     var options = Object.extend(component.options, this._defaults)
@@ -55,6 +60,55 @@ Class.create("Gui", Reactive, {
     var control = component.control = new jClass(options);
     this._controls.set(component.id, control);
     return component;
+  },
+
+  startView : function(){
+    $$(".view").each(function(element){
+      //TODO mime should be set into editors data while parsing
+      var mime = element.getAttribute("default_mime")
+      var editors = $ext.findEditorsForMime(mime);
+      if(editors.length && editors[0].openable){
+        var data = editors[0];
+        data.mime = mime;
+        this._createView(element, data);
+      }
+    }.bind(this));
+  },
+
+  setCurrentView : function(view){
+    this._current = view;
+  },
+
+  /**
+   * Returns the current view.
+   */
+  getView : function(){
+    return this._current;
+  },
+
+  /**
+   * Find an editor using the data and initialize it
+   * @param data Object
+   */
+  _createView : function(element, data){
+    if(data){
+      app.loadEditorResources(data.resourcesManager);
+      if(!data.formId){
+        app.displayMessage('ERROR', 'Error, you must define a formId attribute in your &lt;editor&gt; manifest (or set it as openable="false")');
+        return;
+      }
+      var editorClass = data.editorClass;
+      var view;
+      if(typeof(editorClass) == "string"){
+        view = eval('new '+editorClass+'(element, data)');
+      }else{
+        view = new editorClass(element, data);
+      }
+      this._views.set(element.id, view);
+      if (element.id == "main_view"){
+        this.setCurrentView(view);
+      }
+    }
   },
 
   // Deprecated

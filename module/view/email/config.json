@@ -1,0 +1,10 @@
+{
+  "name": "email",
+  "openable": "true",
+  "text": "editor.eml.name",
+  "title": "Email Viewer",
+  "mimes": "eml",
+  "formId": "emlviewer_box",
+  "label": "Email Viewer",
+  "description": "Email reader, supports eml format and eml mimetypes. Detects if a folder contains only email and display columns accordingly."
+}

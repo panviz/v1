@@ -1,7 +1,7 @@
 /**
  * The Search Engine abstraction.
  */
-Class.create("SearchEngine", Pane, {
+Class.create("Search.Engine", Pane, {
 
 	/**
 	 * @var HTMLElement

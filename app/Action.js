@@ -2,6 +2,7 @@
  * A "Command" object, encapsulating its callbacks, display attributes, etc.
  */
 Class.create("Action", {
+  __implements : ["Action"],
 
   __DEFAULT_ICON_PATH : "/image/action/ICON_SIZE",
   
@@ -97,7 +98,16 @@ Class.create("Action", {
     window.actionArguments = null;
     document.fire("app:afterApply-"+this.p.name);
   },
+
+  // Override in ConcreteCommand
+  execute : function(){},
+
+  /*
+   * @returns Boolean whether Action has undo method
+   */
+  canUndo : function(){},
     
+  isEnabled : function(){},
   /**
    * Updates the action status on context change
    */

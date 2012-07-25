@@ -1,7 +1,7 @@
 /**
  * Show/Edit Item in embedded window
  */
-Class.create("View", {
+Class.create("View", Module, {
   __implements : ["Focusable"],
 
     __allObservers : $A(),

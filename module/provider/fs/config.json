@@ -1,40 +1,37 @@
 {
 	"name": "fs",
-	"label": "CONF_MESSAGE[File System (Standard)]",
-	"description": "CONF_MESSAGE[The most standard access to a filesystem located on the server.]",
+	"label": "File System (Standard)",
+	"description": "The most standard access to a filesystem located on the server.",
 	"mixins": "filesystem_commons,slug_provider,template_provider",
-	"client_settings": {
-		"icon": "/icon.png"
-	},
-	"server_settings": {
+	"serverConfig": {
 		"param": [
 			{
 				"name": "PATH",
 				"type": "string",
-				"label": "CONF_MESSAGE[Path]",
-				"description": "CONF_MESSAGE[Real path to the root folder on the server]",
+				"label": "Path",
+				"description": "Real path to the root folder on the server",
 				"mandatory": "true"
 			},
 			{
 				"name": "CREATE",
 				"type": "boolean",
-				"label": "CONF_MESSAGE[Create]",
-				"description": "CONF_MESSAGE[Create folder if it does not exists]",
+				"label": "Create",
+				"description": "Create folder if it does not exists",
 				"default": "true",
 				"mandatory": "true"
 			},
 			{
 				"name": "CHMOD_VALUE",
 				"type": "string",
-				"label": "CONF_MESSAGE[File Creation Mask]",
-				"description": "CONF_MESSAGE[Optionnaly apply a chmod operation. Value must be numeric, like 0777, 0644, etc.]",
+				"label": "File Creation Mask",
+				"description": "Optionnaly apply a chmod operation. Value must be numeric, like 0777, 0644, etc.",
 				"default": "0666"
 			},
 			{
 				"name": "PURGE_AFTER",
 				"type": "integer",
-				"label": "CONF_MESSAGE[Purge Days]",
-				"description": "CONF_MESSAGE[Option to purge documents after a given number of days. This require a manual set up of a CRON task. Leave to 0 if you don't wan't to use this feature.]",
+				"label": "Purge Days",
+				"description": "Option to purge documents after a given number of days. This require a manual set up of a CRON task. Leave to 0 if you don't wan't to use this feature.",
 				"default": "0"
 			}
 		],
@@ -42,50 +39,46 @@
 			{
 				"name": "PROBE_REAL_SIZE",
 				"type": "boolean",
-				"label": "CONF_MESSAGE[Real Size Probing]",
-				"description": "CONF_MESSAGE[Use system command line to get the filesize instead of php built-in function (fixes the 2Go limitation)]",
+				"label": "Real Size Probing",
+				"description": "Use system command line to get the filesize instead of php built-in function (fixes the 2Go limitation)",
 				"default": "false"
 			},
 			{
 				"name": "USE_XSENDFILE",
 				"type": "boolean",
-				"label": "CONF_MESSAGE[X-SendFile Active]",
-				"description": "CONF_MESSAGE[Delegates all download operations to the webserver using the X-SendFile header. Warning, this is an external module to install for Apache. Module is active by default in Lighttpd. Warning, you have to manually add the folders where files will be downloaded in the module configuration (XSendFilePath directive)]",
+				"label": "X-SendFile Active",
+				"description": "Delegates all download operations to the webserver using the X-SendFile header. Warning, this is an external module to install for Apache. Module is active by default in Lighttpd. Warning, you have to manually add the folders where files will be downloaded in the module configuration (XSendFilePath directive)",
 				"default": "false"
 			}
 		]
 	},
-	"class_definition": {
-		"filename": "module/access.fs/class.fsAccessDriver.php",
-		"classname": "fsAccessDriver"
-	},
-	"client_configs": {
-		"component_config": {
-			"FilesList" : {
+	"clientConfig": {
+		"componentConfig": {
+			"Grid" : {
 				"columns": {
 					"switchGridMode": "filelist",
 					"column": [
 						{
-							"messageId": "1",
+							"id": "1",
 							"attributeName": "label",
 							"sortType": "StringDirFile",
 							"defaultWidth": "48%"
 						},
 						{
-							"messageId": "2",
+							"id": "2",
 							"attributeName": "filesize",
 							"sortType": "CellSorterValue",
-							"modifier": "FilesList.prototype.partSizeCellRenderer",
+							"modifier": "ViewGrid.prototype.partSizeCellRenderer",
 							"defaultWidth": "9%"
 						},
 						{
-							"messageId": "3",
+							"id": "3",
 							"attributeName": "mimestring",
 							"sortType": "String",
 							"defaultWidth": "10%"
 						},
 						{
-							"messageId": "4",
+							"id": "4",
 							"attributeName": "modiftime",
 							"sortType": "MyDate",
 							"defaultWidth": "14%"
@@ -93,13 +86,7 @@
 					]
 				}
 			},
-			"FoldersTree" : {
-				"property": {
-					"name": "display",
-					"value": "dz"
-				}
-			},
-			"InfoPanel" : [{
+			"Preview" : [{
 				"mime" : "no_selection",
 				"attributes" : "",
 				"messages" : {
@@ -114,9 +101,8 @@
 							"id" : "259"
 						}
 					]
-				},
-				"html" : "<div><table class=\"infoPanelTable\" cellspacing=\"0\" border=\"0\" cellpadding=\"0\"><tr><td class=\"infoPanelLabel\">#{folders_string}</td><td class=\"infoPanelValue\">#{filelist_folders_count}</td></tr><tr class=\"even\"><td class=\"infoPanelLabel\">#{files_string}</td><td class=\"infoPanelValue\">#{filelist_files_count}</td></tr><tr><td class=\"infoPanelLabel\">#{totalsize_string}</td><td class=\"infoPanelValue\">#{filelist_totalsize}</td></tr></table></div>"
-					}, {
+				}
+        }, {
 					"mime" : "generic_file",
 					"attributes" : "basename,preview_rich,filesize,mimestring,formated_date",
 					"messages" : {
@@ -138,7 +124,6 @@
 							}
 						]
 					},
-					"html" : "<div><div class=\"infoPanelImagePreview\">#{preview_rich}</div><div class=\"panelHeader infoPanelGroup\">#{header_string}</div><table class=\"infoPanelTable\" cellspacing=\"0\" border=\"0\" cellpadding=\"0\"><tr><td class=\"infoPanelLabel\">#{name_string}</td><td class=\"infoPanelValue\">#{basename}</td></tr><tr class=\"even\"><td class=\"infoPanelLabel\">#{size_string}</td><td class=\"infoPanelValue\">#{filesize}</td></tr><tr><td class=\"infoPanelLabel\">#{modif_string}</td><td class=\"infoPanelValue\">#{formated_date}</td></tr><tr class=\"even\"><td class=\"infoPanelLabel\">#{type_string}</td><td class=\"infoPanelValue\">#{mimestring}</td></tr></table></div>"
 				}, {
 				"mime" : "generic_dir",
 				"attributes" : "basename,icon,formated_date",
@@ -155,19 +140,7 @@
 						}
 					]
 				},
-				"html" : "<div><div class=\"folderImage infoPanelImagePreview\"><img src=\"AJXP_THEME_FOLDER/image/mime/64/#{icon}\" height=\"64\" width=\"64\"></div><div class=\"panelHeader infoPanelGroup\">#{header_string}</div><table class=\"infoPanelTable\" cellspacing=\"0\" border=\"0\" cellpadding=\"0\"><tr><td class=\"infoPanelLabel\">#{name_string}</td><td class=\"infoPanelValue\">#{basename}</td></tr><tr class=\"even\"><td class=\"infoPanelLabel\">#{modif_string}</td><td class=\"infoPanelValue\">#{formated_date}</td></tr></table></div>"
 			}]
 		}
 	},
-	"hooks": {
-		"serverCallback": {
-			"hookName": "node.info",
-			"methodName": "loadNodeInfo"
-		}
-	},
-	"class_stream_wrapper": {
-		"filename": "plugins/access.fs/class.fsAccessWrapper.php",
-		"classname": "fsAccessWrapper",
-		"protocol": "fs"
-	}
 }

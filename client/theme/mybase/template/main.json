@@ -19,7 +19,7 @@
       },
       "components": [
         {
-          "control": "RepositorySelect"
+          "control": "ProviderSelect"
         },{
           "control": "AddressBar"
         },{
@@ -33,19 +33,19 @@
     },
     {
       "id": "GridView",
-      "control": "GridView",
+      "control": "ViewGrid",
       "options": {
         "region": "west"
       }
     },
     {
-      "control": "DetailsView",
+      "control": "ViewPreview",
       "options": {
         "region": "center"
       }
     },
     {
-      "control": "GraphView",
+      "control": "ViewGraph",
       "options": {
         "region": "east"
       }

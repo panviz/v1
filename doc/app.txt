@@ -25,6 +25,7 @@
     /type/name/i18n  Localization files
     /type/name/image  images
     /type/name/config.json  configuration
+    driver.php and other php files are put for inspiration purpose only
 
 
 /config  Configuration
