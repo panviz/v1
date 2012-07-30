@@ -1,0 +1,20 @@
+Install following dependencies manually
+  Extjs
+    Put ext.js into /app/lib/
+    And copy /resources into /client
+  Sockjs-client
+    Download dependency file and put it in /app/lib under sockjs.js name
+  prototypeJS
+    https://github.com/Dmitra/PrototypeJS-for-NodeJS.git
+  Functional
+    https://github.com/Dmitra/Functional.git
+  Md5
+  Scriptaculous
+  Prototype plugins
+
+Configuration
+  Set host, port, local DB settings
+  Edit files in /config folder
+
+Run
+  server/boot.js

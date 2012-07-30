@@ -1,4 +1,4 @@
-lib/ext/ext-all.js
+lib/ext.js
 lib/Functional/recursion.js
 lib/prototype/client.core.js
 lib/prototypeJS/lang/object.js
@@ -29,7 +29,7 @@ lib/scriptaculous/src/effects.js
 lib/scriptaculous/src/dragdrop.js
 lib/scriptaculous/src/controls.js
 lib/scriptaculous/src/slider.js
-lib/sockjs-0.3.min.js
+lib/sockjs.js
 Util.js
 Parcel.js
 Proxy.js

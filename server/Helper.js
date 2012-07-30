@@ -35,18 +35,19 @@ function insert_file(path, code){
     })
     return list.join('\n');
   } else {
-    return code.replace('%path%', path)
+    return code.replace('%path%', path);
   }
 }
 
 //TODO use global root variable for path
 function getList(path){
   var filepath = ROOT_PATH + path;
-  try {
-    fs.statSync(filepath)
+  if (!Path.existsSync(filepath)){
+    filepath = ROOT_PATH + '/app' + path;
+  };
+  if (Path.existsSync(filepath)){
+    return fs.readFileSync(filepath, "binary").split('\n');
+  } else{
+    return [];
   }
-  catch (e) {
-      var filepath = ROOT_PATH + '/app' + path;
-    }
-  return fs.readFileSync(filepath, "binary").split('\n');
 }
