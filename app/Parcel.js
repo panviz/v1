@@ -137,16 +137,16 @@ Class.create("Parcel", {
   _restrict : function(addressee){
     var user = this[addressee];
     if (user.name){
-      //No restrictions for admin and owner
+      // No restrictions for admin
       if (user.roles.include('admin') || this.content.owner == user.id) return;
       //TODO Process other roles
     }
+    // No restrictions for owner
     if (addressee == 'recipient' && this.content.owner == this.recipient) return;
     
     // restrict to Public for anonymous user
     var result = {};
-    //TODO create $app.getManager()
-    var manager = $app[this.model];
+    var manager = $app.getManager(this.model);
     if (manager.public == "all") return
     var self = this;
     manager.public.map(function(key){

@@ -386,55 +386,5 @@ Class.create("Model", {
      */
     getItem : function(i) {
         return this._selectedItems[i];
-    },
-  
-    /**
-     * TODO use item or move to fs/Files.js
-     * Will add the current selection items as serializable data to the element passed : 
-     * either as hidden input elements if it's a form, or as query parameters if it's an url
-     * @param oFormElement HTMLForm The form
-     * @param sUrl String An url to complete
-     * @returns String
-     */
-  updateFormOrUrl : function (oFormElement, sUrl){
-    // CLEAR FROM PREVIOUS ACTIONS!
-    if(oFormElement)  
-    {
-      $(oFormElement).getElementsBySelector("input").each(function(element){
-        if(element.name.indexOf("file_") != -1 || element.name=="file") element.value = "";
-      });
     }
-    // UPDATE THE 'DIR' FIELDS
-    if(oFormElement && oFormElement.rep) oFormElement.rep.value = this._currentRep;
-    sUrl += '&dir='+encodeURIComponent(this._currentRep);
-    
-    // UPDATE THE 'file' FIELDS
-    if(this.isEmpty()) return sUrl;
-    var fileNames = this.getItemNames();
-    if(this.isUnique())
-    {
-      sUrl += '&'+'file='+encodeURIComponent(fileNames[0]);
-      if(oFormElement) this._addHiddenField(oFormElement, 'file', fileNames[0]);
-    }
-    else
-    {
-      for(var i=0;i<fileNames.length;i++)
-      {
-        sUrl += '&'+'file_'+i+'='+encodeURIComponent(fileNames[i]);
-        if(oFormElement) this._addHiddenField(oFormElement, 'file_'+i, fileNames[i]);
-      }
-    }
-    return sUrl;
-  },
-  
-  _addHiddenField : function(oFormElement, sFieldName, sFieldValue){
-    if(oFormElement[sFieldName]) oFormElement[sFieldName].value = sFieldValue;
-    else{
-      var field = document.createElement('input');
-      field.type = 'hidden';
-      field.name = sFieldName;
-      field.value = sFieldValue;
-      oFormElement.appendChild(field);
-    }
-  }
 });

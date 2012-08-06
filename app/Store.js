@@ -10,17 +10,11 @@ Class.create("Store", {
   _uniqColumns : ["name", "SECURE_TOKEN"],
 
   /*
-   * TODO create FsStore < Store for Gui (Template)
    * @param name Model class name
-   * @param source directory Path for File storage
    */
-  initialize : function(name, source){
+  initialize : function(name){
     this._model = name;
-    if (source){
-      this._local = $H($util.requireAll(source)).values();
-    } else {
-      this._local = $A(require(ROOT_PATH + '/data/' + name + '.json'));
-    }
+    this._local = [];
   },
 
   /*
@@ -72,7 +66,6 @@ Class.create("Store", {
       }
       // Update
       if (previous){
-        //TODO delete property from object in store if it is empty in diff
         s[i] = Object.extend(s[i], diff)
         var current = $H(s[i]);
         var diff = previous.diff(current);

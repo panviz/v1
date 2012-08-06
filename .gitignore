@@ -1,9 +1,7 @@
 /node_modules/
-/app/lib/
+lib/
 /data/
 /client/resources/
-/module/view/ckeditor/lib/
-/module/view/codemirror/lib/
 /client/theme/mybase/image
 /client/theme/manager/image
 .dropbox

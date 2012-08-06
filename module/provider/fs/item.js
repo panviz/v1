@@ -1,4 +1,6 @@
-Class.create("Files", Collection, {
+/**
+ */
+Class.create("File", Item, {
 	_isFile: false,
 	_isDir: false,
 	_isRecycle: false,
@@ -31,7 +33,7 @@ Class.create("Files", Collection, {
 	 * Should be hasLeaf
 	 * @returns Boolean
 	 */
-	hasFile : function (){
+	isFile : function (){
 		return this._isFile;
 	},
 	
@@ -39,25 +41,23 @@ Class.create("Files", Collection, {
 	 * Whether the selection has a dir selected
 	 * @returns Boolean
 	 */
-	hasDir : function (){
+	isDir : function (){
 		return this._isDir;
 	},
 			
-	/**
-	 * Whether the current context is the recycle bin
-	 * @returns Boolean
-	 */
-	isRecycle : function (){
-		return this._isRecycle;
-	},
-	
+  /**
+   * @returns Boolean
+   */
+  isRecycle : function(){
+    return (this.getMime() == 'recycle');
+  },
+
 	/**
 	 * Whether the context item has a child with this basename
 	 * @param newFileName String The name to check
 	 * @returns Boolean
 	 */
-	fileNameExists: function(newFileName) 
-	{	
+	fileNameExists: function(newFileName){	
 		var allItems = this._contextItem.getChildren();
 		if(!allItems.length)
 		{		
@@ -71,6 +71,32 @@ Class.create("Files", Collection, {
 				return true;
 		}
 		return false;
-	}	
+	},	
+
+  /**
+   * Sets the metadata as a bunch
+   * @param data $H() A prototype Hash
+   */
+  setMetadata : function(data){
+    this._metadata = data;
+  },
+  
+  /**
+   * Gets the metadat
+   * @returns $H()
+   */
+  getMetadata : function(data){
+    return this._metadata;
+  },
+
+  /**
+   * Gets the current's item mime type, either by mime or by extension.
+   * @returns String
+   */
+  getMime : function(){
+    if(this._metadata && this._metadata.get("mime")) return this._metadata.get("mime").toLowerCase();
+    if(this._metadata && this.isLeaf()) return getMimeType(this._metadata).toLowerCase();
+    return "";
+  }
 )}
 

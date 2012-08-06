@@ -32,7 +32,7 @@
 		},
 		"processing" : {
 			"clientCallback" : {
-				"prepareModal" : "true",
+				"prepareModal" : "true"
 			},
 			"serverCallback" : {
 				"methodName" : "switchAction"

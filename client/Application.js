@@ -35,10 +35,10 @@ Class.create("Application", {
     //this.historyCount = 0;
     this.currentLanguage = $set.currentLanguage;
     $orm = this.orm          = new ORM();
+    $mod = this.modular      = new Modular();
     $act = this.actionFul    = new ActionFul();
     $gui = this.gui          = new Gui($set);
     $modal = $gui.modal;
-    $mod = this.modular      = new Modular();
     // Application has many users and only one is current
     $users = this.userFul    = new UserFul();
     $i18n = this.i18n        = $set.i18n;

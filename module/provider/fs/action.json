@@ -55,7 +55,6 @@
 			"infoPanel" : "false",
 			"actionBarGroup" : "put",
 			"inZip" : "false"
-		}
 		},
 		"rightsContext" : {
 			"noUser" : "true",
@@ -87,7 +86,6 @@
 			"contextMenu" : "true",
 			"infoPanel" : "false",
 			"actionBarGroup" : "change"
-		}
 		},
 		"rightsContext" : {
 			"noUser" : "true",
@@ -421,7 +419,6 @@
 			"infoPanel" : "false",
 			"actionBarGroup" : "change",
 			"inZip" : "false"
-		}
 		},
 		"rightsContext" : {
 			"noUser" : "true",
@@ -458,7 +455,6 @@
 			"infoPanel" : "false",
 			"actionBarGroup" : "change",
 			"inZip" : "false"
-		}
 		},
 		"rightsContext" : {
 			"noUser" : "true",

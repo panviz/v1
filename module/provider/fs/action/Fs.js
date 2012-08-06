@@ -1,4 +1,4 @@
-Class.create("Ls", Action, {
+Class.create("ActionLs", Action, {
 	execute : function(){
 		var path;					
 		if(window.actionArguments && window.actionArguments.length>0){
@@ -18,7 +18,7 @@ Class.create("Ls", Action, {
 	}
 }
 
-Class.create("Upload", Action, {
+Class.create("ActionUpload", Action, {
 	execute : function(){
 		var uploaders = app.getActiveExtensionByType("uploader");
 		if(uploaders.length){
@@ -44,7 +44,7 @@ Class.create("Upload", Action, {
 	}
 }
 
-Class.create("EmptyRecycle", Action, {
+Class.create("ActionEmptyRecycle", Action, {
 	execute : function(){
 		app.getContextHolder().selectAll();				    
 		window.setTimeout(function(){
@@ -53,7 +53,7 @@ Class.create("EmptyRecycle", Action, {
 	}
 }
 
-Class.create("Download", Action, {
+Class.create("ActionDownload", Action, {
 	execute : function(){
 		var userSelection = app.getUserSelection();
 		if((userSelection.isUnique() && !userSelection.hasDir()) || (zipEnabled && multipleFilesDownloadEnabled))
@@ -119,7 +119,7 @@ Class.create("Download", Action, {
 	}
 }
 
-Class.create("Compress", Action, {
+Class.create("ActionCompress", Action, {
 	execute : function(){
 		var userSelection = app.getUserSelection();					
 		if((zipEnabled && multipleFilesDownloadEnabled))
@@ -162,7 +162,7 @@ Class.create("Compress", Action, {
 	}
 }
 
-Class.create("DownloadChunk", Action, {
+Class.create("ActionDownloadChunk", Action, {
 	execute : function(){
 		var userSelection = app.getUserSelection();
 
@@ -205,7 +205,7 @@ Class.create("DownloadChunk", Action, {
 	}
 }
 
-Class.create("OpenWith", Action, {
+Class.create("ActionOpenWith", Action, {
 	execute : function(){
 		var editorData = window.actionArguments[0];
 		if(!editorData){
@@ -261,7 +261,7 @@ Class.create("OpenWith", Action, {
 	}
 }
 
-Class.create("Link", Action, {
+Class.create("ActionLink", Action, {
 	execute : function(){
 		var loadFunc = function (oForm){
 			var link;
@@ -293,7 +293,7 @@ Class.create("Link", Action, {
 	}
 }
 
-Class.create("Restore", Action, {
+Class.create("ActionRestore", Action, {
 	execute : function(){
 		var userSelection = app.getUserSelection();
 		var fileNames = $A(userSelection.getFileNames());
@@ -310,7 +310,7 @@ Class.create("Restore", Action, {
 	}
 }
 
-Class.create("Mkdir", Action, {
+Class.create("ActionMkdir", Action, {
 	execute : function(){
 		$modal.showDialogForm('Create', 'mkdir_form', null, function(){
 				var oForm = $($modal.getForm());
@@ -327,7 +327,7 @@ Class.create("Mkdir", Action, {
 	}
 }
 
-Class.create("Mkfile", Action, {
+Class.create("ActionMkfile", Action, {
 	execute : function(){
 		$modal.showDialogForm('Create', 'mkfile_form', null, function(){
 				var oForm = $($modal.getForm());
@@ -344,7 +344,7 @@ Class.create("Mkfile", Action, {
 	}
 }
 
-Class.create("Rename", Action, {
+Class.create("ActionRename", Action, {
 	execute : function(){
 					var callback = function(node, newValue){
 						var filename = node.getPath();
@@ -361,7 +361,7 @@ Class.create("Rename", Action, {
 	}
 }
 
-Class.create("Copy", Action, {
+Class.create("ActionCopy", Action, {
 	execute : function(){
 					if(app.user){
 						var user = app.user;
@@ -446,7 +446,7 @@ Class.create("Copy", Action, {
 	}
 }
 
-Class.create("Move", Action, {
+Class.create("ActionMove", Action, {
 	execute : function(){
 		var context = app.actionBar;
 		if(app.user){
@@ -519,7 +519,7 @@ Class.create("Move", Action, {
 	}
 }
 
-Class.create("Delete", Action, {
+Class.create("ActionDelete", Action, {
 	execute : function(){
 		var onLoad = function(oForm){
 				var message = I18N[177];
@@ -538,7 +538,7 @@ Class.create("Delete", Action, {
 		});
 	}
 
-Class.create("Chmod", Action, {
+Class.create("ActionChmod", Action, {
 	execute : function(){
 		var userSelection =  app.getUserSelection();
 		var loadFunc = function(oForm){

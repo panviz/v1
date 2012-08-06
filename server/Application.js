@@ -1,15 +1,7 @@
 // Load dependencies
 const express       = require('express')
   , errors        = require('../config/server/errors')
-  require(ROOT_PATH + '/app/Error');
   require(ROOT_PATH + '/app/Util');
-  require(ROOT_PATH + '/app/Parcel');
-  require(ROOT_PATH + '/app/Proxy');
-  require(ROOT_PATH + '/app/ORM');
-  require(ROOT_PATH + '/app/Reactive');
-  require(ROOT_PATH + '/app/UserFul');
-  require(ROOT_PATH + '/app/Store');
-  require(ROOT_PATH + '/app/Gui');
 
 /*
  * Application class
@@ -19,15 +11,21 @@ Class.create("Application", {
 
   initialize : function(){
     $util = new Util();
+    var list = $util.loadList('/config/server/list.txt');
+    list.forEach(function(name){
+      require(ROOT_PATH + name);
+    })
     this.p = require(ROOT_PATH + '/config/settings.json');
     this.p.available_languages = $H($util.requireAll(ROOT_PATH + '/config/i18n')).keys();
 
     var s = this.server = express.createServer()
     $orm = this.orm = new ORM();
-
     // As there is no current user
     $user = this.user = new UserFul();
-
+    // Read only configured modules to Store
+    var moduleStore = new StoreModule(this.p.module);
+    $mod = this.modular = new Modular(moduleStore);
+    
     // Load Expressjs config
     this.configure();
   },
@@ -35,22 +33,24 @@ Class.create("Application", {
   // Configure expressjs server
   configure : function(){
     var s = this.server;
-    s.set('views', ROOT_PATH + '/client/html')
-    s.helpers(require(ROOT_PATH + '/server/Helper'))
-    s.set('view engine', 'ejs')
-    s.use(express.logger('\033[90m:method\033[0m \033[36m:url\033[0m \033[90m:response-time ms\033[0m'))
-    s.use(express.cookieParser())
-    s.use(express.bodyParser())
-    s.use(express.methodOverride())
-    s.use(express.errorHandler({dumpException: true, showStack: true}))
-    s.use(express.session({ secret: 'keyboard cat' }))
+    s.set('views', ROOT_PATH + '/client/html');
+    s.helpers($util);
+    s.set('view engine', 'ejs');
+    s.use(express.logger('\033[90m:method\033[0m \033[36m:url\033[0m \033[90m:response-time ms\033[0m'));
+    s.use(express.cookieParser());
+    s.use(express.bodyParser());
+    s.use(express.methodOverride());
+    s.use(express.errorHandler({dumpException: true, showStack: true}));
+    s.use(express.session({ secret: 'keyboard cat' }));
     //// Initialize Passport!
-    //s.use(passport.initialize())
+    //s.use(passport.initialize());
     //// Also use passport.session() middleware, to support persistent login sessions (recommended).
-    //s.use(passport.session())
-    s.use('/app', express.static(ROOT_PATH + '/app'))
-    s.use('/client', express.static(ROOT_PATH + '/client'))
-    s.use('/module', express.static(ROOT_PATH + '/module'))
+    //s.use(passport.session());
+    //TODO debug only
+    s.use('/app', express.static(ROOT_PATH + '/app'));
+    s.use('/client', express.static(ROOT_PATH + '/client'));
+    //TODO restrict to images, css
+    s.use('/module', express.static(ROOT_PATH + '/module'));
   },
 
   //TODO
@@ -70,9 +70,9 @@ Class.create("Application", {
 
     var s = this.server;
     routes.forEach(function(r){
-      var path = r[0]
-      var method = r[1]
-      var action = r[2]
+      var path = r[0];
+      var method = r[1];
+      var action = r[2];
       s[method](path, eval(action));
     })
     
@@ -90,8 +90,8 @@ Class.create("Application", {
 
     this.p.i18n = require(ROOT_PATH + '/config/i18n/' + this.p.locale + '.json');
     var templatePath = ROOT_PATH + this.p.ui.theme.path + '/template';
-    var templateStore = new Store("Template", templatePath);
-    $gui = this.gui = new Gui(this.p, templateStore);
+    var templateStore = new StoreJSON("Template", templatePath);
+    this.templateFul = new TemplateFul(templateStore);
   },
 
   setEnv : function(env){
@@ -115,5 +115,16 @@ Class.create("Application", {
       , this.env.host
       , s.address().port
     )
+  },
+
+  /*
+   * get from app or Modular
+   * TODO make more generic
+   */
+  getManager : function(name){
+    if(name == "user") return this.user;
+    if(name == "gui") return this.templateFul;
+    if(name == "modular") return this.modular;
+    return this.modular.getSync(name);
   }
 });

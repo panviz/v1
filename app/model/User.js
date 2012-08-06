@@ -6,16 +6,13 @@ Class.create("User", Reactive, {
   /**
    */
   initialize : function($super, name, password){
-    $super();
-
     if (password){
+      this.store = $orm.getStorage(this.__className);
       var p = {password: password};
       this.put(this.update.bind(this), name, null, p)
     }
     else if (name){
-      this.name = name;
-      this.roles = ['guest'];
-      this.get(this.update.bind(this), name)
+      $super(name);
     }
   },
 

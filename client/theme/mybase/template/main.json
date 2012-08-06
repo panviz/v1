@@ -33,19 +33,19 @@
     },
     {
       "id": "GridView",
-      "control": "ViewGrid",
+      "module": "view.grid",
       "options": {
         "region": "west"
       }
     },
     {
-      "control": "ViewPreview",
+      "module": "view.preview",
       "options": {
         "region": "center"
       }
     },
     {
-      "control": "ViewGraph",
+      "module": "view.graph",
       "options": {
         "region": "east"
       }

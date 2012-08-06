@@ -1,39 +1,27 @@
 /** 
- * Provider of Collection and Items of certain Graph type (Tree for now)
- * TODO Update to server Graph, not only Tree
+ * Reactive manager of Items
  * loading, accessType, owner, label, icon
  */
-Class.create("Provider", Module, {
+Class.create("Provider", Reactive, {
 
-  /**
-   * @var String
-   */
+  // @var String
   _id: undefined,
-  /**
-   * @var String
-   */
+
+  // @var String
   _label: 'Public Repository',
-  /**
-   * @var String
-   */
+
+  // @var String
   _icon: '',
-  /**
-   * @var String
-   */
+
+  // @var String
   _accessType: '',
-  /**
-   * @var ResourcesManager
-   */
-  resourcesManager: undefined,
-  /**
-   * TODO where used?
-   * @var Boolean
-   */
+
+  // @var Boolean
   userEditable: false,
-  /**
-   * @var String
-   */
+
+  // @var String
   _name: '',
+
   /**
    * User which created or been assinged to this repo
    * @var String
@@ -41,7 +29,6 @@ Class.create("Provider", Module, {
   _owner: '',
 
   /**
-   * Constructor
    * @param id String
    * @param p params JSON
    */
@@ -54,38 +41,10 @@ Class.create("Provider", Module, {
     this._id = id;
     this._icon = THEME.path +'/image/action/16/network-wired.png';
 
-    //TODO create specific ResourcesManager
-    this.resourcesManager = new ResourcesManager();
-    this.resourcesManager.load();
-
     //Load repository params for current user and item if available
     load('/', {}, p.callback);
   },
 
-  /**
-   * Load an item
-   * @param path
-   * @p params Range, limit, tree depth, etc
-   * @param itemCallback Function On item loaded
-   */
-  load : function(path, p, itemCallback){
-    if(this.isLoading) return;    
-    if(this._isLoaded){
-      //TODO where should loaded data be saved
-      callback();
-      return
-    }
-    var connection = new Connection('/data/' + this._id + path);
-    //add Provider params to request
-    if(this.p || p){
-      var params = $H(Object.extend(p, this.p));
-      params.each(function(pair){
-        connection.addParameter(pair.key, pair.value);
-      });
-    }
-    connection.onComplete = this._onLoad.bind(this, itemCallback);
-    connection.sendAsync();
-  },
   /**
    * @param transport Ajax.Response
    * @param itemCallback Function
@@ -191,14 +150,42 @@ Class.create("Provider", Module, {
    * @returns Boolean
    */
   pathExists : function(path){
-    //var connection = new Connection();
-    //connection.addParameter("get_action", "stat");
-    //connection.addParameter("file", dirName);
-    //this.tmpResTest = false;
-    //connection.onComplete = function(transport){
-      //if(transport.responseJSON && transport.responseJSON.mode) this.tmpResTest = true;
-    //}.bind(this);
-    //connection.sendSync();    
-    //return this.tmpResTest;
   },
+
+  /**
+   * TODO Rename
+   * Finds this item by path if it already exists in arborescence
+   * @param rootItem Item
+   * @param fakeItems Item[]
+   */
+  findInArbo : function(rootItem, fakeItems){
+    if(!this.getPath()) return;
+    var pathParts = this.getPath().split("/");
+    var parentItems = $A();
+    var currentPath = "";
+    var crtItem, crtParentItem = rootItem;
+    for(var i=0;i<pathParts.length;i++){
+      if(pathParts[i] == "") continue;
+      currentPath = currentPath + "/" + pathParts[i];
+      if(item = crtParentItem.findChildByPath(currentPath)){
+        crtItem = item;
+      }else{
+        crtItem = new Item(currentPath, {"isLeaf" : false, 'label' : getBaseName(currentPath), "fake" : true});
+        fakeItems.push(crtItem);
+        crtParentItem.addChild(crtItem);
+      }
+      crtParentItem = crtItem;
+    }
+    return crtItem;
+  },
+  /**
+   * Finds a child item by its path
+   * @param path String
+   * @returns Item
+   */
+  findChildByPath : function(path){
+    return $A(this._children).find(function(child){
+      return (child.getPath() == path);
+    });
+  }
 });

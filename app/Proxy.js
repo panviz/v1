@@ -93,8 +93,7 @@ Class.create("Proxy", {
     var data = new Parcel(conn, message);
     // @param obj logged user or connection
     if (data.action){
-      //TODO create $app.getManager()
-      var manager = $app[data.model];
+      var manager = $app.getManager(data.model);
 
       if (manager){
         if (data.action == "get"){

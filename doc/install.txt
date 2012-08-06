@@ -4,13 +4,14 @@ Install following dependencies manually
     And copy /resources into /client
   Sockjs-client
     Download dependency file and put it in /app/lib under sockjs.js name
-  prototypeJS
+Put into /app/lib:
+  /prototypeJS
     https://github.com/Dmitra/PrototypeJS-for-NodeJS.git
-  Functional
+  /Functional
     https://github.com/Dmitra/Functional.git
-  Md5
-  Scriptaculous
-  Prototype plugins
+  /Md5
+  /scriptaculous
+  /prototype plugins
 
 Configuration
   Set host, port, local DB settings

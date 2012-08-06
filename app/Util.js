@@ -3,19 +3,24 @@
  */
 Class.create("Util", {
 
-  initialize : function(p){ 
+  initialize : function(){
+    if (isServer){
+      this.fs = require('fs'),
+      this.Path = require('path');
+    }
   },
-  /*
+
+  /* @server
    * Require Json file or all files in dir
    * @returns Json key - filename, value - Json Object
    */
   requireAll : function(path){
     var result = {};
     if (isServer){
-      var names = fs.readdirSync(path);
+      var names = this.fs.readdirSync(path);
       names.forEach(function(name){
         var item = path+'/'+name;
-        if (fs.statSync(item).isFile()){
+        if (this.fs.statSync(item).isFile()){
           var ns = name.split('.');
           var key = ns[0];
           var extension = ns.without(key)[ns.length-1];
@@ -27,6 +32,61 @@ Class.create("Util", {
       })
       return result;
     }
+  },
+
+  include_tag: function(file){
+    return this.insertFile(file, '<script language="javascript" type="text/javascript" src="%path%"></script>');
+  },
+
+  link_tag: function(file){
+    return this.insertFile(file, '<link rel="stylesheet" type="text/css" href="%path%">');
+  },
+  //translations
+  //TODO add %s substitution
+  t: function(message){
+     if (settings.currentLanguage == 'en'){
+       return message;
+     } else {
+       settings.i18n[settings.currentLanguage][message];
+     }
+  },
+
+  // @server
+  insertFile : function(path, code){
+    if (path.indexOf('list') != -1){
+      var list = this.loadList(path);
+      for (var i = 0; i < list.length; i++){
+        list[i] = code.replace('%path%', list[i]);
+      }
+    }
+    return list.join('\n');
+  },
+
+  /* @server
+   * TODO use global root variable for path
+   */
+  loadList : function(path){
+    var filepath = ROOT_PATH + path;
+    var list = [];
+    var resultList = [];
+    if (!this.Path.existsSync(filepath)){
+      filepath = ROOT_PATH + '/app' + path;
+    };
+    if (this.Path.existsSync(filepath)){
+      list = this.fs.readFileSync(filepath, 'binary').split('\n');
+    }
+    list.forEach(function(name) {
+      if (!name) return;
+      //if list.txt is not in /config, it has paths relative to its path
+      name = name.replace('\r', '');
+      if (path.indexOf('config') == -1){
+        name = this.Path.dirname(path) + '/' + name;
+      } else{
+        name = '/app/' + name;
+      }
+      resultList.push(name+'.js');
+    })
+    return resultList;
   },
 
   /*

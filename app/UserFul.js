@@ -14,32 +14,8 @@ Class.create("UserFul", Reactive, {
   put : function($super, cb, name, content, options){
     if (isServer){
       var password = options.password
-      if (password){
-        var onFind = function(user){
-          debugger
-          if (user && user.password == password){
-            user.loggedIn = true;
-            user.lastLogin = (new Date).toJSON();
-
-            //TODO generate token
-            user.SECURE_TOKEN = "asdf";
-            
-            // Set user connection id to pass security check on sending reply
-            user.owner = options.recipient;
-
-            // Reply with full user data
-            var onSave = function(){
-              cb(user);
-            }
-            // Save logged user on right password
-            $super(onSave, name, user, options);
-          } else{
-            // wrong password
-            throw("Not Found");
-          }
-        }
-        // If password specified - Find user by login name to check password
-        this.get(onFind, name, options);
+      if (!content && password){
+        this.login(cb, name, options);
       } else{
         // Update user with content
         $super(cb, name, content, options)
@@ -48,6 +24,37 @@ Class.create("UserFul", Reactive, {
       // Update user with content on Client
       $super(cb, name, content, options)
     }
+  },
+
+  login : function(cb, name, options){
+    var self = this;
+    var onFind = function(user){
+      if (user && user.password == options.password){
+        user.loggedIn = true;
+        user.lastLogin = (new Date).toJSON();
+
+        //TODO generate token
+        user.SECURE_TOKEN = "asdf";
+        
+        // Set user connection id to pass security check on sending reply
+        user.owner = options.recipient;
+
+        // Reply with full user data
+        var onSave = function(){
+          cb(user);
+        }
+        // Save logged user on right password
+        self.put(onSave, name, user, options);
+      } else{
+        // wrong password
+        throw("Not Found");
+      }
+    }
+    // If password specified - Find user by login name to check password
+    this.get(onFind, name, options);
+  },
+
+  logout : function(){
   },
 
   setCurrentUser : function(){

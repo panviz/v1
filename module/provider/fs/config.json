@@ -1,9 +1,9 @@
 {
 	"name": "fs",
-	"label": "File System (Standard)",
-	"description": "The most standard access to a filesystem located on the server.",
-	"mixins": "filesystem_commons,slug_provider,template_provider",
-	"serverConfig": {
+	"label": "File System",
+	"description": "Provider of files from local filesystem.",
+	"server": {
+    "executable": true,
 		"param": [
 			{
 				"name": "PATH",
@@ -34,26 +34,11 @@
 				"description": "Option to purge documents after a given number of days. This require a manual set up of a CRON task. Leave to 0 if you don't wan't to use this feature.",
 				"default": "0"
 			}
-		],
-		"global_param": [
-			{
-				"name": "PROBE_REAL_SIZE",
-				"type": "boolean",
-				"label": "Real Size Probing",
-				"description": "Use system command line to get the filesize instead of php built-in function (fixes the 2Go limitation)",
-				"default": "false"
-			},
-			{
-				"name": "USE_XSENDFILE",
-				"type": "boolean",
-				"label": "X-SendFile Active",
-				"description": "Delegates all download operations to the webserver using the X-SendFile header. Warning, this is an external module to install for Apache. Module is active by default in Lighttpd. Warning, you have to manually add the folders where files will be downloaded in the module configuration (XSendFilePath directive)",
-				"default": "false"
-			}
 		]
 	},
-	"clientConfig": {
-		"componentConfig": {
+	"client": {
+    "executable": false,
+		"component": {
 			"Grid" : {
 				"columns": {
 					"switchGridMode": "filelist",
@@ -123,7 +108,7 @@
 								"id" : "341"
 							}
 						]
-					},
+					}
 				}, {
 				"mime" : "generic_dir",
 				"attributes" : "basename,icon,formated_date",
@@ -139,8 +124,8 @@
 							"id" : "342"
 						}
 					]
-				},
+				}
 			}]
 		}
-	},
+	}
 }

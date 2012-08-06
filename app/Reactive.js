@@ -2,10 +2,14 @@
  * Reactive Provider
  * Storage mapper
  * Implements instant record update with only two methods:
- * Get - retrieves data from Remote by uniq identifier "name"
- * Put - send new, null, or updated record to Remote
+ *   Get - retrieves data from Remote by uniq identifier "name"
+ *   Put - send new, null, or updated record to Remote
+ * Abstract class
  */
 Class.create("Reactive", {
+
+  //TODO add _instances var for loaded and initialized Items
+  //TODO add getSync
 
   initialize : function(store){
     this.store = store || $orm.getStorage(this.__className);

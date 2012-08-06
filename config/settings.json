@@ -1,24 +1,28 @@
 {
-  "debug" : true,
-  "socketPath" : "/reactive",
+  "debug": true,
+  "socketPath": "/reactive",
   "default_repository": "/",
-  "loggedUser" : false,
-  "locale" : "en",
-  "currentLanguage" : "en",
-  "session_timeout" : 7200,
-  "client_timeout_warning" : 0,
-  "availableLanguages" : {},
-  "version" : "0.0.1",
-  "versionDate" : "31.08.2012",
-  "i18n" : {},
-  "password_min_length" : "8",
-  "ui" : {
-    "welcomeMessage" : "",
-    "title" : "Graph",
-    "icon" : "/theme/logo.png",
-    "iconWidth" : "250px",
-    "iconHeight" : "50px",
-    "iconOnly" : true,
-    "titleFontSize" : ""
-  }
+  "loggedUser": false,
+  "locale": "en",
+  "currentLanguage": "en",
+  "session_timeout": 7200,
+  "client_timeout_warning": 0,
+  "availableLanguages": {},
+  "version": "0.0.1",
+  "versionDate": "31.08.2012",
+  "i18n": {},
+  "password_min_length": "8",
+  "ui": {
+    "welcomeMessage": "",
+    "title": "Graph",
+    "icon": "/theme/logo.png",
+    "iconWidth": "250px",
+    "iconHeight": "50px",
+    "iconOnly": true,
+    "titleFontSize": ""
+  },
+  "module": [
+    "provider.fs",
+    "view.grid"
+  ]
 }
