@@ -54,36 +54,32 @@ Class.create("Autocompleter", {
     var oXmlDoc = request.responseXML;
     var token = this.getToken();
     var dirs = new Array();
-  if( oXmlDoc == null || oXmlDoc.documentElement == null) 
-{debugger 
-    this.updateChoices('');
-    return;
-  }
+    if( oXmlDoc == null || oXmlDoc.documentElement == null){
+      this.updateChoices('');
+      return;
+    }
   
-  var root = oXmlDoc.documentElement;
-  // loop through all tree children
-  var cs = root.childNodes;
-  var l = cs.length;
-  for (var i = 0; i < l; i++) 
-{debugger 
-    if (cs[i].tagName == "tree") 
-{debugger 
-      var text = getBaseName(cs[i].getAttribute("filename"));
-      
-      var hasCharAfterSlash = (token.lastIndexOf("/")<token.length-1);
-      if(!hasCharAfterSlash){
-        dirs[dirs.length] = text;
-      }else{
-        var afterSlash = token.substring(token.lastIndexOf("/")+1, token.length);
-        //console.log(text+'vs'+afterSlash);
-        if(text.indexOf(afterSlash) ==0){
+    var root = oXmlDoc.documentElement;
+    // loop through all tree children
+    var cs = root.childNodes;
+    var l = cs.length;
+    for (var i = 0; i < l; i++){
+      if (cs[i].tagName == "tree"){
+        var text = getBaseName(cs[i].getAttribute("filename"));
+        
+        var hasCharAfterSlash = (token.lastIndexOf("/")<token.length-1);
+        if(!hasCharAfterSlash){
           dirs[dirs.length] = text;
+        }else{
+          var afterSlash = token.substring(token.lastIndexOf("/")+1, token.length);
+          //console.log(text+'vs'+afterSlash);
+          if(text.indexOf(afterSlash) ==0){
+            dirs[dirs.length] = text;
+          }
         }
       }
     }
-  }
-    if(!dirs.length)
-{debugger 
+    if(!dirs.length){
        this.updateChoices('');
        return;
     }
@@ -95,5 +91,4 @@ Class.create("Autocompleter", {
     responseText += '</ul>';
     this.updateChoices(responseText);
   }
-    
 });

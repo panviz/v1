@@ -43,7 +43,7 @@ Class.create('ProviderFs', Provider, {
 	mkDir : function(path, name){},
 	
   // put item with id and null content
-	remove : function(selectedFiles, $logMessages){},
+	remove : function(selectedFiles, logMessages){},
 	
   // get item and put it without id
 	copy : function(name, dest){},
@@ -51,5 +51,4 @@ Class.create('ProviderFs', Provider, {
 	isWriteable : function(dir){
 		return is_writable($dir);
 	}
-	
 })

@@ -1,7 +1,7 @@
 Class.create("ViewGrid", View, {
 
-  initialize : function(p){ 
-    this.model = Ext.define('Item', {
+  initialize : function(){ 
+    this.model = Ext.define('ExtItem', {
       extend: 'Ext.data.Model',
       fields: [
       //columns definition
@@ -31,7 +31,6 @@ Class.create("ViewGrid", View, {
     });
 
     this.tree = Ext.create('Ext.tree.Panel', {
-      region: p.region,
       xtype: 'treepanel',
       //width: '30%',
       minWidth: 100,

@@ -25,7 +25,7 @@
 				"type": "string",
 				"label": "File Creation Mask",
 				"description": "Optionnaly apply a chmod operation. Value must be numeric, like 0777, 0644, etc.",
-				"default": "0666"
+				"default": "0644"
 			},
 			{
 				"name": "PURGE_AFTER",
