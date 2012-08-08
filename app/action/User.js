@@ -16,16 +16,30 @@ Class.create("Login", Action, {
       //items of Login panel
       // Specific attributes for the text fields for username / password. 
       // The "name" attribute defines the name of variables sent to the server.
-      onClickReset = function() {
-          this.up('form').getForm().reset();
+      var onClickReset = function() {
+          loginForm.getForm().reset();
       };
-      onClickSubmit = function(){
-        var form = this.up('form').getForm();
+      var onClickSubmit = function(){
+        var form = loginForm.getForm();
         if (form.isValid()){
           onSubmit(form.getValues());
         }
       }
+      var focusFirstField = function(){
+        usernameField.focus('', 100);
+      }
+      var submitOnEnter = function(field, e){
+        if (e.getKey() == e.ENTER){
+          onClickSubmit();
+        }
+      }
+
       var loginForm = Ext.create('Ext.form.Panel', template);
+      var usernameField = loginForm.getComponent("username");
+      var passwordField = loginForm.getComponent("password");
+      loginForm.on('afterrender', focusFirstField);
+      passwordField.on('specialkey', submitOnEnter);
+      usernameField.on('specialkey', submitOnEnter);
 
       var buttonsToolbar = loginForm.getDockedItems()[0];
       var resetBtn = buttonsToolbar.getComponent('reset');
