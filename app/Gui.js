@@ -8,9 +8,7 @@ Class.create("Gui", Reactive, {
 
   initialize : function($super, p, store){
     $super(store)
-
-    //Controls instances
-    this._controls = $H();
+    this.store.setUniq("name");
     this.ui = p.ui;
     this._views = $H();
     //TODO change to focused?
@@ -41,12 +39,12 @@ Class.create("Gui", Reactive, {
   },
 
   _initControl : function(component){
+    var options = Object.extend(component.options, this._defaults)
     if (component.module){
-      $mod.get(this.moduleLoaded.bind(this), component.module);
+      $mod.get(this.createView.bind(this, component.options), component.module);
       return {};
     }
-    var jClass = Class.getByName(component.control);
-    var options = Object.extend(component.options, this._defaults)
+    var controlClass = Class.getByName(component.control);
 
     var getExtControls = function(component){
       if (component.id){
@@ -56,15 +54,18 @@ Class.create("Gui", Reactive, {
     if (component.components){
       options.innerControls = component.components.select(getExtControls).flatten()
     }
-    var control = component.control = new jClass(options);
-    this._controls.set(component.id, control);
+    var control = component.control = new controlClass(options);
+    this._instances.set(component.id, control);
     return component;
   },
 
-  moduleLoaded : function(module){
-    debugger
+  createView : function(options, module){
+    var control = module.man;
+    // view has only one top level control
+    this.viewport.add(control.extControls[0])
+    control.render(options);
     // Add control to Gui controls registry
-    this._controls.set(module.id, module.control);
+    this._instances.set(module.name, control);
   },
 
   setCurrentView : function(view){
@@ -115,12 +116,5 @@ Class.create("Gui", Reactive, {
     var name = name || 'mybase';
     var ui = this.ui;
     ui.theme = ui.themes[name];
-  },
-
-  /*
-   * Get Control from registry
-   */
-  getControl : function(id){
-    return this._controls.get(id);
   }
 })

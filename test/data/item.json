@@ -1,0 +1,55 @@
+[
+  {
+    "name": "default",
+    "label": "Default",
+    "icon": "node.png",
+    "created_at": "07/08/2012",
+    "owner": 1,
+    "links": ["personal", "shared", "conf"]
+  },
+  {
+    "name": "personal",
+    "label": "My files",
+    "icon": "personal.png",
+    "provider": {
+      "name": "fs",
+      "path": "/"
+    },
+    "created_at": "07/08/2012",
+    "owner": 1
+  },
+  {
+    "name": "shared",
+    "label": "Shared Items",
+    "icon": "shared.png",
+    "created_at": "07/08/2012",
+    "owner": 1,
+    "sharing": [2, 3],
+    "provider": {
+      "name": "fs",
+      "path": "/shared"
+    }
+  },
+  {
+    "name": "conf",
+    "provider": "conf",
+    "label": "Settings",
+    "owner": 1
+  },
+  {
+    "name": "default",
+    "label": "Default",
+    "icon": "node.png",
+    "created_at": "08/08/2012",
+    "owner": 2,
+    "links": []
+  },
+  {
+    "name": "default",
+    "label": "Default",
+    "icon": "node.png",
+    "created_at": "09/08/2012",
+    "owner": 3,
+    "links": []
+  }
+]

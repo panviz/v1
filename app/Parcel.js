@@ -10,7 +10,7 @@ Class.create("Parcel", {
   // name of Reactive class on Client & Server
   model: "",
 
-  // unique record identifier
+  // record identifier
   name: "",
 
   // unique parcel identifier
@@ -31,13 +31,16 @@ Class.create("Parcel", {
   sender: "",
 
   // id of user whom to send this parcel
+  // String -> sessionID or Number -> userID
   recipient: "",
 
   /*
    * Parcel can be initialized empty or with Connection or message content or both
+    // @param obj logged user or connection
    */
   initialize : function(obj, msg){
     this.__defineGetter__("id", function(){
+      // TODO add options to id as name is not uniq
       return this.model + this.name;
     })
     this.__defineSetter__("sender", function(userId){
@@ -109,7 +112,8 @@ Class.create("Parcel", {
   },
 
   /* @server
-   * Restrict incoming or outgoing message for sender or recipient respectively 
+   * Restrict incoming message accordingly to sender's write access rights
+   * Restrict outgoing message accordingly to recipient's read access rights
    * @param addressee of Parcel delivery
    */
   _secureFor : function(addressee){
@@ -119,30 +123,33 @@ Class.create("Parcel", {
       var type = this.options.SECURE_TOKEN ? 'token' : 'name'
     } else{
       var key = this.recipient;
-      var type = Object.isString(this.recipient) ? 'name' : 'id'
+      var type = Object.isString(this.recipient) ? 'session' : 'id'
     }
     var onFind = function(user){
       this[addressee] = user.id;
-      this._restrict(addressee);
+      this._restrict(user);
     }
     try{
       $user.store.find(onFind.bind(this), key, type)
     }
-    catch(e){this._restrict(addressee)};
+    catch(e){this._restrict()};
   },
 
   /*
-   * restrict content due to found user access rights
+   * restrict content accordingly to found user access rights
+   * @param user User
    */
-  _restrict : function(addressee){
-    var user = this[addressee];
-    if (user.name){
+  _restrict : function(user){
+    if (user){
       // No restrictions for admin
-      if (user.roles.include('admin') || this.content.owner == user.id) return;
+      if (user.roles.include('admin')) return;
+      // No restrictions for owner
+      if (this.content.owner == user.id) return;
+      // No restrictions for just logged user asking itself
+      if (this.content.session == user.session) return
       //TODO Process other roles
+      //TODO Process content shared options
     }
-    // No restrictions for owner
-    if (addressee == 'recipient' && this.content.owner == this.recipient) return;
     
     // restrict to Public for anonymous user
     var result = {};

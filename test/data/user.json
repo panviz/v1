@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "name": "dmitra",
+    "password": "1",
+    "email": "k@dmitra.com",
+    "roles": ["admin"]
+  },
+  {
+    "id": 2,
+    "name": "tania",
+    "password": "111",
+    "email": "st_ta@ukr.net",
+    "roles": ["guest"],
+    "context": "personal",
+    "preferences": [{
+        "name": "view",
+        "value": "view.graph"
+      }, {
+        "name": "lang",
+        "value": "ru"
+      }, {
+        "name": "sidebar_splitter_size",
+        "value": ""
+      }, {
+        "name": "vertical_splitter_size",
+        "value": ""
+      }, {
+        "name": "history_last_repository",
+        "value": ""
+      }, {
+        "name": "pending_folder",
+        "value": ""
+      }, {
+        "name": "thumb_size",
+        "value": ""
+      }, {
+        "name": "module_preferences",
+        "value": ""
+      }, {
+        "name": "upload_auto_send",
+        "value": ""
+      }, {
+        "name": "upload_auto_close",
+        "value": ""
+      }, {
+        "name": "upload_existing",
+        "value": ""
+      }, {
+        "name": "action_bar_style",
+        "value": ""
+      }, {
+        "name": "ls_history",
+        "$t": {"conf": "/config/module/auth"}
+      }, {
+        "name": "columns_size"
+      }, {
+        "name": "columns_visibility"
+      }, {
+        "name": "gui_preferences"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "anik",
+    "password": "111",
+    "email": "anick@i.ua",
+    "roles": ["guest"],
+    "context": "shared"
+  }
+]

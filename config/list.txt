@@ -47,12 +47,9 @@ Action
 ActionFul
 Gui
 Modular
-control/ProviderSelect
 control/AddressBar
 control/UserStatus
-control/AutoCompleter
 control/Toolbar
-control/PropertyPanel
 Tasker
 View
 Modal

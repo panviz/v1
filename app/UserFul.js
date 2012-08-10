@@ -6,6 +6,7 @@ Class.create("UserFul", Reactive, {
 
   initialize : function($super){
     $super();
+    this.store.setUniq(["name", "SECRET_TOKEN", "session"]);
   },
 
   /* @server
@@ -37,7 +38,7 @@ Class.create("UserFul", Reactive, {
         user.SECURE_TOKEN = "asdf";
         
         // Set user connection id to pass security check on sending reply
-        user.owner = options.recipient;
+        user.session = options.recipient;
 
         // Reply with full user data
         var onSave = function(){

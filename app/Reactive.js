@@ -8,8 +8,8 @@
  */
 Class.create("Reactive", {
 
-  //TODO add _instances var for loaded and initialized Items
-  //TODO add getSync
+  // created managed instances
+  _instances : new Hash(),
 
   initialize : function(store){
     this.store = store || $orm.getStorage(this.__className);
@@ -47,7 +47,18 @@ Class.create("Reactive", {
         $proxy.send(onLoad, "get", className, name, options)
       }
     }
+    // TODO find by several keys, query chaining, consider options
+    // or use uniq id
     this.store.find(onFind, name, "name")
+  },
+
+  /*
+   * Get created instance from local Hash
+   * @param name String uniq id
+   * TODO don't inherit to ReactiveRecord
+   */
+  getSync : function(name){
+    return this._instances.get(name);
   },
 
   /*

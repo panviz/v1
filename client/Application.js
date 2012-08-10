@@ -4,12 +4,7 @@
  */
 Class.create("Application", {
 
-  blockEditorShortcuts: false,
-  blockShortcuts: false,
-  blockNavigation: false,
-
-  initialize : function()
-  { 
+  initialize : function(){ 
     var self = this;
     ROOT_PATH = '/';
     isServer = false;
@@ -62,23 +57,6 @@ Class.create("Application", {
     document.fire('app:loaded');
   },
 
-  /**
-   * Try reading the cookie and sending it to the server
-   */
-  logUserFromCookie : function(){
-    var rememberData = retrieveRememberData();
-    if(rememberData!=null){
-    var connection = new Connection('/user/' + rememberData.user);
-      connection.addParameter('password', rememberData.pass);
-      connection.addParameter('cookie_login', 'true');
-      connection.onComplete = function(transport){
-        hideLightBox();
-        this.actionBar.parseXmlMessage(transport.responseXML);
-      }.bind(this);
-      connection.sendSync();
-    }
-  },
-      
   /**
    * Refresh the repositories list for the current user
    */
@@ -140,16 +118,6 @@ Class.create("Application", {
     connection.sendAsync();
   },
 
-  findOriginalTemplatePart : function(id){
-    var tmpElement = new Element("div", {style: "display:none;"});
-    $$("body")[0].insert(tmpElement);
-    this.initTemplates(tmpElement);
-    var tPart = tmpElement.down('[id="'+id+'"]');
-        if(tPart) tPart = tPart.clone(true);
-    tmpElement.remove();
-    return tPart;
-  },
-  
   /**
    * Trigger a simple download
    * @param url String
@@ -198,50 +166,6 @@ Class.create("Application", {
     });
   },
   
-  /**
-   * Trigger a captcha image
-   * @param seedInputField HTMLInput The seed value
-   * @param existingCaptcha HTMLImage An image (optional)
-   * @param captchaAnchor HTMLElement Where to insert the image if created.
-   * @param captchaPosition String Position.insert() possible key.
-   */
-  loadSeedOrCaptcha : function(seedInputField, existingCaptcha, captchaAnchor, captchaPosition){
-    var connection = new Connection("/seed");
-    connection.onComplete = function(transport){
-      if(transport.responseJSON){
-        seedInputField.value = transport.responseJSON.seed;
-        var src = window.serverAccessPath + '&get_action=get_captcha&sid='+Math.random();
-        var refreshSrc = jResourcesFolder + '/image/action/16/reload.png';
-        if(existingCaptcha){
-          existingCaptcha.src = src;
-        }else{
-          var insert = {};
-          var string = '<div class="main_captcha_div" style="padding-top: 4px;"><div class="dialogLegend" j_message_id="389">'+I18N[389]+'</div>';
-          string += '<div class="captcha_container"><img id="captcha_image" align="top" src="'+src+'" width="170" height="80"><img align="top" style="cursor:pointer;" id="captcha_refresh" src="'+refreshSrc+'" with="16" height="16"></div>';
-          string += '<div class="SF_element">';
-          string += '   <div class="SF_label" j_message_id="390">'+I18N[390]+'</div> <div class="SF_input"><input type="text" class="dialogFocus dialogEnterKey" style="width: 100px; padding: 0px;" name="captcha_code"></div>';
-          string += '</div>';
-          string += '<div style="clear:left; margin-bottom:7px;"></div></div>';
-          insert[captchaPosition] = string;
-          captchaAnchor.insert(insert);
-          $modal.refreshDialogPosition();
-          $modal.refreshDialogAppearance();
-          $('captcha_refresh').observe('click', function(){
-            $('captcha_image').src = window.serverAccessPath + '&get_action=get_captcha&sid='+Math.random();
-          });
-        }
-      }else{
-        seedInputField.value = transport.responseText;
-        if(existingCaptcha){
-          existingCaptcha.up('.main_captcha_div').remove();
-          $modal.refreshDialogPosition();
-          $modal.refreshDialogAppearance();
-        }
-      }
-    };
-    connection.sendSync();    
-  },
-
   _setHistory : function(){
     if(!Prototype.Browser.WebKit && !Prototype.Browser.IE){
       this.history = new Proto.History(function(hash){
@@ -367,13 +291,6 @@ Class.create("Application", {
   },
   
   /**
-   * @returns Object
-   */
-  getRegistry : function(){
-    return this._registry;
-  },  
-  
-  /**
    * Utility 
    * @returns Boolean
    */
@@ -381,87 +298,5 @@ Class.create("Application", {
     this.actionBar.treeCopyActive = false;
     hideLightBox();
     return false;
-  },
-    
-  /**
-   * Blocks all access keys
-   */
-  disableShortcuts: function(){
-    this.blockShortcuts = true;
-  },
-  
-  /**
-   * Unblocks all access keys
-   */
-  enableShortcuts: function(){
-    this.blockShortcuts = false;
-  },
-  
-  /**
-   * blocks all tab keys
-   */
-  disableNavigation: function(){
-    this.blockNavigation = true;
-  },
-  
-  /**
-   * Unblocks all tab keys
-   */
-  enableNavigation: function(){
-    this.blockNavigation = false;
-  },
-
-  disableAllKeyBindings : function(){
-     this.blockNavigation = this.blockShortcuts = this.blockEditorShortcuts = true;
-  },
-
-  enableAllKeyBindings : function(){
-     this.blockNavigation = this.blockShortcuts = this.blockEditorShortcuts = false;
-  },
-  
-  /**
-   * TODO move to Modal
-   * Display an information or error message to the user 
-   * @param messageType String ERROR or SUCCESS
-   * @param message String the message
-   */ 
-  displayMessage: function(messageType, message){
-    var urls = parseUrl(message);
-    if(urls.length && this.user && this.user.repositories){
-      urls.each(function(match){
-        var repo = this.user.repositories.get(match.host);
-        if(!repo) return;
-        message = message.replace(match.url, repo.label+" : " + match.path + match.file);
-      }.bind(this));
-    }
-    $modal.displayMessage(messageType, message);
-  },
-  
-  /**
-   * Focuses on a given widget
-   * @param object Focusable
-   */
-  focusOn : function(object){
-    this._focusables.each(function(obj){
-      if(obj != object) obj.blur();
-    });
-    object.focus();
-  },
-  
-  /**
-   * Blur all widgets
-   */
-  blurAll : function(){
-    this._focusables.each(function(f){
-      if(f.hasFocus) this._lastFocused = f;
-      f.blur();
-    }.bind(this) );
-  },  
-  
-  /**
-   * Find last focused Focusable and focus it!
-   */
-  focusLast : function(){
-    if(this._lastFocused) this.focusOn(this._lastFocused);
   }
 });

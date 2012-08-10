@@ -18,22 +18,15 @@ Item
 
 Modal
   should implement one Interface with View?
-    showDialogForm & _initGUI
-    prepareHeader
-    title
-    clearContent
 
-Search
-  Search bar and Search engine
 
   ------------- Minor
 Revise
+  server/exception.js
   FormManager
   BackgroundManager
   Model
-  Driver
   ActivityMonitor
-  ORM
 
 check all methods and variables Privacy
 search all TODO notes in code
@@ -43,7 +36,8 @@ Module
     provider.dropbox -> fs
     bookmark -> persistent storage like fs, mysql, mongo
     git -> svc
-  View is a Module
+    fb, vk -> social as provider of several item types: contact, message,
+    image, etc
   View.Editor
     Does View contains Editor? or Editor is a View?
     move action_bar to Main toolbar like Tridion.RibbonToolbar

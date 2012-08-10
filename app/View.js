@@ -1,7 +1,7 @@
 /**
  * Show/Edit Item/Collection
  */
-Class.create("View", Module, {
+Class.create("View", {
   //__implements : ["Focusable"],
 
   //@var Boolean Current state of the view
@@ -12,27 +12,19 @@ Class.create("View", Module, {
    * @param $super klass Reference to the constructor
    * @param oElement HTMLElement
    */
-  initialize: function($super, oElement, p){
-    debugger
-    this.element = oElement;
+  initialize: function(){
+    // TODO add this view to Ext Viewport
     this.title = 'View Title';
-    this.p = Object.extend({
-      maximizable: true, 
-      closable: true, 
-      floatingToolbar: false
-    }, p || { });   
-    this._initGUI(formId);
-    this.initActions();
+    this.p = {
+      maximizable: true,
+      closable: true
+    };   
 
   // changing context in other view triggers this event
     //this._registerObserver(document, "app:context_changed", this._onContextChanged);
     //this._registerObserver(document, "app:context_loading", loadingObs);
     //this._registerObserver(document, "app:selection_changed", _onSelectionChanged);
     //this._registerObserver(document, "app:provider_changed", this._providerChanged.bind(this));
-  },
-
-  // TODO add this view to Ext Viewport
-  update : function(data){
   },
 
   /**
@@ -42,11 +34,9 @@ Class.create("View", Module, {
   },
 
   /**
-   * Creates the base GUI
+   * Creates base GUI
    */
-  _initGUI : function(sFormId, fOnLoad, fOnComplete, fOnCancel, bOkButtonOnly, skipButtons)
-  {
-    // PASSED A PREFETCHED HIDDEN FORM
+  render : function(options){
   },
 
   _onContextChanged : function(data){

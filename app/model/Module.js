@@ -3,8 +3,7 @@
 Class.create("Module", ReactiveRecord, {
   
   // @param id full name of module (e.g.: provider.fs)
-  update : function($super, p){
-    this.id = p.id;
+  _update : function($super, p){
     this.name = p.name;
     this.p = p;
 

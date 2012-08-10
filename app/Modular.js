@@ -5,28 +5,36 @@
 Class.create("Modular", Reactive, {
   public : "all",
 
-  // created managed instances
-  _modules : {},
-
   /*
    * Init all executable modules from local store
    * Client loads modules to local store in Gui
    */
   initialize : function($super, store){
     $super(store);
+    this.store.setUniq("name");
     var self = this;
     //TODO add findByMask(*) method to Store
     this.store._local.forEach(function(module){
       var config = module.config;
       if(config.server && config.server.executable){
-        self._modules[module.id] = new Module(module.name, store);
+        self._instances[module.id] = new Module(module.name, store);
       }
     })
   },
 
-  // @returns instance by name
-  getSync : function(name){
-    return this._modules[name];
+  // @server
+  get : function($super, callback, name, options){
+    var self = this;
+    if (!isServer){
+      var cb = function(data){
+        var module = new Module(data.name)
+        self._instances[data.name] = module;
+        callback(module);
+      }
+      $super(cb, name, options)
+    } else{
+      $super(callback, name, options)
+    }
   },
 
   /**

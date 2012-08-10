@@ -19,15 +19,15 @@ Class.create("Application", {
     this.p.available_languages = $H($util.requireAll(ROOT_PATH + '/config/i18n')).keys();
 
     var s = this.server = express.createServer()
+    this.configure();
+    
     $orm = this.orm = new ORM();
     // As there is no current user
     $user = this.user = new UserFul();
     // Read only configured modules to Store
     var moduleStore = new StoreModule(this.p.module);
-    $mod = this.modular = new Modular(moduleStore);
-    
-    // Load Expressjs config
-    this.configure();
+    this.modular = new Modular(moduleStore);
+    this.provider = new Provider();
   },
 
   // Configure expressjs server
@@ -122,9 +122,11 @@ Class.create("Application", {
    * TODO make more generic
    */
   getManager : function(name){
-    if(name == "user") return this.user;
-    if(name == "gui") return this.templateFul;
-    if(name == "modular") return this.modular;
-    return this.modular.getSync(name);
+    if(name == 'user') return this.user;
+    if(name == 'gui') return this.templateFul;
+    if(name == 'modular' || name == 'module') return this.modular;
+    if(name == 'item') return this.provider;
+    //TODO consider other modules
+    return this.modular.getSync('provider' + name);
   }
 });

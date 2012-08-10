@@ -16,6 +16,10 @@ Class.create("ORM", {
    * @returns Storage
    */
   getStorage : function(name){
+    //TODO make generic unification for reactive provider & record
+    if (name == 'UserFul') name = 'User';
+    if (name == 'Modular') name = 'Module';
+    if (name == 'Provider') name = 'Item';
     var storage = this._storages[name];
     if (!storage){
       storage = this._storages[name] = new StoreJSON(name);

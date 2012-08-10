@@ -6,15 +6,23 @@
  */
 Class.create("Store", {
 
-  //TODO add validation and setUniq
-  _uniqColumns : ["name", "SECURE_TOKEN"],
-
   /*
    * @param name Model class name
+   * @param uniq Array column names to be uniq
    */
-  initialize : function(name){
+  initialize : function(name, uniq){
     this._model = name;
+    this._uniqColumns = uniq || [];
     this._local = [];
+  },
+
+  setUniq : function(uniq){
+    var names = this._uniqColumns;
+    if (Object.isArray(uniq)){
+      this._uniqColumns = $A(names.concat(uniq)).compact();
+    } else{
+      this._uniqColumns.push(uniq);
+    }
   },
 
   /*
@@ -41,6 +49,7 @@ Class.create("Store", {
     var findFunc = this._uniqColumns.include(type) ? Enumerable.find : Enumerable.findAll;
     var iterator = function(r){ return r[type] == key};
     var record = findFunc.call(this._local, iterator);
+    if (record && record.length < 1) record = false;
 
     if (!record && isServer){
       throw("Not Found");//NotFound(key);

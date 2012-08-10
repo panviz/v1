@@ -1,6 +1,8 @@
 /*
- * Reactive Proxy
+ * Reactive Proxy on WebSocket
  * Implements instant messaging between this and remote instances
+ * ! Do not split into server and client
+ * Try to keep methods universal for any app instance using this Proxy
  */
 Class.create("Proxy", {
 
@@ -23,7 +25,6 @@ Class.create("Proxy", {
 
       //Send registry on connection established
       this._socket.on('connection', function(conn){
-        //conn.write(JSON.stringify(this.p))
         conn.on('data', function(message){
           self._onServer(conn, message);
         })
@@ -40,7 +41,7 @@ Class.create("Proxy", {
     }
   },
 
-  /*
+  /* @client
    * Makes remote call of given model
    * Save callback to trigger it on same data update
    * @param model String name of the Model
@@ -62,13 +63,13 @@ Class.create("Proxy", {
     this._cbs[request.id] = cb;
   },
 
-  /*
+  /* @client
    * Client message is always PUT
    * @param e String stringified object
    */
   _onMessage : function(e){
-                 debugger
     var data = new Parcel(e.data)
+    debugger
 
     // Model requests its data
     if (data.id){
@@ -89,9 +90,8 @@ Class.create("Proxy", {
    * @param data Parcel
    */
   _onServer : function(conn, message){
-                debugger
     var data = new Parcel(conn, message);
-    // @param obj logged user or connection
+    debugger
     if (data.action){
       var manager = $app.getManager(data.model);
 
@@ -126,19 +126,26 @@ Class.create("Proxy", {
   },
 
   /* @server
+   * Send Parcel to recipient
    * Save recipient to send him updates later if record exists
-   * @param data packaged Parcel to send to user
+   * @param data empty Parcel to be sent to user
    * @param diff Json Content diff to send
    */
   subscribe : function(data, diff){
     data.content = diff;
+    data.send();
+
+    // set follower after Parcel has been sent
+    // and recipient is set to User's id
     var followers = this._subscribers;
     if (!followers[data.id]) followers[data.id] = $H();
+    // TODO don't save data.conn
+    // retrieve users connection from user.session
     followers[data.id].set(data.recipient, data.conn);
-    data.send();
   },
 
   /* @server
+   * Subscribe updater and sent Parcel to all followers
    */
   broadcast : function(data, diff){
     this.subscribe(data, diff);

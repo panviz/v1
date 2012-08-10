@@ -8,12 +8,11 @@ Class.create("ReactiveRecord", Reactive, {
     $super(store);
     this.name = name;
     this.loaded = false;
-    this.get(this.update.bind(this), name)
+    this.get(this._update.bind(this), name)
   },
 
-  // override in Record class
-  update : function(data){
+  // augment in Record class
+  _update : function(data){
     this.loaded = true;
   }
 })
-
