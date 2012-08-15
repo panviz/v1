@@ -1,4 +1,4 @@
-/*
+/**
  * Reactive Proxy on WebSocket
  * Implements instant messaging between this and remote instances
  * ! Do not split into server and client
@@ -13,7 +13,7 @@ Class.create("Proxy", {
   //@server Server has many clients for one dataId
   _subscribers : {},
 
-  /*
+  /**
    * Start websocket messaging
    */
   initialize : function(url){

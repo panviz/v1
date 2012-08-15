@@ -1,4 +1,4 @@
-/*
+/**
  * Description
  */
 Class.create("ViewEmail", View, {

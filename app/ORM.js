@@ -1,4 +1,4 @@
-/*
+/**
  * Stores Manager
  * Model mappings to DB tables
  * TODO change JSON to DB
@@ -11,7 +11,7 @@ Class.create("ORM", {
   initialize : function(){
   },
  
-  /*
+  /**
    * @name Model name
    * @returns Storage
    */

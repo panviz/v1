@@ -1,4 +1,4 @@
-/*
+/**
  * Singleton class to be in Global scope
  */
 Class.create("Util", {
@@ -544,7 +544,7 @@ Class.create("Util", {
     target.addEventListener("touchstart", function(event){ scrollByTouch(event, direction, targetId); });
     target.addEventListener("touchend", function(event){ scrollByTouch(event, direction, targetId); });
   },
-  /*
+  /**
    */
   loaderXTemplateRenderer: function(loader, response, active) {
     var tpl = new Ext.XTemplate(response.responseText);

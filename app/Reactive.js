@@ -1,4 +1,4 @@
-/*
+/**
  * Reactive Provider
  * Storage mapper
  * Implements instant record update with only two methods:
@@ -15,7 +15,7 @@ Class.create("Reactive", {
     this.store = store || $orm.getStorage(this.__className);
   },
 
-  /*
+  /**
    * Find record in local storage first
    * If item exists - return it (it is definitely up to date)
    * Else load it
@@ -52,7 +52,7 @@ Class.create("Reactive", {
     this.store.find(onFind, name, "name")
   },
 
-  /*
+  /**
    * Get created instance from local Hash
    * @param name String uniq id
    * TODO don't inherit to ReactiveRecord
@@ -61,7 +61,7 @@ Class.create("Reactive", {
     return this._instances.get(name);
   },
 
-  /*
+  /**
    * Saves changes locally first then sync with remote
    * @returns Json public difference in record between previous and current
    */

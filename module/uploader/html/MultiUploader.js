@@ -1,4 +1,4 @@
-/*
+/**
  * The latest code can be found at <http://www.app.info/>.
  * Credit:
  *   Original class by Stickman -- http://www.the-stickman.com

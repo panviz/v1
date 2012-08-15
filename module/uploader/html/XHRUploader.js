@@ -1,4 +1,4 @@
-/*
+/**
  * Description : Class for simple XHR multiple upload, HTML5 only
  */
 Class.create("XHRUploader", {

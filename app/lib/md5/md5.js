@@ -1,4 +1,4 @@
-/*
+/**
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
  * Digest Algorithm, as defined in RFC 1321.
  * Version 2.1 Copyright (C) Paul Johnston 1999 - 2002.
@@ -7,7 +7,7 @@
  * See http://pajhome.org.uk/crypt/md5 for more info.
  */
 
-/*
+/**
  * Configurable variables. You may need to tweak these to be compatible with
  * the server-side, but the defaults work in most cases.
  */
@@ -15,7 +15,7 @@ var hexcase = 0;  /* hex output format. 0 - lowercase; 1 - uppercase        */
 var b64pad  = ""; /* base-64 pad character. "=" for strict RFC compliance   */
 var chrsz   = 8;  /* bits per input character. 8 - ASCII; 16 - Unicode      */
 
-/*
+/**
  * These are the functions you'll usually want to call
  * They take string arguments and return either hex or base-64 encoded strings
  */
@@ -26,7 +26,7 @@ function hex_hmac_md5(key, data) { return binl2hex(core_hmac_md5(key, data)); }
 function b64_hmac_md5(key, data) { return binl2b64(core_hmac_md5(key, data)); }
 function str_hmac_md5(key, data) { return binl2str(core_hmac_md5(key, data)); }
 
-/*
+/**
  * Perform a simple self-test to see if the VM is working
  */
 function md5_vm_test()
@@ -34,7 +34,7 @@ function md5_vm_test()
   return hex_md5("abc") == "900150983cd24fb0d6963f7d28e17f72";
 }
 
-/*
+/**
  * Calculate the MD5 of an array of little-endian words, and a bit length
  */
 function core_md5(x, len)
@@ -132,7 +132,7 @@ function core_md5(x, len)
 
 }
 
-/*
+/**
  * These functions implement the four basic operations the algorithm uses.
  */
 function md5_cmn(q, a, b, x, s, t)
@@ -156,7 +156,7 @@ function md5_ii(a, b, c, d, x, s, t)
   return md5_cmn(c ^ (b | (~d)), a, b, x, s, t);
 }
 
-/*
+/**
  * Calculate the HMAC-MD5, of a key and some data
  */
 function core_hmac_md5(key, data)
@@ -175,7 +175,7 @@ function core_hmac_md5(key, data)
   return core_md5(opad.concat(hash), 512 + 128);
 }
 
-/*
+/**
  * Add integers, wrapping at 2^32. This uses 16-bit operations internally
  * to work around bugs in some JS interpreters.
  */
@@ -186,7 +186,7 @@ function safe_add(x, y)
   return (msw << 16) | (lsw & 0xFFFF);
 }
 
-/*
+/**
  * Bitwise rotate a 32-bit number to the left.
  */
 function bit_rol(num, cnt)
@@ -194,7 +194,7 @@ function bit_rol(num, cnt)
   return (num << cnt) | (num >>> (32 - cnt));
 }
 
-/*
+/**
  * Convert a string to an array of little-endian words
  * If chrsz is ASCII, characters >255 have their hi-byte silently ignored.
  */
@@ -207,7 +207,7 @@ function str2binl(str)
   return bin;
 }
 
-/*
+/**
  * Convert an array of little-endian words to a string
  */
 function binl2str(bin)
@@ -219,7 +219,7 @@ function binl2str(bin)
   return str;
 }
 
-/*
+/**
  * Convert an array of little-endian words to a hex string.
  */
 function binl2hex(binarray)
@@ -234,7 +234,7 @@ function binl2hex(binarray)
   return str;
 }
 
-/*
+/**
  * Convert an array of little-endian words to a base-64 string
  */
 function binl2b64(binarray)

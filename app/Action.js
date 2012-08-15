@@ -102,7 +102,7 @@ Class.create("Action", {
   // Override in ConcreteCommand
   execute : function(){},
 
-  /*
+  /**
    * @returns Boolean whether Action has undo method
    */
   canUndo : function(){},

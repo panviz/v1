@@ -16,7 +16,7 @@ Class.create("Modal", {
     });
   },
 
-  /*
+  /**
    * @param form Object
    * @param size Object width and height of modal window
    * @param title String window header name

@@ -1,4 +1,4 @@
-/*
+/**
  * jQuery history plugin ported for Prototype
  *
  * Copyright (c) 2006 Taku Sano (Mikage Sawatari)

@@ -1,4 +1,4 @@
-/*
+/**
  * CodeMirror wrapper
  */
 Class.create("ViewCodeMirror", View, {

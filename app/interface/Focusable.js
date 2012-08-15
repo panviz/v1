@@ -1,4 +1,4 @@
-/*
+/**
  * Description : focusable component / Tab navigation
  */
 Interface.create("Focusable", {   

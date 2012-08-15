@@ -1,4 +1,4 @@
-/*
+/**
  * Description : Action interface
  */
 Interface.create("Action", {

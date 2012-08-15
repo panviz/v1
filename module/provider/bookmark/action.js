@@ -1,4 +1,4 @@
-/*
+/**
  * Bookmarks actions
  */
 Class.create("AddBookmark", Action, {

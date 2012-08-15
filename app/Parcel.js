@@ -1,4 +1,4 @@
-/*
+/**
  * Secure Data - object format to send {model, name, content}
  * Is responsible for access restrictions
  */
@@ -34,7 +34,7 @@ Class.create("Parcel", {
   // String -> sessionID or Number -> userID
   recipient: "",
 
-  /*
+  /**
    * Parcel can be initialized empty or with Connection or message content or both
     // @param obj logged user or connection
    */
@@ -66,7 +66,7 @@ Class.create("Parcel", {
     }
   },
 
-  /*
+  /**
    * Parse message
    */
   parse : function(message){
@@ -83,7 +83,7 @@ Class.create("Parcel", {
     }
   },
 
-  /*
+  /**
    * Send parcel depending on its current location
    */
   send : function(){
@@ -135,7 +135,7 @@ Class.create("Parcel", {
     catch(e){this._restrict()};
   },
 
-  /*
+  /**
    * restrict content accordingly to found user access rights
    * @param user User
    */

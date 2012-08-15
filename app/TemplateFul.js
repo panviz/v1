@@ -1,4 +1,4 @@
-/*
+/**
  * Templates manager
  */
 Class.create("TemplateFul", Reactive, {

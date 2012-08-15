@@ -5,7 +5,7 @@
 Class.create("Modular", Reactive, {
   public : "all",
 
-  /*
+  /**
    * Init all executable modules from local store
    * Client loads modules to local store in Gui
    */
@@ -96,7 +96,7 @@ Class.create("Modular", Reactive, {
   loadAutoLoadResources : function(registry){
   },
 
-  /*
+  /**
    * Get required provider extension from user config
    * @return Array Extension names
    */

@@ -1,4 +1,4 @@
-/*
+/**
  * TODO Replace with DB
  * Storage engine
  * Client: Caches Proxy replies in _local variable
@@ -6,7 +6,7 @@
  */
 Class.create("Store", {
 
-  /*
+  /**
    * @param name Model class name
    * @param uniq Array column names to be uniq
    */
@@ -25,7 +25,7 @@ Class.create("Store", {
     }
   },
 
-  /*
+  /**
    * @param id Number
    */
   findById : function(onFind, id){
@@ -38,7 +38,7 @@ Class.create("Store", {
     }
   },
 
-  /*
+  /**
    * @param type String column name
    * @param key String key to search records by
    * @returns Json record
@@ -58,7 +58,7 @@ Class.create("Store", {
     onFind(Object.clone(record));
   },
 
-  /*
+  /**
    * Create, Update & Delete
    * @param diff Object with data to save into the record
    * @param name String record name to be updated

@@ -3,7 +3,7 @@ const express       = require('express')
   , errors        = require('../config/server/errors')
   require(ROOT_PATH + '/app/Util');
 
-/*
+/**
  * Application class
  * Creates express server for static content and some extra
  */
@@ -117,7 +117,7 @@ Class.create("Application", {
     )
   },
 
-  /*
+  /**
    * get from app or Modular
    * TODO make more generic
    */

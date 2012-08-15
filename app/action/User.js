@@ -55,7 +55,7 @@ Class.create("Login", Action, {
     $gui.get(onLoad, 'loginForm');
   },
 
-  /*
+  /**
    * Logout
    */
   undo : function(){

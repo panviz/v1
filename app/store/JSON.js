@@ -1,9 +1,9 @@
-/*
+/**
  * Stores data in json file
  */
 Class.create("StoreJSON", Store, {
 
-  /*
+  /**
    * @param name Model class name
    * @param source directory Path for File storage
    */

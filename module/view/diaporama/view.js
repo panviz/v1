@@ -1,4 +1,4 @@
-/*
+/**
  * Description: The image gallery manager.
  */
 Class.create("Diaporama", View, {

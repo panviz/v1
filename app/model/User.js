@@ -1,4 +1,4 @@
-/*
+/**
  * Authentication, and management of Repositories and preferences
  * TODO default Item should be created for new User on registration
  */

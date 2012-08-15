@@ -1,4 +1,4 @@
-/*
+/**
  */
 Class.create("Module", ReactiveRecord, {
   

@@ -16,7 +16,7 @@ Class.create("StoreModule", Store, {
   , doc: '/doc'
   },
 
-  /*
+  /**
    * @param name Model class name
    * @param source directory Path for File storage
    */

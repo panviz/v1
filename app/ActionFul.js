@@ -74,14 +74,14 @@ Class.create("ActionFul", {
       if(actionsSelectorAtt == 'directoryContext' && !action.context.dir) return;
       if(actionsSelectorAtt == 'genericContext' && action.context.selection) return;
       if(action.contextHidden || action.deny) return;
-            /*
-      if(crtGroup && crtGroup != action.context.actionBarGroup){
-        contextActions.push({separator: true});
-      }
+      /**
+        if(crtGroup && crtGroup != action.context.actionBarGroup){
+          contextActions.push({separator: true});
+        }
       */
-            if(!contextActionsGroup[action.context.actionBarGroup]){
-                contextActionsGroup[action.context.actionBarGroup] = $A();
-            }
+      if(!contextActionsGroup[action.context.actionBarGroup]){
+        contextActionsGroup[action.context.actionBarGroup] = $A();
+      }
       var isDefault = false;
       if(actionsSelectorAtt == 'selectionContext'){
         // set default in bold
