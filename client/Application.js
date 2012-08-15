@@ -77,7 +77,7 @@ Class.create("Application", {
    * @event user loads repository
    * @param data item data
    */
-  _onContextChanged: function(data){
+  _onContextChanged : function(data){
     this._context = new Item(data);
     //TODO if path is not root goto path
       this.goTo(new Item(copy));
@@ -87,7 +87,7 @@ Class.create("Application", {
    * Require a context change to the given path
    * @param itemOrPath Item|String A item or a path
    */
-  goTo: function(itemOrPath){   
+  goTo : function(itemOrPath){   
     if(Object.isString(itemOrPath)){
       item = new Item(itemOrPath);
     }else{
@@ -100,7 +100,7 @@ Class.create("Application", {
    * Change the repository of the current user and reload list and current.
    * @param repositoryId String Id of the new repository
    */
-  triggerRepositoryChange: function(repositoryId){    
+  triggerRepositoryChange : function(repositoryId){    
     document.fire("app:trigger_repository_switch");
     var connection = new Connection();
     connection.addParameter('get_action', 'switch_repository');
@@ -130,7 +130,7 @@ Class.create("Application", {
      * Reload all messages on language change
      * @param newLanguage String
      */
-  loadI18NMessages: function(newLanguage){
+  loadI18NMessages : function(newLanguage){
     var connection = new Connection('/i18n/' + newLanguage);
     connection.onComplete = function(transport){
       if(transport.responseText){
@@ -156,7 +156,7 @@ Class.create("Application", {
   /**
    * Search all j_message_id tags and update their value
    */
-  updateI18nTags: function(){
+  updateI18nTags : function(){
     var messageTags = $$('[j_message_id]');   
     messageTags.each(function(tag){ 
       var messageId = tag.getAttribute("j_message_id");
@@ -199,7 +199,7 @@ Class.create("Application", {
    * Updates the browser history
    * @param path String Path
    */
-  updateHistory: function(path){
+  updateHistory : function(path){
     if(this.history) this.history.historyLoad(this.pathToHistoryHash(path));
   },
   
@@ -208,7 +208,7 @@ Class.create("Application", {
    * @param path String
    * @returns Integer
    */
-  pathToHistoryHash: function(path){
+  pathToHistoryHash : function(path){
     document.title = this.title + ' - '+(getBaseName(path) ? getBaseName(path) : '/');
     if(!this.pathesHash){
       this.pathesHash = new Hash();
@@ -230,7 +230,7 @@ Class.create("Application", {
    * @param hash Integer
    * @returns String
    */
-  historyHashToPath: function(hash){
+  historyHashToPath : function(hash){
     if(!this.pathesHash) return "/";
     var path = this.pathesHash.get(hash);
     if(path == undefined) return "/";
@@ -294,7 +294,7 @@ Class.create("Application", {
    * Utility 
    * @returns Boolean
    */
-  cancelCopyOrMove: function(){
+  cancelCopyOrMove : function(){
     this.actionBar.treeCopyActive = false;
     hideLightBox();
     return false;

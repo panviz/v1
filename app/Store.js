@@ -10,9 +10,9 @@ Class.create("Store", {
    * @param name Model class name
    * @param uniq Array column names to be uniq
    */
-  initialize : function(name, uniq){
+  initialize : function(name, options){
     this._model = name;
-    this._uniqColumns = uniq || [];
+    this._uniqColumns = options.uniq || [];
     this._local = [];
   },
 

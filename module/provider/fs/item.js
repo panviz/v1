@@ -294,5 +294,20 @@ Class.create("File", Item, {
     if(this._metadata && this._metadata.get("mime")) return this._metadata.get("mime").toLowerCase();
     if(this._metadata && this.isLeaf()) return getMimeType(this._metadata).toLowerCase();
     return "";
+  },
+
+  getExtension : function(fileName){
+    if(!fileName || fileName == "") return "";
+    var split = this.getBaseName(fileName).split('.');
+    if(split.length > 1) return split[split.length-1].toLowerCase();
+    return '';
+  },
+
+  getBaseName : function(fileName){
+    if(fileName == null) return null;
+    var separator = "/";
+    if(fileName.indexOf("\\") != -1) separator = "\\";
+    var baseName = fileName.substr(fileName.lastIndexOf(separator)+1, fileName.length); 
+    return baseName;
   }
 )}

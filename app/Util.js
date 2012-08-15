@@ -34,13 +34,14 @@ Class.create("Util", {
     }
   },
 
-  include_tag: function(file){
+  include_tag : function(file){
     return this.insertFile(file, '<script language="javascript" type="text/javascript" src="%path%"></script>');
   },
 
-  link_tag: function(file){
+  link_tag : function(file){
     return this.insertFile(file, '<link rel="stylesheet" type="text/css" href="%path%">');
   },
+
   //translations
   //TODO add %s substitution
   t: function(message){
@@ -89,45 +90,6 @@ Class.create("Util", {
     return resultList;
   },
 
-  /*
-   * Description : Various functions used statically very often.
-   */
-  getBaseName : function(fileName){
-    if(fileName == null) return null;
-    var separator = "/";
-    if(fileName.indexOf("\\") != -1) separator = "\\";
-    var baseName = fileName.substr(fileName.lastIndexOf(separator)+1, fileName.length); 
-    return baseName;
-  },
-
-  getRepName : function(fileName){
-    repName = fileName.substr(0, fileName.lastIndexOf("/"));
-    return repName; 
-  },
-
-  getMimeType : function(item){
-    if(!item) return "";
-    if(Object.isHash(item)){
-      return (item.get('mime') || this.getFileExtension(item.get('filename')));
-    }else if(Object.isFunction(item.getMetadata)){
-      return (item.getMetadata().get('mime') || this.getFileExtension(item.getPath()));
-    }else{
-      return (item.getAttribute('mime') || this.getFileExtension(item.getAttribute('filename')));
-    } 
-  },
-
-  getFileExtension : function(fileName){
-    if(!fileName || fileName == "") return "";
-    var split = this.getBaseName(fileName).split('.');
-    if(split.length > 1) return split[split.length-1].toLowerCase();
-    return '';
-  },
-
-  addImageLibrary : function(aliasName, aliasPath){
-    if(!window.ImageLibraries) window.ImageLibraries = {};
-    window.ImageLibraries[aliasName] = aliasPath;
-  },
-
   resolveImageSource : function(src, defaultPath, size){
     if(!src) return "";
     if(!window.ImageLibraries || src.indexOf("/")==-1){
@@ -143,37 +105,6 @@ Class.create("Util", {
     }else{
       return THEME.path + (defaultPath ? (size ? defaultPath.replace("ICON_SIZE", size) : defaultPath) : '')+ '/' +  src;
     }
-  },
-
-  simpleButton : function(id, cssClass, messageId, messageTitle, iconSrc, iconSize, hoverClass, callback, skipIconResolution, addArrow){
-    var button = new Element("div", {id: id, className: cssClass});
-    var img = new Element("img", {
-      src: (skipIconResolution ? iconSrc : this.resolveImageSource(iconSrc, '/image/action/ICON_SIZE', iconSize)), 
-      width: iconSize,
-      height: iconSize,
-      title: I18N[messageTitle],
-      message_title: I18N[messageTitle]
-    });
-    button.update(img);
-    if(hoverClass){
-      button.observe("mouseover", function(){button.addClassName(hoverClass);});
-      button.observe("mouseout", function(){button.removeClassName(hoverClass);});
-    }
-    if(callback){
-      button.observe("click", callback);
-    }
-    button.setSrc = function(src){img.src=src;};
-      if(addArrow){
-          button.setStyle({position: 'relative'});
-          var arrowImg = new Element('img', {
-              src: this.resolveImageSource('arrow_down.png', '/images'),
-              width: 10,
-              height: 6,
-              className: 'simple_button_arrow'
-          });
-          button.insert(arrowImg);
-      }
-    return button;
   },
 
   roundSize : function(filesize, size_unit){
@@ -252,32 +183,6 @@ Class.create("Util", {
   deleteCookie : function(name){
     var cookieJar = new CookieJar({path: '/',secure: true});
     cookieJar.remove(name); 
-  },
-
-  refreshPNGImages : function(element){
-    if(element.getAttribute('is_image') && element.getAttribute('is_image')=='1'){
-      return element;
-    }
-    var imgs = $(element).getElementsBySelector('img');
-    if(imgs.length) imgs.each(function(img){
-      if(img.original_src) img.src = img.original_src;
-    });
-    return element;
-  },
-
-  messageDivOpen : false,
-
-  closeMessageDiv : function(){
-    if(this.messageDivOpen)
-    {
-      new Effect.BlindUp('message_div');
-      this.messageDivOpen = false;
-    }
-  },
-
-  tempoMessageDivClosing : function(){
-    this.messageDivOpen = true;
-    setTimeout('$utils.closeMessageDiv()', 10000);
   },
 
   disableTextSelection : function(target){
@@ -465,42 +370,6 @@ Class.create("Util", {
     }
 
     return null;
-  },
-
-  corners : function(oElement, cornersString){
-    var tr, tl, bl, br;
-    if(cornersString == null)
-    {
-      tr = tl = bl = br;
-    }
-    else
-    {
-      tr = (cornersString=='top'||cornersString=='tr');
-      tl = (cornersString=='top'||cornersString=='tl');
-      bl = (cornersString=='bottom'||cornersString=='bl');
-      br = (cornersString=='bottom'||cornersString=='br');
-    }
-    if(br || bl)
-    {
-      var botDiv = new Element('div');
-      botDiv.setStyle({marginTop: '-5px', zoom: 1, width: '100%'});
-      botDiv.innerHTML = (bl ? '<div style="overflow:hidden; width:5px; background-color:rgb(255, 255, 255); height:5px; float:left; background-image:url('+THEME.path+'/image/corners/5px_bl.gif);"></div>' : '')+(br ? '<div style="border-style: none; overflow: hidden; float: right; background-color: rgb(255, 255, 255); height: 5px; width: 5px;background-image:url('+THEME.path+'/image/corners/5px_br.gif);"></div>' : '');
-      oElement.appendChild(botDiv);
-    }
-    if(tr || tl)
-    {
-      var topDiv = new Element('div');
-      topDiv.setStyle({marginBottom: '-5px', zoom: 1, width: '100%'});
-      topDiv.innerHTML = (tl ? '<div style="overflow:hidden; width:5px; background-color:rgb(255, 255, 255); height:5px; float:left; background-image:url('+THEME.path+'/image/corners/5px_tl.gif);"></div>' : '')+(tr ? '<div style="border-style: none; overflow: hidden; float: right; background-color: rgb(255, 255, 255); height: 5px; width: 5px;background-image:url('+THEME.path+'/image/corners/5px_tr.gif);"></div>' : '');
-      if(oElement.firstChild)
-      {
-        oElement.insertBefore(topDiv, oElement.firstChild);
-      }
-      else
-      {
-        oElement.appendChild(topDiv);
-      }
-    }
   },
 
   base64_encode : function( data ) {
