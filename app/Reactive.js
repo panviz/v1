@@ -1,5 +1,4 @@
 /**
- * Reactive Provider
  * Storage mapper
  * Implements instant record update with only two methods:
  *   Get - retrieves data from Remote by uniq identifier "name"
@@ -8,11 +7,8 @@
  */
 Class.create("Reactive", {
 
-  // created managed instances
-  _instances : new Hash(),
-
   initialize : function(store){
-    this.store = store || $orm.getStorage(this.__className);
+    this.store = store || $app.db;
   },
 
   /**
@@ -31,7 +27,7 @@ Class.create("Reactive", {
     var onLoad = function(data){
       // Update local storage if Remote Storage has found the record
       if (data.name){
-        self.store.save(onFind, data.name, data);
+        self.store.save(onFind, className, data.name, data);
       } else {
         $modal.error(data);
       }
@@ -49,16 +45,7 @@ Class.create("Reactive", {
     }
     // TODO find by several keys, query chaining, consider options
     // or use uniq id
-    this.store.find(onFind, name, "name")
-  },
-
-  /**
-   * Get created instance from local Hash
-   * @param name String uniq id
-   * TODO don't inherit to ReactiveRecord
-   */
-  getSync : function(name){
-    return this._instances.get(name);
+    this.store.find(onFind, className, "name", name)
   },
 
   /**
@@ -79,6 +66,6 @@ Class.create("Reactive", {
       }
     }
 
-    return this.store.save(onSave, name, content);
+    return this.store.save(onSave, className, name, content);
   }
 })

@@ -21,21 +21,18 @@ Class.create("Application", {
   },
 
   init : function(){
-    //TODO set context from registry?
-    //@var Item
     this._context = null;
-    this._focusables = [];
+    //this._focusables = [];
+    //this.historyCount = 0;
 
     //Public
-    //this.historyCount = 0;
     this.currentLanguage = $set.currentLanguage;
-    $orm = this.orm          = new ORM();
+    this.db                  = new StoreClient();
     $mod = this.modular      = new Modular();
     $act = this.actionFul    = new ActionFul();
     $gui = this.gui          = new Gui($set);
     $modal = $gui.modal;
-    // Application has many users and only one is current
-    $users = this.userFul    = new UserFul();
+    //$provider = this.provider= new Provider();
     $i18n = this.i18n        = $set.i18n;
 
     //TODO update progress bar from right places
@@ -53,34 +50,18 @@ Class.create("Application", {
       $set.client_timeout_warning);
       
     $modal.updateLoadingProgress('User Interface: Done');
-
     document.fire('app:loaded');
   },
 
-  /**
-   * Refresh the repositories list for the current user
-   */
-  reloadRepositoriesList : function(){
-    if(!this.user) return;
-    document.observeOnce("app:registry_part_loaded", function(event){
-      if(event.memo != "user/repositories") return;
-      this.user = new User(this._registry.user);
-      repId = this.user.getActiveRepository();
-      repList = this.user.getRepositoriesList();
-      document.fire("app:repository_list_refreshed", {list: repList,active: repId});      
-    }.bind(this));
-    this.loadRegistry(false, "user/repositories");
-  },
-  
   /**
    * Create Item and save as current context
    * @event user loads repository
    * @param data item data
    */
-  _onContextChanged : function(data){
-    this._context = new Item(data);
+  _onContextChanged : function(item){
+    this._context = item;
     //TODO if path is not root goto path
-      this.goTo(new Item(copy));
+    //this.goTo(item);
   },
   
   /**
@@ -90,7 +71,7 @@ Class.create("Application", {
   goTo : function(itemOrPath){   
     if(Object.isString(itemOrPath)){
       item = new Item(itemOrPath);
-    }else{
+    }else {
       item = itemOrPath;
     }
     this._contextHolder.requireContextChange(item);

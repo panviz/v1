@@ -1,11 +1,11 @@
 /**
  * User management
  */
-Class.create("UserFul", Reactive, {
+Class.create("UserFul", Provider, {
   public : ["id", "name", "loggedIn"],
 
-  initialize : function($super){
-    $super();
+  initialize : function($super, store){
+    $super(store);
     this.store.setUniq(["name", "SECRET_TOKEN", "session"]);
   },
 

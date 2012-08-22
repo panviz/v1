@@ -2,7 +2,7 @@
  * Modules manager
  * Provider of module resources, such as [js, css, html(module templates)]
  */
-Class.create("Modular", Reactive, {
+Class.create("Modular", ReactiveProvider, {
   public : "all",
 
   /**

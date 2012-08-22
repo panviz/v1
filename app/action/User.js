@@ -6,11 +6,7 @@ Class.create("Login", Action, {
         //TODO encrypt password with seed before sending
         //TODO add remember_me option
         //TODO add captcha if third attempt
-        var user = new User(formData.username, formData.password);
-      }
-      //TODO addListener on "user:auth" event
-      var onAuth = function(user){
-        $user.setCurrentUser(user);
+        new User(formData.username, formData.password);
       }
 
       //items of Login panel

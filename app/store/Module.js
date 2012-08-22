@@ -17,11 +17,10 @@ Class.create("StoreModule", Store, {
   },
 
   /**
-   * @param name Model class name
    * @param source directory Path for File storage
    */
   initialize : function($super, toInit){
-    $super("Module");
+    $super();
     var self = this;
 
     toInit.forEach(function(id){

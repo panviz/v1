@@ -1,14 +1,13 @@
-/**
- * Storage engine
- * Client: Caches Proxy replies in _local variable
- * Server: Stores records in Memory Array
- */
-Class.create("Store", {
+var neo4j = require('neo4j');
+
+Class.create("StoreGraph", {
   /**
+   * @param uniq Array column names to be uniq
    */
   initialize : function(p){
+    var url = p.url || 'http://localhost:7474';
     this._uniqColumns = [];
-    this._local = [];
+    this._db = new neo4j.GraphDatabase(url);
   },
 
   setUniq : function(uniq){
@@ -25,34 +24,29 @@ Class.create("Store", {
    * @param id Number
    */
   findById : function(onFind, type, id){
-    var idx = id - 1;
-    if (this._local[idx]) {
-      // as _local is in memory for now, return clone object, not reference
-      onFind(Object.clone(this._local[idx]));
-    } else {
-      throw("Not Found");//NotFound(id);
-    }
+    this._db.getNodeById(id, function (err, node){
+        if (err) throw("Not Found");
+        onFind(node);
+    });
   },
 
   /**
+   * TODO retrieves Item with all its relationships
    * @param type String model name
    * @param key String property name
    * @param value String value to search records by
    * @returns Json record
    */
   find : function(onFind, type, key, value){
-    if (!key || key == "id") return this.findById(onFind, value);
+    if (!type || type == "id") return this.findById(onFind, key);
+    var findFunc = this._uniqColumns.include(type) ? this._db.getIndexedNode : this._db.getIndexedNodes;// change to find by not indexed property
 
-    var findFunc = this._uniqColumns.include(key) ? Enumerable.find : Enumerable.findAll;
-    var iterator = function(r){ return r[key] == value};
-    var record = findFunc.call(this._local, iterator);
-    if (record && record.length < 1) record = false;
-
-    if (!record && isServer){
-      throw("Not Found");//NotFound(key);
-    }
-    // as _local is in memory for now, return clone object, not reference
-    onFind(Object.clone(record));
+    //findFunc('nodes', key, 'user', function (err, record){
+      //if (!record && isServer){
+        //throw("Not Found");//NotFound(key);
+      //})
+      //onFind(record);
+    //}
   },
 
   /**
@@ -62,7 +56,7 @@ Class.create("Store", {
    * @returns Json difference in record between previous and current
    */
   save : function(onSave, type, name, diff){
-    var s = this._local;
+    var db = this._db;
     var previous;
     if (diff){
       for (var i=0; i < s.length; i++){

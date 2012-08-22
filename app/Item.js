@@ -17,7 +17,6 @@ Class.create("Item", ReactiveRecord, {
   },
 
   _update : function($super, data){
-    debugger
     $super();
     document.fire('app:context_changed');
   },
@@ -29,5 +28,18 @@ Class.create("Item", ReactiveRecord, {
    */
   hasLink : function(item){
     //TODO
-  }
+  },
+
+  /**
+   * Get all directly linked items
+   */
+  linked : function(type){
+  },
+
+  incoming : function(type){
+  },
+
+  outgoing : function(type){
+  },
+
 });

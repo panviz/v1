@@ -2,7 +2,7 @@
  * Authentication, and management of Repositories and preferences
  * TODO default Item should be created for new User on registration
  */
-Class.create("User", Reactive, {
+Class.create("User", Item, {
 
   /**
    */
@@ -26,10 +26,11 @@ Class.create("User", Reactive, {
 
     if (this.id) document.fire("user:updated");
     if (data.SECURE_TOKEN) document.fire("user:auth");
+    //TODO save current user reference in $app
 
-    // TODO consider Item owner
-    // Owner should be a link on
-    this.root = new Item(data.context || 'default');
+    // restore last visited item as current root
+    var current = data.context ? new Item(data.context) : this;
+    document.fire("app:context_changed", current);
   },
 
   isAdmin : function(){

@@ -24,5 +24,8 @@
   "module": [
     "provider.fs",
     "view.grid"
-  ]
+  ],
+  "db": {
+    "url": "http://grafiy.com:7474"
+  }
 }

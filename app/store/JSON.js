@@ -4,15 +4,10 @@
 Class.create("StoreJSON", Store, {
 
   /**
-   * @param name Model class name
-   * @param source directory Path for File storage
+   * @param path of directory or file
    */
-  initialize : function($super, name, source){
-    $super(name);
-    if (source){
-      this._local = $H($util.requireAll(source)).values();
-    } else {
-      this._local = $A(require(ROOT_PATH + '/data/' + name + '.json'));
-    }
+  initialize : function($super, path){
+    this._uniqColumns = [];
+    this._local = $H($util.requireAll(path)).values();
   }
 })

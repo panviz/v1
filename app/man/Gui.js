@@ -3,7 +3,7 @@
  * Mediator between application GUI and Controls implementation
  * View Manager
  */
-Class.create("Gui", Reactive, {
+Class.create("Gui", ReactiveProvider, {
   public : "all",
 
   initialize : function($super, p, store){

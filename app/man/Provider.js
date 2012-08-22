@@ -1,7 +1,7 @@
 /** 
- * Reactive manager of Items
+ * Items provider of any type
  */
-Class.create("Provider", Reactive, {
+Class.create("Provider", ReactiveProvider, {
 
   /**
    */

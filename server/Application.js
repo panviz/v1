@@ -21,13 +21,13 @@ Class.create("Application", {
     var s = this.server = express.createServer()
     this.configure();
     
-    $orm = this.orm = new ORM();
+    var db = this.db =  new StoreGraph(this.p.db);
     // As there is no current user
-    $user = this.user = new UserFul();
+    $user = this.user = new UserFul(db);
     // Read only configured modules to Store
-    var moduleStore = new StoreModule(this.p.module);
-    this.modular = new Modular(moduleStore);
-    this.provider = new Provider();
+    var moduleStore =   new StoreModule(this.p.module);
+    this.modular =      new Modular(moduleStore);
+    this.provider =     new Provider(db);
   },
 
   // Configure expressjs server
@@ -42,10 +42,6 @@ Class.create("Application", {
     s.use(express.methodOverride());
     s.use(express.errorHandler({dumpException: true, showStack: true}));
     s.use(express.session({ secret: 'keyboard cat' }));
-    //// Initialize Passport!
-    //s.use(passport.initialize());
-    //// Also use passport.session() middleware, to support persistent login sessions (recommended).
-    //s.use(passport.session());
     //TODO debug only
     s.use('/app', express.static(ROOT_PATH + '/app'));
     s.use('/client', express.static(ROOT_PATH + '/client'));
@@ -90,7 +86,7 @@ Class.create("Application", {
 
     this.p.i18n = require(ROOT_PATH + '/config/i18n/' + this.p.locale + '.json');
     var templatePath = ROOT_PATH + this.p.ui.theme.path + '/template';
-    var templateStore = new StoreJSON("Template", templatePath);
+    var templateStore = new StoreJSON(templatePath);
     this.templateFul = new TemplateFul(templateStore);
   },
 
