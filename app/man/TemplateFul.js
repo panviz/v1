@@ -7,5 +7,6 @@ Class.create("TemplateFul", ReactiveProvider, {
   initialize : function($super, store){
     $super(store);
     this.store.setUniq("name");
+    this.storeName = 'gui';
   }
 })

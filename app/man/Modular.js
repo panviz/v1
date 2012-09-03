@@ -12,6 +12,7 @@ Class.create("Modular", ReactiveProvider, {
   initialize : function($super, store){
     $super(store);
     this.store.setUniq("name");
+    this.storeName = 'module';
     var self = this;
     //TODO add findByMask(*) method to Store
     this.store._local.forEach(function(module){
@@ -100,7 +101,7 @@ Class.create("Modular", ReactiveProvider, {
    * Get required provider extension from user config
    * @return Array Extension names
    */
-  getUserProviders: function(repos){
+  getUserProviders : function(repos){
     var providers = [];
     repos.each(function(repo){
       providers.push("provider." + repo.provider)

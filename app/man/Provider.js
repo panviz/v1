@@ -3,6 +3,10 @@
  */
 Class.create("Provider", ReactiveProvider, {
 
+  initialize : function($super, store){
+    $super(store);
+    this.storeName = 'item';
+  },
   /**
    */
   _onLoad : function(transport){

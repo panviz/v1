@@ -11,6 +11,7 @@ Class.create("Application", {
 
   initialize : function(){
     $util = new Util();
+    this.man = {};
     var list = $util.loadList('/config/server/list.txt');
     list.forEach(function(name){
       require(ROOT_PATH + name);
@@ -23,11 +24,11 @@ Class.create("Application", {
     
     var db = this.db =  new StoreGraph(this.p.db);
     // As there is no current user
-    $user = this.user = new UserFul(db);
+    $user = this.user = this.man['user'] = new UserFul(db);
     // Read only configured modules to Store
-    var moduleStore =   new StoreModule(this.p.module);
-    this.modular =      new Modular(moduleStore);
-    this.provider =     new Provider(db);
+    var moduleStore = new StoreModule(this.p.module);
+    this.modular = this.man['module'] = new Modular(moduleStore);
+    this.provider = this.man['item'] = new Provider(db);
   },
 
   // Configure expressjs server
@@ -87,7 +88,7 @@ Class.create("Application", {
     this.p.i18n = require(ROOT_PATH + '/config/i18n/' + this.p.locale + '.json');
     var templatePath = ROOT_PATH + this.p.ui.theme.path + '/template';
     var templateStore = new StoreJSON(templatePath);
-    this.templateFul = new TemplateFul(templateStore);
+    this.templateFul = this.man['gui'] = new TemplateFul(templateStore);
   },
 
   setEnv : function(env){
@@ -118,11 +119,6 @@ Class.create("Application", {
    * TODO make more generic
    */
   getManager : function(name){
-    if(name == 'user') return this.user;
-    if(name == 'gui') return this.templateFul;
-    if(name == 'modular' || name == 'module') return this.modular;
-    if(name == 'item') return this.provider;
-    //TODO consider other modules
-    return this.modular.getSync('provider' + name);
+    return this.man[name] || this.modular.getSync('provider' + name);
   }
 });

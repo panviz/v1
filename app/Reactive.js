@@ -9,6 +9,7 @@ Class.create("Reactive", {
 
   initialize : function(store){
     this.store = store || $app.db;
+    this.storeName = this.__className.toLowerCase();
   },
 
   /**
@@ -19,7 +20,6 @@ Class.create("Reactive", {
    */
   get : function(callback, name, options){
     var self = this;
-    var className = this.__className.toLowerCase();
 
     /* @server never enters onLoad
      * @param data 
@@ -27,7 +27,7 @@ Class.create("Reactive", {
     var onLoad = function(data){
       // Update local storage if Remote Storage has found the record
       if (data.name){
-        self.store.save(onFind, className, data.name, data);
+        self.store.save(onFind, self.storeName, data.name, data);
       } else {
         $modal.error(data);
       }
@@ -40,12 +40,12 @@ Class.create("Reactive", {
       if (data){
         callback(data);
       } else {
-        $proxy.send(onLoad, "get", className, name, options)
+        $proxy.send(onLoad, "get", self.storeName, name, options)
       }
     }
     // TODO find by several keys, query chaining, consider options
     // or use uniq id
-    this.store.find(onFind, className, "name", name)
+    this.store.find(onFind, self.storeName, "name", name)
   },
 
   /**
@@ -53,8 +53,7 @@ Class.create("Reactive", {
    * @returns Json public difference in record between previous and current
    */
   put : function(callback, name, content, options){
-    var className = this.__className.toLowerCase();
-
+    var self = this;
     if (isServer){
       var onSave = callback;
     } else {
@@ -62,10 +61,10 @@ Class.create("Reactive", {
         options = options || {};
         options.content = diff;
         //TODO save data if put returns some
-        $proxy.send(callback, "put", className, name, options)
+        $proxy.send(callback, "put", self.storeName, name, options)
       }
     }
 
-    return this.store.save(onSave, className, name, content);
+    return this.store.save(onSave, self.storeName, name, content);
   }
 })

@@ -87,6 +87,7 @@ Class.create("Parcel", {
    * Send parcel depending on its current location
    */
   send : function(){
+    debugger
     if (this.model && this.name){
       //TODO add secure check on Client?
 
@@ -130,7 +131,7 @@ Class.create("Parcel", {
       this._restrict(user);
     }
     try{
-      $user.store.find(onFind.bind(this), key, type)
+      $user.store.find(onFind.bind(this), 'user', type, key)
     }
     catch(e){this._restrict()};
   },

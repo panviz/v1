@@ -7,6 +7,7 @@ Class.create("UserFul", Provider, {
   initialize : function($super, store){
     $super(store);
     this.store.setUniq(["name", "SECRET_TOKEN", "session"]);
+    this.storeName = 'user';
   },
 
   /* @server
@@ -53,6 +54,9 @@ Class.create("UserFul", Provider, {
     }
     // If password specified - Find user by login name to check password
     this.get(onFind, name, options);
+  },
+
+  register : function(){
   },
 
   logout : function(){
