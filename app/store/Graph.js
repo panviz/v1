@@ -23,10 +23,10 @@ Class.create("StoreGraph", {
    * @param type String model name
    * @param id Number
    */
-  findById : function(onFind, type, id){
+  findById : function(onFind, id){
     this._db.getNodeById(id, function (err, node){
-        if (err) throw("Not Found");
-        onFind(node);
+      if (err) throw("Not Found");
+      onFind(node);
     });
   },
 
@@ -38,15 +38,14 @@ Class.create("StoreGraph", {
    * @returns Json record
    */
   find : function(onFind, type, key, value){
-    if (!type || type == "id") return this.findById(onFind, key);
-    var findFunc = this._uniqColumns.include(type) ? this._db.getIndexedNode : this._db.getIndexedNodes;// change to find by not indexed property
+    if (!type || type == "id") return this.findById(onFind, value);
+    //var findFunc = this._uniqColumns.include(key) ? this._db.getIndexedNode : this._db.getIndexedNodes;// change to find by not indexed property
 
-    //findFunc('nodes', key, 'user', function (err, record){
-      //if (!record && isServer){
-        //throw("Not Found");//NotFound(key);
-      //})
-      //onFind(record);
-    //}
+    this._db.getIndexedNode(type, key, value, function (err, record){
+      if (!err && !record && isServer) err = "Not Found";//NotFound(key);
+      if (record) record = record.data;
+      onFind(err, record);
+    })
   },
 
   /**

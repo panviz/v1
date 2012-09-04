@@ -33,7 +33,7 @@ Class.create("Reactive", {
       }
     }
 
-    var onFind = function(data){
+    var onFind = function(err, data){
       // On missing record
       // Client storage returns null, so request goes to Remote
       // Remote storage throws NotFound Error

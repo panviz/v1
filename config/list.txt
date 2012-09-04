@@ -1,3 +1,7 @@
+lib/streamline/require-stub
+lib/streamline/future
+lib/streamline/runtime
+lib/streamline/builtins
 lib/ext
 lib/Functional/recursion
 lib/prototype/client.core

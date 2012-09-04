@@ -8,6 +8,7 @@ Class.create("Application", {
     var self = this;
     ROOT_PATH = '/';
     isServer = false;
+    //TODO resolve conflict with streamline/require-stub
     require = function(filename){
       return {};
     }

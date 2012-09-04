@@ -52,7 +52,7 @@ Class.create("Store", {
       throw("Not Found");//NotFound(key);
     }
     // as _local is in memory for now, return clone object, not reference
-    onFind(Object.clone(record));
+    onFind(null, Object.clone(record));
   },
 
   /**
@@ -90,7 +90,7 @@ Class.create("Store", {
         }
       }
     }
-    onSave(diff);
+    onSave(null, diff);
     return diff;
   }
 })

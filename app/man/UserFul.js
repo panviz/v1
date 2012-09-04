@@ -31,6 +31,7 @@ Class.create("UserFul", Provider, {
   login : function(cb, name, options){
     var self = this;
     var onFind = function(user){
+      debugger
       if (user && user.password == options.password){
         user.loggedIn = true;
         user.lastLogin = (new Date).toJSON();

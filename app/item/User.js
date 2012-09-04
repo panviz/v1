@@ -1,19 +1,15 @@
 /**
  * Authentication, and management of Repositories and preferences
- * TODO default Item should be created for new User on registration
  */
 Class.create("User", Item, {
 
   /**
    */
   initialize : function($super, name, password){
+    $super(name);
     if (password){
-      this.store = $orm.getStorage(this.__className);
       var p = {password: password};
-      this.put(this._update.bind(this), name, null, p)
-    }
-    else if (name){
-      $super(name);
+      setTimeout(this.put(this._update.bind(this), name, null, p), 100);
     }
   },
 
