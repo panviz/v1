@@ -30,7 +30,7 @@ Class.create("Store", {
       // as _local is in memory for now, return clone object, not reference
       onFind(Object.clone(this._local[idx]));
     } else {
-      throw("Not Found");//NotFound(id);
+      onFind(null, "Not Found");
     }
   },
 
@@ -49,10 +49,11 @@ Class.create("Store", {
     if (record && record.length < 1) record = false;
 
     if (!record && isServer){
-      throw("Not Found");//NotFound(key);
+      onFind(null, "Not Found");
+    } else {
+      // as _local is in memory for now, return clone object, not reference
+      onFind(Object.clone(record));
     }
-    // as _local is in memory for now, return clone object, not reference
-    onFind(Object.clone(record));
   },
 
   /**

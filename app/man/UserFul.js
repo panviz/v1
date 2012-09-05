@@ -6,7 +6,7 @@ Class.create("UserFul", Provider, {
 
   initialize : function($super, store){
     $super(store);
-    this.store.setUniq(["name", "SECRET_TOKEN", "session"]);
+    this.store.setUniq(["name", "SECRET_TOKEN"]);
     this.storeName = 'user';
   },
 
@@ -38,18 +38,14 @@ Class.create("UserFul", Provider, {
         //TODO generate token
         user.SECURE_TOKEN = "asdf";
         
-        // Set user connection id to pass security check on sending reply
+        // Save user connection id as session to pass security check on sending reply
         user.session = options.recipient;
 
-        // Reply with full user data
-        var onSave = function(){
-          cb(user);
-        }
         // Save logged user on right password
-        self.put(onSave, name, user, options);
+        self.put(cb, name, user, options);
       } else{
         // wrong password
-        throw("Not Found");
+        cb(null, "Not Found");
       }
     }
     // If password specified - Find user by login name to check password

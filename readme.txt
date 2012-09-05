@@ -1,5 +1,6 @@
       TODO
-Make tests for Core classes
+  replace store.setUniq with index
+  Make tests for Core classes
   
 Client
 

@@ -29,7 +29,7 @@ Class.create("Application", {
     this.currentLanguage = $set.currentLanguage;
     this.db                  = new StoreClient();
     $mod = this.modular      = new Modular();
-    $act = this.actionFul    = new ActionFul();
+    //$act = this.actionFul    = new ActionFul();
     $gui = this.gui          = new Gui($set);
     $modal = $gui.modal;
     //$provider = this.provider= new Provider();
@@ -42,7 +42,7 @@ Class.create("Application", {
     document.observe("app:context_changed", this._onContextChanged.bind(this));
     $modal.updateLoadingProgress('Actions: Done');
       
-    this._setHistory();
+    //this._setHistory();
     //Automatically logout user on session timeout
     this.activityMonitor = new ActivityMonitor(
       $set.session_timeout, 

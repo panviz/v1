@@ -26,7 +26,7 @@ Class.create("Proxy", {
       //Send registry on connection established
       this._socket.on('connection', function(conn){
         conn.on('data', function(message){
-          self._onServer(conn, message);
+          self._makeParcel(conn, message);
         })
       });
     }else{
@@ -34,11 +34,30 @@ Class.create("Proxy", {
       socket.onopen = function() {
         document.fire("proxy:connected");
       };
-      socket.onmessage = this._onMessage.bind(this);
+      socket.onmessage = this._makeParcel.bind(this);
       socket.onclose   = function(){
         document.fire("proxy:disconnected");
       }
     }
+  },
+
+  _makeParcel : function(obj, msg){
+    var self = this;
+    var conn;
+    if (obj.write){
+      conn = obj;
+    } else {
+      msg = obj.data;
+    }
+    var data = new Parcel(conn);
+    var cb = function(){
+      if (isServer) {
+        self._onServer(data);
+      } else{
+        self._onMessage(data);
+      }
+    }
+    data.parse(msg, cb);
   },
 
   /* @client
@@ -67,10 +86,7 @@ Class.create("Proxy", {
    * Client message is always PUT
    * @param e String stringified object
    */
-  _onMessage : function(e){
-    var data = new Parcel(e.data)
-    debugger
-
+  _onMessage : function(data){
     // Model requests its data
     if (data.id){
       if (data.content) this._cbs[data.id](data.content);
@@ -89,32 +105,35 @@ Class.create("Proxy", {
   /* @server
    * @param data Parcel
    */
-  _onServer : function(conn, message){
-    var data = new Parcel(conn, message);
-    debugger
+  _onServer : function(data){
+    var self = this;
     if (data.action){
       var manager = $app.getManager(data.model);
 
       if (manager){
         if (data.action == "get"){
-          try{
-            manager.get(this.subscribe.bind(this, data), data.name, data.options);
+          var onFind = function(diff, err){
+            if (err){
+              if (err != "Not Found") throw(err);
+              data.error = err;
+              self.subscribe(data);
+            } else {
+              self.subscribe(data, diff)
+            }
           }
-          catch(e){
-            if (e != "Not Found") throw(e);
-            data.error = e;
-            this.subscribe(data);
-          }
+          manager.get(onFind, data.name, data.options);
         }
         else if (data.action = "put"){
-          try{
-            manager.put(this.broadcast.bind(this, data), data.name, data.content, data.options)
+          var onFind = function(diff, err){
+            if (err){
+              if (err != "Not Found") throw(err);
+              data.error = err;
+              self.subscribe(data);
+            } else {
+              self.broadcast(data, diff)
+            }
           }
-          catch(e){
-            if (e != "Not Found") throw(e);
-            data.error = e;
-            this.subscribe(data);
-          }
+          manager.put(onFind, data.name, data.content, data.options);
         }
       } else {
         data.error = "Model not supported";
@@ -136,7 +155,6 @@ Class.create("Proxy", {
     data.send();
 
     // set follower after Parcel has been sent
-    // and recipient is set to User's id
     var followers = this._subscribers;
     if (!followers[data.id]) followers[data.id] = $H();
     // TODO don't save data.conn
