@@ -1,4 +1,14 @@
       TODO
+
+Graph View
+  draw User Node on context_changed
+  draw modules nodes as fake nodes
+  Save nodes positions on move localy
+  Store nodes positions on Ctrl+s & on time interval (autosave) at server
+  Hide node action
+  Merge nodes action
+
+
   replace store.setUniq with index
   Make tests for Core classes
   

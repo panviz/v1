@@ -22,8 +22,9 @@
     "titleFontSize": ""
   },
   "module": [
-    "provider.fs",
-    "view.grid"
+    "provider.fs"
+  , "view.grid"
+  , "view.graph"
   ],
   "db": {
     "url": "http://grafiy.com:7474"

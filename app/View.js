@@ -7,17 +7,13 @@ Class.create("View", {
   //@var Boolean Current state of the view
   fullScreen : false,
   
-  /**
-   * Constructor
-   * @param $super klass Reference to the constructor
-   * @param oElement HTMLElement
-   */
   initialize: function(){
     // TODO add this view to Ext Viewport
-    this.title = 'View Title';
+    this.title = 'View';
     this.p = {
       maximizable: true,
-      closable: true
+      closable: true,
+      title: this.title
     };   
 
   // changing context in other view triggers this event
@@ -25,6 +21,7 @@ Class.create("View", {
     //this._registerObserver(document, "app:context_loading", loadingObs);
     //this._registerObserver(document, "app:selection_changed", _onSelectionChanged);
     //this._registerObserver(document, "app:provider_changed", this._providerChanged.bind(this));
+    this.extControls = [];
   },
 
   /**

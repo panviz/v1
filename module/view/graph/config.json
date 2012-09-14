@@ -1,11 +1,6 @@
 {
-  "name": "texteditor",
+  "name": "graph",
   "openable": "true",
-  "order": "10",
-  "text": "51",
-  "title": "162",
-  "mimes": "none",
-  "formId": "edit_box",
-  "label": "Text Editor",
-  "description": "Very basic text editor"
+  "label": "Graph Editor",
+  "description": "D3 powered graph editor"
 }

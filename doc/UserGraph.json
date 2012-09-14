@@ -1,0 +1,36 @@
+{
+ "name": "User",
+ "children": [
+  {
+   "name": "Files",
+   "children": [
+     {"name": "Local"},
+     {"name": "Remote"},
+     {"name": "Ftp"}
+   ]
+  },
+  {
+   "name": "Contacts",
+   "children": [
+    {"name": "Facebook"},
+    {"name": "Vkontakte"},
+    {"name": "Skype"}
+   ]
+  },
+  {
+   "name": "Calendar",
+   "children": [
+     {"name": "Dates"}
+   ]
+  },
+  {"name": "Tags"},
+  {"name": "Notes"},
+  {
+   "name": "Bookmarks",
+   "children": [
+     {"name": "Firefox"},
+     {"name": "Delicio.us"}
+   ]
+  }
+ ]
+}

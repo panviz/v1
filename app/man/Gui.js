@@ -61,9 +61,9 @@ Class.create("Gui", ReactiveProvider, {
 
   createView : function(options, module){
     var control = module.man;
+    control.render(options);
     // view has only one top level control
     this.viewport.add(control.extControls[0])
-    control.render(options);
     // Add control to Gui controls registry
     this._instances.set(module.name, control);
   },

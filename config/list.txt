@@ -1,4 +1,5 @@
 lib/ext
+lib/d3
 lib/Functional/recursion
 lib/prototype/client.core
 lib/prototypeJS/lang/object

@@ -1,6 +1,7 @@
 Class.create("ViewGrid", View, {
 
-  initialize : function(){ 
+  initialize : function($super){
+    $super();
     this.model = Ext.define('ExtItem', {
       extend: 'Ext.data.Model',
       fields: [
@@ -29,15 +30,13 @@ Class.create("ViewGrid", View, {
         ]
       }
     });
+  },
 
-    this.tree = Ext.create('Ext.tree.Panel', {
+  render : function(p){
+    this.p = Object.extend(this.p, p);
+    this.tree = Ext.create('Ext.tree.Panel', Object.extend(this.p, {
       xtype: 'treepanel',
       //width: '30%',
-      minWidth: 100,
-      minHeight: 140,
-      title: 'Grid View',
-      width: 700,
-      height: 800,
       store: this.store,
       useArrows: true,
       rootVisible: true,
@@ -61,7 +60,7 @@ Class.create("ViewGrid", View, {
           dataIndex: 'modified'
         }
       ]
-    });
-    this.extControls = [this.tree]
+    }));
+    this.extControls.push(this.tree);
   }
 })

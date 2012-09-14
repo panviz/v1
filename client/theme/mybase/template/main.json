@@ -35,7 +35,11 @@
       "id": "GridView",
       "module": "view.grid",
       "options": {
-        "region": "west"
+        "region": "west",
+        "minWidth": 100,
+        "minHeight": 140,
+        "title": "Grid View",
+        "width": "30%"
       }
     },
     {
@@ -45,9 +49,16 @@
       }
     },
     {
+      "id": "GraphView",
       "module": "view.graph",
       "options": {
-        "region": "east"
+        "region": "east",
+        "contentEl": "desktop",
+        "title": "Graph View",
+        "width": 800,
+        "height": 1000,
+        "chargeBase": -200,
+        "chargeK": -10
       }
     }
   ]
