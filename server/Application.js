@@ -48,6 +48,8 @@ Class.create("Application", {
     s.use('/client', express.static(ROOT_PATH + '/client'));
     //TODO restrict to images, css
     s.use('/module', express.static(ROOT_PATH + '/module'));
+    // TODO restrict to user's folder only
+    s.use('/data', express.static(ROOT_PATH + '/data'));
   },
 
   //TODO

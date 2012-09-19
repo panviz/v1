@@ -11,7 +11,7 @@ Class.create("ViewGraph", View, {
 
     this.force = d3.layout.force()
       .on("tick", this._onTick.bind(this))
-      .charge(function(d){ return d._children ? d.children.length * self.p.chargeK : self.p.chargeBase; })
+      .charge(function(d){ return d.children ? d.children.length * self.p.chargeK : self.p.chargeBase; })
       .linkDistance(function(d){ return d.target._children ? 150 : 75; })
       .size([this.p.width, this.p.height]);
 
@@ -19,11 +19,11 @@ Class.create("ViewGraph", View, {
       .attr("width", this.p.width)
       .attr("height", this.p.height);
 
-    d3.json("/client/tree.json", function(json){
-      self.root = json;
-      self.root.fixed = true;
-      self.root.x = self.p.width / 2;
-      self.root.y = self.p.height / 2;
+    d3.json("/client/test.json", function(json){
+      var root = self.root = json;
+      root.fixed = true;
+      root.x = root.x || self.p.width / 2;
+      root.y = root.y || self.p.height / 2;
       self.update();
     });
   },
@@ -62,7 +62,7 @@ Class.create("ViewGraph", View, {
     // Enter any new nodes.
     g = this.node.enter().append("g")
       .attr("class", "node")
-      .on("click", this._onClick)
+      .on("click", this._onClick.bind(this))
       .on("mouseup", this._fix)
       .call(this.force.drag)
     g.append("circle")
@@ -90,7 +90,7 @@ Class.create("ViewGraph", View, {
       .attr("x2", function(d){ return d.target.x; })
       .attr("y2", function(d){ return d.target.y; });
 
-    this.node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+    this.node.attr("transform", function(d) { console.log('' + d.x + ' ' + d.y); return "translate(" + d.x + "," + d.y + ")"; });
   },
 
   // Toggle children on click.

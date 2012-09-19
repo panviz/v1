@@ -1,0 +1,47 @@
+{
+  "begin": "BEGIN:VCARD",
+  "end": "END:VCARD",
+  "singleText": [
+    "AGENT",
+    "BDAY",
+    "BEGIN",
+    "END",
+    "FN",
+    "FULLNAME",
+    "GEO",
+    "MAILER",
+    "NICKNAME",
+    "NOTE",
+    "REV",
+    "ROLE",
+    "TITLE",
+    "TZ",
+    "UID",
+    "URL",
+    "VERSION"
+  ],
+  "multipleText": [
+    "CATEGORIES",
+    "NICKNAME",
+    "ORG"
+  ],
+  "singleBinary": [
+    "KEY",
+    "LOGO",
+    "PHOTO",
+    "SOUND"
+  ],
+  "rfc2425": [
+    "NAME",
+    "PROFILE",
+    "SOURCE"
+  ],
+  "structured": [
+    "ADR",
+    "EMAIL",
+    "LABEL",
+    "N",
+    "PHOTO",
+    "TEL"
+  ]
+}

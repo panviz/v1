@@ -70,10 +70,10 @@ Class.create("Util", {
     var filepath = ROOT_PATH + path;
     var list = [];
     var resultList = [];
-    if (!this.Path.existsSync(filepath)){
+    if (!fs.existsSync(filepath)){
       filepath = ROOT_PATH + '/app' + path;
     };
-    if (this.Path.existsSync(filepath)){
+    if (fs.existsSync(filepath)){
       list = this.fs.readFileSync(filepath, 'binary').split('\n');
     }
     list.forEach(function(name) {
