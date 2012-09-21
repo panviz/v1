@@ -1,17 +1,21 @@
       TODO
 
 Graph View
-  draw User Node on context_changed
-  draw modules nodes as fake nodes
   Save nodes positions on move localy
   Store nodes positions on Ctrl+s & on time interval (autosave) at server
-  Hide node action
-  Merge nodes action
+  Show nodes properties
+  Actions
+    Edit
+    Create
+    Delete
+    Hide
+    Merge
+  Bound shown nodes to visible area
 
+View
+  draw User Node on context_changed
+  draw modules nodes as fake nodes
 
-  replace store.setUniq with index
-  Make tests for Core classes
-  
 Client
 
 Server
@@ -30,6 +34,10 @@ Item
 Modal
   should implement one Interface with View?
 
+Other
+  replace store.setUniq with index
+  Make tests for Core classes
+  
 
   ------------- Minor
 Revise
