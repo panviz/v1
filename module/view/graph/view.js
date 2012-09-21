@@ -19,7 +19,7 @@ Class.create("ViewGraph", View, {
       .attr("width", this.p.width)
       .attr("height", this.p.height);
 
-    d3.json("/client/test.json", function(json){
+    d3.json("/data/graph.json", function(json){
       var root = self.root = json;
       root.fixed = true;
       root.x = root.x || self.p.width / 2;

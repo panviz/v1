@@ -1,17 +1,26 @@
 require('driver');
 
+/**
+ * Contacts Provider
+ */
 Class.create('ProviderVCard', Provider, {
 		
 	initialize : function(){
     this.driver = new DriverVCard();
 	},
 
-  read : function(file){
-    return this.driver.readFile(file);
+  /**
+   * @param type String source of vCard
+   */
+  get : function(cb, path, type){
+    // The only one type supported currently
+    type = 'skype';
+    var contacts = this.driver.readFile(path);
+    cb(this[type](contacts));
   },
 
-  skype : function(json){
-    json.forEach(function(card){
+  skype : function(contacts){
+    contacts.forEach(function(card){
       var pairs = {
         "N": "skype"
       , "FN": ""
@@ -38,6 +47,6 @@ Class.create('ProviderVCard', Provider, {
         if (newKey !== key) delete card[key];
       })
     })
-    return json;
+    return contacts;
   }
 })
