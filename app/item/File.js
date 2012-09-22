@@ -1,10 +1,6 @@
 /**
  */
 Class.create("File", Item, {
-	_isFile: false,
-	_isDir: false,
-	_isRecycle: false,
-
   /**
    * @param path String
    * @param isLeaf Boolean
@@ -12,6 +8,10 @@ Class.create("File", Item, {
    * @param icon String
    */
   initialize : function(name, p){
+    this._isFile = false;
+    this._isDir = false;
+    this._isRecycle = false;
+
     this._path = path;
     var p = params || {};
     if(this._path && this._path.length && this._path.length > 1){

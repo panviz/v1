@@ -6,7 +6,7 @@
 Class.create("Store", {
   /**
    */
-  initialize : function(p){
+  initialize : function(){
     this._uniqColumns = [];
     this._local = [];
   },

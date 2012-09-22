@@ -4,41 +4,41 @@
  */
 Class.create("Parcel", {
 
-  // put or get
-  action: "",
-
-  // name of Reactive class on Client & Server
-  model: "",
-
-  // record identifier
-  name: "",
-
-  // unique parcel identifier
-  id: "",
-
-  // Connection object which can send this parcel
-  conn: null,
-
-  // Parcel content
-  content: null,
-
-  // Error is provided if content missing
-  error: null,
-
-  options: {},
-
-  // id of user which requested this parcel
-  sender: "",
-
-  // id of user whom to send this parcel
-  // String -> sessionID or Number -> userID
-  recipient: "",
-
   /**
    * Parcel can be initialized empty or with Connection
    * @param obj connection
    */
   initialize : function(connection){
+    // put or get
+    this.action = "";
+
+    // name of Reactive class on Client & Server
+    this.model = "";
+
+    // record identifier
+    this.name = "";
+
+    // unique parcel identifier
+    this.id = "";
+
+    // Connection object which can send this parcel
+    this.conn = null;
+
+    // Parcel content
+    this.content = null;
+
+    // Error is provided if content missing
+    this.error = null;
+
+    this.options = {};
+
+    // id of user which requested this parcel
+    this.sender = "";
+
+    // id of user whom to send this parcel
+    // String -> sessionID or Number -> userID
+    this.recipient = "";
+
     this.__defineGetter__("id", function(){
       // TODO add options to id as name is not uniq
       return this.model + this.name;
@@ -73,7 +73,7 @@ Class.create("Parcel", {
     this.name = msg.name;
     this.error = msg.error;
     this.content = msg.content;
-    this.options = Object.extend(this.options, msg.options);
+    Object.extend(this.options, msg.options);
     // check sender write access
     if (isServer && this.action == 'put') return this._secureFor('sender', cb);
     cb();

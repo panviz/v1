@@ -1,5 +1,4 @@
 /**
- * TODO inherit Reactive but not Provider as it is manager of Records
  */
 Class.create("ReactiveRecord", Reactive, {
 

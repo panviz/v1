@@ -3,7 +3,7 @@
  */
 Class.create("UserStatus", {
 
-	initialize: function(p){
+	initialize : function(p){
     var action = this.action = new Login({});//$act.get("loginAction");
     this.loginButton = Ext.create('Ext.Button', {
       text: "Login",

@@ -4,12 +4,10 @@
 Class.create("View", {
   //__implements : ["Focusable"],
 
-  //@var Boolean Current state of the view
-  fullScreen : false,
-  
-  initialize: function(){
+  initialize : function(){
     // TODO add this view to Ext Viewport
     this.title = 'View';
+    this.fullscreen = false;
     this.p = {
       maximizable: true,
       closable: true,

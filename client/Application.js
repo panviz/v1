@@ -38,7 +38,6 @@ Class.create("Application", {
     //TODO update progress bar from right places
     $modal.showBooting({steps: 2});
 
-    //listener on repository:loaded
     document.observe("app:context_changed", this._onContextChanged.bind(this));
     $modal.updateLoadingProgress('Actions: Done');
       
