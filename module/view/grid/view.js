@@ -6,37 +6,26 @@ Class.create("ViewGrid", View, {
       extend: 'Ext.data.Model',
       fields: [
       //columns definition
-        {name: 'id', type: 'number'},
         {name: 'name', type: 'string'},
-        {name: 'modified', type: 'string'}
+        {name: 'createdAt', type: 'string'},
+        {name: 'size', type: 'number'}
       ]
     });
 
     this.store = Ext.create('Ext.data.TreeStore', {
-      model: this.model,
-      root: {
-        id: 1,
-        name: "root",
-        modified: 9,
-        expanded: true,
-        children: [
-          { leaf: true, id: 2, name: "second", modified: 8},
-          { id: 3, name: "third", modified: 7, children: [
-              { id: 4, name: "forth", modified: 6, leaf: true },
-              { id: 5, modified: 5, leaf: true}
-            ]
-          },
-          { id: 6, name: "six", modified: 4, leaf: true }
-        ]
-      }
+      model: this.model
     });
+    document.observe("app:context_changed", this._onContextChanged.bind(this));
+  },
+
+  _onContextChanged : function(e){
+    this.store.setRootNode(e.memo);
   },
 
   render : function(p){
     this.p = Object.extend(this.p, p);
     this.tree = Ext.create('Ext.tree.Panel', Object.extend(this.p, {
       xtype: 'treepanel',
-      //width: '30%',
       store: this.store,
       useArrows: true,
       rootVisible: true,
@@ -46,18 +35,18 @@ Class.create("ViewGrid", View, {
       columns: [
         {
           xtype: 'treecolumn',
-          text: 'Id',
+          text: 'Item Name',
           flex: 2,
-          sortable: true,
-          dataIndex: 'id'
-        },{
-          text: 'Item name',
           sortable: true,
           dataIndex: 'name'
         },{
-          text: 'Date modified',
+          text: 'Date created',
           sortable: true,
-          dataIndex: 'modified'
+          dataIndex: 'createdAt'
+        },{
+          text: 'Children',
+          sortable: true,
+          dataIndex: 'size'
         }
       ]
     }));

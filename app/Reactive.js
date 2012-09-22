@@ -21,9 +21,7 @@ Class.create("Reactive", {
   get : function(callback, name, options){
     var self = this;
 
-    /* @server never enters onLoad
-     * @param data 
-     */
+    // @server never enters onLoad
     var onLoad = function(data){
       // Update local storage if Remote Storage has found the record
       if (data.name){
@@ -33,14 +31,25 @@ Class.create("Reactive", {
       }
     }
 
-    var onFind = function(data){
-      // On missing record
-      // Client storage returns null, so request goes to Remote
-      // Remote storage throws NotFound Error
-      if (data){
-        callback(data);
+    var onFind = function(data, err){
+      if (isServer){
+        if (data && options && options.depth && options.depth > 0){
+          var cb = function(children){
+            if (children){
+              data.children = children;
+              callback(data);
+            } else {callback(data)}
+          }
+          self.store.getLinked(cb, data.id, options.depth);
+        } else{
+          callback(data, err);
+        }
       } else {
-        $proxy.send(onLoad, "get", self.storeName, name, options)
+        if (data){
+          callback(data)
+        } else {
+          $proxy.send(onLoad, "get", self.storeName, name, options)
+        }
       }
     }
     // TODO find by several keys, query chaining, consider options

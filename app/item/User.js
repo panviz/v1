@@ -9,7 +9,7 @@ Class.create("User", Item, {
     //avoid Reactive.get here? or setTimeout for following put
     $super(name);
     if (password){
-      var p = {password: password};
+      var p = {password: password, depth: 1};
       this.put(this._update.bind(this), name, null, p);
     }
   },
@@ -17,6 +17,8 @@ Class.create("User", Item, {
   _update : function(data){
     var data = data || {};
     this.id = data.id;
+    this.children = data.children;
+    this.createdAt = data.createdAt;
     this.p = $H(data.preferences);
     this.p.set("SECURE_TOKEN", data.SECURE_TOKEN)
     this.roles = data.roles || ['guest'];

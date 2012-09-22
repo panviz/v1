@@ -45,8 +45,12 @@ Class.create("StoreGraph", {
     if (this._uniqColumns.include(key)){
       this._db.getIndexedNode(type, key, value, function (err, record){
         if (!err && !record) err = "Not Found";
-        if (record) record = record.data;
-        onFind(record, err);
+        var data;
+        if (record){
+          data = record.data;
+          data.id = record.id;
+        }
+        onFind(data, err);
       })
     } else {
       var query = [
@@ -59,8 +63,12 @@ Class.create("StoreGraph", {
       this._db.query(query, function(err, array){
         var record = array[0];
         if (!err && !record) err = "Not Found";
-        if (record) record = record.x.data;
-        onFind(record, err);
+        var data;
+        if (record){
+          data = record.x.data;
+          data.id = record.x.id;
+        }
+        onFind(data, err);
       })
     }
   },
@@ -78,8 +86,14 @@ Class.create("StoreGraph", {
         if (err) return onSave(null, err);
         // Update
         if (node){
-          node.data = Object.extend(node.data, diff)
-          var cb = function(){onSave(diff)}
+          var data = {};
+          $H(diff).keys().each(function(key){
+            if (Object.isString(diff[key])) data[key] = diff[key];
+          })
+          Object.extend(node.data, data)
+          var cb = function(err){
+            onSave(diff, err)
+          }
           node.save(cb);
         }
         // Create
@@ -103,5 +117,24 @@ Class.create("StoreGraph", {
       //TODO
     }
     return diff;
+  },
+
+  //TODO consider depth param
+  getLinked : function(onFind, id, depth){
+    var query = [
+      "START n=node(ID)",
+      "MATCH n-->(end)",
+      "RETURN end"
+    ].join('\n').replace('ID', id)
+
+    this._db.query(query, function(err, array){
+      if (err || !array[0]){
+        return onFind(null);
+      }
+      var children = array.map(function(row){
+        return row.end.data;
+      })
+      onFind(children);
+    })
   }
 })

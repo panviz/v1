@@ -8,6 +8,10 @@ Class.create("Item", ReactiveRecord, {
    * @param p JSON optional params
    */
   initialize : function($super, name, p){
+    this.__defineGetter__("size", function(){
+      return this.children ? this.children.length : 0;
+    })
+
     $super(name);
     var p = p || {};
     this.label = p.label || name;
@@ -31,15 +35,22 @@ Class.create("Item", ReactiveRecord, {
   },
 
   /**
-   * Get all directly linked items
+   * @param type String limit links to certain type if specified
+   * @returns Array all directly linked items
    */
-  linked : function(type){
+  links : function(type){
   },
 
+  /**
+   * @returns Array all "parent" items
+   */
   incoming : function(type){
   },
 
+  /**
+   * @returns Array all "child" items
+   */
   outgoing : function(type){
-  },
+  }
 
 });

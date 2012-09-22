@@ -1,4 +1,14 @@
 Class.create("ViewGraph", View, {
+  // visible items
+  items: [],
+  // visible nodes
+  nodes: [],
+  // visible item links
+  links: [],
+  // visible node edges
+  edges: [],
+  //centered current item
+  root: {},
 
   render : function(p){
     var self = this;
@@ -19,32 +29,36 @@ Class.create("ViewGraph", View, {
       .attr("width", this.p.width)
       .attr("height", this.p.height);
 
-    d3.json("/data/graph.json", function(json){
-      var root = self.root = json;
-      root.fixed = true;
-      root.x = root.x || self.p.width / 2;
-      root.y = root.y || self.p.height / 2;
-      self.update();
-    });
+    document.observe("app:context_changed", this.setRoot.bind(this));
+  },
+
+  setRoot : function(e){
+    if (this.root.name == e.memo.name) return
+    this.root.fixed = false;
+    var root = this.root = e.memo;
+    root.fixed = true;
+    root.x = this.p.width / 2;
+    root.y = this.p.height / 2;
+    this.items.push(root)
+    this.links = d3.layout.tree().links(this.items);
+
+    this.update();
   },
 
   update : function(){
-    var nodes = this.flatten(this.root),
-        links = d3.layout.tree().links(nodes);
-
     // Restart the force layout.
     this.force
       .gravity(0)     //no gravity to center
-      .nodes(nodes)
-      .links(links)
+      .nodes(this.items)
+      .links(this.links)
       .start();
 
     // Update the links…
-    this.link = this.vis.selectAll("line.link")
-      .data(links, function(d){ return d.target.id; });
+    this.edges = this.vis.selectAll("line.link")
+      .data(this.links, function(d){ return d.target.id; });
 
     // Enter any new links.
-    this.link.enter().insert("line", ".node")
+    this.edges.enter().insert("line", ".node")
       .attr("class", "link")
       .attr("x1", function(d){ return d.source.x; })
       .attr("y1", function(d){ return d.source.y; })
@@ -53,14 +67,14 @@ Class.create("ViewGraph", View, {
       .attr("style", "stroke: #9ecae1");
 
     // Exit any old links.
-    this.link.exit().remove();
+    this.edges.exit().remove();
 
     // Update the nodes…
-    this.node = this.vis.selectAll(".node")
-      .data(nodes, function(d){ return d.id; })
+    this.nodes = this.vis.selectAll(".node")
+      .data(this.items, function(d){ return d.id; })
 
     // Enter any new nodes.
-    g = this.node.enter().append("g")
+    g = this.nodes.enter().append("g")
       .attr("class", "node")
       .on("click", this._onClick.bind(this))
       .on("mouseup", this._fix)
@@ -81,16 +95,16 @@ Class.create("ViewGraph", View, {
       .text(function(d){ return d.name });
 
     // Exit any old nodes.
-    this.node.exit().remove();
+    this.nodes.exit().remove();
   },
 
   _onTick : function(e){
-    this.link.attr("x1", function(d){ return d.source.x; })
+    this.edges.attr("x1", function(d){ return d.source.x; })
       .attr("y1", function(d){ return d.source.y; })
       .attr("x2", function(d){ return d.target.x; })
       .attr("y2", function(d){ return d.target.y; });
 
-    this.node.attr("transform", function(d) { console.log('' + d.x + ' ' + d.y); return "translate(" + d.x + "," + d.y + ")"; });
+    this.nodes.attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")"; });
   },
 
   // Toggle children on click.

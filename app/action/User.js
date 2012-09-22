@@ -43,9 +43,10 @@ Class.create("Login", Action, {
       resetBtn.on('click', onClickReset);
       submitBtn.on('click', onClickSubmit);
       
-      var size = {width: 300, height: 140}
+      var size = {width: 300, height: 140};
       var title = "Please, login";
-      $modal.show(loginForm, size, title)
+      $modal.show(loginForm, size, title);
+      document.observe("user:auth", $modal.hide.bind($modal))
     }
 
     $gui.get(onLoad, 'loginForm');

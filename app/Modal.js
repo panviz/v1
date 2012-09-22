@@ -4,7 +4,7 @@
  */
 Class.create("Modal", {
 
-  initialize: function(p){
+  initialize : function(p){
     var p = p || {};
     this._window = Ext.create('Ext.window.Window', {
       title: p.title || 'Modal',
