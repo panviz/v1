@@ -10,7 +10,8 @@ Class.create("ViewGraph", View, {
   //centered current item
   root: {},
 
-  render : function(p){
+  initialize : function($super, p){
+    $super();
     var self = this;
     this.p = Object.extend(this.p, p);
     this.p.chargeBase = p.chargeBase || -200;
@@ -23,12 +24,10 @@ Class.create("ViewGraph", View, {
       .on("tick", this._onTick.bind(this))
       .charge(function(d){ return d.children ? d.children.length * self.p.chargeK : self.p.chargeBase; })
       .linkDistance(function(d){ return d.target._children ? 150 : 75; })
-      .size([this.p.width, this.p.height]);
 
-    this.vis = d3.select("#desktop").append("svg")
-      .attr("width", this.p.width)
-      .attr("height", this.p.height);
+    this.vis = d3.select("#desktop").append("svg");
 
+    control.on('resize', this._onResize.bind(this));
     document.observe("app:context_changed", this.setRoot.bind(this));
   },
 
@@ -116,6 +115,15 @@ Class.create("ViewGraph", View, {
       d.children = d._children;
       d._children = null;
     }
+    this.update();
+  },
+
+  _onResize : function(control, width, height){
+    this.p.width = width;
+    this.p.height = height;
+    this.force.size([width, height]);
+    this.vis.attr("width", this.p.width)
+            .attr("height", this.p.height);
     this.update();
   },
 

@@ -14,6 +14,7 @@
       "control": "Toolbar",
       "options": {
         "region": "north",
+        "title": "Toolbar",
         "height": 100,
         "minHeight": 60
       },
@@ -45,18 +46,16 @@
     {
       "module": "view.preview",
       "options": {
-        "region": "center"
+        "region": "west"
       }
     },
     {
       "id": "GraphView",
       "module": "view.graph",
       "options": {
-        "region": "east",
+        "region": "center",
         "contentEl": "desktop",
         "title": "Graph View",
-        "width": 800,
-        "height": 1000,
         "chargeBase": -200,
         "chargeK": -10
       }

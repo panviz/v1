@@ -6,8 +6,7 @@ Class.create("Module", ReactiveRecord, {
     this.p = p;
 
     eval(p.src);
-    var moduleClass = Class.getByName(p.man);
-    this.man = new moduleClass();
+    this.man = p.man;
     $super()
   }
 })

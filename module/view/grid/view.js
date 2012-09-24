@@ -1,7 +1,8 @@
 Class.create("ViewGrid", View, {
 
-  initialize : function($super){
+  initialize : function($super, p){
     $super();
+    this.p = Object.extend(this.p, p);
     this.model = Ext.define('ExtItem', {
       extend: 'Ext.data.Model',
       fields: [
@@ -15,15 +16,7 @@ Class.create("ViewGrid", View, {
     this.store = Ext.create('Ext.data.TreeStore', {
       model: this.model
     });
-    document.observe("app:context_changed", this._onContextChanged.bind(this));
-  },
 
-  _onContextChanged : function(e){
-    this.store.setRootNode(e.memo);
-  },
-
-  render : function(p){
-    this.p = Object.extend(this.p, p);
     this.tree = Ext.create('Ext.tree.Panel', Object.extend(this.p, {
       xtype: 'treepanel',
       store: this.store,
@@ -51,5 +44,10 @@ Class.create("ViewGrid", View, {
       ]
     }));
     this.extControls.push(this.tree);
+    document.observe("app:context_changed", this._onContextChanged.bind(this));
+  },
+
+  _onContextChanged : function(e){
+    this.store.setRootNode(e.memo);
   }
 })

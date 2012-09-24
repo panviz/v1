@@ -7,7 +7,7 @@ Class.create("Toolbar", {
     this.bar = Ext.create('Ext.Toolbar', {
       region: p.region,
       xtype: 'toolbar',
-      title: 'Toolbar',
+      title: p.title,
       items: p.innerControls
     });
 
