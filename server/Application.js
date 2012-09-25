@@ -2,6 +2,9 @@
 const express       = require('express')
   , errors        = require('../config/server/errors')
   require(ROOT_PATH + '/app/Util');
+  var log4js = require('log4js');
+log4js.configure('config/server/logger.json', {});
+var logger = log4js.getLogger();
 
 /**
  * Application class
@@ -37,7 +40,8 @@ Class.create("Application", {
     s.set('views', ROOT_PATH + '/client/html');
     s.helpers($util);
     s.set('view engine', 'ejs');
-    s.use(express.logger('\033[90m:method\033[0m \033[36m:url\033[0m \033[90m:response-time ms\033[0m'));
+    var loggerFormat = ':remote-addr \033[90m:method\033[0m \033[36m:url\033[0m \033[90m:response-time ms\033[0m';
+    s.use(log4js.connectLogger(logger, {format: loggerFormat }));
     s.use(express.cookieParser());
     s.use(express.bodyParser());
     s.use(express.methodOverride());
@@ -89,7 +93,7 @@ Class.create("Application", {
 
     this.p.i18n = require(ROOT_PATH + '/config/i18n/' + this.p.locale + '.json');
     var templatePath = ROOT_PATH + this.p.ui.theme.path + '/template';
-    var templateStore = new StoreJSON(templatePath);
+    var templateStore = new StoreJSON('gui', templatePath);
     this.templateFul = this.man['gui'] = new TemplateFul(templateStore);
   },
 
