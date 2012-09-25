@@ -4,11 +4,11 @@
  * Server: Stores records in Memory Array
  */
 Class.create("Store", {
-  /**
-   */
+  NOT_FOUND: "Not Found",
+
   initialize : function(){
     this._uniqColumns = [];
-    this._local = [];
+    this._local = {};
   },
 
   setUniq : function(uniq){
@@ -26,11 +26,11 @@ Class.create("Store", {
    */
   findById : function(onFind, type, id){
     var idx = id - 1;
-    if (this._local[idx]) {
+    if (this._local[type] && this._local[type][idx]) {
       // as _local is in memory for now, return clone object, not reference
-      onFind(Object.clone(this._local[idx]));
+      onFind(Object.clone(this._local[type][idx]));
     } else {
-      onFind(null, "Not Found");
+      onFind(null, this.NOT_FOUND);
     }
   },
 
@@ -41,15 +41,22 @@ Class.create("Store", {
    * @returns Json record
    */
   find : function(onFind, type, key, value){
-    if (!key || key == "id") return this.findById(onFind, value);
+    if (!this._local[type]) return onFind(null, this.NOT_FOUND)
 
-    var findFunc = this._uniqColumns.include(key) ? Enumerable.find : Enumerable.findAll;
-    var iterator = function(r){ return r[key] == value};
-    var record = findFunc.call(this._local, iterator);
+    // find all records with key property
+    if (Object.isBoolean(value)){
+      var findFunc = Enumerable.findAll;
+      var iterator = function(r){ return !!r[key]};
+    } else {
+      if (!key || key == "id") return this.findById(onFind, value);
+      var findFunc = this._uniqColumns.include(key) ? Enumerable.find : Enumerable.findAll;
+      var iterator = function(r){ return r[key] == value};
+    }
+    var record = findFunc.call(this._local[type], iterator);
     if (record && record.length < 1) record = false;
 
     if (!record && isServer){
-      onFind(null, "Not Found");
+      onFind(null, this.NOT_FOUND);
     } else {
       // as _local is in memory for now, return clone object, not reference
       onFind(Object.clone(record));
@@ -63,7 +70,8 @@ Class.create("Store", {
    * @returns Json difference in record between previous and current
    */
   save : function(onSave, type, name, diff){
-    var s = this._local;
+    if (!this._local[type]) this._local[type] = [];
+    var s = this._local[type];
     var previous;
     if (diff){
       for (var i=0; i < s.length; i++){
@@ -87,7 +95,7 @@ Class.create("Store", {
     else{
       for (var i=0; i < s.length; i++){
         if (s[i].name == name){
-         delete s[i];
+          this._local[type] = s.without(s[i]);
         }
       }
     }

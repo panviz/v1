@@ -2,7 +2,7 @@
  * Imlements Store model for modules in /module path
  */
 Class.create("StoreModule", Store, {
-
+  name: 'module',
   _root: '/module',
 
   //Extension path convensions
@@ -22,9 +22,10 @@ Class.create("StoreModule", Store, {
   initialize : function($super, toInit){
     $super();
     var self = this;
+    var s = this._local[this.name] = [];
 
     toInit.forEach(function(id){
-      self._local.push(self.initModule(id));
+      s.push(self.initModule(id));
     })
   },
 
@@ -50,5 +51,15 @@ Class.create("StoreModule", Store, {
     //TODO add dependent files
 
     return m;
+  },
+
+  //ensure type is right
+  find : function($super, onFind, type, key, value){
+    $super(onFind, this.name, key, value);
+  },
+
+  //ensure type is right
+  save : function($super, onSave, type, name, diff){
+    $super(onSave, this.name, name, diff);
   }
 })

@@ -3,7 +3,8 @@
  * Provider of module resources, such as [js, css, html(module templates)]
  */
 Class.create("Modular", ReactiveProvider, {
-  public : "all",
+  storeName: 'module',
+  public: "all",
 
   /**
    * Init all executable modules from local store
@@ -12,15 +13,19 @@ Class.create("Modular", ReactiveProvider, {
   initialize : function($super, store){
     $super(store);
     this.store.setUniq("name");
-    this.storeName = 'module';
     var self = this;
-    //TODO add findByMask(*) method to Store
-    this.store._local.forEach(function(module){
-      var config = module.config;
-      if(config.server && config.server.executable){
-        self._instances[module.id] = new Module(module.name, store);
+
+    if (isServer){
+      var onFind = function(modules){
+        modules.each(function(module){
+          var config = module.config;
+          if(config.server && config.server.executable){
+            self._instances[module.id] = new Module(module.name, store);
+          }
+        })
       }
-    })
+      this.store.find(onFind, this.storeName, 'name', true);
+    }
   },
 
   // @server

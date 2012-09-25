@@ -6,7 +6,7 @@ Class.create("User", Item, {
   /**
    */
   initialize : function($super, name, password){
-    //avoid Reactive.get here? or setTimeout for following put
+    //avoid Reactive.get here
     $super(name);
     if (password){
       var p = {password: password, depth: 1};
@@ -20,16 +20,19 @@ Class.create("User", Item, {
     this.children = data.children;
     this.createdAt = data.createdAt;
     this.p = $H(data.preferences);
-    this.p.set("SECURE_TOKEN", data.SECURE_TOKEN)
     this.roles = data.roles || ['guest'];
 
     if (this.id) document.fire("user:updated");
-    if (data.SECURE_TOKEN) document.fire("user:auth");
-    //TODO save current user reference in $app
 
-    // restore last visited item as current root
-    var current = data.context ? new Item(data.context) : this;
-    document.fire("app:context_changed", current);
+    // Current user
+    if (data.SECURE_TOKEN){
+      this.p.set("SECURE_TOKEN", data.SECURE_TOKEN)
+      $user = this;
+      document.fire("user:auth");
+      // restore last visited item as current root
+      var current = data.context ? new Item(data.context) : this;
+      document.fire("app:context_changed", current);
+    }
   },
 
   isAdmin : function(){

@@ -9,7 +9,7 @@ Class.create("Reactive", {
 
   initialize : function(store){
     this.store = store || $app.db;
-    this.storeName = this.__className.toLowerCase();
+    if (!this.storeName) this.storeName = this.__className.toLowerCase();
   },
 
   /**
@@ -20,16 +20,6 @@ Class.create("Reactive", {
    */
   get : function(callback, name, options){
     var self = this;
-
-    // @server never enters onLoad
-    var onLoad = function(data){
-      // Update local storage if Remote Storage has found the record
-      if (data.name){
-        self.store.save(onFind, self.storeName, data.name, data);
-      } else {
-        $modal.error(data);
-      }
-    }
 
     var onFind = function(data, err){
       if (isServer){
@@ -48,13 +38,13 @@ Class.create("Reactive", {
         if (data){
           callback(data)
         } else {
-          $proxy.send(onLoad, "get", self.storeName, name, options)
+          $proxy.send(self._onLoad.bind(self, onFind), "get", self.storeName, name, options)
         }
       }
     }
     // TODO find by several keys, query chaining, consider options
     // or use uniq id
-    this.store.find(onFind, self.storeName, "name", name)
+    this.store.find(onFind, this.storeName, "name", name)
   },
 
   /**
@@ -69,11 +59,20 @@ Class.create("Reactive", {
       var onSave = function(diff){
         options = options || {};
         options.content = diff;
-        //TODO save data if put returns some
-        $proxy.send(callback, "put", self.storeName, name, options)
+        $proxy.send(self._onLoad.bind(self, callback), "put", self.storeName, name, options)
       }
     }
 
-    return this.store.save(onSave, self.storeName, name, content);
+    return this.store.save(onSave, this.storeName, name, content);
+  },
+
+  //@client
+  _onLoad : function(cb, data){
+    // Update local storage if Remote Storage has found the record
+    if (data.name){
+      this.store.save(cb, this.storeName, data.name, data);
+    } else {
+      $modal.error(data);
+    }
   }
 })

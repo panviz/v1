@@ -48,6 +48,6 @@ Class.create("ViewGrid", View, {
   },
 
   _onContextChanged : function(e){
-    this.store.setRootNode(e.memo);
+    this.store.setRootNode(Object.clone(e.memo, true));
   }
 })

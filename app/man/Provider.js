@@ -2,10 +2,10 @@
  * Items provider of any type
  */
 Class.create("Provider", ReactiveProvider, {
+  storeName: 'item',
 
   initialize : function($super, store){
     $super(store);
-    this.storeName = 'item';
   },
   /**
    */

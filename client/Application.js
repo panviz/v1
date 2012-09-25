@@ -27,13 +27,13 @@ Class.create("Application", {
 
     //Public
     this.currentLanguage = $set.currentLanguage;
+    $i18n = this.i18n        = $set.i18n;
     this.db                  = new StoreClient();
     $mod = this.modular      = new Modular();
     //$act = this.actionFul    = new ActionFul();
     $gui = this.gui          = new Gui($set);
     $modal = $gui.modal;
     //$provider = this.provider= new Provider();
-    $i18n = this.i18n        = $set.i18n;
 
     //TODO update progress bar from right places
     $modal.showBooting({steps: 2});
@@ -50,6 +50,11 @@ Class.create("Application", {
       
     $modal.updateLoadingProgress('User Interface: Done');
     document.fire('app:loaded');
+
+    var onFind = function(array, err){
+      if (array && array[0]) $user = new User(array[0].name)
+    }
+    $app.db.find(onFind, 'user', 'SECURE_TOKEN', true)
   },
 
   /**

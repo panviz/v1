@@ -2,12 +2,12 @@
  * User management
  */
 Class.create("UserFul", Provider, {
-  public : ["id", "name", "loggedIn"],
+  storeName: 'user',
+  public: ["id", "name", "loggedIn"],
 
   initialize : function($super, store){
     $super(store);
     this.store.setUniq(["name", "SECRET_TOKEN"]);
-    this.storeName = 'user';
   },
 
   /* @server

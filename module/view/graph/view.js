@@ -38,7 +38,7 @@ Class.create("ViewGraph", View, {
     root.fixed = true;
     root.x = this.p.width / 2;
     root.y = this.p.height / 2;
-    this.items.push(root)
+    this.items = this.flatten(root);
     this.links = d3.layout.tree().links(this.items);
 
     this.update();

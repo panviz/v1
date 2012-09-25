@@ -18,7 +18,8 @@ Class.create("Gui", ReactiveProvider, {
   },
 
   // Initialize controls
-  initControls : function(template){
+  initControls : function(p){
+    var template = Object.clone(p, true);
     this._defaults = template.defaults;
     //TODO set controls to layout in viewport for performance
     var hasId = function(component){
@@ -62,9 +63,14 @@ Class.create("Gui", ReactiveProvider, {
   createView : function(options, module){
     var moduleClass = Class.getByName(module.man);
     var control = new moduleClass(options);
-    // view has only one top level control
-    this.viewport.add(control.extControls[0])
-    control.render();
+    var addView = function(){
+      // view has only one top level control
+      $gui.viewport.add(control.extControls[0])
+      control.render();
+    }
+    //TODO Create viewport before any controls?
+    if (!this.viewport){setTimeout(addView, 100)}
+    else {addView()}
     // Add control to Gui controls registry
     this._instances.set(module.name, control);
   },
