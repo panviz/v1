@@ -34,15 +34,16 @@ Class.create("StoreGraph", {
 
   /**
    * TODO retrieves Item with all its relationships
-   * @param type String model name
+   * @param type String Item type (model name)
    * @param key String property name
    * @param value String value to search records by
    * @returns Json record
    */
   find : function(onFind, type, key, value){
-    if (!type || type == "id") return this.findById(onFind, value);
+    if (!key || key == "id") return this.findById(onFind, value);
 
-    if (this._uniqColumns.include(key)){
+    //TODO indexing
+    if (false){//this._uniqColumns.include(key)){
       this._db.getIndexedNode(type, key, value, function (err, record){
         if (!err && !record) err = "Not Found";
         var data;
@@ -55,12 +56,20 @@ Class.create("StoreGraph", {
     } else {
       var query = [
         "START x=node(*)",
-        "WHERE x.KEY! = 'VALUE'",
+        "WHERE x.type! = 'TYPE'",
+        "AND x.KEY! = 'VALUE'",
         "RETURN x"
-      ].join('\n')
-          .replace('KEY', key)
-          .replace('VALUE', value)
+      ]
+      // Default type is not stored
+      if (!type) query = query.without(query[1]);
+      query = query.join('\n')
+        .replace('TYPE', type)
+        .replace('KEY', key)
+        .replace('VALUE', value)
+      logger.debug(query);
       this._db.query(query, function(err, array){
+        if (err) return onFind(null, err)
+        //TODO return array of results
         var record = array[0];
         if (!err && !record) err = "Not Found";
         var data;
@@ -120,6 +129,9 @@ Class.create("StoreGraph", {
   },
 
   //TODO consider depth param
+  /**
+   * @returns Array of Nodes
+   */
   getLinked : function(onFind, id, depth){
     var query = [
       "START n=node(ID)",

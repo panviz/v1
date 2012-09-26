@@ -12,6 +12,7 @@ Class.create("StoreClient", Store, {
 
   save : function($super, onSave, type, name, diff){
     $super(onSave, type, name, diff);
+    if (name == 'view.graph') return
     localStorage.s = JSON.stringify(this._local);
   }
 })

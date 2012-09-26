@@ -29,6 +29,12 @@
           "options": {
             "buttonSize": "small"
           }
+        },{
+          "id": "MainMenu",
+          "control": "MainMenu",
+          "options": {
+            "buttonSize": "small"
+          }
         }
       ]
     },

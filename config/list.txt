@@ -49,6 +49,7 @@ man/Modular
 man/Tasker
 control/AddressBar
 control/UserStatus
+control/Menu
 control/Toolbar
 View
 Modal
@@ -56,4 +57,5 @@ Observer
 action/Navigation
 action/Splash
 action/User
+action/Main
 ../client/Application

@@ -30,13 +30,13 @@ Class.create("StoreModule", Store, {
   },
 
   // @param id full name of module (e.g.: provider.fs)
-  initModule : function(id){
+  initModule : function(name){
     var m = {};
-    // to be uniq in store name is id now
-    m.name = id;
-    m.type = id.split('.')[0];
+    m.id = this.generateId();
+    m.name = name;
+    m.type = name.split('.')[0];
     var path = {};
-    var root = path.root = ROOT_PATH + this._root + '/' + id.replace('.','/');
+    var root = path.root = ROOT_PATH + this._root + '/' + name.replace('.','/');
     
     //Change paths to absolute
     $H(this._path).each(function(el){
@@ -61,5 +61,9 @@ Class.create("StoreModule", Store, {
   //ensure type is right
   save : function($super, onSave, type, name, diff){
     $super(onSave, this.name, name, diff);
+  },
+
+  generateId : function($super){
+    return $super(this.name);
   }
 })

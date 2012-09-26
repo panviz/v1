@@ -9,7 +9,7 @@ Class.create("Reactive", {
 
   initialize : function(store){
     this.store = store || $app.db;
-    if (!this.storeName) this.storeName = this.__className.toLowerCase();
+    if (!this.type) this.type = this.__className.toLowerCase();
   },
 
   /**
@@ -38,13 +38,13 @@ Class.create("Reactive", {
         if (data){
           callback(data)
         } else {
-          $proxy.send(self._onLoad.bind(self, onFind), "get", self.storeName, name, options)
+          $proxy.send(self._onLoad.bind(self, onFind), "get", self.type, name, options)
         }
       }
     }
     // TODO find by several keys, query chaining, consider options
     // or use uniq id
-    this.store.find(onFind, this.storeName, "name", name)
+    this.store.find(onFind, this.type, "name", name)
   },
 
   /**
@@ -59,18 +59,18 @@ Class.create("Reactive", {
       var onSave = function(diff){
         options = options || {};
         options.content = diff;
-        $proxy.send(self._onLoad.bind(self, callback), "put", self.storeName, name, options)
+        $proxy.send(self._onLoad.bind(self, callback), "put", self.type, name, options)
       }
     }
 
-    return this.store.save(onSave, this.storeName, name, content);
+    return this.store.save(onSave, this.type, name, content);
   },
 
   //@client
   _onLoad : function(cb, data){
     // Update local storage if Remote Storage has found the record
     if (data.name){
-      this.store.save(cb, this.storeName, data.name, data);
+      this.store.save(cb, this.type, data.name, data);
     } else {
       $modal.error(data);
     }

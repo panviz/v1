@@ -2,7 +2,8 @@
  * Items provider of any type
  */
 Class.create("Provider", ReactiveProvider, {
-  storeName: 'item',
+  // Default type is 'item'
+  type: '',
 
   initialize : function($super, store){
     $super(store);

@@ -2,7 +2,7 @@
  * Templates manager
  */
 Class.create("TemplateFul", ReactiveProvider, {
-  storeName: 'gui',
+  type: 'gui',
   public: "all",
 
   initialize : function($super, store){

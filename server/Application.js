@@ -1,10 +1,10 @@
-// Load dependencies
 const express       = require('express')
-  , errors        = require('../config/server/errors')
-  require(ROOT_PATH + '/app/Util');
-  var log4js = require('log4js');
+, errors        = require('../config/server/errors')
+
+require(ROOT_PATH + '/app/Util');
+var log4js = require('log4js');
 log4js.configure('config/server/logger.json', {});
-var logger = log4js.getLogger();
+logger = log4js.getLogger();
 
 /**
  * Application class
@@ -31,7 +31,6 @@ Class.create("Application", {
     // Read only configured modules to Store
     var moduleStore = new StoreModule(this.p.module);
     this.modular = this.man['module'] = new Modular(moduleStore);
-    this.provider = this.man['item'] = new Provider(db);
   },
 
   // Configure expressjs server
@@ -122,7 +121,7 @@ Class.create("Application", {
 
   /**
    * get from app or Modular
-   * TODO make more generic
+   * TODO test for providers
    */
   getManager : function(name){
     return this.man[name] || this.modular.getSync('provider' + name);

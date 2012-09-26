@@ -2,6 +2,7 @@
  * Authentication, and management of Repositories and preferences
  */
 Class.create("User", Item, {
+  type: 'user',
 
   /**
    */
@@ -14,11 +15,8 @@ Class.create("User", Item, {
     }
   },
 
-  _update : function(data){
-    var data = data || {};
-    this.id = data.id;
-    this.children = data.children;
-    this.createdAt = data.createdAt;
+  _update : function($super, data){
+    $super(data);
     this.p = $H(data.preferences);
     this.roles = data.roles || ['guest'];
 

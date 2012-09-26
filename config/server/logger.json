@@ -2,9 +2,8 @@
   "appenders": [
     {
       "type": "file",
-      "filename": ".server.log",
-      "maxLogSize": 20480,
-      "backups": 1
+      "filename": "./server/log/access.log",
+      "maxLogSize": 200000
     },
     {
       "type": "console",

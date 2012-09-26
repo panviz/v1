@@ -29,6 +29,7 @@ Class.create("ViewGraph", View, {
 
     control.on('resize', this._onResize.bind(this));
     document.observe("app:context_changed", this.setRoot.bind(this));
+    if ($user) this.setRoot({memo: $user});
   },
 
   setRoot : function(e){
@@ -97,6 +98,7 @@ Class.create("ViewGraph", View, {
     this.nodes.exit().remove();
   },
 
+  // Move nodes and lines on layout recalculation
   _onTick : function(e){
     this.edges.attr("x1", function(d){ return d.source.x; })
       .attr("y1", function(d){ return d.source.y; })
@@ -106,15 +108,28 @@ Class.create("ViewGraph", View, {
     this.nodes.attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")"; });
   },
 
-  // Toggle children on click.
+  // TODO nodes should have links to its lines (to delete lines by index, not full search)
+  // Toggle children visibility on click
   _onClick : function(d){
+    var self = this;
     if (d.children) {
-      d._children = d.children;
-      d.children = null;
-    } else {
-      d.children = d._children;
-      d._children = null;
+      d.children.each(function(item){
+        if (item.index >= 0){
+          delete self.items[item.index];
+          delete item.index;
+          self.links.each(function(link, index){
+            if (link.source == item || link.target == item) delete self.links[index]
+          })
+        } else {
+          self.items.push(item);
+          self.links.push({source: d, target: item})
+        }
+      })
+      //this.links = 
+      //TODO add/remove links
     }
+    this.items = this.items.compact();
+    this.links = this.links.compact();
     this.update();
   },
 

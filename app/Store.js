@@ -101,5 +101,9 @@ Class.create("Store", {
     }
     onSave(diff);
     return diff;
+  },
+
+  generateId : function(type){
+    return this._local[type].length;
   }
 })

@@ -21,6 +21,7 @@ Class.create("Application", {
   },
 
   init : function(){
+    $user = null;
     this._context = null;
     //this._focusables = [];
     //this.historyCount = 0;
@@ -62,8 +63,8 @@ Class.create("Application", {
    * @event user loads repository
    * @param data item data
    */
-  _onContextChanged : function(item){
-    this._context = item;
+  _onContextChanged : function(e){
+    this._context = e.memo;
     //TODO if path is not root goto path
     //this.goTo(item);
   },
