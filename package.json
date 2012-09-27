@@ -1,13 +1,13 @@
 {
-  "name": "Graph",
+  "name": "Grafiy",
   "homepage": "http://grafiy.com",
   "version": "0.0.1",
   "description": "All data integration service",
   "maintainers": [
     {
-     "name": "Dmitra",
-     "email": "k@dmitra.com",
-     "web": "http://www.dmitra.com"
+      "name": "Dmitra",
+      "email": "k@dmitra.com",
+      "web": "http://www.dmitra.com"
     }
   ],
   "bugs": {
@@ -18,7 +18,7 @@
     {
       "type": "git",
       "url": "https://bitbucket.org/dmitra/graph.git"
-    } 
+    }
   ],
   "dependencies": {
     "ejs": "0.7.1",
@@ -33,8 +33,16 @@
     "xml2js": "0.1.14",
     "csv": "0.0.19"
   },
-  "os": ["linux", "macos", "win"],
+  "os": [
+    "linux",
+    "macos",
+    "win"
+  ],
   "engines": {
     "node": "0.8.x"
+  },
+  "subdomain": "grafiy",
+  "scripts": {
+    "start": "node server/boot.js"
   }
 }

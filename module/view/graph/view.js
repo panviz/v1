@@ -16,6 +16,7 @@ Class.create("ViewGraph", View, {
     this.p = Object.extend(this.p, p);
     this.p.chargeBase = p.chargeBase || -200;
     this.p.chargeK = p.chargeK || -10;
+    this.container = $("desktop");
 
     var control = Ext.create('Ext.panel.Panel', this.p);
     this.extControls.push(control);
@@ -26,6 +27,7 @@ Class.create("ViewGraph", View, {
       .linkDistance(function(d){ return d.target._children ? 150 : 75; })
 
     this.vis = d3.select("#desktop").append("svg");
+    d3.select('#desktop').on("click", function(d){self.add(d)})
 
     control.on('resize', this._onResize.bind(this));
     document.observe("app:context_changed", this.setRoot.bind(this));
@@ -43,6 +45,12 @@ Class.create("ViewGraph", View, {
     this.links = d3.layout.tree().links(this.items);
 
     this.update();
+  },
+
+  add : function(d){
+    var point = d3.mouse(this.container);
+    this.items.push({name: 'new Node', fixed: true, x: point[0], y: point[1]})
+    this.update()
   },
 
   update : function(){
@@ -100,17 +108,26 @@ Class.create("ViewGraph", View, {
 
   // Move nodes and lines on layout recalculation
   _onTick : function(e){
-    this.edges.attr("x1", function(d){ return d.source.x; })
+    var radius = 15
+    var width = this.p.width;
+    var height = this.p.height;
+    this.nodes.attr("transform", function(d){
+      d.x = Math.max(radius, Math.min(width - radius, d.x))
+      d.y = Math.max(radius, Math.min(height - radius, d.y));
+      return "translate(" + d.x + "," + d.y + ")";
+    })
+
+    this.edges
+      .attr("x1", function(d){ return d.source.x; })
       .attr("y1", function(d){ return d.source.y; })
       .attr("x2", function(d){ return d.target.x; })
       .attr("y2", function(d){ return d.target.y; });
-
-    this.nodes.attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")"; });
   },
 
   // TODO nodes should have links to its lines (to delete lines by index, not full search)
   // Toggle children visibility on click
   _onClick : function(d){
+    d3.event.stopPropagation()
     var self = this;
     if (d.children) {
       d.children.each(function(item){
