@@ -42,7 +42,7 @@ Class.create("StoreModule", Store, {
     $H(this._path).each(function(el){
       path[el.key] = root + el.value;
     })
-    var config = m.config = require(path.config);
+    m.config = require(path.config);
     m.i18n = $util.requireAll(path.i18n);
     var manPath = path.root + '/' + m.type + '.js';
 

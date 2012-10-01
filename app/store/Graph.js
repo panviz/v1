@@ -25,9 +25,11 @@ Class.create("StoreGraph", {
    * @param id Number
    */
   findById : function(onFind, id){
+    var self = this;
     this._db.getNodeById(id, function (err, record){
       if (!err && !record) err = "Not Found";
       if (record) record = record.data;
+      self._parse(record)
       onFind(record, err);
     });
   },
@@ -40,6 +42,7 @@ Class.create("StoreGraph", {
    * @returns Json record
    */
   find : function(onFind, type, key, value){
+    var self = this;
     if (!key || key == "id") return this.findById(onFind, value);
 
     //TODO indexing
@@ -51,6 +54,7 @@ Class.create("StoreGraph", {
           data = record.data;
           data.id = record.id;
         }
+        self._parse(data);
         onFind(data, err);
       })
     } else {
@@ -77,6 +81,7 @@ Class.create("StoreGraph", {
           data = record.x.data;
           data.id = record.x.id;
         }
+        self._parse(data);
         onFind(data, err);
       })
     }
@@ -89,6 +94,7 @@ Class.create("StoreGraph", {
    * @returns Json difference in record between previous and current
    */
   save : function(onSave, type, name, diff){
+    var self = this;
     var db = this._db;
     if (diff){
       var onFind = function(err, node){
@@ -103,6 +109,7 @@ Class.create("StoreGraph", {
           var cb = function(err){
             onSave(diff, err)
           }
+          self._beforeSave(node.data);
           node.save(cb);
         }
         // Create
@@ -148,5 +155,31 @@ Class.create("StoreGraph", {
       })
       onFind(children);
     })
+  },
+
+  /**
+   * Neo4j doesn't support Maps as node's property
+   */
+  _parse : function(data){
+    $H(data).keys().each(function(key){
+      try{data[key] = JSON.parse(data[key])}
+      catch (e){return}
+    })
+    return data;
+  },
+
+  /**
+   * Neo4j doesn't support Maps as node's property
+   */
+  // TODO Arrays may contain Objects and are not strigified
+  _beforeSave : function(data){
+    $H(data).keys().each(function(key){
+      var value = data[key]
+      if (!Object.isNumber(value) && !Object.isString(value) && !Object.isArray(value)){
+        try{data[key] = JSON.stringify(value)}
+        catch (e){return}
+      }
+    })
+    return data;
   }
 })

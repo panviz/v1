@@ -45,7 +45,6 @@
         "region": "west",
         "minWidth": 100,
         "minHeight": 140,
-        "title": "Grid View",
         "width": "30%"
       }
     },
@@ -60,10 +59,7 @@
       "module": "view.graph",
       "options": {
         "region": "center",
-        "contentEl": "desktop",
-        "title": "Graph View",
-        "chargeBase": -200,
-        "chargeK": -10
+        "contentEl": "desktop"
       }
     }
   ]

@@ -23,7 +23,7 @@ Class.create("Util", {
         if (this.fs.statSync(item).isFile()){
           var ns = name.split('.');
           var key = ns[0];
-          var extension = ns.without(key)[ns.length-1];
+          var extension = ns.without(key).last();
           key = ns.without(extension).join('.');
           result[key] = require(item);
         } else {
@@ -40,16 +40,6 @@ Class.create("Util", {
 
   link_tag : function(file){
     return this.insertFile(file, '<link rel="stylesheet" type="text/css" href="%path%">');
-  },
-
-  //translations
-  //TODO add %s substitution
-  t: function(message){
-     if (settings.currentLanguage == 'en'){
-       return message;
-     } else {
-       settings.i18n[settings.currentLanguage][message];
-     }
   },
 
   // @server
@@ -88,6 +78,22 @@ Class.create("Util", {
       resultList.push(name+'.js');
     })
     return resultList;
+  },
+
+  composeHash : function(keys, values){
+    var hash = {};
+    keys.each(function(key, index){
+      //if there are key duplicates - append ordinal number to the key
+      if (hash[key]){
+        var counter = 0;
+        for (var i=0; i<index; i++){
+          if (keys[i] == key) counter++
+       }
+       key += counter;
+      }
+      hash[key] = values[index];
+    })
+    return hash;
   },
 
   resolveImageSource : function(src, defaultPath, size){

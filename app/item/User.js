@@ -24,7 +24,7 @@ Class.create("User", Item, {
 
     // Current user
     if (data.SECURE_TOKEN){
-      this.p.set("SECURE_TOKEN", data.SECURE_TOKEN)
+      this.token = data.SECURE_TOKEN;
       $user = this;
       document.fire("user:auth");
       // restore last visited item as current root

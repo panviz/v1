@@ -25,11 +25,6 @@ lib/prototype/proto.menu
 lib/prototype/proto.history
 lib/prototype/cookiejar
 lib/prototype/protopass
-lib/scriptaculous/src/builder
-lib/scriptaculous/src/effects
-lib/scriptaculous/src/dragdrop
-lib/scriptaculous/src/controls
-lib/scriptaculous/src/slider
 lib/sockjs
 Util
 Parcel

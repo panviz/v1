@@ -26,9 +26,24 @@ Class.create("Application", {
     //this._focusables = [];
     //this.historyCount = 0;
 
-    //Public
-    this.currentLanguage = $set.currentLanguage;
-    $i18n = this.i18n        = $set.i18n;
+    //TODO add %s substitution
+    var i18n = this.i18n = function(msg, variation){
+      if (i18n.current == 'en' || !i18n[msg]) return msg;
+      if (variation >= 0){
+        return i18n[msg + variation];
+      }
+      return i18n[msg];
+    }
+    i18n.update = function(set){
+      Object.extend(i18n, set);
+      Object.extend(i18n._object, set);   //for inspect purpose
+    }
+    i18n._object = {};
+    i18n.current = $set.currentLanguage;
+    var local = $set.i18n;
+    if (local) i18n.update(local);
+    t = i18n;     //Set Global translation function
+
     this.db                  = new StoreClient();
     $mod = this.modular      = new Modular();
     //$act = this.actionFul    = new ActionFul();
@@ -40,7 +55,7 @@ Class.create("Application", {
     $modal.showBooting({steps: 2});
 
     document.observe("app:context_changed", this._onContextChanged.bind(this));
-    $modal.updateLoadingProgress('Actions: Done');
+    $modal.updateLoadingProgress(t('Actions: Done'));
       
     //this._setHistory();
     //Automatically logout user on session timeout
@@ -49,7 +64,7 @@ Class.create("Application", {
       $set.client_timeout,
       $set.client_timeout_warning);
       
-    $modal.updateLoadingProgress('User Interface: Done');
+    $modal.updateLoadingProgress(t('User Interface: Done'));
     document.fire('app:loaded');
 
     var onFind = function(array, err){
@@ -108,14 +123,14 @@ Class.create("Application", {
    * Trigger a simple download
    * @param url String
    */
-    triggerDownload: function(url){
-        document.location.href = url;
-    },
+  triggerDownload : function(url) {
+      document.location.href = url;
+  },
 
-    /**
-     * Reload all messages on language change
-     * @param newLanguage String
-     */
+  /**
+   * Reload all messages on language change
+   * @param newLanguage String
+   */
   loadI18NMessages : function(newLanguage){
     var connection = new Connection('/i18n/' + newLanguage);
     connection.onComplete = function(transport){
@@ -140,10 +155,10 @@ Class.create("Application", {
   },
   
   /**
-   * Search all j_message_id tags and update their value
+   * Search all divs with class 'i18n' and update their value
    */
   updateI18nTags : function(){
-    var messageTags = $$('[j_message_id]');   
+    var messageTags = $$('[i18n]');   
     messageTags.each(function(tag){ 
       var messageId = tag.getAttribute("j_message_id");
       try{

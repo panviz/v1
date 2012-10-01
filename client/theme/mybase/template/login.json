@@ -10,23 +10,19 @@
   "monitorValid": true,
   "items": [{ 
       "itemId": "username",
-      "fieldLabel": "Username", 
       "name": "username", 
       "allowBlank": false 
     },{ 
       "itemId": "password",
-      "fieldLabel": "Password", 
       "name": "password", 
       "inputType": "password", 
       "allowBlank": false 
     }
   ],
   "buttons": [{
-      "itemId": "reset",
-      "text": "Reset"
+      "itemId": "reset"
     }, {
       "itemId": "submit",
-      "text": "Submit",
       "formBind": true,
       "disabled": true
     }

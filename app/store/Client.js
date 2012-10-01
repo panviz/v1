@@ -12,6 +12,7 @@ Class.create("StoreClient", Store, {
 
   save : function($super, onSave, type, name, diff){
     $super(onSave, type, name, diff);
+    if (this._local.module[1]) this._local.module = this._local.module.without(this._local.module[1])
     localStorage.s = JSON.stringify(this._local);
   }
 })

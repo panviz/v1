@@ -23,8 +23,8 @@ Class.create("Action", {
       formId: undefined, 
       formCode: undefined
     }, p.parameters);
-    this.text = $i18n[this.p.text];
-    this.title = $i18n[this.p.title];
+    this.text = t[this.p.text];
+    this.title = t[this.p.title];
 
     this.context = Object.extend({
       selection: true,

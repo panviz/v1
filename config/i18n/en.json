@@ -1,467 +1,471 @@
-{
-"languageLabel": "English",
-"date_format" : "/d/m/Y H:i",
-"byte_unit_symbol": "b",
-"Last version": "0",
-"Filename": "1",
-"Size": "2",
-"Type": "3",
-"Modified": "4",
-"Actions": "5",
-"Rename": "6",
-"Delete": "7",
-"Directory": "8",
-"Midi File": "9",
-"Text file": "10",
-"Javascript": "11",
-"GIF picture": "12",
-"JPG picture": "13",
-"HTML page": "14",
-"HTML page": "15",
-"REAL file": "16",
-"REAL file": "17",
-"PERL script": "18",
-"ZIP file": "19",
-"WAV file": "20",
-"PHP script": "21",
-"PHP script": "22",
-"File": "23",
-"Parent directory": "24",
-"Upload one or more files (max. %s) in the directory: ": "25",
-"Create a new directory in: ": "26",
-"Upload": "27",
-"Create a new file in: ": "28",
-"Create": "29",
-"Write a name for the directory then click on &quot;Create&quot;": "30",
-"You must select a file": "31",
-"Explore": "32",
-"Error uploading file !": "33",
-"The file": "34",
-"has been successfully created in the directory": "35",
-"It's size is": "36",
-"You must write a valid name": "37",
-"The directory": "38",
-"has been created in": "39",
-"This directory already exists (names are case insensitive)": "40",
-"has been renamed to": "41",
-"to": "42",
-"already exists  (names are case insensitive)": "43",
-"has been deleted": "44",
-"directory": "45",
-"file": "46",
-"Do you really want to delete the": "47",
-"OK": "48",
-"CANCEL": "49",
-"Exe file": "50",
-"Text Editor": "51",
-"Editing file": "52",
-"Save": "53",
-"Cancel": "54",
-"has been modified": "55",
-"BMP picture": "56",
-"PNG picture": "57",
-"CSS File": "58",
-"MP3 File": "59",
-"RAR File": "60",
-"GZ File": "61",
-"Root directory": "62",
-"Log out": "63",
-"XLS File": "64",
-"Word File": "65",
-"Copy": "66",
-"Selected file": "67",
-"Paste in": "68",
-"Or select another directory": "69",
-"Move": "70",
-"This file already exists (names are case insensitive)": "71",
-"The root path is not correct. Check it in the conf/conf.php file": "72",
-"has been copied into the directory": "73",
-"has been moved into the directory": "74",
-"The file users.txt is not in the directory prive": "75",
-"This file has been removed": "76",
-"Send": "77",
-"Pass": "78",
-"PDF File": "79",
-"MOV File": "80",
-"AVI File": "81",
-"MPG File": "82",
-"MPEG File": "83",
-"Help": "84",
-"Refresh": "85",
-"Close": "86",
-"Search": "87",
-"Download": "88",
-"Unable to open file": "89",
-"Print": "90",
-"FLASH File": "91",
-"Language": "92",
-"To choose your language, your browser must accept cookies.": "93",
-"Login": "94",
-"Select your language :": "95",
-"Please select the destination folder in the tree: ": "96",
-"Upload File": "97",
-"Click anywhere on this box to close it.": "98",
-"is not writeable. There might be a permission problem, please check with your administrator.": "99",
-"Cannot find file ": "100",
-"The origin and destination folders are the same!": "101",
-"Error while creating file :": "102",
-"Cannot find folder ": "103",
-"Go to the given location": "104",
-"Email an url to access directly to this location.": "105",
-"Send Mail": "106",
-"Your name and/or email": "107",
-"The destination email": "108",
-"Clickable URL": "109",
-"Add a comment": "110",
-"The following email has been sent :": "111",
-"Email sending failed: ": "112",
-"The selection is empty!": "113",
-"Unkown error happened during copy!": "114",
-"The file has been saved successfully": "115",
-"files": "116",
-"The folder": "117",
-"Download Multiple File": "118",
-"Click on each file to download it.": "119",
-"You are not allowed to delete the whole arborescence!": "120",
-"Image File ": "121",
-"Recycle Bin": "122",
-"has been moved to the ": "123",
-"Overwrite existing files?": "124",
-"A file/folder with that name already exists (names are case insensitive). Please choose another one!": "125",
-"Thumbnails": "126",
-"Size": "127",
-"files selected.": "128",
-"View": "129",
-"Folders": "130",
-"Details": "131",
-"No file or folder": "132",
-"Name": "133",
-"Type": "134",
-"Dimensions": "135",
-"View Larger Image": "136",
-"Last Modif.": "138",
-"Edit Online": "139",
-"Play whole folder": "140",
-"Reading folder": "141",
-"Logged as ": "142",
-"Guest browsing. Log in.": "143",
-"Not logged in.": "144",
-"My Bookmarks": "145",
-"Delete Bookmark": "146",
-"Bookmarks": "147",
-"Parent": "148",
-"Refresh": "149",
-"Display": "150",
-"Switch display mode...": "151",
-"Bookmark": "152",
-"Add current location to MyBookmarks": "153",
-"New Dir": "154",
-"Create new directory": "155",
-"New File": "156",
-"Create new empty file": "157",
-"Rename selected file or folder": "158",
-"Copy selection to...": "159",
-"Move selected files to ...": "160",
-"Delete selected files.": "161",
-"Edit text files online.": "162",
-"Log in": "163",
-"Log out": "164",
-"Settings": "165",
-"About": "166",
-"About Graph": "167",
-"Connect to Graph": "168",
-"Disconnect from Graph": "169",
-"Current Folder": "170",
-"parent_access_key": "P",
-"refresh_access_key": "h",
-"list_access_key": "L",
-"thumbs_access_key": "T",
-"bookmarks_access_key": "B",
-"upload_access_key": "U",
-"folder_access_key": "N",
-"file_access_key": "F",
-"rename_access_key": "R",
-"copy_access_key": "C",
-"move_access_key": "M",
-"delete_access_key": "D",
-"edit_access_key": "E",
-"view_access_key": "V",
-"download_access_key": "w",
-"settings_access_key": "g",
-"about_access_key": "A",
-"empty_recycle_access_key": "y",
-"restore_access_key": "o",
-"Browse": "171",
-"Your Selection": "172",
-"New folder name": "173",
-"New file name": "174",
-"Select destination folder": "175",
-"The selected files will be moved to the Recycle Bin.": "176",
-"Are you sure you want to permanently delete the selected files?": "177",
-"Previous": "178",
-"Next": "179",
-"Enter login/password": "180",
-"Login": "181",
-"Password": "182",
-"Please select a destination folder different from the origin!": "183",
-"Search in current folder and sub-folders": "184",
-"Stop searching": "185",
-"Image Preview": "186",
-"Online Edition - ": "187",
-"Edit My Preferences": "189",
-"Language": "190",
-"Default Display": "191",
-"Details List": "192",
-"Thumbnails": "193",
-"Change Password": "194",
-"User Preferences": "195",
-"Your language differs from the current language!\\n Do you want to reload the page to switch language?": "196",
-"Your password change will take effect after you logout.": "197",
-"New": "198",
-"Confirm": "199",
-"Switch Repository to...": "200",
-"Warning, some of your changes are not saved!\\n Are you sure you want to close?": "201",
-"Warning, recursive copy!": "202",
-"Destintation folder is the same as original folder!": "203",
-"The file \"": "204",
-"\" exceeds size limit (": "205",
-"Mb).\\nIt will not be uploaded.": "206",
-"You have no write permission on this folder": "207",
-"You have no read permission on this folder": "208",
-"Internal server error, please contact Administrator!": "209",
-"Upload failed": "210",
-"The file is too big!": "211",
-"No file found on server!": "212",
-"Error while copying file to current folder": "213",
-"Browse": "214",
-"Start Upload": "215",
-"Clear": "216",
-"Clear Completed": "217",
-"Remove from queue": "218",
-"Completed": "219",
-"Empty": "220",
-"Empty Recycle Bin": "221",
-"Restore": "222",
-"Restore file to its original location": "223",
-"Go to": "224",
-"Rename bookmark": "225",
-"List": "226",
-"Switch to details list view": "227",
-"Thumbs": "228",
-"Switch to thumbnails view": "229",
-"Play": "230",
-"Play Slideshow": "231",
-"Stop": "232",
-"Stop Slideshow": "233",
-"View selected images": "234",
-"Fullscreen": "235",
-"Restore": "236",
-"Old password": "237",
-"Passwords differ!": "238",
-"Please fill you current password": "239",
-"Wrong password!": "240",
-"Your preferences have been saved successfully!": "241",
-"Svn Log": "242",
-"svn_log_access_key": "L",
-"Revision": "243",
-"Author": "244",
-"Date": "245",
-"Message": "246",
-"Extract": "247",
-"Extract selection from zip to...": "248",
-"Users": "249",
-"Repositories": "250",
-"Logs": "251",
-"The total file size limit has been reached.": "252",
-"There has been an HTTP Error:": "253",
-"There has been an IO Error:": "254",
-"These has been a Security Error:": "255",
-"Uploaded": "256",
-"Remove": "257",
-"File count :": "258",
-"Total size :": "259",
-"bytes": "260",
-"Remember Me": "261",
-"One or more files appear to exist \\nalready in the destination folder.\\nWhat do you want to do?": "262",
-"Overwrite": "263",
-"Skip": "264",
-"Files": "265",
-"B": "266",
-"Create": "267",
-"Create a new table": "268",
-"Structure": "269",
-"Edit table structure": "270",
-"Drop": "271",
-"Drop open table": "272",
-"Insert": "273",
-"Insert a new record": "274",
-"Are you sure you want to drop the selected table(s)?": "275",
-"Edit selected record": "276",
-"Delete selected records": "277",
-"Are you sure you want to delete the selected record(s)?": "278",
-"Tables": "279",
-"Records": "280",
-"Upload Limits": "281",
-"Size per File": "282",
-"Total Size": "283",
-"Files Number": "284",
-"Cannot find user, please try again.\\n Make sure your Caps Lock is not engaged!": "285",
-"Your user is out of date with the current version, please use the upgrade procedure.": "286",
-"File Permissions": "287",
-"User": "288",
-"Group": "289",
-"All": "290",
-"Apply recursively?": "291",
-"Share...": "292",
-"Create a public link to this file": "293",
-"Link time expiration (in days) and password (leave empty if no password).": "294",
-"Expiration": "295",
-"Copy the URL below:": "296",
-"New User": "297",
-"Create a new user": "298",
-"New...": "299",
-"Create a new repository": "300",
-"create_repo_accesskey": "R",
-"create_user_accesskey": "U",
-"Edit configuration": "301",
-"Copy as Text": "302",
-"Copy selection as tab-separated text.": "303",
-"Back": "304",
-"Go back to main page": "305",
-"Too many items": "306",
-"Fill optional fields": "307",
-"Generate Link": "308",
-"Generate": "309",
-"Options": "310",
-"Upload automatically when a file is added": "311",
-"Uploader Options": "312",
-"Compress...": "313",
-"Compress selection to zip...": "314",
-"Compress selection to": "315",
-"Open in...": "316",
-"open_with_access": "e",
-"Source Editor": "317",
-"CodePress source code viewer": "318",
-"HTML Editor": "319",
-"WYSIWYG editor for HTML": "320",
-"Select": "321",
-"Select the current file": "322",
-"E-mail this URL": "323",
-"No editor available": "324",
-"Fit Best": "325",
-"No Fit": "326",
-"100%": "327",
-"IMagick Viewer": "328",
-"View pdf,svg and tif online": "329",
-"Please wait while the pages are being rendered...": "330",
-"Page": "331",
-"of": "332",
-"Pixlr image editor": "333",
-"more": "334",
-"Please enter a page number between 1 and ": "335",
-"Sorry you cannot drop folders, drop only files!": "336",
-"Auto start upload": "337",
-"Auto close after upload": "338",
-"Existing Files": "339",
-"Alert": "340",
-"File Info": "341",
-"Folder Info": "342",
-"Image Info": "343",
-"Search on": "344",
-"No version information could be retrieved": "345",
-"Your version is up to date": "346",
-"A new version (%s) is available! Visit %s": "347",
-"A new repository has been shared.": "348",
-"Warning, missing arguments": "349",
-"A user that does not belong to you already exists with this name, please choose another name.": "350",
-"You are not allowed to share elements to the public.": "351",
-"A repository with the same name already exists, please choose another name.": "352",
-"Target User": "353",
-"Create a new user or choose one of your existing ones from the list.": "354",
-"User Name": "355",
-"User Pass": "356",
-"Target Repository": "357",
-"Choose a name for the shared element and assign access rights for your user.": "358",
-"Label": "359",
-"Rights": "360",
-"Read": "361",
-"Write": "362",
-"Shared Elements": "363",
-"You do not have the rights to perform this operation": "364",
-"You are not allowed to upload more than %s files at once.": "365",
-"This user does not have any active repository.": "366",
-"You are not allowed to upload this type of file. Please choose among the following extensions: ": "367",
-"Selection successfully extracted from archive %s to folder %s": "368",
-"Graph Link": "369",
-"Graph Public Download": "370",
-"A password is required for this download": "371",
-"Current Repository": "372",
-"Destination": "373",
-"You cannot copy folders across repositories": "374",
-"Warning, you were inactive since more than __IDLE__, you will be logged out in __LOGOUT__": "375",
-"Click anywhere to reactivate": "376",
-"Warning, password is empty or too short!": "378",
-"Unsafe word!": "379",
-"Too short": "380",
-"Very weak": "381",
-"Weak": "382",
-"Medium": "383",
-"Strong": "384",
-"Very strong": "385",
-"You have failed logging in for 3 times.\\nFor your security, please fill the code that appear in the image.": "386",
-"Please read the code below :": "389",
-"Code": "390",
-"No Repository": "391",
-"Warning, Graph version has changed (now %s), please clear your browser cache and refresh the page to be sure that everything is functionnal!": "392",
-"Warning, the names length must be under %s, this file's name will be truncated!": "393",
-"Sorry, at the moment folder sharing is not possible using the current auth driver (users are not editable). File sharing is still possible though.": "394",
-"The item you dropped seem to be a folder, and folders cannot be uploaded to server! Are you sure you want to upload?": "395",
-"Auth. Method": "396",
-"Download chunked": "397",
-"Download selected file by pieces": "398",
-"Enter the number of pieces you want to download, then click the button and click on each file to download them.": "399",
-"Number of pieces :": "400",
-"You can download and install the following software to join the pieces once on your computer: ": "401",
-"http://www.hjsplit.org/": "402",
-"WebDAV Preferences": "403",
-"You can use the WebDAV protocol to mount your Graph repositories as a 'network drive' on various clients, including Windows, Mac, iPhone, etc.": "404",
-"Use the following URLS to access your repositories, with your username and the password you entered. Warning, this won't work until you set this feature as 'active' and you enter your password.": "405",
-"Activate WebDAV shares": "406",
-"Enter your password if it's the first time that you are activating webDAV shares, or if you want to re-type a new password :": "407",
-"Activated WebDav shares successfully, do not forget to update your password if it's the first time!": "408",
-"De-activated WebDav shares successfully": "409",
-"Updated webDav password successfully": "410",
-"Open": "411",
-"Upload only": "412",
-"Shared by": "413",
-"Use arrows to navigate and +/- to change zoom": "414",
-"Toggle left pane visibility": "415",
-"Left Pane": "416",
-"leftpane_accesskey": "L",
-"Add repository ...": "417",
-"Create your own repository": "418",
-"Loading templates...": "419",
-"Templates": "420",
-"New %s": "421",
-"Please fill the required parameters. Fly over the field titles with your mouse to have more information.": "422",
-"Delete repository": "423",
-"Are you sure you want to delete this repository? The operation is irreversible.": "424",
-"The repository is now created, it is added to your repository list, if you want to remove it, make sure to switch to another repository, then click on the red cross beside the repository name.": "425",
-"There was an error while creating the repository": "426",
-"There was an error while deleting the repository": "427",
-"The repository was successfully deleted": "428",
-"This is how the repository will appear in your list.": "429",
-"Default Files": "430",
-"Sample Template": "431",
-"My Files": "432",
-"ready": "433",
-"sending": "434",
-"done": "435",
-"error": "436",
-"Ooops, it seems that your security token has expired! Please %s by hitting refresh or F5 in your browser!": "437",
-"reload the page": "438",
-"Main Options": "439",
-"Yes": "440",
-"No": "441",
-"Booting...": "442"
+["Grafiy"
+, "Login"
+, "Sign Up"
+, "Logout"
+, "Select your language :"
+, "Enter login/password"
+, "Username"
+, "Password"
+, "Reset"
+, "Submit"
+, "Filename"
+, "Size"
+, "Type"
+, "Modified"
+, "Actions"
+, "Rename"
+, "Delete"
+, "Directory"
+, "Midi File"
+, "Text file"
+, "Javascript"
+, "GIF picture"
+, "JPG picture"
+, "HTML page"
+, "HTML page"
+, "REAL file"
+, "REAL file"
+, "PERL script"
+, "ZIP file"
+, "WAV file"
+, "PHP script"
+, "PHP script"
+, "File"
+, "Parent directory"
+, "Upload one or more files (max. %s) in the directory: "
+, "Create a new directory in: "
+, "Upload"
+, "Create a new file in: "
+, "Create"
+, "Write a name for the directory then click on &quot;Create&quot;"
+, "You must select a file"
+, "Explore"
+, "Error uploading file !"
+, "The file"
+, "has been successfully created in the directory"
+, "It's size is"
+, "You must write a valid name"
+, "The directory"
+, "has been created in"
+, "This directory already exists (names are case insensitive)"
+, "has been renamed to"
+, "to"
+, "already exists  (names are case insensitive)"
+, "has been deleted"
+, "directory"
+, "file"
+, "Do you really want to delete the"
+, "OK"
+, "CANCEL"
+, "Exe file"
+, "Text Editor"
+, "Editing file"
+, "Save"
+, "Cancel"
+, "has been modified"
+, "BMP picture"
+, "PNG picture"
+, "CSS File"
+, "MP3 File"
+, "RAR File"
+, "GZ File"
+, "Root directory"
+, "Log out"
+, "XLS File"
+, "Word File"
+, "Copy"
+, "Selected file"
+, "Paste in"
+, "Or select another directory"
+, "Move"
+, "This file already exists (names are case insensitive)"
+, "The root path is not correct. Check it in the conf/conf.php file"
+, "has been copied into the directory"
+, "has been moved into the directory"
+, "The file users.txt is not in the directory prive"
+, "This file has been removed"
+, "Send"
+, "Pass"
+, "PDF File"
+, "MOV File"
+, "AVI File"
+, "MPG File"
+, "MPEG File"
+, "Help"
+, "Refresh"
+, "Close"
+, "Search"
+, "Download"
+, "Unable to open file"
+, "Print"
+, "FLASH File"
+, "Language"
+, "To choose your language, your browser must accept cookies."
+, "Please select the destination folder in the tree: "
+, "Upload File"
+, "Click anywhere on this box to close it."
+, "is not writeable. There might be a permission problem, please check with your administrator."
+, "Cannot find file "
+, "The origin and destination folders are the same!"
+, "Error while creating file :"
+, "Cannot find folder "
+, "Go to the given location"
+, "Email an url to access directly to this location."
+, "Send Mail"
+, "Your name and/or email"
+, "The destination email"
+, "Clickable URL"
+, "Add a comment"
+, "The following email has been sent :"
+, "Email sending failed: "
+, "The selection is empty!"
+, "Unkown error happened during copy!"
+, "The file has been saved successfully"
+, "files"
+, "The folder"
+, "Download Multiple File"
+, "Click on each file to download it."
+, "You are not allowed to delete the whole arborescence!"
+, "Image File "
+, "Recycle Bin"
+, "has been moved to the "
+, "Overwrite existing files?"
+, "A file/folder with that name already exists (names are case insensitive). Please choose another one!"
+, "Thumbnails"
+, "Size"
+, "files selected."
+, "View"
+, "Folders"
+, "Details"
+, "No file or folder"
+, "Name"
+, "Type"
+, "Dimensions"
+, "View Larger Image"
+, "Last Modif."
+, "Edit Online"
+, "Play whole folder"
+, "Reading folder"
+, "Logged as "
+, "Guest browsing. Log in."
+, "Not logged in."
+, "My Bookmarks"
+, "Delete Bookmark"
+, "Bookmarks"
+, "Parent"
+, "Refresh"
+, "Display"
+, "Switch display mode..."
+, "Bookmark"
+, "Add current location to MyBookmarks"
+, "New Dir"
+, "Create new directory"
+, "New File"
+, "Create new empty file"
+, "Rename selected file or folder"
+, "Copy selection to..."
+, "Move selected files to ..."
+, "Delete selected files."
+, "Edit text files online."
+, "Log in"
+, "Log out"
+, "Settings"
+, "About"
+, "About Graph"
+, "Connect to Graph"
+, "Disconnect from Graph"
+, "Current Folder"
+, "Browse"
+, "Your Selection"
+, "New folder name"
+, "New file name"
+, "Select destination folder"
+, "The selected files will be moved to the Recycle Bin."
+, "Are you sure you want to permanently delete the selected files?"
+, "Previous"
+, "Next"
+, "Please select a destination folder different from the origin!"
+, "Search in current folder and sub-folders"
+, "Stop searching"
+, "Image Preview"
+, "Online Edition - "
+, "Edit My Preferences"
+, "Language"
+, "Default Display"
+, "Details List"
+, "Thumbnails"
+, "Change Password"
+, "User Preferences"
+, "Your language differs from the current language!\\n Do you want to reload the page to switch language?"
+, "Your password change will take effect after you logout."
+, "New"
+, "Confirm"
+, "Switch Repository to..."
+, "Warning, some of your changes are not saved!\\n Are you sure you want to close?"
+, "Warning, recursive copy!"
+, "Destintation folder is the same as original folder!"
+, "The file \""
+, "\" exceeds size limit ("
+, "Mb).\\nIt will not be uploaded."
+, "You have no write permission on this folder"
+, "You have no read permission on this folder"
+, "Internal server error, please contact Administrator!"
+, "Upload failed"
+, "The file is too big!"
+, "No file found on server!"
+, "Error while copying file to current folder"
+, "Browse"
+, "Start Upload"
+, "Clear"
+, "Clear Completed"
+, "Remove from queue"
+, "Completed"
+, "Empty"
+, "Empty Recycle Bin"
+, "Restore"
+, "Restore file to its original location"
+, "Go to"
+, "Rename bookmark"
+, "List"
+, "Switch to details list view"
+, "Thumbs"
+, "Switch to thumbnails view"
+, "Play"
+, "Play Slideshow"
+, "Stop"
+, "Stop Slideshow"
+, "View selected images"
+, "Fullscreen"
+, "Restore"
+, "Old password"
+, "Passwords differ!"
+, "Please fill you current password"
+, "Wrong password!"
+, "Your preferences have been saved successfully!"
+, "Svn Log"
+, "Revision"
+, "Author"
+, "Date"
+, "Message"
+, "Extract"
+, "Extract selection from zip to..."
+, "Users"
+, "Repositories"
+, "Logs"
+, "The total file size limit has been reached."
+, "There has been an HTTP Error:"
+, "There has been an IO Error:"
+, "These has been a Security Error:"
+, "Uploaded"
+, "Remove"
+, "File count :"
+, "Total size :"
+, "bytes"
+, "Remember Me"
+, "One or more files appear to exist \\nalready in the destination folder.\\nWhat do you want to do?"
+, "Overwrite"
+, "Skip"
+, "Files"
+, "B"
+, "Create"
+, "Create a new table"
+, "Structure"
+, "Edit table structure"
+, "Drop"
+, "Drop open table"
+, "Insert"
+, "Insert a new record"
+, "Are you sure you want to drop the selected table(s)?"
+, "Edit selected record"
+, "Delete selected records"
+, "Are you sure you want to delete the selected record(s)?"
+, "Tables"
+, "Records"
+, "Upload Limits"
+, "Size per File"
+, "Total Size"
+, "Files Number"
+, "Cannot find user, please try again.\\n Make sure your Caps Lock is not engaged!"
+, "Your user is out of date with the current version, please use the upgrade procedure."
+, "File Permissions"
+, "User"
+, "Group"
+, "All"
+, "Apply recursively?"
+, "Share..."
+, "Create a public link to this file"
+, "Link time expiration (in days) and password (leave empty if no password)."
+, "Expiration"
+, "Copy the URL below:"
+, "New User"
+, "Create a new user"
+, "New..."
+, "Create a new repository"
+, "Edit configuration"
+, "Copy as Text"
+, "Copy selection as tab-separated text."
+, "Back"
+, "Go back to main page"
+, "Too many items"
+, "Fill optional fields"
+, "Generate Link"
+, "Generate"
+, "Options"
+, "Upload automatically when a file is added"
+, "Uploader Options"
+, "Compress..."
+, "Compress selection to zip..."
+, "Compress selection to"
+, "Open in..."
+, "Source Editor"
+, "CodePress source code viewer"
+, "HTML Editor"
+, "WYSIWYG editor for HTML"
+, "Select"
+, "Select the current file"
+, "E-mail this URL"
+, "No editor available"
+, "Fit Best"
+, "No Fit"
+, "100%"
+, "IMagick Viewer"
+, "View pdf,svg and tif online"
+, "Please wait while the pages are being rendered..."
+, "Page"
+, "of"
+, "Pixlr image editor"
+, "more"
+, "Please enter a page number between 1 and "
+, "Sorry you cannot drop folders, drop only files!"
+, "Auto start upload"
+, "Auto close after upload"
+, "Existing Files"
+, "Alert"
+, "File Info"
+, "Folder Info"
+, "Image Info"
+, "Search on"
+, "No version information could be retrieved"
+, "Your version is up to date"
+, "A new version (%s) is available! Visit %s"
+, "A new repository has been shared."
+, "Warning, missing arguments"
+, "A user that does not belong to you already exists with this name, please choose another name."
+, "You are not allowed to share elements to the public."
+, "A repository with the same name already exists, please choose another name."
+, "Target User"
+, "Create a new user or choose one of your existing ones from the list."
+, "User Name"
+, "User Pass"
+, "Target Repository"
+, "Choose a name for the shared element and assign access rights for your user."
+, "Label"
+, "Rights"
+, "Read"
+, "Write"
+, "Shared Elements"
+, "You do not have the rights to perform this operation"
+, "You are not allowed to upload more than %s files at once."
+, "This user does not have any active repository."
+, "You are not allowed to upload this type of file. Please choose among the following extensions: "
+, "Selection successfully extracted from archive %s to folder %s"
+, "Graph Link"
+, "Graph Public Download"
+, "A password is required for this download"
+, "Current Repository"
+, "Destination"
+, "You cannot copy folders across repositories"
+, "Warning, you were inactive since more than __IDLE__, you will be logged out in __LOGOUT__"
+, "Click anywhere to reactivate"
+, "Warning, password is empty or too short!"
+, "Unsafe word!"
+, "Too short"
+, "Very weak"
+, "Weak"
+, "Medium"
+, "Strong"
+, "Very strong"
+, "You have failed logging in for 3 times.\\nFor your security, please fill the code that appear in the image."
+, "Please read the code below :"
+, "Code"
+, "No Repository"
+, "Warning, Graph version has changed (now %s), please clear your browser cache and refresh the page to be sure that everything is functionnal!"
+, "Warning, the names length must be under %s, this file's name will be truncated!"
+, "Sorry, at the moment folder sharing is not possible using the current auth driver (users are not editable). File sharing is still possible though."
+, "The item you dropped seem to be a folder, and folders cannot be uploaded to server! Are you sure you want to upload?"
+, "Auth. Method"
+, "Download chunked"
+, "Download selected file by pieces"
+, "Enter the number of pieces you want to download, then click the button and click on each file to download them."
+, "Number of pieces :"
+, "You can download and install the following software to join the pieces once on your computer: "
+, "http://www.hjsplit.org/"
+, "WebDAV Preferences"
+, "You can use the WebDAV protocol to mount your Graph repositories as a 'network drive' on various clients, including Windows, Mac, iPhone, etc."
+, "Use the following URLS to access your repositories, with your username and the password you entered. Warning, this won't work until you set this feature as 'active' and you enter your password."
+, "Activate WebDAV shares"
+, "Enter your password if it's the first time that you are activating webDAV shares, or if you want to re-type a new password :"
+, "Activated WebDav shares successfully, do not forget to update your password if it's the first time!"
+, "De-activated WebDav shares successfully"
+, "Updated webDav password successfully"
+, "Open"
+, "Upload only"
+, "Shared by"
+, "Use arrows to navigate and +/- to change zoom"
+, "Toggle left pane visibility"
+, "Left Pane"
+, "Add repository ..."
+, "Create your own repository"
+, "Loading templates..."
+, "Templates"
+, "New %s"
+, "Please fill the required parameters. Fly over the field titles with your mouse to have more information."
+, "Delete repository"
+, "Are you sure you want to delete this repository? The operation is irreversible."
+, "The repository is now created, it is added to your repository list, if you want to remove it, make sure to switch to another repository, then click on the red cross beside the repository name."
+, "There was an error while creating the repository"
+, "There was an error while deleting the repository"
+, "The repository was successfully deleted"
+, "This is how the repository will appear in your list."
+, "Default Files"
+, "Sample Template"
+, "My Files"
+, "ready"
+, "sending"
+, "done"
+, "error"
+, "Ooops, it seems that your security token has expired! Please %s by hitting refresh or F5 in your browser!"
+, "reload the page"
+, "Main Options"
+, "Yes"
+, "No"
+, "Booting..."
+, {"languageLabel": "English"
+, "date_format" : "/d/m/Y H:i"
+, "byte_unit_symbol": "b"
+, "parent_access_key": "P"
+, "refresh_access_key": "h"
+, "list_access_key": "L"
+, "thumbs_access_key": "T"
+, "bookmarks_access_key": "B"
+, "upload_access_key": "U"
+, "folder_access_key": "N"
+, "file_access_key": "F"
+, "rename_access_key": "R"
+, "copy_access_key": "C"
+, "move_access_key": "M"
+, "delete_access_key": "D"
+, "edit_access_key": "E"
+, "view_access_key": "V"
+, "download_access_key": "w"
+, "settings_access_key": "g"
+, "about_access_key": "A"
+, "empty_recycle_access_key": "y"
+, "restore_access_key": "o"
+, "svn_log_access_key": "L"
+, "create_repo_accesskey": "R"
+, "create_user_accesskey": "U"
+, "open_with_access": "e"
+, "leftpane_accesskey": "L"
 }
+]

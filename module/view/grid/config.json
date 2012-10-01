@@ -1,6 +1,5 @@
 {
   "name": "grid",
-  "openable": "true",
-  "label": "Grid View",
+  "title": "Grid View",
   "description": "Sortable, Filterable, Draggable, Droppable Table with Tree column"
 }

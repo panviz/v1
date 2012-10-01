@@ -4,15 +4,16 @@
 Class.create("View", {
   //__implements : ["Focusable"],
 
-  initialize : function(){
-    // TODO add this view to Ext Viewport
-    this.title = 'View';
+  initialize : function(options){
+    var p = this.p = {};
     this.fullscreen = false;
-    this.p = {
+    var viewOptions = {
       maximizable: true,
       closable: true,
-      title: this.title
+      title: 'View'
     };   
+    Object.extend(p, viewOptions, options);
+    this.title = p.title = t(p.title);
 
   // changing context in other view triggers this event
     //this._registerObserver(document, "app:context_changed", this._onContextChanged);

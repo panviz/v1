@@ -1,33 +1,38 @@
 Class.create("ViewGraph", View, {
-  // visible items
-  items: [],
-  // visible nodes
-  nodes: [],
-  // visible item links
-  links: [],
-  // visible node edges
-  edges: [],
-  //centered current item
-  root: {},
+  
+  items: [],    // visible items
+  nodes: [],    // visible nodes
+  links: [],    // visible item links
+  edges: [],    // visible node edges
+  root: {},     //centered current item
 
-  initialize : function($super, p){
-    $super();
+  initialize : function($super, options){
+    $super(options);
     var self = this;
-    this.p = Object.extend(this.p, p);
-    this.p.chargeBase = p.chargeBase || -200;
-    this.p.chargeK = p.chargeK || -10;
-    this.container = $("desktop");
+    var p = this.p;
+    this.element = $(p.contentEl);
 
-    var control = Ext.create('Ext.panel.Panel', this.p);
+    var control = Ext.create('Ext.panel.Panel', p);
     this.extControls.push(control);
 
     this.force = d3.layout.force()
       .on("tick", this._onTick.bind(this))
-      .charge(function(d){ return d.children ? d.children.length * self.p.chargeK : self.p.chargeBase; })
+      .charge(function(d){ return d.children ? d.children.length * self.p.graph.chargeK : self.p.graph.chargeBase; })
       .linkDistance(function(d){ return d.target._children ? 150 : 75; })
 
-    this.vis = d3.select("#desktop").append("svg");
+    this.vis = d3.select("#"+p.contentEl).append("svg");
     d3.select('#desktop').on("click", function(d){self.add(d)})
+    this.vis.append("svg:defs")
+      .append("svg:marker")
+        .attr("id", 'type')
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 20)
+        .attr("refY", 0)
+        .attr("markerWidth", 10)
+        .attr("markerHeight", 10)
+        .attr("orient", "auto")
+      .append("svg:path")
+        .attr("d", "M0,-5L10,0L0,5");
 
     control.on('resize', this._onResize.bind(this));
     document.observe("app:context_changed", this.setRoot.bind(this));
@@ -48,12 +53,13 @@ Class.create("ViewGraph", View, {
   },
 
   add : function(d){
-    var point = d3.mouse(this.container);
+    var point = d3.mouse(this.element);
     this.items.push({name: 'new Node', fixed: true, x: point[0], y: point[1]})
     this.update()
   },
 
   update : function(){
+    var self = this;
     // Restart the force layout.
     this.force
       .gravity(0)     //no gravity to center
@@ -72,7 +78,8 @@ Class.create("ViewGraph", View, {
       .attr("y1", function(d){ return d.source.y; })
       .attr("x2", function(d){ return d.target.x; })
       .attr("y2", function(d){ return d.target.y; })
-      .attr("style", "stroke: #9ecae1");
+      .attr("style", "stroke: #9ecae1")
+      .attr("marker-end", "url(#type)");
 
     // Exit any old links.
     this.edges.exit().remove();
@@ -88,7 +95,7 @@ Class.create("ViewGraph", View, {
       .on("mouseup", this._fix)
       .call(this.force.drag)
     g.append("circle")
-      .attr("r", function(d) { return d.children ? 15 : 10; })
+      .attr("r", function(d) { return d.children ? 15 : self.p.graph.nodeRadius; })
       .style("fill", this._color)
     g.append("image")
       .attr("xlink:href", "http://dmitra.com/favicon.ico")
@@ -108,9 +115,10 @@ Class.create("ViewGraph", View, {
 
   // Move nodes and lines on layout recalculation
   _onTick : function(e){
-    var radius = 15
-    var width = this.p.width;
-    var height = this.p.height;
+    var p = this.p;
+    var radius = p.graph.nodeRadius;
+    var width = p.width;
+    var height = p.height;
     this.nodes.attr("transform", function(d){
       d.x = Math.max(radius, Math.min(width - radius, d.x))
       d.y = Math.max(radius, Math.min(height - radius, d.y));
@@ -142,8 +150,6 @@ Class.create("ViewGraph", View, {
           self.links.push({source: d, target: item})
         }
       })
-      //this.links = 
-      //TODO add/remove links
     }
     this.items = this.items.compact();
     this.links = this.links.compact();
@@ -151,11 +157,12 @@ Class.create("ViewGraph", View, {
   },
 
   _onResize : function(control, width, height){
-    this.p.width = width;
-    this.p.height = height;
+    var p = this.p;
+    p.width = width;
+    p.height = height;
     this.force.size([width, height]);
-    this.vis.attr("width", this.p.width)
-            .attr("height", this.p.height);
+    this.vis.attr("width", p.width)
+            .attr("height", p.height);
     this.update();
   },
 

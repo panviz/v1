@@ -1,8 +1,7 @@
 Class.create("ViewGrid", View, {
 
   initialize : function($super, p){
-    $super();
-    this.p = Object.extend(this.p, p);
+    $super(p);
     this.model = Ext.define('ExtItem', {
       extend: 'Ext.data.Model',
       fields: [
@@ -28,16 +27,16 @@ Class.create("ViewGrid", View, {
       columns: [
         {
           xtype: 'treecolumn',
-          text: 'Item Name',
+          text: t('Item Name'),
           flex: 2,
           sortable: true,
           dataIndex: 'name'
         },{
-          text: 'Date created',
+          text: t('Date created'),
           sortable: true,
           dataIndex: 'createdAt'
         },{
-          text: 'Children',
+          text: t('Children'),
           sortable: true,
           dataIndex: 'size'
         }

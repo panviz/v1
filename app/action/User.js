@@ -30,6 +30,10 @@ Class.create("Login", Action, {
         }
       }
 
+      template.items[0].fieldLabel = t('Username');
+      template.items[1].fieldLabel = t('Password');
+      template.buttons[0].text = t('Reset');
+      template.buttons[1].text = t('Submit');
       var loginForm = Ext.create('Ext.form.Panel', template);
       var usernameField = loginForm.getComponent("username");
       var passwordField = loginForm.getComponent("password");
@@ -44,7 +48,7 @@ Class.create("Login", Action, {
       submitBtn.on('click', onClickSubmit);
       
       var size = {width: 300, height: 140};
-      var title = "Please, login";
+      var title = t["Enter login/password"];
       $modal.show(loginForm, size, title);
       document.observe("user:auth", $modal.hide.bind($modal))
     }

@@ -1,6 +1,10 @@
 {
   "name": "graph",
-  "openable": "true",
-  "label": "Graph Editor",
-  "description": "D3 powered graph editor"
+  "title": "Graph Editor",
+  "description": "D3 powered graph editor",
+  "graph": {
+    "chargeBase": -200,
+    "chargeK": -10,
+    "nodeRadius": 10
+  }
 }

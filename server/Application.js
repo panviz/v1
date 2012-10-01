@@ -20,7 +20,7 @@ Class.create("Application", {
       require(ROOT_PATH + name);
     })
     this.p = require(ROOT_PATH + '/config/settings.json');
-    this.p.available_languages = $H($util.requireAll(ROOT_PATH + '/config/i18n')).keys();
+    this.p.availableLanguages = $H($util.requireAll(ROOT_PATH + '/config/i18n')).keys();
 
     var s = this.server = express.createServer()
     this.configure();
@@ -83,15 +83,20 @@ Class.create("Application", {
   },
 
   setGui : function(ui, theme){
+    var p = this.p;
     var uiName = uiName || "desktop";
     var config = require(ROOT_PATH + '/config/' + uiName)
-    Object.extend(this.p.ui, config);
+    Object.extend(p.ui, config);
     var themeName = themeName || 'mybase';
-    var ui = this.p.ui;
+    var ui = p.ui;
     ui.theme = ui.themes[themeName];
 
-    this.p.i18n = require(ROOT_PATH + '/config/i18n/' + this.p.locale + '.json');
-    var templatePath = ROOT_PATH + this.p.ui.theme.path + '/template';
+    var en = require(ROOT_PATH + '/config/i18n/en.json');
+    if (p.locale != 'en'){
+      var local = require(ROOT_PATH + '/config/i18n/' + p.locale + '.json');
+      p.i18n = $util.composeHash(en, local);
+    }
+    var templatePath = ROOT_PATH + p.ui.theme.path + '/template';
     var templateStore = new StoreJSON('gui', templatePath);
     this.templateFul = this.man['gui'] = new TemplateFul(templateStore);
   },

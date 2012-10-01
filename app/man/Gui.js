@@ -62,7 +62,13 @@ Class.create("Gui", ReactiveProvider, {
 
   createView : function(options, module){
     var moduleClass = Class.getByName(module.man);
-    var control = new moduleClass(options);
+    Object.extend(true, module.config, options);
+    var i18n = module.i18n;
+    var currentLocale = t.current;
+    var hash = (currentLocale != 'en' && i18n[currentLocale]) ?
+      $util.composeHash(i18n.en, i18n[currentLocale]) : i18n.en
+    t.update(hash);
+    var control = new moduleClass(module.config);
     var addView = function(){
       // view has only one top level control
       $gui.viewport.add(control.extControls[0])
@@ -84,31 +90,6 @@ Class.create("Gui", ReactiveProvider, {
    */
   getView : function(){
     return this._current;
-  },
-
-  /**
-   * Find an editor using the data and initialize it
-   * @param data Object
-   */
-  _createView : function(element, data){
-    if(data){
-      app.loadEditorResources(data.resourcesManager);
-      if(!data.formId){
-        app.displayMessage('ERROR', 'Error, you must define a formId attribute in your &lt;editor&gt; manifest (or set it as openable="false")');
-        return;
-      }
-      var editorClass = data.editorClass;
-      var view;
-      if(typeof(editorClass) == "string"){
-        view = eval('new '+editorClass+'(element, data)');
-      }else{
-        view = new editorClass(element, data);
-      }
-      this._views.set(element.id, view);
-      if (element.id == "main_view"){
-        this.setCurrentView(view);
-      }
-    }
   },
 
   // Deprecated
