@@ -25,7 +25,7 @@ Class.create("Gui", ReactiveProvider, {
     var hasId = function(component){
       return component.id;
     }
-    var processTemplate = Functional.processTree("components", hasId, this._initControl.bind(this))
+    var processTemplate = Functional.processTree("components", hasId, this._parseComponent.bind(this))
     var controlsTree = processTemplate(template)
 
     var getExtControls = function(component){
@@ -39,14 +39,14 @@ Class.create("Gui", ReactiveProvider, {
     this.viewport = Ext.create('Ext.Viewport', template);
   },
 
-  _initControl : function(component){
+  _parseComponent : function(component){
     var options = Object.extend(component.options, this._defaults)
+    //TODO move to instance
     if (component.module){
-      $mod.get(this.createView.bind(this, component.options), component.module);
+      $mod.getInstance(this.createView.bind(this, options), component.module);
       return {};
     }
-    var controlClass = Class.getByName(component.control);
-
+    //TODO remove
     var getExtControls = function(component){
       if (component.id){
         return component.control.extControls
@@ -55,9 +55,15 @@ Class.create("Gui", ReactiveProvider, {
     if (component.components){
       options.innerControls = component.components.select(getExtControls).flatten()
     }
-    var control = component.control = new controlClass(options);
-    this._instances.set(component.id, control);
-    return component;
+    component.control = this.instance(component);
+    return component
+  },
+
+  instance : function(template){
+    var controlClass = Class.getByName(template.control);
+    var control = new controlClass(template.options);
+    this._instances.set(template.id, control);
+    return control;
   },
 
   createView : function(options, module){

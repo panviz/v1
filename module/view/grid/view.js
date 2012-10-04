@@ -30,11 +30,18 @@ Class.create("ViewGrid", View, {
           text: t('Item Name'),
           flex: 2,
           sortable: true,
-          dataIndex: 'name'
+          dataIndex: 'label'
         },{
+          xtype: 'templatecolumn',
           text: t('Date created'),
           sortable: true,
-          dataIndex: 'createdAt'
+          dataIndex: 'createdAt',
+          tpl: Ext.create('Ext.XTemplate', '{createdAt:this.formatDate}', {
+            formatDate: function(v) {
+              var date = Ext.Date.parse(v, 'c');
+              return Ext.Date.format(date, t('m/d/Y'))
+            }
+          })
         },{
           text: t('Children'),
           sortable: true,
@@ -43,10 +50,12 @@ Class.create("ViewGrid", View, {
       ]
     }));
     this.extControls.push(this.tree);
-    document.observe("app:context_changed", this._onContextChanged.bind(this));
   },
 
   _onContextChanged : function(e){
     this.store.setRootNode(Object.clone(e.memo, true));
+  },
+
+  _onItem : function(e){
   }
 })

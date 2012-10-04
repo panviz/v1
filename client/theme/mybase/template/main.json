@@ -37,28 +37,30 @@
           }
         }
       ]
-    },
-    {
+    },{
       "id": "GridView",
       "module": "view.grid",
       "options": {
-        "region": "west",
+        "region": "center",
         "minWidth": 100,
         "minHeight": 140,
         "width": "30%"
       }
-    },
-    {
+    },{
+      "id": "Preview",
       "module": "view.preview",
       "options": {
-        "region": "west"
+        "region": "south",
+        "height": 250,
+        "minHeight": 100,
+        "weight": -100
       }
-    },
-    {
+    },{
       "id": "GraphView",
       "module": "view.graph",
       "options": {
-        "region": "center",
+        "region": "east",
+        "width": "70%",
         "contentEl": "desktop"
       }
     }

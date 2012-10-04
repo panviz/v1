@@ -4,10 +4,12 @@
 Class.create("Provider", ReactiveProvider, {
   // Default type is 'item'
   type: '',
+  public: 'all',
 
   initialize : function($super, store){
     $super(store);
   },
+
   /**
    */
   _onLoad : function(transport){

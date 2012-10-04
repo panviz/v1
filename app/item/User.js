@@ -4,14 +4,13 @@
 Class.create("User", Item, {
   type: 'user',
 
-  /**
-   */
   initialize : function($super, name, password){
-    //avoid Reactive.get here
-    $super(name);
     if (password){
-      var p = {password: password, depth: 1};
+      $super()
+      var p = {password: password};
       this.put(this._update.bind(this), name, null, p);
+    } else{
+      $super(name);
     }
   },
 
@@ -20,13 +19,13 @@ Class.create("User", Item, {
     this.p = $H(data.preferences);
     this.roles = data.roles || ['guest'];
 
-    if (this.id) document.fire("user:updated");
-
     // Current user
     if (data.SECURE_TOKEN){
-      this.token = data.SECURE_TOKEN;
+      SECURE_TOKEN = this.token = data.SECURE_TOKEN;
+      if (!data.id) return this.get(this._update.bind(this), data.name, {force: true});
+      //TODO remove after debugging
       $user = this;
-      document.fire("user:auth");
+      document.fire("user:auth", this);
       // restore last visited item as current root
       var current = data.context ? new Item(data.context) : this;
       document.fire("app:context_changed", current);
@@ -91,40 +90,5 @@ Class.create("User", Item, {
    */
   getSearchEngine : function(repoId){
     return this._repoSearchEngines.get(repoId);
-  },
-
-  savePreference : function(name){
-    if(!this._preferences.get(name)) return;
-    var connection = new Connection('/user/preferences');
-        connection.setMethod('post');
-    connection.addParameter("name_" + 0, name);
-    connection.addParameter("value_" + 0, this._preferences.get(name));
-    connection.sendAsync();
-  },
-
-  /**
-   * Send all _preferences to the server. If oldPass, newPass and seed are set, also save pass.
-   * @param oldPass String
-   * @param newPass String
-   * @param seed String
-   * @param onComplete Function
-   */
-  savePreferences : function(oldPass, newPass, seed, onComplete){
-    var connection = new Connection('/user/preferences');
-    var i=0;
-    this._preferences.each(function(pair){
-      connection.addParameter("name_"+i, pair.key);
-      connection.addParameter("value_"+i, pair.value);
-      i++;
-    });
-    if(oldPass && newPass)
-    {
-      connection.addParameter("name"+i, "password");
-      connection.addParameter("value_"+i, newPass);
-      connection.addParameter("crt", oldPass);
-      connection.addParameter("pass_seed", seed);
-    }
-    connection.onComplete = onComplete;
-    connection.sendAsync();
   }
 });

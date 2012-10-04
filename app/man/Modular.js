@@ -28,19 +28,10 @@ Class.create("Modular", ReactiveProvider, {
     }
   },
 
-  // @server
-  get : function($super, callback, name, options){
-    var self = this;
-    if (!isServer){
-      var cb = function(data){
-        var module = new Module(data.name)
-        self._instances[data.name] = module;
-        callback(module);
-      }
-      $super(cb, name, options)
-    } else{
-      $super(callback, name, options)
-    }
+  instance : function(data){
+    var module = new Module(data.name)
+    this._instances[data.name] = module;
+    return module;
   },
 
   /**

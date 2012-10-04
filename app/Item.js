@@ -3,30 +3,31 @@
  */
 Class.create("Item", ReactiveRecord, {
 
+  //links Array of {type: String, direction: String, end: Number(Node ID)}
+  //linked Array of linked Items
   /**
    * @param name String
    * @param p JSON optional params
    */
   initialize : function($super, name){
+    //TODO Calculate size base on all/in/out links?
     this.__defineGetter__("size", function(){
-      return this.children ? this.children.length : 0;
+      return this.out ? this.out.length : 0;
     })
 
     $super(name);
     this.type = this.__className.toLowerCase();
   },
-  //TODO override Reactive get/put to use this.type for $proxy.send and 'item' for this.store
 
   _update : function($super, p){
-    $super();
+    $super(p);
     var p = p || {};
-    this.id = p.id;
-    this.createdAt = p.createdAt;
-    this.label = p.label || name;
+    this.x = p.x; this.y = p.y;
+    this.fixed = p.fixed;
+    this.label = p.label || p.name;
     this.icon = p.icon;
-    this.children = p.children;
-    //TODO what format of links?
     this._links = p.links;
+    if (this.id) document.fire("item:updated");
   },
 
   /**
@@ -42,19 +43,31 @@ Class.create("Item", ReactiveRecord, {
    * @param type String limit links to certain type if specified
    * @returns Array all directly linked items
    */
-  links : function(type){
+  //TODO consider type
+  links : function(){
+    if (this.xLinks) return this.xLinks
+    var links = this.xLinks = [];
+    if (this._links){
+      this._links.each(function(link){
+        var xLink = Object.clone(link);
+        xLink.to = new Item(link.to);
+        links.push(xLink);
+      })
+    }
   },
 
   /**
    * @returns Array all "parent" items
    */
-  incoming : function(type){
+  inc : function(type){
+    return this.links(type, 'in');
   },
 
   /**
    * @returns Array all "child" items
    */
-  outgoing : function(type){
+  out : function(type){
+    return this.links(type, 'out');
   }
 
 });

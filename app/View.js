@@ -3,9 +3,11 @@
  */
 Class.create("View", {
   //__implements : ["Focusable"],
+  selection: [],// currently selecteded items
 
   initialize : function(options){
     var p = this.p = {};
+    this.provider = $app.item;
     this.fullscreen = false;
     var viewOptions = {
       maximizable: true,
@@ -15,12 +17,13 @@ Class.create("View", {
     Object.extend(p, viewOptions, options);
     this.title = p.title = t(p.title);
 
-  // changing context in other view triggers this event
-    //this._registerObserver(document, "app:context_changed", this._onContextChanged);
-    //this._registerObserver(document, "app:context_loading", loadingObs);
+    // changing context in other view triggers this event
+    document.observe("app:context_changed", this._onContextChanged.bind(this));
     //this._registerObserver(document, "app:selection_changed", _onSelectionChanged);
-    //this._registerObserver(document, "app:provider_changed", this._providerChanged.bind(this));
     this.extControls = [];
+  },
+
+  _onContextChanged : function(e){
   },
 
   /**
@@ -33,11 +36,6 @@ Class.create("View", {
    * Creates base GUI
    */
   render : function(options){
-  },
-
-  _onContextChanged : function(data){
-    var currentDir = app.getContextNode().getPath();
-    this.open(app.getUserSelection());    
   },
 
   /**

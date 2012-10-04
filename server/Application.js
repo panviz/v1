@@ -31,6 +31,7 @@ Class.create("Application", {
     // Read only configured modules to Store
     var moduleStore = new StoreModule(this.p.module);
     this.modular = this.man['module'] = new Modular(moduleStore);
+    this.provider = this.man['item'] = new Provider(db);
   },
 
   // Configure expressjs server

@@ -1,15 +1,33 @@
 /**
- * TODO implement as View
  * A dynamic panel displaying details on the current selection.
  */
 Class.create("ViewPreview", View, {
 
+  initialize : function($super, p){
+    $super(p);
+    
+    this.list = Ext.create('Ext.grid.property.Grid', Object.extend(this.p, {
+      source: {
+        "Name": t("Item")
+      }
+    }));
+    this.extControls.push(this.list);
+  },
+
   /**
-   * Constructor
-   * @param $super klass Superclass reference
-   * @param element HTMLElement
+   * Show item properties
+   * TODO what to show on multiples selected 
    */
-  initialize : function($super, element, p){
+  _onContextChanged : function(e){
+    var item = e.memo;
+    var p = {};
+    p[t("Name")] = item.label;
+    p[t("Children")] = item.size;
+    p[t("Last login")] = Ext.Date.parse(item.lastLogin, 'c');
+    p[t("Item type")] = item.type;
+    p[t("Date created")] = Ext.Date.parse(item.createdAt, 'c');
+
+    this.list.setSource(p);
   },
 
   /**
@@ -36,16 +54,6 @@ Class.create("ViewPreview", View, {
    * @param sHtml String
    */
   setContent : function(sHtml){
-  },
-
-  /**
-   * Show/Hide the panel
-   * @param show Boolean
-   */
-  showElement : function(show){
-    if(!this.element) return;
-    if(show) this.element.show();
-    else this.element.hide();
   },
 
   /**

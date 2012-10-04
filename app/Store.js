@@ -25,10 +25,14 @@ Class.create("Store", {
    * @param id Number
    */
   findById : function(onFind, type, id){
-    var idx = id - 1;
-    if (this._local[type] && this._local[type][idx]) {
-      // as _local is in memory for now, return clone object, not reference
-      onFind(Object.clone(this._local[type][idx]));
+    var s = this._local[type];
+    if (s){
+      for (var i=0; i< s.length; i++){
+        if (s[i].id == id){
+          // as _local is in memory for now, return clone object, not reference
+          return onFind(Object.clone(s[i]));
+        }
+      }
     } else {
       onFind(null, this.NOT_FOUND);
     }
@@ -42,13 +46,13 @@ Class.create("Store", {
    */
   find : function(onFind, type, key, value){
     if (!this._local[type]) return onFind(null, this.NOT_FOUND)
+    if (key == "id") return this.findById(onFind, type, value);
 
     // find all records with key property
     if (Object.isBoolean(value)){
       var findFunc = Enumerable.findAll;
       var iterator = function(r){ return !!r[key]};
     } else {
-      if (!key || key == "id") return this.findById(onFind, value);
       var findFunc = this._uniqColumns.include(key) ? Enumerable.find : Enumerable.findAll;
       var iterator = function(r){ return r[key] == value};
     }
@@ -81,9 +85,10 @@ Class.create("Store", {
       }
       // Update
       if (previous){
-        s[i] = Object.extend(s[i], diff)
-        var current = $H(s[i]);
-        var diff = previous.diff(current);
+        Object.extend(s[i], diff)
+        //Local DB should return full record on Save
+        //var current = $H(s[i]);
+        //var diff = previous.diff(current);
       }
       // Create
       else {
@@ -99,6 +104,7 @@ Class.create("Store", {
         }
       }
     }
+    //diff is actually full record
     onSave(diff);
     return diff;
   },

@@ -25,7 +25,7 @@
     "express": "2.5.4",
     "sockjs": "0.3.1",
     "moment": "1.7.0",
-    "neo4j": "0.2.16",
+    "neo4j": "0.2.19",
     "log4js": "0.5.2"
   },
   "optionalDependencies": {

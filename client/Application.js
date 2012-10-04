@@ -22,6 +22,7 @@ Class.create("Application", {
 
   init : function(){
     $user = null;
+    SECURE_TOKEN = null;
     this._context = null;
     //this._focusables = [];
     //this.historyCount = 0;
@@ -48,14 +49,16 @@ Class.create("Application", {
     $mod = this.modular      = new Modular();
     //$act = this.actionFul    = new ActionFul();
     $gui = this.gui          = new Gui($set);
+    $item = this.item        = new Provider(this.db);
     $modal = $gui.modal;
     //$provider = this.provider= new Provider();
 
     //TODO update progress bar from right places
-    $modal.showBooting({steps: 2});
+    this.gui.modal.showBooting({steps: 2});
 
+    document.observe("user:auth", this.showChildren.bind(this));
     document.observe("app:context_changed", this._onContextChanged.bind(this));
-    $modal.updateLoadingProgress(t('Actions: Done'));
+    this.gui.modal.updateLoadingProgress(t('Actions: Done'));
       
     //this._setHistory();
     //Automatically logout user on session timeout
@@ -64,13 +67,13 @@ Class.create("Application", {
       $set.client_timeout,
       $set.client_timeout_warning);
       
-    $modal.updateLoadingProgress(t('User Interface: Done'));
+    this.gui.modal.updateLoadingProgress(t('User Interface: Done'));
     document.fire('app:loaded');
 
     var onFind = function(array, err){
       if (array && array[0]) $user = new User(array[0].name)
     }
-    $app.db.find(onFind, 'user', 'SECURE_TOKEN', true)
+    this.db.find(onFind, 'user', 'SECURE_TOKEN', true)
   },
 
   /**

@@ -8,6 +8,6 @@ Class.create("Module", ReactiveRecord, {
     // Add class to global scope
     eval(p.src);
     this.man = p.man;
-    $super()
+    $super(p)
   }
 })

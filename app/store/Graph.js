@@ -27,10 +27,16 @@ Class.create("StoreGraph", {
   findById : function(onFind, id){
     var self = this;
     this._db.getNodeById(id, function (err, record){
-      if (!err && !record) err = "Not Found";
-      if (record) record = record.data;
-      self._parse(record)
-      onFind(record, err);
+      if (err) return onFind(null, err)
+      if (!record) return onFind(null, "Not Found");
+      var onLinks = function(links){
+        var data = record.data;
+        data.id = record.id;
+        data.links = links;
+        self._parse(data);
+        onFind(data, err);
+      }
+      self._getLinks(onLinks, record)
     });
   },
 
@@ -42,47 +48,43 @@ Class.create("StoreGraph", {
    * @returns Json record
    */
   find : function(onFind, type, key, value){
+    logger.debug("FIND type: "+type+ " key: "+key+ " value: "+value);
     var self = this;
-    if (!key || key == "id") return this.findById(onFind, value);
+    if (key == "id") return this.findById(onFind, value);
 
     //TODO indexing
     if (false){//this._uniqColumns.include(key)){
       this._db.getIndexedNode(type, key, value, function (err, record){
         if (!err && !record) err = "Not Found";
-        var data;
-        if (record){
-          data = record.data;
-          data.id = record.id;
-        }
-        self._parse(data);
-        onFind(data, err);
       })
     } else {
       var query = [
         "START x=node(*)",
-        "WHERE x.type! = 'TYPE'",
-        "AND x.KEY! = 'VALUE'",
+        "WHERE x.KEY! = 'VALUE'",
+        "AND x.type! = 'TYPE'",
         "RETURN x"
       ]
       // Default type is not stored
-      if (!type) query = query.without(query[1]);
+      if (!type) query = query.without(query[2]);
       query = query.join('\n')
         .replace('TYPE', type)
         .replace('KEY', key)
         .replace('VALUE', value)
-      logger.debug(query);
+
       this._db.query(query, function(err, array){
         if (err) return onFind(null, err)
-        //TODO return array of results
         var record = array[0];
-        if (!err && !record) err = "Not Found";
-        var data;
-        if (record){
-          data = record.x.data;
-          data.id = record.x.id;
+        if (!record) return onFind(null, "Not Found");
+        //TODO consider multiple results
+        record = record.x;
+        var onLinks = function(links){
+          var data = record.data;
+          data.id = record.id;
+          data.links = links;
+          self._parse(data);
+          onFind(data, err);
         }
-        self._parse(data);
-        onFind(data, err);
+        self._getLinks(onLinks, record)
       })
     }
   },
@@ -94,6 +96,8 @@ Class.create("StoreGraph", {
    * @returns Json difference in record between previous and current
    */
   save : function(onSave, type, name, diff){
+    logger.debug("SAVE type: "+type+ " name: "+name);
+    console.log(diff);
     var self = this;
     var db = this._db;
     if (diff){
@@ -101,11 +105,7 @@ Class.create("StoreGraph", {
         if (err) return onSave(null, err);
         // Update
         if (node){
-          var data = {};
-          $H(diff).keys().each(function(key){
-            if (Object.isString(diff[key])) data[key] = diff[key];
-          })
-          Object.extend(node.data, data)
+          Object.extend(node.data, diff)
           var cb = function(err){
             onSave(diff, err)
           }
@@ -135,26 +135,53 @@ Class.create("StoreGraph", {
     return diff;
   },
 
-  //TODO consider depth param
   /**
-   * @returns Array of Nodes
+   * @param id Item
+   * @param p.type String of link
+   * @param p.direction Boolean (true for out)
+   * @returns Array of linked Items
    */
-  getLinked : function(onFind, id, depth){
-    var query = [
-      "START n=node(ID)",
-      "MATCH n-->(end)",
-      "RETURN end"
-    ].join('\n').replace('ID', id)
-
-    this._db.query(query, function(err, array){
-      if (err || !array[0]){
-        return onFind(null);
+  getLinked : function(onFind, id, p){
+    p.type = p.type || 'REL';
+    cb = function(err, node){
+      if (err || !node) return onFind(null);
+      var cb = function(err, array){
+        if (err || !array[0]) return onFind(null);
+        var out = array.map(function(row){
+          return row.data;
+        })
+        onFind(out);
       }
-      var children = array.map(function(row){
-        return row.end.data;
-      })
-      onFind(children);
-    })
+      node.getRelationshipNodes(p, cb)
+    }
+    db.getNodeById(id, cb)
+  },
+
+  // Load & transform relationship objects to links data format
+  _getLinks : function(cb, node){
+    var onLoad = function(err, rels){
+      var links;
+      if (rels){
+        links = rels.map(function(rel){
+          var link = {};
+          if (rel.end.id == node.id){
+            link.direction = 'in';
+            link.to = rel.start.id;
+          } else{
+            link.direction = 'out';
+            link.to = rel.end.id;
+          }
+          link.type = rel.type;
+          return link;
+        })
+      } else {
+        links = [];
+      }
+      // if links are not empty array - try reload on error
+      if (err) links = false;
+      cb(links);
+    }
+    node.all('REL', onLoad)
   },
 
   /**
@@ -171,13 +198,17 @@ Class.create("StoreGraph", {
   /**
    * Neo4j doesn't support Maps as node's property
    */
-  // TODO Arrays may contain Objects and are not strigified
   _beforeSave : function(data){
     $H(data).keys().each(function(key){
       var value = data[key]
-      if (!Object.isNumber(value) && !Object.isString(value) && !Object.isArray(value)){
-        try{data[key] = JSON.stringify(value)}
-        catch (e){return}
+      if (!Object.isNumber(value) && !Object.isString(value)){
+        if (Object.isArray(value)){
+          for (var i=0;i<value.length;i++){
+            if (!Object.isString(value[i])) value[i] = JSON.stringify(value[i])
+          }
+        } else{
+          data[key] = JSON.stringify(value)
+        }
       }
     })
     return data;

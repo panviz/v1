@@ -42,10 +42,12 @@ man/ActionFul
 man/Gui
 man/Modular
 man/Tasker
+man/Provider
 control/AddressBar
 control/UserStatus
 control/Menu
 control/Toolbar
+control/Login
 View
 Modal
 Observer

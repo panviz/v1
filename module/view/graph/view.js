@@ -1,10 +1,10 @@
 Class.create("ViewGraph", View, {
   
-  items: [],    // visible items
-  nodes: [],    // visible nodes
-  links: [],    // visible item links
-  edges: [],    // visible node edges
-  root: {},     //centered current item
+  items: [],    // items loaded to this view
+  nodes: [],    // svg nodes for visible items
+  links: [],    // links of loaded items
+  edges: [],    // svg lines for visible links
+  root: {},     // centered item
 
   initialize : function($super, options){
     $super(options);
@@ -17,7 +17,7 @@ Class.create("ViewGraph", View, {
 
     this.force = d3.layout.force()
       .on("tick", this._onTick.bind(this))
-      .charge(function(d){ return d.children ? d.children.length * self.p.graph.chargeK : self.p.graph.chargeBase; })
+      .charge(function(d){ return d.out ? d.out.length * self.p.graph.chargeK : self.p.graph.chargeBase; })
       .linkDistance(function(d){ return d.target._children ? 150 : 75; })
 
     this.vis = d3.select("#"+p.contentEl).append("svg");
@@ -35,29 +35,50 @@ Class.create("ViewGraph", View, {
         .attr("d", "M0,-5L10,0L0,5");
 
     control.on('resize', this._onResize.bind(this));
-    document.observe("app:context_changed", this.setRoot.bind(this));
-    if ($user) this.setRoot({memo: $user});
+    document.observe("app:selection_changed", this.select.bind(this));
+    document.observe("item:updated", this._onItem.bind(this));
+    if ($user) this.select($user);
   },
 
-  setRoot : function(e){
-    if (this.root.name == e.memo.name) return
-    this.root.fixed = false;
-    var root = this.root = e.memo;
-    root.fixed = true;
-    root.x = this.p.width / 2;
-    root.y = this.p.height / 2;
-    this.items = this.flatten(root);
-    this.links = d3.layout.tree().links(this.items);
+  /**
+   * Change selection to new items
+   * Selection may have multiple items on:
+   *  Search results
+   *  Grid selection
+   * @param items Item or Array of Items
+   * @return Boolean if selection changed
+   */
+  select : function(items){
+    var s = this.selection;
+    if (!Object.isArray(items)) items = [items];
+    if (items[0] == s[0] && s.length == 1 && items.length == 1) return false;
+    this.selection = items;
 
+    items.each(function(item){
+      item.fixed = true;
+    })
+
+    // add items from selection which are not rendered
+    var extra = items.diff(this.items);
+    if (extra) this.items = this.items.concat(extra);
+    // TODO valid only for the first time
+    //this.items = this.flatten(root);
+    //this.links = d3.layout.tree().links(this.items);
     this.update();
+    //document.fire('app:selection_changed', s);
+    return true;
   },
 
+  // Add new node
   add : function(d){
     var point = d3.mouse(this.element);
-    this.items.push({name: 'new Node', fixed: true, x: point[0], y: point[1]})
-    this.update()
+    var item = {name: t('new Node'), fixed: true, x: point[0], y: point[1]};
+    this.items.push(item);
+    this.update();
+    this.select();
   },
 
+  // update graph accordingly to this.items , links change
   update : function(){
     var self = this;
     // Restart the force layout.
@@ -92,10 +113,11 @@ Class.create("ViewGraph", View, {
     g = this.nodes.enter().append("g")
       .attr("class", "node")
       .on("click", this._onClick.bind(this))
-      .on("mouseup", this._fix)
+      .on("mousedown", this._onMouseDown.bind(this))
+      .on("mousemove", function(d){d.changed = true; console.log('CHANGED');})
       .call(this.force.drag)
     g.append("circle")
-      .attr("r", function(d) { return d.children ? 15 : self.p.graph.nodeRadius; })
+      .attr("r", function(d) { return d.out ? 15 : self.p.graph.nodeRadius; })
       .style("fill", this._color)
     g.append("image")
       .attr("xlink:href", "http://dmitra.com/favicon.ico")
@@ -107,10 +129,71 @@ Class.create("ViewGraph", View, {
     g.append("text")
       .attr("dx", 10)
       .attr("dy", "10pt")
-      .text(function(d){ return d.name });
+      .text(function(d){ return d.label || d.id});
 
     // Exit any old nodes.
     this.nodes.exit().remove();
+  },
+
+  /**
+   * Toggle linked items visibility of selected one
+   * @param selected Item
+   */
+  // TODO consider direction & type of links
+  // TODO nodes should have links to its lines (to delete lines by index, not full search)
+  toggle : function(selected){
+    var self = this;
+    var links = selected.links();
+    if (links){
+      links.each(function(link){
+        var item = link.to;
+        if (item.index >= 0){
+          delete self.items[item.index];
+          delete item.index;
+          self.links.each(function(link, index){
+            if (link.source == item || link.target == item) delete self.links[index]
+          })
+        } else {
+          self.items.push(item);
+          self.links.push({source: item, target: item})
+        }
+      })
+    }
+    this.items = this.items.compact();
+    this.links = this.links.compact();
+    this.update();
+  },
+
+  _onContextChanged : function(e){
+    this.select(e.memo);
+  },
+
+  // Color leaf nodes orange, and packages white or blue.
+  _color : function(d){
+    return d._children ? "#3182bd" : d.out ?  "#fd8d3c" : "#c6dbef";
+  },
+
+  // TODO use library func for Tree flattening
+  // Returns a list of all nodes under the root.
+  flatten : function(root){
+    var nodes = [], i = 0;
+
+    function recurse(node){
+      if (node.out) node.size = node.out.reduce(function(p, v){ return p + recurse(v); }, 0);
+      if (!node.id) node.id = ++i;
+      nodes.push(node);
+      return node.size;
+    }
+
+    root.size = recurse(root);
+    return nodes;
+  },
+
+  // Update visual node on graph
+  _onItem : function(e){
+    //TODO remove only updated nodes
+    this.nodes.remove();
+    this.update();
   },
 
   // Move nodes and lines on layout recalculation
@@ -132,28 +215,16 @@ Class.create("ViewGraph", View, {
       .attr("y2", function(d){ return d.target.y; });
   },
 
-  // TODO nodes should have links to its lines (to delete lines by index, not full search)
-  // Toggle children visibility on click
-  _onClick : function(d){
+  // Load on click
+  _onClick : function(item){
+    debugger
     d3.event.stopPropagation()
-    var self = this;
-    if (d.children) {
-      d.children.each(function(item){
-        if (item.index >= 0){
-          delete self.items[item.index];
-          delete item.index;
-          self.links.each(function(link, index){
-            if (link.source == item || link.target == item) delete self.links[index]
-          })
-        } else {
-          self.items.push(item);
-          self.links.push({source: d, target: item})
-        }
-      })
-    }
-    this.items = this.items.compact();
-    this.links = this.links.compact();
-    this.update();
+    this.toggle(item);
+  },
+
+  _onMouseDown : function(item){
+    // if selection changed by other view do not fire own event
+    if (this.select(item)) document.fire('app:context_changed', item);
   },
 
   _onResize : function(control, width, height){
@@ -164,30 +235,5 @@ Class.create("ViewGraph", View, {
     this.vis.attr("width", p.width)
             .attr("height", p.height);
     this.update();
-  },
-
-  // Color leaf nodes orange, and packages white or blue.
-  _color : function(d){
-    return d._children ? "#3182bd" : d.children ?  "#fd8d3c" : "#c6dbef";
-  },
-
-  _fix : function(d, i){
-    d.fixed = true;
-  },
-
-  // TODO use library func for Tree flattening
-  // Returns a list of all nodes under the root.
-  flatten : function(root){
-    var nodes = [], i = 0;
-
-    function recurse(node){
-      if (node.children) node.size = node.children.reduce(function(p, v){ return p + recurse(v); }, 0);
-      if (!node.id) node.id = ++i;
-      nodes.push(node);
-      return node.size;
-    }
-
-    root.size = recurse(root);
-    return nodes;
   }
 })

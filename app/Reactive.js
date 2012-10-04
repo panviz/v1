@@ -9,7 +9,7 @@ Class.create("Reactive", {
 
   initialize : function(store){
     this.store = store || $app.db;
-    if (!this.type) this.type = this.__className.toLowerCase();
+    if (this.type === undefined) this.type = this.__className.toLowerCase();
   },
 
   /**
@@ -17,34 +17,23 @@ Class.create("Reactive", {
    * If item exists - return it (it is definitely up to date)
    * Else load it
    * @param name unique identifier of record
+   * @returns Json data of record
    */
-  get : function(callback, name, options){
+  get : function(got, name, options){
     var self = this;
-
+    options = options || {};
     var onFind = function(data, err){
-      if (isServer){
-        if (data && options && options.depth && options.depth > 0){
-          var cb = function(children){
-            if (children){
-              data.children = children;
-              callback(data);
-            } else {callback(data)}
-          }
-          self.store.getLinked(cb, data.id, options.depth);
-        } else{
-          callback(data, err);
-        }
+      if (isServer || (data && (!options.force || data.id))){
+        got(data, err)
       } else {
-        if (data){
-          callback(data)
-        } else {
-          $proxy.send(self._onLoad.bind(self, onFind), "get", self.type, name, options)
-        }
+        options.SECURE_TOKEN = SECURE_TOKEN;
+        $proxy.send(self._onLoad.bind(self, onFind), "get", self.type, name, options)
       }
     }
     // TODO find by several keys, query chaining, consider options
     // or use uniq id
-    this.store.find(onFind, this.type, "name", name)
+    var key = Object.isString(name) ? "name" : "id";
+    this.store.find(onFind, this.type, key, name)
   },
 
   /**
@@ -59,6 +48,7 @@ Class.create("Reactive", {
       var onSave = function(diff){
         options = options || {};
         options.content = diff;
+        options.SECURE_TOKEN = SECURE_TOKEN;
         $proxy.send(self._onLoad.bind(self, callback), "put", self.type, name, options)
       }
     }

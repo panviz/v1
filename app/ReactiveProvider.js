@@ -10,7 +10,33 @@ Class.create("ReactiveProvider", Reactive, {
   },
 
   /**
-   * Get created instance from local Hash
+   * @returns Class instantiated record
+   */
+  getInstance : function(got, name, options){
+    var self = this;
+    var instance = this._instances.get(name)
+    if (instance){
+      got(instance)
+    } else {
+      var cb = function(data){
+        var instance = self.instance(data);
+        self._instances.set(name, instance);
+        got(instance)
+      }
+      this.get(cb, name, options)
+    }
+  },
+
+  /**
+   * @param data Json
+   * @returns Class instantiated record
+   */
+  instance : function(data){
+  },
+
+  /**
+   * TODO Deprecated
+   * Get created instance from memory Hash
    * @param name String uniq id
    */
   getSync : function(name){
