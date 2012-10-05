@@ -43,7 +43,7 @@ Class.create("UserFul", Provider, {
         diff.session = options.recipient;
 
         // Save logged user on right password
-        self.put(cb, name, diff, options);
+        self.put(cb, user.id, diff, options);
       } else{
         // wrong password
         cb(null, "Not Found");

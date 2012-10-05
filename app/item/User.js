@@ -1,34 +1,21 @@
 /**
  * Authentication, and management of Repositories and preferences
  */
-Class.create("User", Item, {
-  type: 'user',
+Class.create("User", {
 
-  initialize : function($super, name, password){
-    if (password){
-      $super()
-      var p = {password: password};
-      this.put(this._update.bind(this), name, null, p);
-    } else{
-      $super(name);
-    }
-  },
-
-  _update : function($super, data){
-    $super(data);
+  initialize : function(data, item){
     this.p = $H(data.preferences);
     this.roles = data.roles || ['guest'];
 
     // Current user
     if (data.SECURE_TOKEN){
       SECURE_TOKEN = this.token = data.SECURE_TOKEN;
-      if (!data.id) return this.get(this._update.bind(this), data.name, {force: true});
       //TODO remove after debugging
       $user = this;
       document.fire("user:auth", this);
       // restore last visited item as current root
-      var current = data.context ? new Item(data.context) : this;
-      document.fire("app:context_changed", current);
+      var current = data.context ? $app.createItem(data.context) : this;
+      document.fire("app:context_changed", item);
     }
   },
 

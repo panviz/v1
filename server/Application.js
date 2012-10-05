@@ -130,6 +130,6 @@ Class.create("Application", {
    * TODO test for providers
    */
   getManager : function(name){
-    return this.man[name] || this.modular.getSync('provider' + name);
+    return this.man[name] || this.modular.getInstance(null, 'provider' + name);
   }
 });

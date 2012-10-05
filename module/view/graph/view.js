@@ -143,7 +143,7 @@ Class.create("ViewGraph", View, {
   // TODO nodes should have links to its lines (to delete lines by index, not full search)
   toggle : function(selected){
     var self = this;
-    var links = selected.links();
+    var links = selected.expand();
     if (links){
       links.each(function(link){
         var item = link.to;
@@ -158,10 +158,10 @@ Class.create("ViewGraph", View, {
           self.links.push({source: item, target: item})
         }
       })
+      this.items = this.items.compact();
+      this.links = this.links.compact();
+      this.update();
     }
-    this.items = this.items.compact();
-    this.links = this.links.compact();
-    this.update();
   },
 
   _onContextChanged : function(e){

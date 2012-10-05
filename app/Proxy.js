@@ -6,7 +6,7 @@
  */
 Class.create("Proxy", {
 
-  // Client has one callback per dataId
+  //TODO replace saving callback with message dispatcher
   _cbs : {},
 
   //TODO persist followers

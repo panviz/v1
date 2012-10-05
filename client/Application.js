@@ -21,6 +21,8 @@ Class.create("Application", {
   },
 
   init : function(){
+    var self = this;
+    this.items = $H();
     $user = null;
     SECURE_TOKEN = null;
     this._context = null;
@@ -49,14 +51,13 @@ Class.create("Application", {
     $mod = this.modular      = new Modular();
     //$act = this.actionFul    = new ActionFul();
     $gui = this.gui          = new Gui($set);
-    $item = this.item        = new Provider(this.db);
     $modal = $gui.modal;
     //$provider = this.provider= new Provider();
 
     //TODO update progress bar from right places
     this.gui.modal.showBooting({steps: 2});
 
-    document.observe("user:auth", this.showChildren.bind(this));
+    document.observe("user:auth", this._onCurrentUser.bind(this));
     document.observe("app:context_changed", this._onContextChanged.bind(this));
     this.gui.modal.updateLoadingProgress(t('Actions: Done'));
       
@@ -71,7 +72,13 @@ Class.create("Application", {
     document.fire('app:loaded');
 
     var onFind = function(array, err){
-      if (array && array[0]) $user = new User(array[0].name)
+      if (array && array[0]){
+        var data = array[0]
+        SECURE_TOKEN = data.token
+        var item = self.createItem()
+        item.type = 'user'
+        item.get(item._update.bind(item), data.name, {force: true})
+      }
     }
     this.db.find(onFind, 'user', 'SECURE_TOKEN', true)
   },
@@ -85,6 +92,14 @@ Class.create("Application", {
     this._context = e.memo;
     //TODO if path is not root goto path
     //this.goTo(item);
+  },
+
+  createItem : function(name){
+    return this.items.get(name) || this.items.set(name, new Item(name))
+  },
+
+  _onCurrentUser : function(e){
+    //e.memo.expand();
   },
   
   /**

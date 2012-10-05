@@ -1,5 +1,6 @@
 /**
- * Reactive Provider
+ * TODO Don't inherit Reactive
+ * get & put methods should bind one callback per Model at Proxy
  */
 Class.create("ReactiveProvider", Reactive, {
 
@@ -8,7 +9,6 @@ Class.create("ReactiveProvider", Reactive, {
     this._instances = new Hash();
     $super.apply(this, $A(arguments).slice(1, arguments.length));
   },
-
   /**
    * @returns Class instantiated record
    */
@@ -25,21 +25,12 @@ Class.create("ReactiveProvider", Reactive, {
       }
       this.get(cb, name, options)
     }
+    return instance
   },
-
   /**
    * @param data Json
    * @returns Class instantiated record
    */
   instance : function(data){
-  },
-
-  /**
-   * TODO Deprecated
-   * Get created instance from memory Hash
-   * @param name String uniq id
-   */
-  getSync : function(name){
-    return this._instances.get(name);
   }
 })

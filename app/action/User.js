@@ -4,7 +4,11 @@ Class.create("Login", Action, {
     var onSubmit = function(formData){
       //TODO encrypt password with seed before sending
       //TODO add captcha if third attempt
-      new User(formData.username, formData.password);
+      var name = formData.username
+      var item = $app.createItem()
+      item.type = 'user';
+      var p = {password: formData.password};
+      item.put(item._update.bind(item), name, null, p)
     }
     var got = function(control){
       control.setOnSubmit(onSubmit);

@@ -92,46 +92,46 @@ Class.create("StoreGraph", {
   /**
    * Create, Update & Delete
    * @param diff Object with data to save into the record
-   * @param name String record name to be updated
+   * @param id Number of record to be updated
    * @returns Json difference in record between previous and current
    */
-  save : function(onSave, type, name, diff){
-    logger.debug("SAVE type: "+type+ " name: "+name);
+  save : function(onSave, type, id, diff){
+    logger.debug("SAVE type: "+type+ " id: "+id);
     console.log(diff);
     var self = this;
     var db = this._db;
-    if (diff){
-      var onFind = function(err, node){
-        if (err) return onSave(null, err);
+    var onFind = function(err, record){
+      if (err) return onSave(null, err)
+      if (diff){
         // Update
-        if (node){
-          Object.extend(node.data, diff)
+        if (record){
+          Object.extend(record.data, diff)
           var cb = function(err){
+            debugger
             onSave(diff, err)
           }
-          self._beforeSave(node.data);
-          node.save(cb);
+          self._beforeSave(record.data);
+          record.save(cb);
         }
         // Create
         else {
-          console.log('CREATE');
-          //diff.name = name;
-          //var node = db.createNode(data);
-          //node.save(function (err) {
-            //if (err) return onSave(null, err);
-            //node.index(type, 'name', name, function (err) {
-              //if (err) return onSave(null, err);
-              //onSave(diff);
-            //});
-          //});
+          var record = db.createNode(diff);
+          record.save(function (err){
+            if (err) return onSave(null, err);
+            record.index(type, 'name', diff.name, function(err){
+              if (err) return onSave(null, err);
+              onSave(diff);
+            });
+          });
         }
       }
-      this._db.getIndexedNode(type, 'name', name, onFind);
+      // Remove
+      else{
+        //force links deletion
+        record.delete(function(err){onSave(err)}, true)
+      }
     }
-    // Remove
-    else{
-      //TODO
-    }
+    db.getNodeById(id, onFind)
     return diff;
   },
 

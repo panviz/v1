@@ -1,4 +1,6 @@
 /**
+ * On initialize Record binds its _update method on message from Remote
+ * In such way this Record will be always updated on any remote change
  */
 Class.create("ReactiveRecord", Reactive, {
 
