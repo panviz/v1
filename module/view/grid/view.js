@@ -53,7 +53,14 @@ Class.create("ViewGrid", View, {
   },
 
   _onContextChanged : function(e){
-    this.store.setRootNode(Object.clone(e.memo, true));
+    //TODO
+    var item = e.memo
+    var node = {}
+    node.name = item.label
+    node.createdAt = item.createdAt
+    node.size = item.size
+    node.isLeaf = !!item._links
+    this.store.setRootNode(node)
   },
 
   _onItem : function(e){

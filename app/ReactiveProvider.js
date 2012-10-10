@@ -7,6 +7,7 @@ Class.create("ReactiveProvider", Reactive, {
   initialize : function($super){
     // created managed instances
     this._instances = new Hash();
+    this._cbs = {}
     $super.apply(this, $A(arguments).slice(1, arguments.length));
   },
   /**
@@ -23,7 +24,8 @@ Class.create("ReactiveProvider", Reactive, {
         self._instances.set(name, instance);
         got(instance)
       }
-      this.get(cb, name, options)
+      this._cbs[name] = cb
+      this.get(null, name, options)
     }
     return instance
   },
@@ -32,5 +34,10 @@ Class.create("ReactiveProvider", Reactive, {
    * @returns Class instantiated record
    */
   instance : function(data){
+  },
+
+  update : function(data){
+    this._cbs[data.name](data)
+    delete this._cbs[data.name]
   }
 })

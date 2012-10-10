@@ -23,6 +23,7 @@ Class.create("Application", {
   init : function(){
     var self = this;
     this.items = $H();
+    this.man = {};
     $user = null;
     SECURE_TOKEN = null;
     this._context = null;
@@ -48,9 +49,9 @@ Class.create("Application", {
     t = i18n;     //Set Global translation function
 
     this.db                  = new StoreClient();
-    $mod = this.modular      = new Modular();
+    $mod = this.modular = this.man['module'] = new Modular();
     //$act = this.actionFul    = new ActionFul();
-    $gui = this.gui          = new Gui($set);
+    $gui = this.gui = this.man['gui'] = new Gui($set);
     $modal = $gui.modal;
     //$provider = this.provider= new Provider();
 
@@ -75,9 +76,9 @@ Class.create("Application", {
       if (array && array[0]){
         var data = array[0]
         SECURE_TOKEN = data.token
-        var item = self.createItem()
-        item.type = 'user'
-        item.get(item._update.bind(item), data.name, {force: true})
+        var user = $user = self.getItem(data.id)
+        //reestablish authorized connection with remote
+        user.get(null, data.id, {force: true})
       }
     }
     this.db.find(onFind, 'user', 'SECURE_TOKEN', true)
@@ -93,13 +94,26 @@ Class.create("Application", {
     //TODO if path is not root goto path
     //this.goTo(item);
   },
-
-  createItem : function(name){
-    return this.items.get(name) || this.items.set(name, new Item(name))
+  /**
+   * Get or Create Item
+   * @param newId Number provided if param 'id' is name
+   */
+  getItem : function(id, newId){
+    var items = this.items;
+    //id is name
+    if (Object.isString(id)){
+      if (items.get(id)){
+        if (newId) return items.set(newId, items.unset(id))
+        return items.get(id)
+      } else{
+        return items.set(id, new Item())
+      }
+    }
+    return items.get(id) || items.set(id, new Item(id))
   },
 
   _onCurrentUser : function(e){
-    //e.memo.expand();
+    //TODO expand if item.expanded (was previously saved)
   },
   
   /**

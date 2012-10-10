@@ -1,6 +1,9 @@
       TODO
 
 Graph View
+  Mark as Changed on move, edit, link
+    Nodes - colored circumference
+    View - colored title
   Save nodes positions on move localy
   Store nodes positions on Ctrl+s & on time interval (autosave) at server
   Show nodes properties

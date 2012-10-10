@@ -1,13 +1,11 @@
-/**
- */
-Class.create("Module", ReactiveRecord, {
+Class.create("Module", {
   
-  _update : function($super, p){
+  initialize : function(p){
     Object.extend(this, p);
 
     // Add class to global scope
-    eval(p.src);
+    if (p.src) p.src.each(function(src){eval(src)})
+    delete p.src
     this.man = p.man;
-    $super(p)
   }
 })

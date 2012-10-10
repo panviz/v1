@@ -21,8 +21,11 @@ Class.create("ViewPreview", View, {
   _onContextChanged : function(e){
     var item = e.memo;
     var p = {};
+    p[t("ID")] = item.id;
     p[t("Name")] = item.label;
     p[t("Children")] = item.size;
+    p[t("Parents")] = item.inc().length;
+    p[t("Links")] = item.links().length;
     p[t("Last login")] = Ext.Date.parse(item.lastLogin, 'c');
     p[t("Item type")] = item.type;
     p[t("Date created")] = Ext.Date.parse(item.createdAt, 'c');

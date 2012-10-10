@@ -14,11 +14,13 @@ Class.create("Gui", ReactiveProvider, {
     //TODO change to focused?
     this._current = null;
     this.modal = new Modal();
-    this.get(this.initControls.bind(this), 'main')
+    this.get(null, 'main')
   },
 
   // Initialize controls
-  initControls : function(p){
+  update : function($super, p){
+    if (p.name != 'main') return $super(p);
+
     var template = Object.clone(p, true);
     this._defaults = template.defaults;
     //TODO set controls to layout in viewport for performance
@@ -67,6 +69,7 @@ Class.create("Gui", ReactiveProvider, {
   },
 
   createView : function(options, module){
+    var self = this;
     var moduleClass = Class.getByName(module.man);
     Object.extend(true, module.config, options);
     var i18n = module.i18n;
@@ -74,10 +77,11 @@ Class.create("Gui", ReactiveProvider, {
     var hash = (currentLocale != 'en' && i18n[currentLocale]) ?
       $util.composeHash(i18n.en, i18n[currentLocale]) : i18n.en
     t.update(hash);
+
     var control = new moduleClass(module.config);
     var addView = function(){
       // view has only one top level control
-      $gui.viewport.add(control.extControls[0])
+      self.viewport.add(control.extControls[0])
       control.render();
     }
     //TODO Create viewport before any controls?

@@ -21,13 +21,15 @@ Class.create("Reactive", {
    */
   get : function(got, name, options){
     var self = this;
+    got = got || this.update.bind(this)
     options = options || {};
     var onFind = function(data, err){
-      if (isServer || (data && (!options.force || data.id))){
+      if (isServer || (data && !options.force)){
         got(data, err)
       } else {
+        delete options.force
         options.SECURE_TOKEN = SECURE_TOKEN;
-        $proxy.send(self._onLoad.bind(self, onFind), "get", self.type, name, options)
+        $proxy.send("get", self.type, name, options)
       }
     }
     // TODO find by several keys, query chaining, consider options
@@ -49,7 +51,7 @@ Class.create("Reactive", {
         options = options || {};
         options.content = diff;
         options.SECURE_TOKEN = SECURE_TOKEN;
-        $proxy.send(self._onLoad.bind(self, callback), "put", self.type, name, options)
+        $proxy.send("put", self.type, name, options)
       }
     }
 
@@ -57,12 +59,21 @@ Class.create("Reactive", {
   },
 
   //@client
-  _onLoad : function(cb, data){
+  onLoad : function(data){
+    var self = this;
+    var onSave = function(data){
+      self.update(data);
+    }
     // Update local storage if Remote Storage has found the record
     if (data.name){
-      this.store.save(cb, this.type, data.name, data);
+      this.store.save(onSave, this.type, data.name, data);
     } else {
       $modal.error(data);
     }
+  },
+
+  //implement in child class
+  update : function(){
+    logger.error("Update method is not implemented")
   }
 })

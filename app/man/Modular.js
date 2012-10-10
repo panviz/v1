@@ -29,7 +29,7 @@ Class.create("Modular", ReactiveProvider, {
   },
 
   instance : function(data){
-    var module = new Module(data.name)
+    var module = new Module(data)
     this._instances[data.name] = module;
     return module;
   },

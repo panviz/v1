@@ -107,7 +107,6 @@ Class.create("StoreGraph", {
         if (record){
           Object.extend(record.data, diff)
           var cb = function(err){
-            debugger
             onSave(diff, err)
           }
           self._beforeSave(record.data);
@@ -171,6 +170,7 @@ Class.create("StoreGraph", {
             link.direction = 'out';
             link.to = rel.end.id;
           }
+          link.id = rel.id;
           link.type = rel.type;
           return link;
         })

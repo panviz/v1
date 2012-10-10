@@ -67,7 +67,7 @@ Class.create("Proxy", {
    * @param name record identifier to pass Model.get on remote side
    * @param cb Function callback
    */
-  send : function(cb, action, model, name, options){
+  send : function(action, model, name, options){
     var request = new Parcel(this._socket);
     request.action = action;
     request.model = model;
@@ -77,9 +77,6 @@ Class.create("Proxy", {
       request.content = options.content;
     }
     request.send();
-
-    //TODO use connection callID
-    this._cbs[request.id] = cb;
   },
 
   /* @client
@@ -89,15 +86,9 @@ Class.create("Proxy", {
   _onMessage : function(data){
     // Model requests its data
     if (data.id){
-      if (data.content) this._cbs[data.id](data.content);
-
-      // On Error Remove update model callback
-      if (data.error){
-        this._cbs[data.id](data.error);
-
-        // on NotFound error leave callback for future updates
-        if (data.error != "Not Found") this._cbs[data.id] = undefined;
-      }
+      if (data.content) var id = data.content.id
+      var recipient = $app.man[data.model] || $app.getItem(data.name, id)
+      recipient.onLoad(data.content || data.error)
     }
     // Other messages
   },

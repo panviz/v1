@@ -6,6 +6,7 @@ Class.create("User", {
   initialize : function(data, item){
     this.p = $H(data.preferences);
     this.roles = data.roles || ['guest'];
+    this.item = item
 
     // Current user
     if (data.SECURE_TOKEN){
@@ -14,7 +15,7 @@ Class.create("User", {
       $user = this;
       document.fire("user:auth", this);
       // restore last visited item as current root
-      var current = data.context ? $app.createItem(data.context) : this;
+      var current = data.context ? $app.getItem(data.context) : this;
       document.fire("app:context_changed", item);
     }
   },

@@ -33,9 +33,8 @@ Class.create("Store", {
           return onFind(Object.clone(s[i]));
         }
       }
-    } else {
-      onFind(null, this.NOT_FOUND);
     }
+    onFind(null, this.NOT_FOUND);
   },
 
   /**

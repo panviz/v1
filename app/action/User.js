@@ -5,10 +5,10 @@ Class.create("Login", Action, {
       //TODO encrypt password with seed before sending
       //TODO add captcha if third attempt
       var name = formData.username
-      var item = $app.createItem()
+      var item = $app.getItem(name)
       item.type = 'user';
       var p = {password: formData.password};
-      item.put(item._update.bind(item), name, null, p)
+      item.put(null, name, null, p)
     }
     var got = function(control){
       control.setOnSubmit(onSubmit);

@@ -10,11 +10,11 @@ Class.create("ReactiveRecord", Reactive, {
     if (Object.isString(name)) this.name = name;
     if (Object.isNumber(name)) this.id = name;
     this.loaded = false;
-    if (name) this.get(this._update.bind(this), name)
+    if (name) this.get(null, name)
   },
 
   // augment in Record class
-  _update : function(p){
+  update : function(p){
     this.id = p.id;
     this.name = p.name;
     this.createdAt = p.createdAt;

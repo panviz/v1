@@ -4,7 +4,6 @@
  */
 Class.create("Item", ReactiveRecord, {
 
-  //links Array of {type: String, direction: String, end: Number(Node ID)}
   //linked Array of linked Items
   /**
    * @param name String
@@ -13,28 +12,30 @@ Class.create("Item", ReactiveRecord, {
   initialize : function($super, name){
     //TODO Calculate size base on all/in/out links?
     this.__defineGetter__("size", function(){
-      return this.out ? this.out.length : 0;
+      return this._links ? this.out().length : 0;
     })
+    this._links = []      // Not loaded item has no links
 
     $super(name);
     this.type = this.__className.toLowerCase();
   },
 
-  _update : function($super, p){
+  update : function($super, p){
     $super(p);
-    if (!p.id) return this.get(this._update.bind(this), p.name, {force: true});
+    // Reload local record from server
+    if (!p.id) return this.get(null, p.name, {force: true});
     var p = p || {};
     this.x = p.x; this.y = p.y;
     this.fixed = p.fixed;
     this.label = p.label || p.name;
     this.icon = p.icon;
-    this._links = p.links;
-    this.links();
+    // Array of {id: Number, type: String, direction: String, to: Number(Item ID)}
+    this._links = p.links;         // All links of item
     if (p.type){
       var className = Class.getByName(p.type.capitalize())
       this[p.type] = new className(p, this)
     }
-    if (this.id) document.fire("item:updated");
+    if (this.id) document.fire("item:updated", this);
   },
   /**
    * if this Item is linked with given item
@@ -45,47 +46,74 @@ Class.create("Item", ReactiveRecord, {
     //TODO
   },
   /**
-   * Set links with already instantiated items
+   * Filter links
    * @param type String limit links to certain type if specified
-   * @returns Array all directly linked items
+   * @param direction String 'in'/'out'
+   * @returns Array of links
    */
-  //TODO consider type
-  links : function(){
-    if (this.xLinks) return this.xLinks
-    var links = this.xLinks = []
-    if (this._links){
-      this._links.each(function(link){
-        var xLink = Object.clone(link)
-        xLink.to = $app.items.get(link.to);
-        if (xLink.to) links.push(xLink)
+  links : function(type, direction){
+    var self = this
+    var links = this._links
+    if (type){
+      links = links.filter(function(link){
+        return link.type == type
+      })
+    }
+    if (direction){
+      links = links.filter(function(link){
+        return link.direction == direction
       })
     }
     return links
   },
   /**
-   * Trigger linked items load
-   */
-  expand : function(){
-    var xLinks = this.xLinks;
-    if (this._links){
-      this._links.each(function(link){
-        var xLink = Object.clone(link)
-        xLink.to = $app.createItem(null, link.to)
-        if (xLink.to) links.push(xLink)
-      })
-    }
-    return links
-  },
-  /**
-   * @returns Array all "parent" items
+   * @type String
+   * @returns Array of incoming links by type
    */
   inc : function(type){
     return this.links(type, 'in');
   },
   /**
-   * @returns Array all "child" items
+   * @type String
+   * @returns Array of outgoing links by type
    */
   out : function(type){
     return this.links(type, 'out');
+  },
+  /**
+   * Get linked items or Async load
+   */
+  linked : function(type, links){
+    var self = this
+    links = links || this._links
+    var linked = links.map(function(link){
+      return $app.getItem(link.to)
+    })
+    if (type){
+      linked.filter(function(item){
+        return item.type == type
+      })
+    }
+    return linked
+  },
+
+  /**
+   * @param itemType
+   * @param linkType
+   * @returns Array "parent" items
+   */
+  parents : function(itemType, linkType){
+    var links = this.inc(linkType)
+    return this.linked(itemType, links)
+  },
+
+  /**
+   * @param itemType
+   * @param linkType
+   * @returns Array all "child" items
+   */
+  children : function(itemType, linkType){
+    var links = this.out(linkType)
+    return this.linked(itemType, links)
   }
 });

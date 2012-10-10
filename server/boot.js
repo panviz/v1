@@ -4,6 +4,7 @@ var path = require('path');
 
   //Global
 fs = require('fs');
+wrench = require('wrench')
 isServer = true;
 ROOT_PATH = path.join(__dirname, '/..');
 require(ROOT_PATH + '/app/lib/prototypeJS/prototype');

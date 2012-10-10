@@ -1,14 +1,14 @@
 Class.create("ViewGraph", View, {
   
-  items: [],    // items loaded to this view
   nodes: [],    // svg nodes for visible items
-  links: [],    // links of loaded items
   edges: [],    // svg lines for visible links
   root: {},     // centered item
 
   initialize : function($super, options){
     $super(options);
     var self = this;
+    this.linkman = new LinkMan(this)
+    this.itemman = new ItemMan(this)
     var p = this.p;
     this.element = $(p.contentEl);
 
@@ -21,7 +21,7 @@ Class.create("ViewGraph", View, {
       .linkDistance(function(d){ return d.target._children ? 150 : 75; })
 
     this.vis = d3.select("#"+p.contentEl).append("svg");
-    d3.select('#desktop').on("click", function(d){self.add(d)})
+    d3.select('#desktop').on("click", function(){self._onClickBase()})
     this.vis.append("svg:defs")
       .append("svg:marker")
         .attr("id", 'type')
@@ -35,62 +35,24 @@ Class.create("ViewGraph", View, {
         .attr("d", "M0,-5L10,0L0,5");
 
     control.on('resize', this._onResize.bind(this));
-    document.observe("app:selection_changed", this.select.bind(this));
+    document.observe("app:selection_changed", this._onSelectionChanged.bind(this));
     document.observe("item:updated", this._onItem.bind(this));
-    if ($user) this.select($user);
+    if ($user) this.itemman.select($user);
   },
 
-  /**
-   * Change selection to new items
-   * Selection may have multiple items on:
-   *  Search results
-   *  Grid selection
-   * @param items Item or Array of Items
-   * @return Boolean if selection changed
-   */
-  select : function(items){
-    var s = this.selection;
-    if (!Object.isArray(items)) items = [items];
-    if (items[0] == s[0] && s.length == 1 && items.length == 1) return false;
-    this.selection = items;
-
-    items.each(function(item){
-      item.fixed = true;
-    })
-
-    // add items from selection which are not rendered
-    var extra = items.diff(this.items);
-    if (extra) this.items = this.items.concat(extra);
-    // TODO valid only for the first time
-    //this.items = this.flatten(root);
-    //this.links = d3.layout.tree().links(this.items);
-    this.update();
-    //document.fire('app:selection_changed', s);
-    return true;
-  },
-
-  // Add new node
-  add : function(d){
-    var point = d3.mouse(this.element);
-    var item = {name: t('new Node'), fixed: true, x: point[0], y: point[1]};
-    this.items.push(item);
-    this.update();
-    this.select();
-  },
-
-  // update graph accordingly to this.items , links change
+  // update graph accordingly to registries of items and links
   update : function(){
     var self = this;
     // Restart the force layout.
     this.force
       .gravity(0)     //no gravity to center
-      .nodes(this.items)
-      .links(this.links)
+      .nodes(this.itemman.items)
+      .links(this.linkman.links)
       .start();
 
     // Update the links…
     this.edges = this.vis.selectAll("line.link")
-      .data(this.links, function(d){ return d.target.id; });
+      .data(this.linkman.links, function(d){ return d.target.id; });
 
     // Enter any new links.
     this.edges.enter().insert("line", ".node")
@@ -107,12 +69,12 @@ Class.create("ViewGraph", View, {
 
     // Update the nodes…
     this.nodes = this.vis.selectAll(".node")
-      .data(this.items, function(d){ return d.id; })
+      .data(this.itemman.items, function(d){ return d.id; })
 
     // Enter any new nodes.
     g = this.nodes.enter().append("g")
       .attr("class", "node")
-      .on("click", this._onClick.bind(this))
+      .on("click", this._onClickNode.bind(this))
       .on("mousedown", this._onMouseDown.bind(this))
       .on("mousemove", function(d){d.changed = true; console.log('CHANGED');})
       .call(this.force.drag)
@@ -135,37 +97,12 @@ Class.create("ViewGraph", View, {
     this.nodes.exit().remove();
   },
 
-  /**
-   * Toggle linked items visibility of selected one
-   * @param selected Item
-   */
-  // TODO consider direction & type of links
-  // TODO nodes should have links to its lines (to delete lines by index, not full search)
-  toggle : function(selected){
-    var self = this;
-    var links = selected.expand();
-    if (links){
-      links.each(function(link){
-        var item = link.to;
-        if (item.index >= 0){
-          delete self.items[item.index];
-          delete item.index;
-          self.links.each(function(link, index){
-            if (link.source == item || link.target == item) delete self.links[index]
-          })
-        } else {
-          self.items.push(item);
-          self.links.push({source: item, target: item})
-        }
-      })
-      this.items = this.items.compact();
-      this.links = this.links.compact();
-      this.update();
-    }
+  _onContextChanged : function(e){
+    this.itemman.select(e.memo);
   },
 
-  _onContextChanged : function(e){
-    this.select(e.memo);
+  _onSelectionChanged : function(e){
+    this.itemman.select(e.memo)
   },
 
   // Color leaf nodes orange, and packages white or blue.
@@ -173,27 +110,15 @@ Class.create("ViewGraph", View, {
     return d._children ? "#3182bd" : d.out ?  "#fd8d3c" : "#c6dbef";
   },
 
-  // TODO use library func for Tree flattening
-  // Returns a list of all nodes under the root.
-  flatten : function(root){
-    var nodes = [], i = 0;
-
-    function recurse(node){
-      if (node.out) node.size = node.out.reduce(function(p, v){ return p + recurse(v); }, 0);
-      if (!node.id) node.id = ++i;
-      nodes.push(node);
-      return node.size;
-    }
-
-    root.size = recurse(root);
-    return nodes;
-  },
-
   // Update visual node on graph
   _onItem : function(e){
-    //TODO remove only updated nodes
-    this.nodes.remove();
-    this.update();
+    var item = e.memo
+    if (this.itemman.isShown(item)){
+      this.itemman.show(item)
+      //TODO remove only updated nodes
+      this.nodes.remove();
+      this.update();
+    }
   },
 
   // Move nodes and lines on layout recalculation
@@ -216,15 +141,19 @@ Class.create("ViewGraph", View, {
   },
 
   // Load on click
-  _onClick : function(item){
-    debugger
+  _onClickNode : function(item){
     d3.event.stopPropagation()
-    this.toggle(item);
+    this.itemman.toggle(item);
+  },
+
+  _onClickBase : function(){
+    var point = d3.mouse(this.element);
+    this.itemman.add(point)
   },
 
   _onMouseDown : function(item){
     // if selection changed by other view do not fire own event
-    if (this.select(item)) document.fire('app:context_changed', item);
+    if (this.itemman.select(item)) document.fire('app:context_changed', item);
   },
 
   _onResize : function(control, width, height){

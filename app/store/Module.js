@@ -44,11 +44,14 @@ Class.create("StoreModule", Store, {
     })
     m.config = require(path.config);
     m.i18n = $util.requireAll(path.i18n);
-    var manPath = path.root + '/' + m.type + '.js';
-
-    m.src = fs.readFileSync(manPath, 'binary');
+    var fileNames = wrench.readdirSyncRecursive(path.root);
+    fileNames = fileNames.filter(function(file){
+      return file.match(/.js$/)
+    })
+    m.src = fileNames.map(function(fileName){
+      return fs.readFileSync(path.root + '/' + fileName, 'binary')
+    })
     m.man = m.type.capitalize() + m.config.name.capitalize();
-    //TODO add dependent files
 
     return m;
   },
