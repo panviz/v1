@@ -12,31 +12,46 @@ Class.create("Item", ReactiveRecord, {
   initialize : function($super, name){
     //TODO Calculate size base on all/in/out links?
     this.__defineGetter__("size", function(){
-      return this._links ? this.out().length : 0;
+      return this.relations ? this.out().length : 0;
     })
-    this._links = []      // Not loaded item has no links
 
     $super(name);
-    this.type = this.__className.toLowerCase();
+    // Array of {id: Number, type: String, direction: String, to: Number(Item ID)}
+    this.relations = []      // Not loaded item has no links
+    this.type = this.__className.toLowerCase()    // Local storage needs type = 'item'
+    this.toStore = this.toStore.concat($w('relations label icon x y fixed expanded '))
   },
 
   update : function($super, p){
+    if (!p) return
+    debugger
     $super(p);
     // Reload local record from server
-    if (!p.id) return this.get(null, p.name, {force: true});
-    var p = p || {};
-    this.x = p.x; this.y = p.y;
-    this.fixed = p.fixed;
-    this.label = p.label || p.name;
-    this.icon = p.icon;
-    // Array of {id: Number, type: String, direction: String, to: Number(Item ID)}
-    this._links = p.links;         // All links of item
-    if (p.type){
-      var className = Class.getByName(p.type.capitalize())
-      this[p.type] = new className(p, this)
+    if (!this.id) return this.get(null, this.name, {force: true});
+    this.label = this.label || this.name;
+    
+    // Update delegate class if type specified
+    var type = this.type
+    var hash = $H(p)
+    if (type && !hash.isEmpty()){
+      if (!this[type]){
+        var className = Class.getByName(type.capitalize())
+        this[type] = new className(this)
+        this[type].update(p)
+      } else{
+        this[type].update(p)
+      }
     }
-    if (this.id) document.fire("item:updated", this);
+    if (this.id && !hash.isEmpty()) document.fire("item:updated", this);
   },
+
+  save : function($super){
+    //TODO get data from this[type] to save
+    this.x = Math.round(this.x)
+    this.y = Math.round(this.y)
+    $super()
+  },
+
   /**
    * if this Item is linked with given item
    * @param item Item
@@ -53,7 +68,7 @@ Class.create("Item", ReactiveRecord, {
    */
   links : function(type, direction){
     var self = this
-    var links = this._links
+    var links = this.relations
     if (type){
       links = links.filter(function(link){
         return link.type == type
@@ -85,7 +100,7 @@ Class.create("Item", ReactiveRecord, {
    */
   linked : function(type, links){
     var self = this
-    links = links || this._links
+    links = links || this.relations
     var linked = links.map(function(link){
       return $app.getItem(link.to)
     })

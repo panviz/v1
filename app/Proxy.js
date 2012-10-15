@@ -60,7 +60,7 @@ Class.create("Proxy", {
     data.parse(msg, cb);
   },
 
-  /* @client
+  /** @client
    * Makes remote call of given model
    * Save callback to trigger it on same data update
    * @param model String name of the Model
@@ -79,21 +79,24 @@ Class.create("Proxy", {
     request.send();
   },
 
-  /* @client
+  /** @client
    * Client message is always PUT
    * @param e String stringified object
    */
   _onMessage : function(data){
     // Model requests its data
     if (data.id){
-      if (data.content) var id = data.content.id
-      var recipient = $app.man[data.model] || $app.getItem(data.name, id)
-      recipient.onLoad(data.content || data.error)
+      if (data.error) return $modal.error(data.error);
+      if (data.content){
+        var newId = data.content.id
+        var recipient = $app.man[data.model] || $app.getItem(data.name, newId)
+        recipient.onLoad(data.content)
+      }
     }
     // Other messages
   },
 
-  /* @server
+  /** @server
    * @param data Parcel
    */
   _onServer : function(data){
@@ -128,17 +131,17 @@ Class.create("Proxy", {
         }
       } else {
         data.error = "Model not supported";
-        data.send(data);
+        data.send();
       }
     } else {
       // Proceed with other message types
     }
   },
 
-  /* @server
-   * Send Parcel to recipient
-   * Save recipient to send him updates later if record exists
-   * @param data empty Parcel to be sent to user
+  /** @server
+   * Send Parcel to sender
+   * Save sender to send him updates later if record exists
+   * @param data Parcel (empty) to be sent to user
    * @param diff Json Content diff to send
    */
   subscribe : function(data, diff){
@@ -150,25 +153,25 @@ Class.create("Proxy", {
     if (!followers[data.id]) followers[data.id] = $H();
     // TODO don't save data.conn
     // retrieve users connection from user.session
-    followers[data.id].set(data.recipient, data.conn);
+    followers[data.id].set(data.sender, data.conn);
   },
 
-  /* @server
+  /** @server
+   * @param data Parcel
+   * @param diff Json content to send
    * Subscribe updater and sent Parcel to all followers
    */
   broadcast : function(data, diff){
     this.subscribe(data, diff);
-    var sender  = data.recipient;
+    var sender  = data.sender;
 
     if (diff){
-      data.content = diff;
       var followers = this._subscribers[data.id];
       followers.keys().forEach(function(followerId){
         // Skip sender
         if (followerId == sender) return;
-        data.recipient = followerId;
-        data.conn = followers.get(followerId);
-        data.send();
+        var recipientConnection = followers.get(followerId);
+        data.send(followerId, recipientConnection);
       })
     }
   }

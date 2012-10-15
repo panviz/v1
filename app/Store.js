@@ -68,44 +68,42 @@ Class.create("Store", {
 
   /**
    * Create, Update & Delete
-   * @param diff Object with data to save into the record
-   * @param name String record name to be updated
-   * @returns Json difference in record between previous and current
+   * @param update Object with data to save into the record
+   * @param id String record id to be updated
+   * @param onSave Callback with Json difference in record between previous and current
    */
-  save : function(onSave, type, name, diff){
+  save : function(onSave, type, id, update){
     if (!this._local[type]) this._local[type] = [];
     var s = this._local[type];
     var previous;
-    if (diff){
+    var diff
+    if (update){
       for (var i=0; i < s.length; i++){
-        if (s[i].name == name){
+        if (s[i].id == id){
          previous = $H(s[i]).clone(); break;
         }
       }
       // Update
       if (previous){
+        var current = $H(update);
+        diff = previous.diff(current);
         Object.extend(s[i], diff)
-        //Local DB should return full record on Save
-        //var current = $H(s[i]);
-        //var diff = previous.diff(current);
       }
       // Create
       else {
-        diff.name = name;
-        s.push(diff);
+        s.push(update);
+        diff = update
       }
     }
     // Remove
     else{
       for (var i=0; i < s.length; i++){
-        if (s[i].name == name){
+        if (s[i].id == id){
           this._local[type] = s.without(s[i]);
         }
       }
     }
-    //diff is actually full record
-    onSave(diff);
-    return diff;
+    onSave(Object.clone(diff));
   },
 
   generateId : function(type){

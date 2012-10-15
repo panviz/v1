@@ -3,21 +3,32 @@
  */
 Class.create("User", {
 
-  initialize : function(data, item){
-    this.p = $H(data.preferences);
-    this.roles = data.roles || ['guest'];
+  initialize : function(item){
     this.item = item
+  },
 
-    // Current user
-    if (data.SECURE_TOKEN){
-      SECURE_TOKEN = this.token = data.SECURE_TOKEN;
-      //TODO remove after debugging
-      $user = this;
-      document.fire("user:auth", this);
-      // restore last visited item as current root
-      var current = data.context ? $app.getItem(data.context) : this;
-      document.fire("app:context_changed", item);
+  update : function(data){
+    var self = this
+    $w('loggedIn lastLogin roles preferences').each(function(attr){
+      //TODO what if server has deleted attr?
+      if (data[attr]) self[attr] = data[attr]
+    })
+    this.roles = this.roles || ['guest'];
+    if (data.token){
+      SECURE_TOKEN = this.token = data.token;
+      // wait for view modules initialization
+      setTimeout(this.login.bind(this, data.token, data.context), 100)
     }
+  },
+
+  // Current user login
+  login : function(token, context){
+    //TODO remove after debugging
+    $user = this;
+    document.fire("user:auth", this);
+    // restore last visited item as current root
+    var current = context ? $app.getItem(data.context) : this;
+    document.fire("app:context_changed", this.item);
   },
 
   isAdmin : function(){

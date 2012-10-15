@@ -76,12 +76,13 @@ Class.create("Application", {
       if (array && array[0]){
         var data = array[0]
         SECURE_TOKEN = data.token
-        var user = $user = self.getItem(data.id)
+        var user = self.getItem(data.id)
         //reestablish authorized connection with remote
+        user.type = data.type   // override default item type
         user.get(null, data.id, {force: true})
       }
     }
-    this.db.find(onFind, 'user', 'SECURE_TOKEN', true)
+    this.db.find(onFind, 'user', 'token', true)
   },
 
   /**
@@ -110,6 +111,12 @@ Class.create("Application", {
       }
     }
     return items.get(id) || items.set(id, new Item(id))
+  },
+
+  save : function(){
+    this.items.values().each(function(item){
+      if (item.changed) item.save()
+    })
   },
 
   _onCurrentUser : function(e){

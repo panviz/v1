@@ -37,10 +37,10 @@ Class.create("UserFul", Provider, {
         diff.lastLogin = (new Date).toJSON();
 
         //TODO generate token
-        diff.SECURE_TOKEN = "asdf";
+        diff.token = "asdf";
         
         // Save user connection id as session to pass security check on sending reply
-        diff.session = options.recipient;
+        diff.session = options.sender;
 
         // Save logged user on right password
         self.put(cb, user.id, diff, options);

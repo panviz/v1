@@ -1,4 +1,5 @@
 {
+  "id": "main",
   "name": "main",
   "layout": {
     "type": "border",
@@ -20,10 +21,6 @@
       },
       "components": [
         {
-          "control": "ProviderSelect"
-        },{
-          "control": "AddressBar"
-        },{
           "id": "UserStatus",
           "control": "UserStatus",
           "options": {

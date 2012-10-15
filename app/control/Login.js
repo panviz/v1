@@ -1,4 +1,4 @@
-Class.create("CLogin", Action, {
+Class.create("CLogin", {
 
   initialize : function(template){
     this.size = {width: template.width, height: template.height};

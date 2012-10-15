@@ -29,10 +29,11 @@ Class.create("StoreGraph", {
     this._db.getNodeById(id, function (err, record){
       if (err) return onFind(null, err)
       if (!record) return onFind(null, "Not Found");
+    //TODO replace duplicate code in this.find onLinks
       var onLinks = function(links){
         var data = record.data;
         data.id = record.id;
-        data.links = links;
+        data.relations = links;
         self._parse(data);
         onFind(data, err);
       }
@@ -80,7 +81,7 @@ Class.create("StoreGraph", {
         var onLinks = function(links){
           var data = record.data;
           data.id = record.id;
-          data.links = links;
+          data.relations = links;
           self._parse(data);
           onFind(data, err);
         }
@@ -103,8 +104,9 @@ Class.create("StoreGraph", {
     var onFind = function(err, record){
       if (err) return onSave(null, err)
       if (diff){
-        // Update
+              // Update
         if (record){
+          //TODO save outgoing links
           Object.extend(record.data, diff)
           var cb = function(err){
             onSave(diff, err)
@@ -112,8 +114,9 @@ Class.create("StoreGraph", {
           self._beforeSave(record.data);
           record.save(cb);
         }
-        // Create
+              // Create
         else {
+          diff.createdAt = (new Date).toJSON()
           var record = db.createNode(diff);
           record.save(function (err){
             if (err) return onSave(null, err);
@@ -124,10 +127,12 @@ Class.create("StoreGraph", {
           });
         }
       }
-      // Remove
+              // Remove
       else{
         //force links deletion
-        record.delete(function(err){onSave(err)}, true)
+        //TODO remove
+        console.log('DELETE');
+        //record.delete(function(err){onSave(err)}, true)
       }
     }
     db.getNodeById(id, onFind)

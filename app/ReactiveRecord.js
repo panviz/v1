@@ -7,17 +7,34 @@ Class.create("ReactiveRecord", Reactive, {
   // Load record on creation
   initialize : function($super, name, store){
     $super(store);
+    this.toStore = $w('name type')
     if (Object.isString(name)) this.name = name;
     if (Object.isNumber(name)) this.id = name;
     this.loaded = false;
-    if (name) this.get(null, name)
+    // Let initialization chain finish before update
+    if (name) setTimeout(this.get.bind(this, null, name), 10)
   },
 
   // augment in Record class
   update : function(p){
-    this.id = p.id;
-    this.name = p.name;
-    this.createdAt = p.createdAt;
+    var self = this
+    if (p.id) this.id = p.id
+    this.toStore.each(function(attr){
+      //TODO what if server has deleted attr?
+      if (p[attr]){
+        self[attr] = p[attr]
+        delete p[attr]
+      }
+    })
     this.loaded = true;
+  },
+
+  save : function(){
+    var self = this
+    var content = {}
+    this.toStore.each(function(p){
+      if (self[p] != undefined) content[p] = self[p]
+    })
+    this.put(null, this.id, content)
   }
 })

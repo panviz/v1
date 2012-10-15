@@ -17,11 +17,9 @@ Class.create("UserStatus", {
 		this.logoutButton = Ext.create('Ext.Button', {
 			text: t["Logout"],
 			scale: p.buttonSize,
-			handler: function(){
-        action.undo;
-      }
+			handler: action.undo
     });
 
-    this.extControls = [this.loginButton, this.logoutButton];
+    this.extControls = [this.loginButton, this.signupButton, this.logoutButton];
   }
 })

@@ -1,12 +1,14 @@
 /**
- * Secure Data - object format to send {model, name, content}
+ * Data surveyor
  * Is responsible for access restrictions
+ * Secure Data delivery from/to Proxy
+ * specify data format {model, name, content}
  */
 Class.create("Parcel", {
 
   /**
-   * Parcel can be initialized empty or with Connection
-   * @param obj connection
+   * Parcel can be initialized empty or with sender's Connection
+   * @param obj Connection
    */
   initialize : function(connection){
     // put or get
@@ -15,7 +17,7 @@ Class.create("Parcel", {
     // name of Reactive class on Client & Server
     this.model = "";
 
-    // record identifier
+    // record identifier (id or name)
     this.name = "";
 
     // unique parcel identifier
@@ -35,10 +37,6 @@ Class.create("Parcel", {
     // id of user which requested this parcel
     this.sender = "";
 
-    // id of user whom to send this parcel
-    // String -> sessionID or Number -> userID
-    this.recipient = "";
-
     this.__defineGetter__("id", function(){
       // TODO add options to id as name is not uniq
       return this.model + this.name;
@@ -49,17 +47,10 @@ Class.create("Parcel", {
     this.__defineGetter__("sender", function(){
       return this.options.sender || this.conn.id;
     })
-    this.__defineSetter__("recipient", function(id){
-      this.options.recipient = id;
-    })
 
-    // Send parcel back if no recipient specified
-    this.__defineGetter__("recipient", function(){
-      return this.options.recipient || this.sender;
-    })
     if (connection){
       this.conn = connection;
-      this.recipient = this.conn.id;  //set recipient explicit
+      this.sender = this.conn.id;  //set sender explicit
     }
   },
 
@@ -75,101 +66,112 @@ Class.create("Parcel", {
     this.content = msg.content;
     Object.extend(this.options, msg.options);
     // check sender write access
-    if (isServer && this.action == 'put') return this._secureFor('sender', cb);
+    if (isServer && this.action == 'put') return this._secureFor(cb);
     cb();
   },
 
   /**
-   * Send parcel depending on its current location
+   * @param recipient String UserID - optional
+   * @param connection Connection of recipient - optional
    */
-  send : function(){
+  send : function(recipient, connection){
+    // Parcel will be sent to specified recipient
+    // or back to its sender, specified on its creation
+    connection = connection || this.conn
     var self = this;
     if (this.model && this.name){
       //TODO add secure check on Client?
 
-      var secureSend = function(){
+      var secureSend = function(restrictedContent){
         var message = JSON.stringify({
           action: self.action,
           model: self.model,
           name: self.name,
           error: self.error,
-          content: self.content,
+          content: restrictedContent,
           options: self.options,
           sender: self.sender
         });
         if (isServer){
-          self.conn.write(message);
+          connection.write(message);
         } else {
-          self.conn.send(message);
+          connection.send(message);
         }
       }
 
       // check recipient read access
       if (isServer){
-        self._secureFor("recipient", secureSend);
+        self._secureFor(secureSend, recipient);
       } else {
-        secureSend();
+        secureSend(this.content);
       }
     } else{
       throw("Parcel should have model, name specified")
     }
   },
 
-  /* @server
+  /** @server
    * Restrict incoming message accordingly to sender's write access rights
    * Restrict outgoing message accordingly to recipient's read access rights
-   * @param addressee of Parcel delivery
+   * @param addressee 'sender' or recipient id
+   * @param send Function callback
    */
-  _secureFor : function(addressee, cb){
+  _secureFor : function(send, addressee){
     var self = this;
     // no content to restrict
-    if (!this.content) return cb();
-    // find sender by token or name provided with put request
-    if (addressee == 'sender'){
-      var key = this.options.SECURE_TOKEN || this.sender;
-      var type = this.options.SECURE_TOKEN ? 'token' : 'name'
-    } else{
-      // find recipient by session or id
-      var key = this.recipient;
-      var type = Object.isString(this.recipient) ? 'session' : 'id'
+    if (!this.content) return send();
+    var key = 'session'
+    var value = addressee || this.sender
+    // TODO find by name provided with put request?
+
+    // find addresse by token
+    if (this.options.SECURE_TOKEN){
+      key = 'token'
+      value = this.options.SECURE_TOKEN
+    }
+    // find by session ID
+    else if (Object.isString(addressee)){
+      key =  'session'
+    }
+    // find by user ID
+    else if (Object.isNumber(addressee)){
+      key =  'id'
     }
 
     var onFind = function(user){
-      if (user){
-        self[addressee] = user.id;
-        self._restrict(user);
-      } else{
-        self._restrict();
-      }
-      cb();
+      send(self._restrict(user));
     }
-    $user.store.find(onFind, 'user', type, key)
+    $user.store.find(onFind, 'user', key, value)
   },
 
   /**
    * restrict content accordingly to found user access rights
    * @param user User
+   * @returns Json Restricted content
    */
   _restrict : function(user){
     if (user){
       // No restrictions for admin
-      if (user.roles.include('admin')) return;
+      if (user.roles && user.roles.include('admin')) return this.content;
       // No restrictions for owner
-      if (this.content.owner == user.id) return;
+      if (this.content.owner == user.id) return this.content
       // No restrictions for just logged user asking itself
-      if (this.content.session == user.session) return;
+      if (this.content.session == user.session) return this.content
+      // No restrictions for sending user its content
+      if (this.name == user.id) return this.content
       //TODO Process other roles
       //TODO Process content shared options
     }
     
     // restrict to Public for anonymous user
-    var result = {};
+    var restrictedContent = {};
     var manager = $app.getManager(this.model);
-    if (manager.public == "all") return;
+    if (manager.public == "all") return this.content;
+
     var self = this;
     manager.public.map(function(key){
-      result.key = self.content.key;
+      restrictedContent[key] = self.content[key];
     })
-    this.content = result;
+    return restrictedContent;
   }
 })

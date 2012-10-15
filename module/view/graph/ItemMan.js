@@ -28,7 +28,7 @@ Class.create("ItemMan", {
 
       // add items from selection which are not rendered
       var extra = items.diff(this.items);
-      if (extra) this.items = this.items.concat(extra);
+      if (extra) this.items = extra.concat(this.items);
       this.view.update()
       return true;
     }

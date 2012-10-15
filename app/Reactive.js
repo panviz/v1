@@ -42,7 +42,7 @@ Class.create("Reactive", {
    * Saves changes locally first then sync with remote
    * @returns Json public difference in record between previous and current
    */
-  put : function(callback, name, content, options){
+  put : function(callback, id, content, options){
     var self = this;
     if (isServer){
       var onSave = callback;
@@ -51,11 +51,11 @@ Class.create("Reactive", {
         options = options || {};
         options.content = diff;
         options.SECURE_TOKEN = SECURE_TOKEN;
-        $proxy.send("put", self.type, name, options)
+        $proxy.send("put", self.type, id, options)
       }
     }
 
-    return this.store.save(onSave, this.type, name, content);
+    return this.store.save(onSave, this.type, id, content);
   },
 
   //@client
@@ -64,11 +64,12 @@ Class.create("Reactive", {
     var onSave = function(data){
       self.update(data);
     }
-    // Update local storage if Remote Storage has found the record
-    if (data.name){
-      this.store.save(onSave, this.type, data.name, data);
-    } else {
-      $modal.error(data);
+    // Update local storage
+    var id = data.id || this.id
+    if (id){
+      this.store.save(onSave, this.type, id, data);
+    } else{
+      self.update(data)
     }
   },
 

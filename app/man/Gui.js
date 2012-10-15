@@ -24,10 +24,11 @@ Class.create("Gui", ReactiveProvider, {
     var template = Object.clone(p, true);
     this._defaults = template.defaults;
     //TODO set controls to layout in viewport for performance
-    var hasId = function(component){
-      return component.id;
+    // Condition for processing component template
+    var condition = function(component){
+      return (component.control || component.module);
     }
-    var processTemplate = Functional.processTree("components", hasId, this._parseComponent.bind(this))
+    var processTemplate = Functional.processTree("components", condition, this._parseComponent.bind(this))
     var controlsTree = processTemplate(template)
 
     var getExtControls = function(component){
@@ -35,7 +36,6 @@ Class.create("Gui", ReactiveProvider, {
         return component.control.extControls
       }
     }
-    //TODO Viewport should be created while template process in processTemplate as Display control?
     template.items = template.components.select(getExtControls).flatten()
     //Container for all controls
     this.viewport = Ext.create('Ext.Viewport', template);
@@ -64,6 +64,10 @@ Class.create("Gui", ReactiveProvider, {
   instance : function(template){
     var controlClass = Class.getByName(template.control);
     var control = new controlClass(template.options);
+
+    //TODO do not store extjs modal windows
+    //they can't be reused after disposal
+    //OR do not dispose them
     this._instances.set(template.id, control);
     return control;
   },
