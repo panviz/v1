@@ -12,7 +12,6 @@ Class.create("Proxy", {
   //TODO persist followers
   //@server Server has many clients for one dataId
   _subscribers : {},
-
   /**
    * Start websocket messaging
    */
@@ -59,13 +58,13 @@ Class.create("Proxy", {
     }
     data.parse(msg, cb);
   },
-
   /** @client
    * Makes remote call of given model
    * Save callback to trigger it on same data update
-   * @param model String name of the Model
-   * @param name record identifier to pass Model.get on remote side
-   * @param cb Function callback
+   * @param String action get|put
+   * @param String model name of the Model
+   * @param {Number|String} name identifier to pass Model.get on remote side
+   * @param Json options
    */
   send : function(action, model, name, options){
     var request = new Parcel(this._socket);
@@ -78,10 +77,9 @@ Class.create("Proxy", {
     }
     request.send();
   },
-
   /** @client
-   * Client message is always PUT
-   * @param e String stringified object
+   * Client always recieves message PUT
+   * @param Parcel data
    */
   _onMessage : function(data){
     // Model requests its data
@@ -95,9 +93,8 @@ Class.create("Proxy", {
     }
     // Other messages
   },
-
   /** @server
-   * @param data Parcel
+   * @param Parcel data
    */
   _onServer : function(data){
     var self = this;
@@ -106,7 +103,7 @@ Class.create("Proxy", {
 
       if (manager){
         if (data.action == "get"){
-          var onFind = function(diff, err){
+          var got = function(diff, err){
             if (err){
               if (err != "Not Found") throw(err);
               data.error = err;
@@ -115,10 +112,10 @@ Class.create("Proxy", {
               self.subscribe(data, diff)
             }
           }
-          manager.get(onFind, data.name, data.options);
+          manager.get(got, data.name, data.options);
         }
         else if (data.action = "put"){
-          var onFind = function(diff, err){
+          var onPut = function(diff, err){
             if (err){
               if (err != "Not Found") throw(err);
               data.error = err;
@@ -127,7 +124,7 @@ Class.create("Proxy", {
               self.broadcast(data, diff)
             }
           }
-          manager.put(onFind, data.name, data.content, data.options);
+          manager.put(onPut, data.name, data.content, data.options);
         }
       } else {
         data.error = "Model not supported";
@@ -137,12 +134,11 @@ Class.create("Proxy", {
       // Proceed with other message types
     }
   },
-
   /** @server
    * Send Parcel to sender
    * Save sender to send him updates later if record exists
-   * @param data Parcel (empty) to be sent to user
-   * @param diff Json Content diff to send
+   * @param Parcel data (empty) to be sent to user
+   * @param Json diff Content diff to send
    */
   subscribe : function(data, diff){
     data.content = diff;
@@ -155,10 +151,9 @@ Class.create("Proxy", {
     // retrieve users connection from user.session
     followers[data.id].set(data.sender, data.conn);
   },
-
   /** @server
-   * @param data Parcel
-   * @param diff Json content to send
+   * @param Parcel data
+   * @param Json diff content to send
    * Subscribe updater and sent Parcel to all followers
    */
   broadcast : function(data, diff){

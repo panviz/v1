@@ -24,7 +24,7 @@ Class.create("Modular", ReactiveProvider, {
           }
         })
       }
-      this.store.find(onFind, this.type, 'name', true);
+      this.store.find(onFind, this.type, 'name');
     }
   },
 

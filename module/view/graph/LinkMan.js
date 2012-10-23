@@ -1,6 +1,8 @@
 Class.create("LinkMan", {
    
+  // All created links
   all: {},
+  // Shown links
   links: [],
 
   format : function(item, link){
@@ -10,9 +12,13 @@ Class.create("LinkMan", {
       return {target: item, source: $app.items.get(link.to)}
     }
   },
-
+  /**
+   * @param Item item source of the links
+   * @param {Link|Link[]} links
+   */
   show : function(item, links){
     var self = this
+    if (!Object.isArray(links)) links = [links]
     links.map(function(link){
       var saved = self.all[link.id]
       if (!saved){
@@ -21,7 +27,9 @@ Class.create("LinkMan", {
       if (!self.links.include(saved)) self.links.push(saved)
     })
   },
-
+  /**
+   * @param Link[] links
+   */
   hide : function(links){
     var self = this
     links.map(function(link){

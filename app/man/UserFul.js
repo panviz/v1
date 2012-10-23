@@ -32,18 +32,17 @@ Class.create("UserFul", Provider, {
     var self = this;
     var onFind = function(user){
       if (user && user.password == options.password){
-        var diff = {name: name};
-        diff.loggedIn = true;
-        diff.lastLogin = (new Date).toJSON();
+        user.loggedIn = true;
+        user.lastLogin = (new Date).toJSON();
 
         //TODO generate token
-        diff.token = "asdf";
+        user.token = "asdf";
         
         // Save user connection id as session to pass security check on sending reply
-        diff.session = options.sender;
+        user.session = options.sender;
 
         // Save logged user on right password
-        self.put(cb, user.id, diff, options);
+        self.put(cb, user.id, user, options);
       } else{
         // wrong password
         cb(null, "Not Found");

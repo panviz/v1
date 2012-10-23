@@ -19,10 +19,9 @@ Class.create("Store", {
       this._uniqColumns.push(uniq);
     }
   },
-
   /**
-   * @param type String model name
-   * @param id Number
+   * @param String type model name
+   * @param Number id
    */
   findById : function(onFind, type, id){
     var s = this._local[type];
@@ -36,11 +35,11 @@ Class.create("Store", {
     }
     onFind(null, this.NOT_FOUND);
   },
-
   /**
-   * @param type String model name
-   * @param key String property name
-   * @param value String value to search records by
+   * @param String type model name
+   * @param String key property name
+   * @param String [value] to search records by
+   * Find all if missing
    * @returns Json record
    */
   find : function(onFind, type, key, value){
@@ -48,7 +47,7 @@ Class.create("Store", {
     if (key == "id") return this.findById(onFind, type, value);
 
     // find all records with key property
-    if (Object.isBoolean(value)){
+    if (!value){
       var findFunc = Enumerable.findAll;
       var iterator = function(r){ return !!r[key]};
     } else {
@@ -65,21 +64,22 @@ Class.create("Store", {
       onFind(Object.clone(record));
     }
   },
-
   /**
    * Create, Update & Delete
-   * @param update Object with data to save into the record
-   * @param id String record id to be updated
-   * @param onSave Callback with Json difference in record between previous and current
+   * @param Function onSave callback called with Json difference in record between previous and current
+   * @param String type Item type
+   * @param Json update data to save into the record
+   * @param {Number|String} idOrName record id to be updated or name of new one
    */
-  save : function(onSave, type, id, update){
+  save : function(onSave, type, idOrName, update){
+    var previous, diff, id, key
     if (!this._local[type]) this._local[type] = [];
     var s = this._local[type];
-    var previous;
-    var diff
+    if (Object.isNumber(idOrName)) id = idOrName
     if (update){
+      key = id ? 'id' : 'name'
       for (var i=0; i < s.length; i++){
-        if (s[i].id == id){
+        if (s[i][key] == idOrName){
          previous = $H(s[i]).clone(); break;
         }
       }

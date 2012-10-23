@@ -1,26 +1,27 @@
-/**
- * On initialize Record binds its _update method on message from Remote
- * In such way this Record will be always updated on any remote change
- */
 Class.create("ReactiveRecord", Reactive, {
-
-  // Load record on creation
-  initialize : function($super, name, store){
+  /**
+   * Load record on creation
+   * @param {Number|String} [idOrName]
+   * @param Store [store]
+   */
+  initialize : function($super, idOrName, store){
     $super(store);
     this.toStore = $w('name type')
-    if (Object.isString(name)) this.name = name;
-    if (Object.isNumber(name)) this.id = name;
+    if (Object.isNumber(idOrName)) this.id = idOrName;
+    if (Object.isString(idOrName)) this.name = idOrName;
     this.loaded = false;
     // Let initialization chain finish before update
-    if (name) setTimeout(this.get.bind(this, null, name), 10)
+    if (idOrName) setTimeout(this.get.bind(this, null, idOrName), 10)
   },
-
-  // augment in Record class
+  /**
+   * On remote record change, Proxy will call this method
+   * Augment it in concrete Record class
+   * @param Json [p]
+   */
   update : function(p){
     var self = this
-    if (p.id) this.id = p.id
-    this.toStore.each(function(attr){
-      //TODO what if server has deleted attr?
+    $w('id createdAt').concat(this.toStore).each(function(attr){
+      //TODO what if remote has deleted attr?
       if (p[attr]){
         self[attr] = p[attr]
         delete p[attr]
@@ -35,6 +36,7 @@ Class.create("ReactiveRecord", Reactive, {
     this.toStore.each(function(p){
       if (self[p] != undefined) content[p] = self[p]
     })
-    this.put(null, this.id, content)
+    var idOrName = this.id > 0 ? this.id : this.name
+    this.put(null, idOrName, content)
   }
 })

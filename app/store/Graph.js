@@ -2,7 +2,7 @@ var neo4j = require('neo4j');
 
 Class.create("StoreGraph", {
   /**
-   * @param uniq Array column names to be uniq
+   * @param Array uniq column names to be uniq
    */
   initialize : function(p){
     var url = p.url || 'http://localhost:7474';
@@ -19,40 +19,43 @@ Class.create("StoreGraph", {
       this._uniqColumns.push(uniq);
     }
   },
-
   /**
-   * @param type String model name
-   * @param id Number
+   * @param String type model name
+   * @param Number id
    */
   findById : function(onFind, id){
     var self = this;
     this._db.getNodeById(id, function (err, record){
       if (err) return onFind(null, err)
       if (!record) return onFind(null, "Not Found");
-    //TODO replace duplicate code in this.find onLinks
-      var onLinks = function(links){
-        var data = record.data;
-        data.id = record.id;
-        data.relations = links;
-        self._parse(data);
-        onFind(data, err);
-      }
-      self._getLinks(onLinks, record)
+      self._getLinks(self.output.bind(self, onFind, record), record)
     });
   },
-
   /**
-   * TODO retrieves Item with all its relationships
-   * @param type String Item type (model name)
-   * @param key String property name
-   * @param value String value to search records by
+   * @param String type Item type (model name)
+   * @param String key property name
+   * @param String value value to search records by
    * @returns Json record
    */
   find : function(onFind, type, key, value){
     logger.debug("FIND type: "+type+ " key: "+key+ " value: "+value);
-    var self = this;
-    if (key == "id") return this.findById(onFind, value);
-
+    var self = this
+    var cb = function(record, err){
+      if (err) return onFind(err)
+      self._getLinks(self.output.bind(self, onFind, record), record)
+    }
+    this._find(cb, type, key, value)
+  },
+  /**
+   * @returns Node db record
+   */
+  _find : function(onFind, type, key, value){
+    if (key == 'id'){
+      this._db.getNodeById(value, function (err, record){
+        return onFind(record, err)
+      });
+      return
+    }
     //TODO indexing
     if (false){//this._uniqColumns.include(key)){
       this._db.getIndexedNode(type, key, value, function (err, record){
@@ -74,39 +77,32 @@ Class.create("StoreGraph", {
 
       this._db.query(query, function(err, array){
         if (err) return onFind(null, err)
-        var record = array[0];
-        if (!record) return onFind(null, "Not Found");
+        var row = array[0];
+        if (!row) return onFind(null, "Not Found");
         //TODO consider multiple results
-        record = record.x;
-        var onLinks = function(links){
-          var data = record.data;
-          data.id = record.id;
-          data.relations = links;
-          self._parse(data);
-          onFind(data, err);
-        }
-        self._getLinks(onLinks, record)
+        onFind(row.x)
       })
     }
   },
-
   /**
    * Create, Update & Delete
-   * @param diff Object with data to save into the record
-   * @param id Number of record to be updated
+   * @param Object diff with data to save into the record
+   * @param {Number|String} idOrName of record to be updated
    * @returns Json difference in record between previous and current
    */
-  save : function(onSave, type, id, diff){
-    logger.debug("SAVE type: "+type+ " id: "+id);
+  save : function(onSave, type, idOrName, diff){
+    logger.debug("SAVE type: "+type+ " idOrName: "+idOrName);
     console.log(diff);
     var self = this;
     var db = this._db;
-    var onFind = function(err, record){
-      if (err) return onSave(null, err)
+    var onFind = function(record, err){
+      if (err && err != "Not Found") return onSave(null, err)
       if (diff){
               // Update
         if (record){
-          //TODO save outgoing links
+          //TODO handle item created with existing name
+          //TODO update outgoing links
+          delete diff.relations
           Object.extend(record.data, diff)
           var cb = function(err){
             onSave(diff, err)
@@ -116,13 +112,17 @@ Class.create("StoreGraph", {
         }
               // Create
         else {
+          type = type || 'item'
           diff.createdAt = (new Date).toJSON()
-          var record = db.createNode(diff);
+          //TODO save outgoing links
+          var links = diff.relations
+          delete diff.relations
+          record = db.createNode(diff);
           record.save(function (err){
             if (err) return onSave(null, err);
             record.index(type, 'name', diff.name, function(err){
               if (err) return onSave(null, err);
-              onSave(diff);
+              self.output(onSave, record, links)
             });
           });
         }
@@ -135,14 +135,14 @@ Class.create("StoreGraph", {
         //record.delete(function(err){onSave(err)}, true)
       }
     }
-    db.getNodeById(id, onFind)
+    var key = Object.isNumber(idOrName) ? 'id' : 'name'
+    this._find(onFind, type, key, idOrName)
     return diff;
   },
-
   /**
-   * @param id Item
-   * @param p.type String of link
-   * @param p.direction Boolean (true for out)
+   * @param Item id
+   * @param String p.type of link
+   * @param Boolean p.direction (true for out)
    * @returns Array of linked Items
    */
   getLinked : function(onFind, id, p){
@@ -189,6 +189,14 @@ Class.create("StoreGraph", {
     node.all('REL', onLoad)
   },
 
+  output : function(cb, record, links){
+    var data = record.data;
+    data.id = record.id;
+    data.relations = links;
+    console.log(data);
+    this._parse(data);
+    cb(data);
+  },
   /**
    * Neo4j doesn't support Maps as node's property
    */
@@ -199,7 +207,6 @@ Class.create("StoreGraph", {
     })
     return data;
   },
-
   /**
    * Neo4j doesn't support Maps as node's property
    */

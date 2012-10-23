@@ -3,6 +3,7 @@
  * TODO Need responsible class for i18n?
  */
 Class.create("Application", {
+  unsavedItemsCounter: 1,
 
   initialize : function(){ 
     var self = this;
@@ -59,7 +60,6 @@ Class.create("Application", {
     this.gui.modal.showBooting({steps: 2});
 
     document.observe("user:auth", this._onCurrentUser.bind(this));
-    document.observe("app:context_changed", this._onContextChanged.bind(this));
     this.gui.modal.updateLoadingProgress(t('Actions: Done'));
       
     //this._setHistory();
@@ -82,35 +82,51 @@ Class.create("Application", {
         user.get(null, data.id, {force: true})
       }
     }
-    this.db.find(onFind, 'user', 'token', true)
-  },
-
-  /**
-   * Create Item and save as current context
-   * @event user loads repository
-   * @param data item data
-   */
-  _onContextChanged : function(e){
-    this._context = e.memo;
-    //TODO if path is not root goto path
-    //this.goTo(item);
+    this.db.find(onFind, 'user', 'token')
   },
   /**
    * Get or Create Item
-   * @param newId Number provided if param 'id' is name
+   * If name provided - create Item without immediate get to remote
+   * @param {Number|String} idOrName itemID OR name
+   * @param Number [newId] provided if param 'id' is name
    */
-  getItem : function(id, newId){
+  getItem : function(idOrName, newId){
     var items = this.items;
-    //id is name
-    if (Object.isString(id)){
-      if (items.get(id)){
-        if (newId) return items.set(newId, items.unset(id))
-        return items.get(id)
+    // Get By name
+    if (!idOrName || Object.isString(idOrName)){
+      var name = idOrName
+      if (items.get(name)){
+        if (newId){
+          var item = items.unset(name)      // Remove items stored by name
+          items.unset(item.id)              // Remove duplicate stored by '-ID'
+          item.changed = false
+          return items.set(newId, item)     // Store item by remote ID
+        } else {
+          return items.get(name)
+        }
       } else{
-        return items.set(id, new Item())
+        return this._createItem(name)
       }
     }
+    // get By ID
+    var id = idOrName
     return items.get(id) || items.set(id, new Item(id))
+  },
+
+  _createItem : function(name){
+    var items = this.items;
+    var baseName = t('new Node ')
+    var name = name || baseName + this.unsavedItemsCounter
+    while (this.items.get(name)){
+      this.unsavedItemsCounter++
+      name = baseName + this.unsavedItemsCounter
+    }
+    var item = new Item()
+    item.id = -this.unsavedItemsCounter
+    item.name = name
+    item.changed = true
+    items.set(item.id, item)      // Save duplicate by '-ID'
+    return items.set(name, item)
   },
 
   save : function(){
@@ -120,12 +136,13 @@ Class.create("Application", {
   },
 
   _onCurrentUser : function(e){
-    //TODO expand if item.expanded (was previously saved)
+    var item = e.memo.item
+    item.get(null, item.id, {force:true})
   },
   
   /**
    * Require a context change to the given path
-   * @param itemOrPath Item|String A item or a path
+   * @param {Item|String} itemOrPath A item or a path
    */
   goTo : function(itemOrPath){   
     if(Object.isString(itemOrPath)){
@@ -135,10 +152,9 @@ Class.create("Application", {
     }
     this._contextHolder.requireContextChange(item);
   },
-  
   /**
    * Change the repository of the current user and reload list and current.
-   * @param repositoryId String Id of the new repository
+   * @param String repositoryId Id of the new repository
    */
   triggerRepositoryChange : function(repositoryId){    
     document.fire("app:trigger_repository_switch");
@@ -157,7 +173,6 @@ Class.create("Application", {
     }
     connection.sendAsync();
   },
-
   /**
    * Trigger a simple download
    * @param url String
@@ -165,7 +180,6 @@ Class.create("Application", {
   triggerDownload : function(url) {
       document.location.href = url;
   },
-
   /**
    * Reload all messages on language change
    * @param newLanguage String
@@ -192,7 +206,6 @@ Class.create("Application", {
     }.bind(this);
     connection.sendSync();
   },
-  
   /**
    * Search all divs with class 'i18n' and update their value
    */
@@ -212,18 +225,15 @@ Class.create("Application", {
         this.goTo(this.historyHashToPath(hash));
       }.bind(this));
       document.observe("app:context_changed", function(event){
-        debugger
         this.updateHistory(this.getContext().getPath());
       }.bind(this));
     }else{
       document.observe("app:context_changed", function(event){
-        debugger
         var path = this.getContext().getPath();
         document.title = this.title + ' - '+(getBaseName(path) ? getBaseName(path) : '/');
       }.bind(this));
     }
     document.observe("app:context_changed", function(event){
-      debugger
       if(this.skipLsHistory || !this.user || !this.user.getActiveRepository()) return;      
       window.setTimeout(function(){
         var data = this.user.getPreference("ls_history", true) || {};
@@ -234,7 +244,6 @@ Class.create("Application", {
       }.bind(this), 100 );
     }.bind(this) );
   },
-      
   /**
    * Updates the browser history
    * @param path String Path
@@ -242,7 +251,6 @@ Class.create("Application", {
   updateHistory : function(path){
     if(this.history) this.history.historyLoad(this.pathToHistoryHash(path));
   },
-  
   /**
    * Translate the path to a history step. Return the count.
    * @param path String
@@ -264,7 +272,6 @@ Class.create("Application", {
     this.pathesHash.set(this.historyCount, path);
     return this.historyCount;
   },
-  
   /**
    * Reverse operation
    * @param hash Integer
@@ -276,7 +283,6 @@ Class.create("Application", {
     if(path == undefined) return "/";
     return path;
   },  
-
   /**
    * Accessor for updating the datamodel context
    * @param jContextItem Item optional
@@ -291,14 +297,12 @@ Class.create("Application", {
       this._contextHolder.setSelectedItems(jSelectedItems, selectionSource);
     }
   },
-  
   /**
    * @returns Item
    */
   getContext : function(){
     return this._context;
   },
-  
   /**
    * TODO remove
    * @returns Collection
@@ -306,21 +310,18 @@ Class.create("Application", {
   getUserSelection : function(){
     return this._contextHolder;
   },    
-  
   /**
    * Accessor for datamodel.requireContextChange()
    */
   fireContextRefresh : function(){
     this.getContextHolder().requireContextChange(this.getContext(), true);
   },
-  
   /**
    * Accessor for datamodel.requireContextChange()
    */
   fireItemRefresh : function(itemPathOrItem){
     this.getContextHolder().requireItemReload(itemPathOrItem);
   },
-  
   /**
    * Accessor for datamodel.requireContextChange()
    * TODO move out
@@ -329,7 +330,6 @@ Class.create("Application", {
     if(this.getContext().isRoot()) return;
     this.updateContextData(this.getContext().getParent());
   },
-  
   /**
    * Utility 
    * @returns Boolean

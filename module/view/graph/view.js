@@ -11,7 +11,6 @@ Class.create("ViewGraph", View, {
     this.itemman = new ItemMan(this)
     var p = this.p;
     this.element = $(p.contentEl);
-
     var control = Ext.create('Ext.panel.Panel', p);
     this.extControls.push(control);
 
@@ -19,14 +18,17 @@ Class.create("ViewGraph", View, {
       .on("tick", this._onTick.bind(this))
       .charge(function(d){ return d.out ? d.out.length * self.p.graph.chargeK : self.p.graph.chargeBase; })
       .linkDistance(function(d){ return d.target._children ? 150 : 75; })
-
+    this.drag = d3.behavior.drag()
+      .on("dragstart", this._onDragstart.bind(this))
+      .on("drag", this._onDragmove.bind(this))
+      .on("dragend", this._onDragend.bind(this));
     this.vis = d3.select("#"+p.contentEl).append("svg");
-    d3.select('#desktop').on("click", function(){self._onClickBase()})
+    d3.select('#desktop').on("click", this._onClickBase.bind(this))
     this.vis.append("svg:defs")
       .append("svg:marker")
         .attr("id", 'type')
         .attr("viewBox", "0 -5 10 10")
-        .attr("refX", 20)
+        .attr("refX", 25)
         .attr("refY", 0)
         .attr("markerWidth", 10)
         .attr("markerHeight", 10)
@@ -37,13 +39,15 @@ Class.create("ViewGraph", View, {
     control.on('resize', this._onResize.bind(this));
     document.observe("app:selection_changed", this._onSelectionChanged.bind(this));
     document.observe("item:updated", this._onItem.bind(this));
-    if ($user) this.itemman.select($user);
+    // Select context if view is loaded after user login
+    if ($user) this.itemman.select($user.context);
   },
 
   // update graph accordingly to registries of items and links
   update : function(){
     var self = this;
     // Restart the force layout.
+    this.force.stop()
     this.force
       .gravity(0)     //no gravity to center
       .nodes(this.itemman.items)
@@ -64,23 +68,29 @@ Class.create("ViewGraph", View, {
       .attr("style", "stroke: #9ecae1")
       .attr("marker-end", "url(#type)");
 
-    // Exit any old links.
+    // Remove old links.
     this.edges.exit().remove();
 
-    // Update the nodes…
+    // Update the nodes
     this.nodes = this.vis.selectAll(".node")
       .data(this.itemman.items, function(d){ return d.id; })
 
-    // Enter any new nodes.
+    //TODO add transition for adding nodes
+    // Add new nodes
     g = this.nodes.enter().append("g")
-      .attr("class", "node")
+      .attr("class", function(d){return 'node item'+d.id})
       .on("click", this._onClickNode.bind(this))
       .on("mousedown", this._onMouseDown.bind(this))
-      .on("mousemove", function(d){d.changed = true; console.log('CHANGED');})
-      .call(this.force.drag)
+      .on("mousemove", this._onMouseMove.bind(this))
+      .on("contextmenu", this._onContextMenu.bind(this))
+      .on("mouseup", this._onMouseUp.bind(this))
+      .on("mouseover", this._onMouseOver.bind(this))
+      .on("mouseout", this._onMouseOut.bind(this))
+      .call(this.drag)
     g.append("circle")
-      .attr("r", function(d) { return d.out ? 15 : self.p.graph.nodeRadius; })
+      .attr("r", function(d){ return d.out ? 15 : self.p.graph.nodeRadius })
       .style("fill", this._color)
+      .style(":hover", 'opacity: 0.5')
     g.append("image")
       .attr("xlink:href", "http://dmitra.com/favicon.ico")
       .attr("x", -8)
@@ -93,8 +103,13 @@ Class.create("ViewGraph", View, {
       .attr("dy", "10pt")
       .text(function(d){ return d.label || d.id});
 
-    // Exit any old nodes.
-    this.nodes.exit().remove();
+    // Remove old nodes
+    this.nodes.exit()
+      .transition()
+        .duration(750)
+        .attr("y", 60)
+        .style("fill-opacity", 1e-6)
+      .remove()
   },
 
   _onContextChanged : function(e){
@@ -114,10 +129,9 @@ Class.create("ViewGraph", View, {
   _onItem : function(e){
     var item = e.memo
     if (this.itemman.isShown(item)){
-      this.itemman.show(item)
       //TODO remove only updated nodes
       this.nodes.remove();
-      this.update();
+      this.itemman.show(item)
     }
   },
 
@@ -148,12 +162,72 @@ Class.create("ViewGraph", View, {
 
   _onClickBase : function(){
     var point = d3.mouse(this.element);
-    this.itemman.add(point)
+    this.itemman.create(point)
   },
 
   _onMouseDown : function(item){
     // if selection changed by other view do not fire own event
     if (this.itemman.select(item)) document.fire('app:context_changed', item);
+  },
+
+  _onMouseMove : function(item){
+  },
+
+  _onMouseOut : function(item){
+    delete this.hover
+    d3.select('.item'+item.id+' circle').style("stroke", "#fff").style('stroke-width', 1)
+    if (item.tempFix){
+      item.fixed = false
+      delete item.tempFix
+    }
+  },
+
+  _onMouseOver : function(item){
+    this.hover = item
+    if (!item.fixed){
+      item.tempFix = true
+      item.fixed = true
+    }
+    d3.select('.item'+item.id+' circle').style("stroke", "#ff0000").style('stroke-width', 2)
+  },
+
+  _onMouseUp : function(item){
+  },
+
+  _onDragstart : function(d){
+    // auto positioning is off while dragging
+    this.force.stop()
+  },
+
+  _onDragmove : function(d){
+    //TODO do once
+    var node = d3.select('.item'+d.id)
+    node.attr('pointer-events', 'none')
+    d.px += d3.event.dx;
+    d.py += d3.event.dy;
+    d.x += d3.event.dx;
+    d.y += d3.event.dy; 
+    this._onTick(); // this is the key to make it work together with updating both px,py,x,y on d !
+  },
+
+  _onDragend : function(item){
+    if (!item.changed) item.changed = true
+    if (this.hover && item != this.hover){
+      var link = item.link(this.hover)
+      this.linkman.show(item, link)
+      console.log(item.name + ' -> '+this.hover.name);
+      //TODO dragged item should be put to drag start position if link created?
+      item.fixed = false
+      this.update()
+    }
+    this._onTick();
+    this.force.resume();
+    var node = d3.select('.item' + item.id)
+    node.attr('pointer-events', 'all')
+  },
+
+  _onContextMenu : function(item){
+    d3.event.preventDefault()
   },
 
   _onResize : function(control, width, height){

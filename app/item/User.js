@@ -16,8 +16,7 @@ Class.create("User", {
     this.roles = this.roles || ['guest'];
     if (data.token){
       SECURE_TOKEN = this.token = data.token;
-      // wait for view modules initialization
-      setTimeout(this.login.bind(this, data.token, data.context), 100)
+      this.login(data.token, data.context)
     }
   },
 
@@ -27,8 +26,8 @@ Class.create("User", {
     $user = this;
     document.fire("user:auth", this);
     // restore last visited item as current root
-    var current = context ? $app.getItem(data.context) : this;
-    document.fire("app:context_changed", this.item);
+    this.context = context ? $app.getItem(context) : this.item;
+    document.fire("app:context_changed", this.context);
   },
 
   isAdmin : function(){
@@ -40,7 +39,6 @@ Class.create("User", {
     this.roles.push(role);
     if (role == "admin") this._isAdmin = true;
   },
-
   /**
    * Rights to read active item
    * @returns Boolean
@@ -48,7 +46,6 @@ Class.create("User", {
   readable : function(){
     return this._permissions.read;
   },
-  
   /**
    * Rights to write active item
    * @returns Boolean
@@ -56,7 +53,6 @@ Class.create("User", {
   writable : function(){
     return this._permissions.write;
   },
-  
   /**
    * Rights to copy active item
    * @returns Boolean
@@ -64,7 +60,6 @@ Class.create("User", {
   copiable : function(){
     return this._permissions.copiable;
   },
-  
   /**
    * Get a user preference by its name
    * @returns Mixed
@@ -72,7 +67,6 @@ Class.create("User", {
   getPreference : function(prefName){
     return this._preferences.get(prefName); 
   },
-  
   /**
    * Set a preference value
    * @param prefName String
@@ -82,7 +76,6 @@ Class.create("User", {
   setPreference : function(name, value){
     this._preferences.set(name, value);
   },
-
   /**
    * @param repoId String
    * @returns String

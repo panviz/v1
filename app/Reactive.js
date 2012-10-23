@@ -1,7 +1,7 @@
 /**
  * Storage mapper
  * Implements instant record update with only two methods:
- *   Get - retrieves data from Remote by uniq identifier "name"
+ *   Get - retrieves data from Remote by uniq identifier
  *   Put - send new, null, or updated record to Remote
  * Abstract class
  */
@@ -11,15 +11,15 @@ Class.create("Reactive", {
     this.store = store || $app.db;
     if (this.type === undefined) this.type = this.__className.toLowerCase();
   },
-
   /**
    * Find record in local storage first
    * If item exists - return it (it is definitely up to date)
    * Else load it
-   * @param name unique identifier of record
-   * @returns Json data of record
+   * @param Json options
+   * @param {Number|String} idOrName unique identifier of record
+   * @returns Json data of the record
    */
-  get : function(got, name, options){
+  get : function(got, idOrName, options){
     var self = this;
     got = got || this.update.bind(this)
     options = options || {};
@@ -29,20 +29,23 @@ Class.create("Reactive", {
       } else {
         delete options.force
         options.SECURE_TOKEN = SECURE_TOKEN;
-        $proxy.send("get", self.type, name, options)
+        $proxy.send("get", self.type, idOrName, options)
       }
     }
     // TODO find by several keys, query chaining, consider options
     // or use uniq id
-    var key = Object.isString(name) ? "name" : "id";
-    this.store.find(onFind, this.type, key, name)
+    var key = Object.isNumber(idOrName) ? "id" : "name"
+    this.store.find(onFind, this.type, key, idOrName)
   },
-
   /**
    * Saves changes locally first then sync with remote
+   * @param Function callback
+   * @param Json options
+   * @param Json content
+   * @param {Number|String} idOrName name used when sending new record
    * @returns Json public difference in record between previous and current
    */
-  put : function(callback, id, content, options){
+  put : function(callback, idOrName, content, options){
     var self = this;
     if (isServer){
       var onSave = callback;
@@ -51,11 +54,10 @@ Class.create("Reactive", {
         options = options || {};
         options.content = diff;
         options.SECURE_TOKEN = SECURE_TOKEN;
-        $proxy.send("put", self.type, id, options)
+        $proxy.send("put", self.type, idOrName, options)
       }
     }
-
-    return this.store.save(onSave, this.type, id, content);
+    return this.store.save(onSave, this.type, idOrName, content);
   },
 
   //@client
@@ -64,13 +66,9 @@ Class.create("Reactive", {
     var onSave = function(data){
       self.update(data);
     }
+    var idOrName = this.id >= 0 ? this.id : data.name
     // Update local storage
-    var id = data.id || this.id
-    if (id){
-      this.store.save(onSave, this.type, id, data);
-    } else{
-      self.update(data)
-    }
+    this.store.save(onSave, this.type, idOrName, data);
   },
 
   //implement in child class
