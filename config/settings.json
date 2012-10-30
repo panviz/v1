@@ -1,23 +1,18 @@
 {
   "debug": true,
   "socketPath": "/reactive",
-  "default_repository": "/",
   "locale": "ru",
   "currentLanguage": "ru",
   "session_timeout": 7200,
   "client_timeout_warning": 0,
   "availableLanguages": {},
   "version": "0.0.1",
-  "versionDate": "31.08.2012",
+  "versionDate": "01.11.2012",
   "i18n": {},
   "password_min_length": "8",
   "ui": {
-    "title": "Graph",
-    "icon": "/theme/logo.png",
-    "iconWidth": "250px",
-    "iconHeight": "50px",
-    "iconOnly": true,
-    "titleFontSize": ""
+    "title": "Grafiy",
+    "icon": "/theme/logo.png"
   },
   "module": [
     "provider.fs"

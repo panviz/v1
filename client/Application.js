@@ -3,7 +3,7 @@
  * TODO Need responsible class for i18n?
  */
 Class.create("Application", {
-  unsavedItemsCounter: 1,
+  unsavedItemsCounter: 0,
 
   initialize : function(){ 
     var self = this;
@@ -85,48 +85,42 @@ Class.create("Application", {
     this.db.find(onFind, 'user', 'token')
   },
   /**
-   * Get or Create Item
+   * Get or Create Item for further update by name
    * If name provided - create Item without immediate get to remote
-   * @param {Number|String} idOrName itemID OR name
-   * @param Number [newId] provided if param 'id' is name
+   * @param String id itemID
+   * @param String [name] provided if creating new Item
    */
-  getItem : function(idOrName, newId){
+  getItem : function(id){
     var items = this.items;
-    // Get By name
-    if (!idOrName || Object.isString(idOrName)){
-      var name = idOrName
-      if (items.get(name)){
-        if (newId){
-          var item = items.unset(name)      // Remove items stored by name
-          items.unset(item.id)              // Remove duplicate stored by '-ID'
-          item.changed = false
-          return items.set(newId, item)     // Store item by remote ID
-        } else {
-          return items.get(name)
-        }
-      } else{
-        return this._createItem(name)
-      }
-    }
-    // get By ID
-    var id = idOrName
     return items.get(id) || items.set(id, new Item(id))
   },
 
-  _createItem : function(name){
+  getItemByName : function(name){
+    var items = this.items;
+    if (items.get(name)){
+      return items.get(name)
+    } else{
+      var item = new Item()
+      item.name = name
+      return items.set(name, item)
+    }
+  },
+
+  createItem : function(name){
     var items = this.items;
     var baseName = t('new Node ')
-    var name = name || baseName + this.unsavedItemsCounter
-    while (this.items.get(name)){
+    var isNameUsed = true
+    // generate uniq name
+    while (!name || isNameUsed){
       this.unsavedItemsCounter++
       name = baseName + this.unsavedItemsCounter
+      isNameUsed = items.values().find(function(item){return item.name == name})
     }
     var item = new Item()
-    item.id = -this.unsavedItemsCounter
+    item.id = $util.generateId()
     item.name = name
     item.changed = true
-    items.set(item.id, item)      // Save duplicate by '-ID'
-    return items.set(name, item)
+    return items.set(item.id, item)
   },
 
   save : function(){
@@ -137,7 +131,8 @@ Class.create("Application", {
 
   _onCurrentUser : function(e){
     var item = e.memo.item
-    item.get(null, item.id, {force:true})
+    this.items.unset(item.name)
+    this.items.set(item.id, item)
   },
   
   /**

@@ -16,7 +16,7 @@ Class.create("Reactive", {
    * If item exists - return it (it is definitely up to date)
    * Else load it
    * @param Json options
-   * @param {Number|String} idOrName unique identifier of record
+   * @param String idOrName
    * @returns Json data of the record
    */
   get : function(got, idOrName, options){
@@ -32,9 +32,7 @@ Class.create("Reactive", {
         $proxy.send("get", self.type, idOrName, options)
       }
     }
-    // TODO find by several keys, query chaining, consider options
-    // or use uniq id
-    var key = Object.isNumber(idOrName) ? "id" : "name"
+    var key = options.name ? "name" : "id"
     this.store.find(onFind, this.type, key, idOrName)
   },
   /**
@@ -42,22 +40,23 @@ Class.create("Reactive", {
    * @param Function callback
    * @param Json options
    * @param Json content
-   * @param {Number|String} idOrName name used when sending new record
+   * @param String idOrName name used when user login for example
    * @returns Json public difference in record between previous and current
    */
   put : function(callback, idOrName, content, options){
-    var self = this;
     if (isServer){
       var onSave = callback;
     } else {
-      var onSave = function(diff){
-        options = options || {};
-        options.content = diff;
-        options.SECURE_TOKEN = SECURE_TOKEN;
-        $proxy.send("put", self.type, idOrName, options)
-      }
+      var onSave = this._onSave.bind(this, idOrName, options)
     }
     return this.store.save(onSave, this.type, idOrName, content);
+  },
+
+  _onSave : function(idOrName, options, diff){
+    options = options || {};
+    options.content = diff;
+    options.SECURE_TOKEN = SECURE_TOKEN;
+    $proxy.send("put", this.type, idOrName, options)
   },
 
   //@client
@@ -66,7 +65,7 @@ Class.create("Reactive", {
     var onSave = function(data){
       self.update(data);
     }
-    var idOrName = this.id >= 0 ? this.id : data.name
+    var idOrName = this.id || data.name
     // Update local storage
     this.store.save(onSave, this.type, idOrName, data);
   },

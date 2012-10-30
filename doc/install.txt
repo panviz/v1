@@ -16,6 +16,7 @@ Put into /app/lib:
 Configuration
   Set host, port, local DB settings
   Edit files in /config folder
+  Copy /config/server/neo4j.properties to Neo4j_HOME/conf
 
 Run
-  server/boot.js
+  npm start

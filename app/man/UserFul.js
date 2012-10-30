@@ -15,8 +15,8 @@ Class.create("UserFul", Provider, {
    */
   put : function($super, cb, name, content, options){
     if (isServer){
-      var password = options.password
-      if (!content && password){
+      if (options && options.password){
+        var password = options.password
         this.login(cb, name, options);
       } else{
         // Update user with content
@@ -28,24 +28,29 @@ Class.create("UserFul", Provider, {
     }
   },
 
-  login : function(cb, name, options){
+  login : function(onLogin, name, options){
     var self = this;
     var onFind = function(user){
       if (user && user.password == options.password){
-        user.loggedIn = true;
-        user.lastLogin = (new Date).toJSON();
+        var diff = {}
+        diff.loggedIn = true;
+        diff.lastLogin = (new Date).toJSON();
 
         //TODO generate token
-        user.token = "asdf";
+        diff.token = "asdf";
         
         // Save user connection id as session to pass security check on sending reply
-        user.session = options.sender;
+        diff.session = options.sender;
 
+        var onSave = function(data){
+          Object.extend(user, data)
+          onLogin(user)
+        }
         // Save logged user on right password
-        self.put(cb, user.id, user, options);
+        self.put(onSave, user.id, diff)
       } else{
         // wrong password
-        cb(null, "Not Found");
+        onLogin(null, "Not Found");
       }
     }
     // If password specified - Find user by login name to check password

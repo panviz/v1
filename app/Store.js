@@ -29,7 +29,7 @@ Class.create("Store", {
       for (var i=0; i< s.length; i++){
         if (s[i].id == id){
           // as _local is in memory for now, return clone object, not reference
-          return onFind(Object.clone(s[i]));
+          return onFind(Object.clone(s[i], true));
         }
       }
     }
@@ -61,33 +61,37 @@ Class.create("Store", {
       onFind(null, this.NOT_FOUND);
     } else {
       // as _local is in memory for now, return clone object, not reference
-      onFind(Object.clone(record));
+      onFind(Object.clone(record, true));
     }
   },
   /**
    * Create, Update & Delete
    * @param Function onSave callback called with Json difference in record between previous and current
    * @param String type Item type
-   * @param Json update data to save into the record
-   * @param {Number|String} idOrName record id to be updated or name of new one
+   * @param String id record id to be updated or name of new one
+   * @param Json update diff or full record data to save into the record
+   * @returns Diff 
+   * update.property:
+   * null      - empty value
+   * undefined - don't update
+   * false     - remove property
    */
-  save : function(onSave, type, idOrName, update){
+  save : function(onSave, type, id, update){
     var previous, diff, id, key
     if (!this._local[type]) this._local[type] = [];
     var s = this._local[type];
-    if (Object.isNumber(idOrName)) id = idOrName
     if (update){
-      key = id ? 'id' : 'name'
       for (var i=0; i < s.length; i++){
-        if (s[i][key] == idOrName){
-         previous = $H(s[i]).clone(); break;
+        if (s[i].id == id){
+         previous = $H(s[i]); break;
         }
       }
       // Update
       if (previous){
         var current = $H(update);
-        diff = previous.diff(current);
-        Object.extend(s[i], diff)
+        // TODO use deep diff instead of custom this.diff?
+        diff = this._diff(previous, current)
+        s[i] = this._update(previous, diff).toJSON()
       }
       // Create
       else {
@@ -96,17 +100,25 @@ Class.create("Store", {
       }
     }
     // Remove
-    else{
+    else if (update != undefined){
       for (var i=0; i < s.length; i++){
         if (s[i].id == id){
           this._local[type] = s.without(s[i]);
         }
       }
     }
-    onSave(Object.clone(diff));
+    onSave(Object.clone(diff, true));
+  },
+  /**
+   * @param Hash first
+   * @param Hash second
+   * @returns Hash what is different in second record
+   */
+  _diff : function(first, second){
+    return first.diff(second)
   },
 
-  generateId : function(type){
-    return this._local[type].length;
+  _update : function(first, second){
+    return Object.extend(first, second)
   }
 })

@@ -25,7 +25,7 @@ Class.create("Item", ReactiveRecord, {
     // Array of {id: Number, type: String, direction: String, to: Number(Item ID)}
     this.relations = []      // Not loaded item has no links
     this.type = this.__className.toLowerCase()    // Local storage needs type = 'item'
-    this.toStore = this.toStore.concat($w('relations label icon x y fixed expand '))
+    this.toStore = this.toStore.concat($w('relations label icon x y fixed expand'))
   },
 
   /**
@@ -51,11 +51,11 @@ Class.create("Item", ReactiveRecord, {
   },
 
   save : function($super){
-    //TODO get data from this[type] to save
-    this.x = Math.round(this.x)
-    this.y = Math.round(this.y)
+    //TODO get data from delegate this[type] to save
+    this.x = this.fixed ? Math.round(this.x) : false
+    this.y = this.fixed ? Math.round(this.y) : false
     this.changed = false
-    if (this.expanded) this.expand = true
+    this.expand = this.expanded
     $super()
   },
   /**
@@ -94,11 +94,12 @@ Class.create("Item", ReactiveRecord, {
    * @returns Link created link
    */
   link : function(item, type){
-    // TODO create '-ID'
-    var link = {type: type, direction: 'out', to: item.id}
+    type = type || 'REL'
+    var id = $util.generateId()
+    var link = {id: id, type: type, direction: 'out', target: item.id}
     this.relations.push(link)
-    item.relations.push({type: type, direction: 'in', to: this.id})
     this.changed = true
+    item.relations.push({id: id, type: type, direction: 'in', target: this.id})
     item.changed = true
     return link
   },
@@ -126,7 +127,7 @@ Class.create("Item", ReactiveRecord, {
     var self = this
     links = links || this.relations
     var linked = links.map(function(link){
-      return $app.getItem(link.to)
+      return $app.getItem(link.target)
     })
     if (type){
       linked.filter(function(item){
@@ -152,5 +153,20 @@ Class.create("Item", ReactiveRecord, {
   children : function(itemType, linkType){
     var links = this.out(linkType)
     return this.linked(itemType, links)
+  },
+
+  // Remove incoming links
+  _onSave : function($super, idOrName, options, diff){
+    if (diff && diff.relations){
+      var addition = diff.relations[0]
+      var privation = diff.relations[1]
+      var byDirection = function(rel){
+        return rel.direction == 'out'
+      }
+      addition = addition.filter(byDirection)
+      privation = privation.filter(byDirection)
+      if (addition.isEmpty() && privation.isEmpty()) delete diff.relations
+    }
+    if (!$H(diff).isEmpty() || options.name) $super(idOrName, options, diff)
   }
 });

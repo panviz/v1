@@ -2,6 +2,9 @@
  * Singleton class to be in Global scope
  */
 Class.create("Util", {
+  //TODO add allowed chars
+  chars: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_·",
+  startingChars: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
 
   initialize : function(){
     if (isServer){
@@ -52,7 +55,6 @@ Class.create("Util", {
     }
     return list.join('\n');
   },
-
   /* @server
    * TODO use global root variable for path
    */
@@ -94,6 +96,18 @@ Class.create("Util", {
       hash[key] = values[index];
     })
     return hash;
+  },
+
+  generateId : function(length){
+    length = length ? length : 32;
+    var string = "";
+    var chars = this.startingChars
+    for (var i=0; i<length; i+=1){
+      if (i > 0) chars = this.chars
+      var randomNumber = Math.floor(Math.random() * chars.length);
+      string += chars.substring(randomNumber, randomNumber + 1);
+    }
+    return string;
   },
 
   resolveImageSource : function(src, defaultPath, size){

@@ -78,7 +78,8 @@ Class.create("ViewGraph", View, {
     //TODO add transition for adding nodes
     // Add new nodes
     g = this.nodes.enter().append("g")
-      .attr("class", function(d){return 'node item'+d.id})
+      .attr("class", 'node')
+      .attr("id", function(d){return d.id})
       .on("click", this._onClickNode.bind(this))
       .on("mousedown", this._onMouseDown.bind(this))
       .on("mousemove", this._onMouseMove.bind(this))
@@ -175,7 +176,7 @@ Class.create("ViewGraph", View, {
 
   _onMouseOut : function(item){
     delete this.hover
-    d3.select('.item'+item.id+' circle').style("stroke", "#fff").style('stroke-width', 1)
+    d3.select('#'+item.id+' circle').style("stroke", "#fff").style('stroke-width', 1)
     if (item.tempFix){
       item.fixed = false
       delete item.tempFix
@@ -188,7 +189,7 @@ Class.create("ViewGraph", View, {
       item.tempFix = true
       item.fixed = true
     }
-    d3.select('.item'+item.id+' circle').style("stroke", "#ff0000").style('stroke-width', 2)
+    d3.select('#'+item.id+' circle').style("stroke", "#ff0000").style('stroke-width', 2)
   },
 
   _onMouseUp : function(item){
@@ -201,7 +202,7 @@ Class.create("ViewGraph", View, {
 
   _onDragmove : function(d){
     //TODO do once
-    var node = d3.select('.item'+d.id)
+    var node = d3.select('#'+d.id)
     node.attr('pointer-events', 'none')
     d.px += d3.event.dx;
     d.py += d3.event.dy;
@@ -220,9 +221,10 @@ Class.create("ViewGraph", View, {
       item.fixed = false
       this.update()
     }
+    this.itemman.fix(item)
     this._onTick();
     this.force.resume();
-    var node = d3.select('.item' + item.id)
+    var node = d3.select('#' + item.id)
     node.attr('pointer-events', 'all')
   },
 

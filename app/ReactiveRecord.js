@@ -1,17 +1,18 @@
 Class.create("ReactiveRecord", Reactive, {
   /**
    * Load record on creation
-   * @param {Number|String} [idOrName]
+   * @param String [id]
    * @param Store [store]
    */
-  initialize : function($super, idOrName, store){
+  initialize : function($super, id, store){
     $super(store);
     this.toStore = $w('name type')
-    if (Object.isNumber(idOrName)) this.id = idOrName;
-    if (Object.isString(idOrName)) this.name = idOrName;
     this.loaded = false;
     // Let initialization chain finish before update
-    if (idOrName) setTimeout(this.get.bind(this, null, idOrName), 10)
+    if (id){
+      this.id = id
+      setTimeout(this.get.bind(this, null, id), 10)
+    }
   },
   /**
    * On remote record change, Proxy will call this method
@@ -22,7 +23,7 @@ Class.create("ReactiveRecord", Reactive, {
     var self = this
     $w('id createdAt').concat(this.toStore).each(function(attr){
       //TODO what if remote has deleted attr?
-      if (p[attr]){
+      if (p[attr] != undefined){
         self[attr] = p[attr]
         delete p[attr]
       }
@@ -36,7 +37,6 @@ Class.create("ReactiveRecord", Reactive, {
     this.toStore.each(function(p){
       if (self[p] != undefined) content[p] = self[p]
     })
-    var idOrName = this.id > 0 ? this.id : this.name
-    this.put(null, idOrName, content)
+    this.put(null, this.id, content)
   }
 })

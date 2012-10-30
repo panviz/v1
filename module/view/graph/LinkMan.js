@@ -7,9 +7,9 @@ Class.create("LinkMan", {
 
   format : function(item, link){
     if (link.direction == 'out'){
-      return {source: item, target: $app.items.get(link.to)}
+      return {source: item, target: $app.items.get(link.target)}
     } else{
-      return {target: item, source: $app.items.get(link.to)}
+      return {target: item, source: $app.items.get(link.target)}
     }
   },
   /**

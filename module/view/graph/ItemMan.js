@@ -27,8 +27,8 @@ Class.create("ItemMan", {
         self.fix(item)
       })
 
-      // add items from selection which are not rendered
-      var extra = items.diff(this.items);
+      // show items from selection if they are not shown
+      var extra = items.substract(this.items)
       if (extra){
         extra.each(function(item){
           self.show(item)
@@ -42,7 +42,7 @@ Class.create("ItemMan", {
 
   // Add new node
   create : function(point){
-    var item = $app.getItem()
+    var item = $app.createItem()
     item.x = point[0]
     item.y = point[1]
     this.select(item);
@@ -127,9 +127,9 @@ Class.create("ItemMan", {
 
     // Show links to already rendered items
     var links = item.links().filter(function(link){
-      var to = $app.items.get(link.to)
-      if (to) return self.isShown(to)
-      return to
+      var target = $app.items.get(link.target)
+      if (target) return self.isShown(target)
+      return target
     })
     if (!links.isEmpty()) this.links.show(item, links)
     this.view.update()

@@ -63,7 +63,7 @@ Class.create("Proxy", {
    * Save callback to trigger it on same data update
    * @param String action get|put
    * @param String model name of the Model
-   * @param {Number|String} name identifier to pass Model.get on remote side
+   * @param String name identifier to pass Model.get on remote side
    * @param Json options
    */
   send : function(action, model, name, options){
@@ -86,8 +86,15 @@ Class.create("Proxy", {
     if (data.id){
       if (data.error) return $modal.error(data.error);
       if (data.content){
-        var newId = data.content.id
-        var recipient = $app.man[data.model] || $app.getItem(data.name, newId)
+        var recipient
+        var manager = $app.man[data.model]
+        if (manager){
+          recipient = manager
+        } else if (data.options.name){
+          recipient = $app.getItemByName(data.name)   // find item by name
+        } else {
+          recipient = $app.getItem(data.name)
+        }
         recipient.onLoad(data.content)
       }
     }

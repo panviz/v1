@@ -20,29 +20,17 @@ Class.create("StoreGraph", {
     }
   },
   /**
-   * @param String type model name
-   * @param Number id
-   */
-  findById : function(onFind, id){
-    var self = this;
-    this._db.getNodeById(id, function (err, record){
-      if (err) return onFind(null, err)
-      if (!record) return onFind(null, "Not Found");
-      self._getLinks(self.output.bind(self, onFind, record), record)
-    });
-  },
-  /**
    * @param String type Item type (model name)
    * @param String key property name
    * @param String value value to search records by
    * @returns Json record
    */
   find : function(onFind, type, key, value){
-    logger.debug("FIND type: "+type+ " key: "+key+ " value: "+value);
+    logger.debug("FIND type: "+type+ " key: "+key+ " = "+value);
     var self = this
     var cb = function(record, err){
       if (err) return onFind(err)
-      self._getLinks(self.output.bind(self, onFind, record), record)
+      self._getLinks(self._output.bind(self, onFind, record), record)
     }
     this._find(cb, type, key, value)
   },
@@ -51,7 +39,7 @@ Class.create("StoreGraph", {
    */
   _find : function(onFind, type, key, value){
     if (key == 'id'){
-      this._db.getNodeById(value, function (err, record){
+      this._db.getIndexedNode('node_auto_index', key, value, function(err, record){
         return onFind(record, err)
       });
       return
@@ -63,10 +51,10 @@ Class.create("StoreGraph", {
       })
     } else {
       var query = [
-        "START x=node(*)",
-        "WHERE x.KEY! = 'VALUE'",
-        "AND x.type! = 'TYPE'",
-        "RETURN x"
+        "START x=node(*)"
+      , "WHERE x.KEY! = 'VALUE'"
+      , "AND x.type! = 'TYPE'"
+      , "RETURN x"
       ]
       // Default type is not stored
       if (!type) query = query.without(query[2]);
@@ -87,11 +75,11 @@ Class.create("StoreGraph", {
   /**
    * Create, Update & Delete
    * @param Object diff with data to save into the record
-   * @param {Number|String} idOrName of record to be updated
+   * @param String id of record to be updated
    * @returns Json difference in record between previous and current
    */
-  save : function(onSave, type, idOrName, diff){
-    logger.debug("SAVE type: "+type+ " idOrName: "+idOrName);
+  save : function(onSave, type, id, diff){
+    logger.debug("SAVE type: "+type+ " id = "+id);
     console.log(diff);
     var self = this;
     var db = this._db;
@@ -101,7 +89,7 @@ Class.create("StoreGraph", {
               // Update
         if (record){
           //TODO handle item created with existing name
-          //TODO update outgoing links
+          if (diff.relations) self._updateLinks(diff.relations, id)
           delete diff.relations
           Object.extend(record.data, diff)
           var cb = function(err){
@@ -120,27 +108,23 @@ Class.create("StoreGraph", {
           record = db.createNode(diff);
           record.save(function (err){
             if (err) return onSave(null, err);
-            record.index(type, 'name', diff.name, function(err){
-              if (err) return onSave(null, err);
-              self.output(onSave, record, links)
-            });
+            self._output(onSave, record, links)
           });
         }
       }
               // Remove
-      else{
+      else if (diff != undefined){
         //force links deletion
         //TODO remove
         console.log('DELETE');
         //record.delete(function(err){onSave(err)}, true)
       }
     }
-    var key = Object.isNumber(idOrName) ? 'id' : 'name'
-    this._find(onFind, type, key, idOrName)
+    this._find(onFind, type, 'id', id)
     return diff;
   },
   /**
-   * @param Item id
+   * @param String id
    * @param String p.type of link
    * @param Boolean p.direction (true for out)
    * @returns Array of linked Items
@@ -163,19 +147,19 @@ Class.create("StoreGraph", {
 
   // Load & transform relationship objects to links data format
   _getLinks : function(cb, node){
-    var onLoad = function(err, rels){
+    var onLoad = function(rows, err){
       var links;
-      if (rels){
-        links = rels.map(function(rel){
-          var link = {};
+      if (rows && !rows.isEmpty()){
+        links = rows.map(function(row){
+          var link = {}
+          var rel = row.relation
           if (rel.end.id == node.id){
             link.direction = 'in';
-            link.to = rel.start.id;
           } else{
             link.direction = 'out';
-            link.to = rel.end.id;
           }
-          link.id = rel.id;
+          link.target = row.targetID
+          link.id = rel.data.id;
           link.type = rel.type;
           return link;
         })
@@ -186,14 +170,55 @@ Class.create("StoreGraph", {
       if (err) links = false;
       cb(links);
     }
-    node.all('REL', onLoad)
+    var query = [
+      "START x=node(ID)"
+    , "MATCH x -[relation]- y"
+    , "RETURN relation, y.id as targetID"
+    ]
+    query = query.join('\n')
+      .replace('ID', node.id)
+
+    this._db.query(query, function(err, array){
+      onLoad(array, err)
+    })
   },
 
-  output : function(cb, record, links){
+  _updateLinks : function(diff, start){
+    var db = this._db;
+    var addition = (diff && diff[0]) ? diff[0] : []
+    var privation = (diff && diff[1]) ? diff[1] : []
+    addition.each(function(link){
+      var query = [
+        "START a=node:node_auto_index(id = 'FROM'), b=node:node_auto_index(id = 'TO')"
+      , "CREATE a-[r:TYPE {id : 'ID'}]->b"
+      , "RETURN r"
+      ].join('\n')
+      .replace('FROM', start)
+      .replace('TO', link.target)
+      .replace('ID', link.id)
+      .replace('TYPE', link.type)
+      console.log(query);
+      db.query(query, function(err, record){
+        console.log(err);
+        console.log(record[0]);
+      })
+    })
+    privation.each(function(link){
+      var query = [
+        "START r=relationship:relationship_auto_index(id = ID)"
+      ].join('\n')
+      .replace('ID', link.id)
+      console.log(query);
+      db.query(query, function(err, record){
+        console.log(err);
+        console.log(record[0]);
+      })
+    })
+  },
+
+  _output : function(cb, record, links){
     var data = record.data;
-    data.id = record.id;
     data.relations = links;
-    console.log(data);
     this._parse(data);
     cb(data);
   },
