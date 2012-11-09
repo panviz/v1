@@ -54,7 +54,7 @@ Class.create("Application", {
     //$act = this.actionFul    = new ActionFul();
     $gui = this.gui = this.man['gui'] = new Gui($set);
     $modal = $gui.modal;
-    //$provider = this.provider= new Provider();
+    //$item = this.provider= new Provider();
 
     //TODO update progress bar from right places
     this.gui.modal.showBooting({steps: 2});
@@ -95,6 +95,7 @@ Class.create("Application", {
     return items.get(id) || items.set(id, new Item(id))
   },
 
+  // return existing node or create without sync
   getItemByName : function(name){
     var items = this.items;
     if (items.get(name)){
@@ -106,7 +107,7 @@ Class.create("Application", {
     }
   },
 
-  createItem : function(name){
+  createItem : function(name, p){
     var items = this.items;
     var baseName = t('new Node ')
     var isNameUsed = true
@@ -116,10 +117,11 @@ Class.create("Application", {
       name = baseName + this.unsavedItemsCounter
       isNameUsed = items.values().find(function(item){return item.name == name})
     }
-    var item = new Item()
+    var item = new Item(null, p)
     item.id = $util.generateId()
     item.name = name
     item.changed = true
+    item.save()
     return items.set(item.id, item)
   },
 
@@ -127,6 +129,11 @@ Class.create("Application", {
     this.items.values().each(function(item){
       if (item.changed) item.save()
     })
+  },
+  // Search by name among loaded items for now
+  search : function(pattern, global){
+    //this.items.values().filter
+    // highlight items satisfying search pattern
   },
 
   _onCurrentUser : function(e){

@@ -1,4 +1,4 @@
-Class.create("LinkMan", {
+Class.create("ViewGraphLinkMan", {
    
   // All created links
   all: {},

@@ -7,16 +7,23 @@ Class.create("User", {
     this.item = item
   },
 
-  update : function(data){
+  update : function(data, diff){
     var self = this
+    var update = data || diff
     $w('loggedIn lastLogin roles preferences').each(function(attr){
-      //TODO what if server has deleted attr?
-      if (data[attr]) self[attr] = data[attr]
+      if (update[attr] != undefined){
+        if (diff && Object.isArray(update[attr])){
+          self[attr] = self[attr].diffMerge(update[attr])
+        } else {
+          self[attr] = update[attr]
+        }
+        delete update[attr]
+      }
     })
     this.roles = this.roles || ['guest'];
-    if (data.token){
-      SECURE_TOKEN = this.token = data.token;
-      this.login(data.token, data.context)
+    if (update.token){
+      SECURE_TOKEN = this.token = update.token;
+      this.login(update.token, update.context)
     }
   },
 

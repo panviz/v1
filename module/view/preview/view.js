@@ -2,6 +2,8 @@
  * A dynamic panel displaying details on the current selection.
  */
 Class.create("ViewPreview", View, {
+  // Item shown in Preview
+  item: null,
 
   initialize : function($super, p){
     $super(p);
@@ -11,15 +13,15 @@ Class.create("ViewPreview", View, {
         "Name": t("Item")
       }
     }));
+    this.list.on('edit', this._onEdit.bind(this))
     this.extControls.push(this.list);
   },
-
   /**
    * Show item properties
    * TODO what to show on multiples selected 
    */
   _onContextChanged : function(e){
-    var item = e.memo;
+    var item = this.item = e.memo;
     var p = {};
     p[t("ID")] = item.id;
     p[t("Name")] = item.label;
@@ -33,6 +35,13 @@ Class.create("ViewPreview", View, {
     this.list.setSource(p);
   },
 
+  _onEdit : function(editor, e){
+    if (e.originalValue != e.value){
+      var diff = {}
+      diff[e.record.data.name] = e.value
+      //this.item.update(diff)
+    }
+  },
   /**
    * Called by the other components to create a preview (thumbnail) of a given node
    * @param item Node The node to display
@@ -41,7 +50,6 @@ Class.create("ViewPreview", View, {
    */
   getPreview : function(item, rich){
   },
-  
   /**
    * TODO move somewhere?
    * Gets the standard thumbnail source for previewing the node
@@ -51,14 +59,12 @@ Class.create("ViewPreview", View, {
   getThumbnailSource : function(item){
     return resolveImageSource(item.getIcon(), "/image/mime/ICON_SIZE", 64);
   },
-
   /**
    * Insert html in content pane
    * @param sHtml String
    */
   setContent : function(sHtml){
   },
-
   /**
    * Find template and evaluate it
    * @param mimeType String
@@ -67,7 +73,6 @@ Class.create("ViewPreview", View, {
    */
   getTemplateForMime : function(mimeType, fileNode, tArgs){
   },
-    
   /**
    * Adds an "Action" section below the templates
    * @param selectionType String 'empty', 'multiple', 'unique'

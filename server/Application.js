@@ -14,7 +14,7 @@ Class.create("Application", {
 
   initialize : function(){
     $util = new Util();
-    this.man = {};
+    var man = this.man = {};
     var list = $util.loadList('/config/server/list.txt');
     list.forEach(function(name){
       require(ROOT_PATH + name);
@@ -27,11 +27,11 @@ Class.create("Application", {
     
     var db = this.db =  new StoreGraph(this.p.db);
     // As there is no current user
-    $user = this.user = this.man['user'] = new UserFul(db);
+    $user = this.user = man['user'] = new UserFul(db);
     // Read only configured modules to Store
     var moduleStore = new StoreModule(this.p.module);
-    this.modular = this.man['module'] = new Modular(moduleStore);
-    this.provider = this.man['item'] = new Provider(db);
+    this.modular = man['module'] = new Modular(moduleStore);
+    this.provider = man['item'] = new Provider(db);
   },
 
   // Configure expressjs server

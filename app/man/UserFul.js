@@ -2,7 +2,7 @@
  * User management
  */
 Class.create("UserFul", Provider, {
-  type: 'user',
+  man: 'user',
   public: ["id", "name", "loggedIn"],
 
   initialize : function($super, store){

@@ -3,17 +3,11 @@
  */
 Class.create("Provider", ReactiveProvider, {
   // Default type is 'item'
-  type: '',
+  man: '',
   public: 'all',
 
   initialize : function($super, store){
     $super(store);
-  },
-
-  /**
-   */
-  _onLoad : function(transport){
-    document.fire("app:context_changed", response.item);
   },
 
   /**
@@ -30,7 +24,6 @@ Class.create("Provider", ReactiveProvider, {
       this.resourcesManager.parse(p.resources);
     }
   },
-  
   /**
    * TODO Rename
    * Finds this item by path if it already exists in arborescence
@@ -57,7 +50,6 @@ Class.create("Provider", ReactiveProvider, {
     }
     return crtItem;
   },
-
   /**
    * Finds a child item by its path
    * @param path String

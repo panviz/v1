@@ -25,6 +25,7 @@ Class.create("StoreGraph", {
    * @param String value value to search records by
    * @returns Json record
    */
+  //TODO consider regexp as value
   find : function(onFind, type, key, value){
     logger.debug("FIND type: "+type+ " key: "+key+ " = "+value);
     var self = this
@@ -101,11 +102,12 @@ Class.create("StoreGraph", {
               // Create
         else {
           type = type || 'item'
-          diff.createdAt = (new Date).toJSON()
+          if (!diff.createdAt) diff.createdAt = (new Date).toJSON()
           //TODO save outgoing links
           var links = diff.relations
           delete diff.relations
           record = db.createNode(diff);
+          if (links) self._updateLinks(links, diff.id)
           record.save(function (err){
             if (err) return onSave(null, err);
             self._output(onSave, record, links)

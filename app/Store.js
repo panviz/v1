@@ -76,27 +76,27 @@ Class.create("Store", {
    * undefined - don't update
    * false     - remove property
    */
+  //TODO update should be diff too
   save : function(onSave, type, id, update){
-    var previous, diff, id, key
+    var diff
     if (!this._local[type]) this._local[type] = [];
     var s = this._local[type];
+    // Update or Create
     if (update){
+      var previous
       for (var i=0; i < s.length; i++){
         if (s[i].id == id){
          previous = $H(s[i]); break;
         }
       }
-      // Update
-      if (previous){
-        var current = $H(update);
-        // TODO use deep diff instead of custom this.diff?
-        diff = this._diff(previous, current)
-        s[i] = this._update(previous, diff).toJSON()
-      }
-      // Create
-      else {
-        s.push(update);
+      var current = $H(update);
+      if (type == 'gui' || type == 'module'){
         diff = update
+        previous ? s[i] = update : s.push(update)
+      } else{
+        diff = (previous || $H()).diff(current)
+        var updated = (previous || $H()).diffMerge(diff).toJSON()
+        previous ? s[i] = updated : s.push(updated)
       }
     }
     // Remove
@@ -108,17 +108,5 @@ Class.create("Store", {
       }
     }
     onSave(Object.clone(diff, true));
-  },
-  /**
-   * @param Hash first
-   * @param Hash second
-   * @returns Hash what is different in second record
-   */
-  _diff : function(first, second){
-    return first.diff(second)
-  },
-
-  _update : function(first, second){
-    return Object.extend(first, second)
   }
 })

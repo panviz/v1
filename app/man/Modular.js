@@ -3,7 +3,7 @@
  * Provider of module resources, such as [js, css, html(module templates)]
  */
 Class.create("Modular", ReactiveProvider, {
-  type: 'module',
+  man: 'module',
   public: "all",
 
   /**
@@ -24,7 +24,7 @@ Class.create("Modular", ReactiveProvider, {
           }
         })
       }
-      this.store.find(onFind, this.type, 'name');
+      this.store.find(onFind, this.man, 'name');
     }
   },
 

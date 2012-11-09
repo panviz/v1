@@ -1,10 +1,11 @@
-Class.create("ItemMan", {
+Class.create("ViewGraphItemMan", {
   items: [],
 
   initialize : function(view){
     this.view = view
     this.links = view.linkman
     this.selection = []
+    $item = this
   },
   /**
    * Change selection to new items
@@ -42,9 +43,7 @@ Class.create("ItemMan", {
 
   // Add new node
   create : function(point){
-    var item = $app.createItem()
-    item.x = point[0]
-    item.y = point[1]
+    var item = $app.createItem(null, point)
     this.select(item);
   },
   /**
@@ -81,7 +80,7 @@ Class.create("ItemMan", {
 
   collapse : function(item){
     item.expanded = false
-    item.fixed = false
+    this.unfix(item)
     this.hideChildren(item)
     this.view.update()
   },
@@ -136,11 +135,13 @@ Class.create("ItemMan", {
   },
 
   fix : function(item){
+    d3.select('#'+item.id+' g image').attr("xlink:href", "/client/image/pin.ico")
     item.fixed = true
     delete item.tempFix
   },
 
   unfix : function(item){
+    d3.select('#'+item.id+' g image').attr("xlink:href", "/client/image/no.ico")
     item.fixed = false
   },
   

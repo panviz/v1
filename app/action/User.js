@@ -6,9 +6,10 @@ Class.create("Login", Action, {
       //TODO add captcha if third attempt
       var name = formData.username
       var item = $app.getItemByName(name)
-      item.type = 'user';
+      item.type = item.man = 'user';
+      item.name = name
       var p = {password: formData.password, name: true};
-      item.put(null, name, null, p)
+      item.put(p)
     }
     var got = function(control){
       control.setOnSubmit(onSubmit);

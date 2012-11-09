@@ -6,26 +6,44 @@ Class.create("ReactiveRecord", Reactive, {
    */
   initialize : function($super, id, store){
     $super(store);
-    this.toStore = $w('name type')
+    this.toStore = $w('id name type createdAt')
     this.loaded = false;
     // Let initialization chain finish before update
     if (id){
       this.id = id
-      setTimeout(this.get.bind(this, null, id), 10)
+      setTimeout(this.get.bind(this), 10)
     }
   },
+
+  /**
+   */
+  get : function($super, options){
+    options = options || {}
+    var idOrName = options.name ? this.name : this.id
+    $super(null, idOrName, options)
+  },
+
+  put : function($super, options){
+    var idOrName = options.name ? this.name : this.id
+    $super(null, idOrName, this._content, options)
+  },
+
   /**
    * On remote record change, Proxy will call this method
    * Augment it in concrete Record class
-   * @param Json [p]
+   * @param Json [diff]
    */
-  update : function(p){
+  update : function(data, diff){
     var self = this
-    $w('id createdAt').concat(this.toStore).each(function(attr){
-      //TODO what if remote has deleted attr?
-      if (p[attr] != undefined){
-        self[attr] = p[attr]
-        delete p[attr]
+    var update = data || diff
+    this.toStore.each(function(attr){
+      if (update[attr] != undefined){
+        if (diff && Object.isArray(update[attr])){
+          self[attr] = self[attr].diffMerge(update[attr])
+        } else {
+          self[attr] = update[attr]
+        }
+        delete update[attr]
       }
     })
     this.loaded = true;
@@ -33,10 +51,10 @@ Class.create("ReactiveRecord", Reactive, {
 
   save : function(){
     var self = this
-    var content = {}
+    var content = this._content = {}
     this.toStore.each(function(p){
       if (self[p] != undefined) content[p] = self[p]
     })
-    this.put(null, this.id, content)
+    this.put()
   }
 })

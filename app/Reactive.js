@@ -9,7 +9,7 @@ Class.create("Reactive", {
 
   initialize : function(store){
     this.store = store || $app.db;
-    if (this.type === undefined) this.type = this.__className.toLowerCase();
+    if (this.man === undefined) this.man = this.__className.toLowerCase();
   },
   /**
    * Find record in local storage first
@@ -17,7 +17,7 @@ Class.create("Reactive", {
    * Else load it
    * @param Json options
    * @param String idOrName
-   * @returns Json data of the record
+   * @returns Json diff of the record
    */
   get : function(got, idOrName, options){
     var self = this;
@@ -29,11 +29,11 @@ Class.create("Reactive", {
       } else {
         delete options.force
         options.SECURE_TOKEN = SECURE_TOKEN;
-        $proxy.send("get", self.type, idOrName, options)
+        $proxy.send("get", self.man, idOrName, options)
       }
     }
     var key = options.name ? "name" : "id"
-    this.store.find(onFind, this.type, key, idOrName)
+    this.store.find(onFind, this.man, key, idOrName)
   },
   /**
    * Saves changes locally first then sync with remote
@@ -49,25 +49,26 @@ Class.create("Reactive", {
     } else {
       var onSave = this._onSave.bind(this, idOrName, options)
     }
-    return this.store.save(onSave, this.type, idOrName, content);
+    return this.store.save(onSave, this.man, idOrName, content);
   },
 
   _onSave : function(idOrName, options, diff){
     options = options || {};
     options.content = diff;
     options.SECURE_TOKEN = SECURE_TOKEN;
-    $proxy.send("put", this.type, idOrName, options)
+    $proxy.send("put", this.man, idOrName, options)
   },
 
   //@client
   onLoad : function(data){
     var self = this;
-    var onSave = function(data){
-      self.update(data);
+    var onSave = function(diff){
+      if (self.man == 'gui' || self.man == 'module') return self.update(diff)
+      self.update(null, diff);
     }
     var idOrName = this.id || data.name
     // Update local storage
-    this.store.save(onSave, this.type, idOrName, data);
+    this.store.save(onSave, this.man, idOrName, data);
   },
 
   //implement in child class

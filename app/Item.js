@@ -8,7 +8,7 @@ Class.create("Item", ReactiveRecord, {
    * @param String name
    * @param Json [p] optional params
    */
-  initialize : function($super, name){
+  initialize : function($super, name, p){
     //TODO Calculate size base on all/in/out links?
     this.__defineGetter__("label", function(){
       return this._label ? this._label : this.name
@@ -19,8 +19,12 @@ Class.create("Item", ReactiveRecord, {
     this.__defineGetter__("size", function(){
       return this.relations ? this.out().length : 0
     })
+    this.__defineGetter__("icon", function(){
+      return '/client/image/' + this.type + '.ico'
+    })
 
     $super(name);
+    if (p){this.x = p.x; this.y = p.y}
     //TODO should be private?
     // Array of {id: Number, type: String, direction: String, to: Number(Item ID)}
     this.relations = []      // Not loaded item has no links
@@ -29,31 +33,33 @@ Class.create("Item", ReactiveRecord, {
   },
 
   /**
-   * @param Json [p] diff to update item
+   * @param Json [data] new data to update item
+   * @param Json [diff] Diff to update item
    */
-  update : function($super, p){
-    if (!p) return
-    $super(p);
+  update : function($super, data, diff){
+    var update = data || diff
+    if (!update) return
+    $super(data, diff);
     
     // Update delegate class if type specified
     var type = this.type
-    var hash = $H(p)
+    var hash = $H(update)
     if (type && type != 'item' && !hash.isEmpty()){
       if (!this[type]){
         var className = Class.getByName(type.capitalize())
         this[type] = new className(this)
-        this[type].update(p)
+        this[type].update(data, diff)
       } else{
-        this[type].update(p)
+        this[type].update(data, diff)
       }
     }
     if (this.id) document.fire("item:updated", this)
   },
 
   save : function($super){
-    //TODO get data from delegate this[type] to save
-    this.x = this.fixed ? Math.round(this.x) : false
-    this.y = this.fixed ? Math.round(this.y) : false
+    //TODO get data from this[type] to save
+    this.x = Math.round(this.x)
+    this.y = Math.round(this.y)
     this.changed = false
     this.expand = this.expanded
     $super()
@@ -158,14 +164,13 @@ Class.create("Item", ReactiveRecord, {
   // Remove incoming links
   _onSave : function($super, idOrName, options, diff){
     if (diff && diff.relations){
-      var addition = diff.relations[0]
-      var privation = diff.relations[1]
+      var diffRel = diff.relations
       var byDirection = function(rel){
         return rel.direction == 'out'
       }
-      addition = addition.filter(byDirection)
-      privation = privation.filter(byDirection)
-      if (addition.isEmpty() && privation.isEmpty()) delete diff.relations
+      diffRel[0] = diffRel[0].filter(byDirection)
+      diffRel[1] = diffRel[1].filter(byDirection)
+      if (diffRel[0].isEmpty() && diffRel[1].isEmpty()) delete diff.relations
     }
     if (!$H(diff).isEmpty() || options.name) $super(idOrName, options, diff)
   }
