@@ -19,13 +19,30 @@ Class.create("StoreGraph", {
       this._uniqColumns.push(uniq);
     }
   },
+
+  findLinked : function(onFind, key, value){
+    logger.debug("SEARCH key: "+key+ " ~ "+value);
+    var query = [
+      "START x=node(*)",
+    , "WHERE x.KEY! =~ /(?i).*VALUE.*/"
+    , "RETURN x.id as id"
+    ]
+    query = query.join('\n')
+      .replace('KEY', key)
+      .replace('VALUE', value)
+
+    this._db.query(query, function(err, array){
+      if (err) return onFind(null, err)
+      if (array.isEmpty()) return onFind(null, "Not Found");
+      onFind(array.map(function(row){return row.id}))
+    })
+  },
   /**
    * @param String type Item type (model name)
    * @param String key property name
    * @param String value value to search records by
    * @returns Json record
    */
-  //TODO consider regexp as value
   find : function(onFind, type, key, value){
     logger.debug("FIND type: "+type+ " key: "+key+ " = "+value);
     var self = this
@@ -68,7 +85,6 @@ Class.create("StoreGraph", {
         if (err) return onFind(null, err)
         var row = array[0];
         if (!row) return onFind(null, "Not Found");
-        //TODO consider multiple results
         onFind(row.x)
       })
     }

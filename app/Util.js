@@ -36,48 +36,78 @@ Class.create("Util", {
       return result;
     }
   },
-
-  include_tag : function(file){
-    return this.insertFile(file, '<script language="javascript" type="text/javascript" src="%path%"></script>');
+  /**
+   * @param Array list of javascript file names w/o extention
+   */
+  jsTag : function(list){
+    return this.format(list, '<script language="javascript" type="text/javascript" src="%PATH%"></script>', 'js');
   },
 
-  link_tag : function(file){
-    return this.insertFile(file, '<link rel="stylesheet" type="text/css" href="%path%">');
+  cssTag : function(list){
+    return this.insertFiles(list, '<link rel="stylesheet" type="text/css" href="%PATH%">', 'css');
+  },
+
+  format : function(list, template){
+    var html = []
+    list.each(function(name){
+      html.push(template.replace('%PATH%', name))
+    })
+    return html.join('\n')
   },
 
   // @server
-  insertFile : function(path, code){
+  insertFiles : function(path, code, extension){
+    var list
     if (path.indexOf('list') != -1){
-      var list = this.loadList(path);
-      for (var i = 0; i < list.length; i++){
-        list[i] = code.replace('%path%', list[i]);
-      }
+      list = this.loadList(path, extension)
+    } else {
+      list = [path]
     }
-    return list.join('\n');
+    var html = list.map(function(path){
+      return code.replace('%PATH%', path)
+    })
+    return html.join('\n');
   },
   /* @server
-   * TODO use global root variable for path
    */
-  loadList : function(path){
+  loadList : function(path, extension){
+    var self = this
     var filepath = ROOT_PATH + path;
     var list = [];
     var resultList = [];
+
     if (!fs.existsSync(filepath)){
       filepath = ROOT_PATH + '/app' + path;
-    };
+    }
     if (fs.existsSync(filepath)){
       list = this.fs.readFileSync(filepath, 'binary').split('\n');
     }
-    list.forEach(function(name) {
+    list.forEach(function(name){
       if (!name) return;
       //if list.txt is not in /config, it has paths relative to its path
       name = name.replace('\r', '');
       if (path.indexOf('config') == -1){
-        name = this.Path.dirname(path) + '/' + name;
+        name = self.Path.dirname(path) + '/' + name;
       } else{
         name = '/app/' + name;
       }
-      resultList.push(name+'.js');
+      if (name.match('\\/\\*$')){
+        name = name.replace('*','')
+        var fileNames = fs.readdirSync(ROOT_PATH + name)
+        fileNames = fileNames.select(function(fileName){
+          if (fileName.match('\.js$')) return name + fileName
+        })
+        return resultList = resultList.concat(fileNames)
+      }
+      if (name.match('\\/\\*\\*$')){
+        name = name.replace('**','')
+        var fileNames = wrench.readdirSyncRecursive(ROOT_PATH+name)
+        fileNames = fileNames.select(function(fileName){
+          if (fileName.match('\.js$')) return name + fileName
+        })
+        return resultList = resultList.concat(fileNames)
+      }
+      resultList.push(name +'.'+ extension);
     })
     return resultList;
   },

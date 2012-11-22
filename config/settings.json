@@ -19,6 +19,7 @@
   , "view.grid"
   , "view.graph"
   , "view.preview"
+  , "view.texteditor"
   ],
   "db": {
     "url": "http://grafiy.com:7474"

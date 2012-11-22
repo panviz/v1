@@ -8,13 +8,13 @@ Class.create("ViewPreview", View, {
   initialize : function($super, p){
     $super(p);
     
-    this.list = Ext.create('Ext.grid.property.Grid', Object.extend(this.p, {
+    this.control = Ext.create('Ext.grid.property.Grid', Object.extend(this.p, {
       source: {
         "Name": t("Item")
       }
     }));
-    this.list.on('edit', this._onEdit.bind(this))
-    this.extControls.push(this.list);
+    this.control.on('edit', this._onEdit.bind(this))
+    this.extControls.push(this.control);
   },
   /**
    * Show item properties
@@ -32,7 +32,7 @@ Class.create("ViewPreview", View, {
     p[t("Item type")] = item.type;
     p[t("Date created")] = Ext.Date.parse(item.createdAt, 'c');
 
-    this.list.setSource(p);
+    this.control.setSource(p);
   },
 
   _onEdit : function(editor, e){

@@ -15,21 +15,26 @@ Class.create("Application", {
   initialize : function(){
     $util = new Util();
     var man = this.man = {};
-    var list = $util.loadList('/config/server/list.txt');
+    var list = $util.loadList('/config/server/list.txt', 'js');
     list.forEach(function(name){
       require(ROOT_PATH + name);
     })
-    this.p = require(ROOT_PATH + '/config/settings.json');
-    this.p.availableLanguages = $H($util.requireAll(ROOT_PATH + '/config/i18n')).keys();
+    var p = this.p = require(ROOT_PATH + '/config/settings.json');
+    p.clientList = $util.loadList('/config/list.txt', 'js')
+    p.availableLanguages = $H($util.requireAll(ROOT_PATH + '/config/i18n')).keys();
+    p.actions = wrench.readdirSyncRecursive(ROOT_PATH + '/app/action').select(function(filename){
+      var match = filename.match(/(\w*)\.js$/)
+      if (match) return match[1]
+    })
 
     var s = this.server = express.createServer()
     this.configure();
     
-    var db = this.db =  new StoreGraph(this.p.db);
+    var db = this.db =  new StoreGraph(p.db);
     // As there is no current user
     $user = this.user = man['user'] = new UserFul(db);
     // Read only configured modules to Store
-    var moduleStore = new StoreModule(this.p.module);
+    var moduleStore = new StoreModule(p.module);
     this.modular = man['module'] = new Modular(moduleStore);
     this.provider = man['item'] = new Provider(db);
   },

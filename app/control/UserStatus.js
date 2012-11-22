@@ -4,21 +4,23 @@
 Class.create("UserStatus", {
 
 	initialize : function(p){
-    var action = this.action = new Login({});//$act.get("loginAction");
+    var action = this.action = $act.get("ActionLogin");
     this.loginButton = Ext.create('Ext.Button', {
-      text: t["Login"],
-			scale: p.buttonSize,
-      handler: action.execute
+      text: t["Login"]
+    , scale: p.buttonSize
+    , handler: action.apply
+    , scope: action
     });
 		this.signupButton = Ext.create('Ext.Button', {
-			text: t["Sign Up"],
-			scale: p.buttonSize
-    });
+			text: t["Sign Up"]
+    , scale: p.buttonSize
+    })
 		this.logoutButton = Ext.create('Ext.Button', {
-			text: t["Logout"],
-			scale: p.buttonSize,
-			handler: action.undo
-    });
+			text: t["Logout"]
+    , scale: p.buttonSize
+    , handler: action.undo
+    , scope: action
+    })
 
     this.extControls = [this.loginButton, this.signupButton, this.logoutButton];
   }

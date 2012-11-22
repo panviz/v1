@@ -1,4 +1,4 @@
-Class.create("Login", Action, {
+Class.create("ActionLogin", Action, {
 
   execute : function(){
     var onSubmit = function(formData){
@@ -19,14 +19,13 @@ Class.create("Login", Action, {
 
     $gui.getInstance(got, 'loginForm');
   },
-
   /**
    * Logout
    */
   undo : function(){
     //TODO
     var onServerConfirm = function(user){
-      $user.setCurrentUser(null);
+      $user = null
     }
   }
 });

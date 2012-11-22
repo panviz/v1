@@ -3,6 +3,7 @@
  * TODO Need responsible class for i18n?
  */
 Class.create("Application", {
+  itemTypes: $w('address bookmark contact commit commodity date diagramm email event file message note image reminder table tag task text video website'),
   unsavedItemsCounter: 0,
 
   initialize : function(){ 
@@ -26,6 +27,7 @@ Class.create("Application", {
     this.items = $H();
     this.man = {};
     $user = null;
+    $item = null;
     SECURE_TOKEN = null;
     this._context = null;
     //this._focusables = [];
@@ -49,11 +51,12 @@ Class.create("Application", {
     if (local) i18n.update(local);
     t = i18n;     //Set Global translation function
 
-    this.db                  = new StoreClient();
-    $mod = this.modular = this.man['module'] = new Modular();
-    //$act = this.actionFul    = new ActionFul();
-    $gui = this.gui = this.man['gui'] = new Gui($set);
+    this.db                  = new StoreClient()
+    $act = this.actionFul    = new ActionFul($set.actions)
+    $mod = this.modular = this.man['module'] = new Modular()
+    $gui = this.gui     = this.man['gui'] = new Gui($set)
     $modal = $gui.modal;
+    // TODO Itemman in view.graph is doing some job of Provider?
     //$item = this.provider= new Provider();
 
     //TODO update progress bar from right places
@@ -94,15 +97,24 @@ Class.create("Application", {
     var items = this.items;
     return items.get(id) || items.set(id, new Item(id))
   },
-
-  // return existing node or create without sync
-  getItemByName : function(name){
+  /**
+   * return existing node or create without sync
+   * @param String name
+   * @param Json special options
+   */
+  getItemByName : function(name, special){
+    var item
     var items = this.items;
     if (items.get(name)){
       return items.get(name)
     } else{
-      var item = new Item()
-      item.name = name
+      if (special){
+        var itemClass = Class.getByName(name);
+        item = new itemClass(special)
+      } else {
+        item = new Item()
+        item.name = name
+      }
       return items.set(name, item)
     }
   },
@@ -129,6 +141,7 @@ Class.create("Application", {
     this.items.values().each(function(item){
       if (item.changed) item.save()
     })
+    document.fire("app:saved")
   },
   // Search by name among loaded items for now
   search : function(pattern, global){
@@ -140,40 +153,6 @@ Class.create("Application", {
     var item = e.memo.item
     this.items.unset(item.name)
     this.items.set(item.id, item)
-  },
-  
-  /**
-   * Require a context change to the given path
-   * @param {Item|String} itemOrPath A item or a path
-   */
-  goTo : function(itemOrPath){   
-    if(Object.isString(itemOrPath)){
-      item = new Item(itemOrPath);
-    }else {
-      item = itemOrPath;
-    }
-    this._contextHolder.requireContextChange(item);
-  },
-  /**
-   * Change the repository of the current user and reload list and current.
-   * @param String repositoryId Id of the new repository
-   */
-  triggerRepositoryChange : function(repositoryId){    
-    document.fire("app:trigger_repository_switch");
-    var connection = new Connection();
-    connection.addParameter('get_action', 'switch_repository');
-    connection.addParameter('repository_id', repositoryId);
-    oThis = this;
-    connection.onComplete = function(transport){
-      this.repositoryId = null;
-      this.loadRegistry();
-    }.bind(this);
-    var root = this._contextHolder.getRootItem();
-    if(root){
-      this.skipLsHistory = true;
-      root.clear();     
-    }
-    connection.sendAsync();
   },
   /**
    * Trigger a simple download
@@ -187,38 +166,11 @@ Class.create("Application", {
    * @param newLanguage String
    */
   loadI18NMessages : function(newLanguage){
-    var connection = new Connection('/i18n/' + newLanguage);
-    connection.onComplete = function(transport){
-      if(transport.responseText){
-        var result = transport.responseText.evalScripts();
-        I18N = result[0];
-        for(var key in I18N){
-          I18N[key] = I18N[key].replace("\\n", "\n");
-        }
-        this.updateI18nTags();
-        if(this.guiActions){
-          this.guiActions.each(function(pair){
-            pair.value.setLabel();
-          });
-        }
-        this.loadRegistry();
-        this.fireContextRefresh();
-        this.currentLanguage = newLanguage;
-      }
-    }.bind(this);
-    connection.sendSync();
   },
   /**
    * Search all divs with class 'i18n' and update their value
    */
   updateI18nTags : function(){
-    var messageTags = $$('[i18n]');   
-    messageTags.each(function(tag){ 
-      var messageId = tag.getAttribute("j_message_id");
-      try{
-        tag.update(I18N[messageId]);
-      }catch(e){}
-    });
   },
   
   _setHistory : function(){
@@ -284,61 +236,5 @@ Class.create("Application", {
     var path = this.pathesHash.get(hash);
     if(path == undefined) return "/";
     return path;
-  },  
-  /**
-   * Accessor for updating the datamodel context
-   * @param jContextItem Item optional
-   * @param jSelectedItems Item[]
-   * @param selectionSource String
-   */
-  updateContextData : function(jContextItem, jSelectedItems, selectionSource){
-    if(jContextItem){
-      this._contextHolder.requireContextChange(jContextItem);
-    }
-    if(jSelectedItems){
-      this._contextHolder.setSelectedItems(jSelectedItems, selectionSource);
-    }
-  },
-  /**
-   * @returns Item
-   */
-  getContext : function(){
-    return this._context;
-  },
-  /**
-   * TODO remove
-   * @returns Collection
-   */
-  getUserSelection : function(){
-    return this._contextHolder;
-  },    
-  /**
-   * Accessor for datamodel.requireContextChange()
-   */
-  fireContextRefresh : function(){
-    this.getContextHolder().requireContextChange(this.getContext(), true);
-  },
-  /**
-   * Accessor for datamodel.requireContextChange()
-   */
-  fireItemRefresh : function(itemPathOrItem){
-    this.getContextHolder().requireItemReload(itemPathOrItem);
-  },
-  /**
-   * Accessor for datamodel.requireContextChange()
-   * TODO move out
-   */
-  fireContextUp : function(){
-    if(this.getContext().isRoot()) return;
-    this.updateContextData(this.getContext().getParent());
-  },
-  /**
-   * Utility 
-   * @returns Boolean
-   */
-  cancelCopyOrMove : function(){
-    this.actionBar.treeCopyActive = false;
-    hideLightBox();
-    return false;
   }
 });

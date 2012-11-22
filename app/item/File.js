@@ -156,7 +156,6 @@ Class.create("File", Item, {
   getIcon : function(){
     return this._icon;
   },
-
   /**
    * Sets a reference to the parent item
    * @param parentItem Item
@@ -164,7 +163,6 @@ Class.create("File", Item, {
   setParent : function(parentItem){
     this._parentItem = parentItem;
   },
-
   /**
    * Gets the parent Item
    * @returns Item
@@ -179,7 +177,6 @@ Class.create("File", Item, {
   isRoot : function(){
     return this._isRoot;
   },
-
   /**
    * Check if it's the parent of the given item
    * @param item Item
@@ -190,7 +187,6 @@ Class.create("File", Item, {
     var parentPath = this.getPath();
     return (childPath.substring(0,parentPath.length) == parentPath);
   },
-
   /**
    * Check if it's a child of the given item
    * @param item Item
@@ -200,7 +196,7 @@ Class.create("File", Item, {
     var childPath = this.getPath();
     var parentPath = item.getPath();
     return (childPath.substring(0,parentPath.length) == parentPath);
-  }
+  },
 
 	setSelectedItems : function(items, source){
 		if(!source){
@@ -224,7 +220,6 @@ Class.create("File", Item, {
 		}
 		document.fire("app:selection_changed", this);	
 	},
-
 	/**
 	 * Whether the selection has a file selected.
 	 * Should be hasLeaf
@@ -233,7 +228,6 @@ Class.create("File", Item, {
 	isFile : function (){
 		return this._isFile;
 	},
-	
 	/**
 	 * Whether the selection has a dir selected
 	 * @returns Boolean
@@ -241,20 +235,18 @@ Class.create("File", Item, {
 	isDir : function (){
 		return this._isDir;
 	},
-			
   /**
    * @returns Boolean
    */
   isRecycle : function(){
     return (this.getMime() == 'recycle');
   },
-
 	/**
 	 * Whether the context item has a child with this basename
 	 * @param newFileName String The name to check
 	 * @returns Boolean
 	 */
-	fileNameExists: function(newFileName){	
+	fileNameExists : function(newFileName){	
 		var allItems = this._contextItem.getChildren();
 		if(!allItems.length)
 		{		
@@ -269,7 +261,6 @@ Class.create("File", Item, {
 		}
 		return false;
 	},	
-
   /**
    * Sets the metadata as a bunch
    * @param data $H() A prototype Hash
@@ -277,7 +268,6 @@ Class.create("File", Item, {
   setMetadata : function(data){
     this._metadata = data;
   },
-  
   /**
    * Gets the metadat
    * @returns $H()
@@ -285,7 +275,6 @@ Class.create("File", Item, {
   getMetadata : function(data){
     return this._metadata;
   },
-
   /**
    * Gets the current's item mime type, either by mime or by extension.
    * @returns String
@@ -310,4 +299,4 @@ Class.create("File", Item, {
     var baseName = fileName.substr(fileName.lastIndexOf(separator)+1, fileName.length); 
     return baseName;
   }
-)}
+})

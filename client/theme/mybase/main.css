@@ -1,0 +1,18 @@
+.saveBtn .disabled {
+  background-image: url('/client/image/save-disabled.ico');
+}
+.saveBtn .enabled {
+  background-image: url('/client/image/save-enabled.ico');
+}
+.downloadBtn .disabled {
+  background-image: url('/client/image/download-disabled.ico');
+}
+.downloadBtn .enabled {
+  background-image: url('/client/image/download-enabled.ico');
+}
+.addBtn {
+  background-image: url('/client/image/add.ico');
+}
+.search {
+  background-image: url('/client/image/item/search.ico');
+}

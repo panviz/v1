@@ -27,8 +27,8 @@
             "buttonSize": "small"
           }
         },{
-          "id": "MainMenu",
-          "control": "MainMenu",
+          "id": "ActionsMenu",
+          "control": "ActionsMenu",
           "options": {
             "buttonSize": "small"
           }
@@ -38,27 +38,36 @@
       "id": "GridView",
       "module": "view.grid",
       "options": {
-        "region": "center",
-        "minWidth": 100,
-        "minHeight": 140,
-        "width": "30%"
+        "region": "north",
+        "minHeight": 100,
+        "height": 200,
+        "weight": -10
       }
     },{
       "id": "Preview",
       "module": "view.preview",
       "options": {
-        "region": "south",
-        "height": 250,
+        "region": "north",
+        "height": 200,
         "minHeight": 100,
-        "weight": -100
+        "weight": -20
       }
     },{
       "id": "GraphView",
       "module": "view.graph",
       "options": {
-        "region": "east",
+        "region": "west",
         "width": "70%",
-        "contentEl": "desktop"
+        "contentEl": "desktop",
+        "weight": 10
+      }
+    },{
+      "id": "TextEditor",
+      "module": "view.texteditor",
+      "options": {
+        "width": "30%",
+        "minHeight": 300,
+        "region": "center"
       }
     }
   ]

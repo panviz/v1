@@ -48,6 +48,11 @@ Class.create("StoreModule", Store, {
     fileNames = fileNames.filter(function(file){
       return file.match(/.js$/)
     })
+    if (fs.existsSync(path.action)){
+      m.actions = wrench.readdirSyncRecursive(path.action).map(function(filename){
+        return filename.replace('.js','')
+      })
+    }
     m.src = fileNames.map(function(fileName){
       return fs.readFileSync(path.root + '/' + fileName, 'binary')
     })

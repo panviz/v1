@@ -3,7 +3,6 @@
  * Everything should be an Item!
  */
 Class.create("Item", ReactiveRecord, {
-
   /**
    * @param String name
    * @param Json [p] optional params
@@ -17,21 +16,32 @@ Class.create("Item", ReactiveRecord, {
       this._label = label
     })
     this.__defineGetter__("size", function(){
-      return this.relations ? this.out().length : 0
+      return this._size || (this.relations.isEmpty() ? this.out().length : 1)
+    })
+    this.__defineSetter__("size", function(size){
+      this._size = size
     })
     this.__defineGetter__("icon", function(){
-      return '/client/image/' + this.type + '.ico'
+      return '/client/image/item/' + this.type + '.ico'
+    })
+    this.__defineGetter__("changed", function(){
+      return this._changed
+    })
+    this.__defineSetter__("changed", function(value){
+      this._changed = value
+      if (value) document.fire("app:changed")
     })
 
+    this.man = 'item'
+    this.id = $util.generateId()
     $super(name);
     if (p){this.x = p.x; this.y = p.y}
     //TODO should be private?
     // Array of {id: Number, type: String, direction: String, to: Number(Item ID)}
     this.relations = []      // Not loaded item has no links
     this.type = this.__className.toLowerCase()    // Local storage needs type = 'item'
-    this.toStore = this.toStore.concat($w('relations label icon x y fixed expand'))
+    this.toStore = this.toStore.concat($w('relations label icon x y fixed expand content'))
   },
-
   /**
    * @param Json [data] new data to update item
    * @param Json [diff] Diff to update item
@@ -44,16 +54,16 @@ Class.create("Item", ReactiveRecord, {
     // Update delegate class if type specified
     var type = this.type
     var hash = $H(update)
-    if (type && type != 'item' && !hash.isEmpty()){
+    var className = Class.getByName(type.capitalize())
+    if (type && type != 'item' && className && !hash.isEmpty()){
       if (!this[type]){
-        var className = Class.getByName(type.capitalize())
         this[type] = new className(this)
         this[type].update(data, diff)
       } else{
         this[type].update(data, diff)
       }
     }
-    if (this.id) document.fire("item:updated", this)
+    document.fire("item:updated", this)
   },
 
   save : function($super){
@@ -107,7 +117,18 @@ Class.create("Item", ReactiveRecord, {
     this.changed = true
     item.relations.push({id: id, type: type, direction: 'in', target: this.id})
     item.changed = true
+    document.fire("item:linked", {item: this, link: link})
     return link
+  },
+  /*
+   */
+  unlink : function(item, type){
+    if (!item && !type) return this.relations = []
+    //this.relations = this.relations.without(function(rel){return rel.id == })
+    //item.relations = item.relations.without()
+    this.changed = true
+    item.changed = true
+    //document.fire("item:unlinked", this, link)
   },
   /**
    * @param String [type] link type
@@ -174,4 +195,4 @@ Class.create("Item", ReactiveRecord, {
     }
     if (!$H(diff).isEmpty() || options.name) $super(idOrName, options, diff)
   }
-});
+})

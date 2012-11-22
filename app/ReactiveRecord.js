@@ -14,7 +14,6 @@ Class.create("ReactiveRecord", Reactive, {
       setTimeout(this.get.bind(this), 10)
     }
   },
-
   /**
    */
   get : function($super, options){
@@ -24,10 +23,10 @@ Class.create("ReactiveRecord", Reactive, {
   },
 
   put : function($super, options){
+    options = options || {}
     var idOrName = options.name ? this.name : this.id
     $super(null, idOrName, this._content, options)
   },
-
   /**
    * On remote record change, Proxy will call this method
    * Augment it in concrete Record class

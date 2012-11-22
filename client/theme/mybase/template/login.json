@@ -1,34 +1,36 @@
 {
-  "id": "loginForm",
-  "name": "loginForm",
-  "control": "CLogin",
-  "options": {
-    "title": "Enter login/password",
-    "labelWidth": 80,
-    "header": false, 
-    "bodyPadding": 5,
-    "height": 140,
-    "width": 300,
-    "layout": "anchor",
-    "defaultType": "textfield",
-    "monitorValid": true,
-    "items": [{ 
-        "itemId": "username",
-        "name": "username", 
-        "allowBlank": false 
+  "id": "loginForm"
+, "name": "loginForm"
+, "control": "ControlLogin"
+, "options": {
+    "title": "Enter login/password"
+  , "labelWidth": 80
+  , "header": false 
+  , "bodyPadding": 5
+  , "height": 140
+  , "width": 300
+  , "layout": "vbox"
+  , "defaultType": "textfield"
+  , "monitorValid": true
+  , "items": [{ 
+        "itemId": "username"
+      , "name": "username"
+      , "value": "dmitra"
+      , "allowBlank": false 
       },{ 
-        "itemId": "password",
-        "name": "password", 
-        "inputType": "password", 
-        "allowBlank": false 
+        "itemId": "password"
+      , "name": "password"
+      , "value": "asdf"
+      , "inputType": "password"
+      , "allowBlank": false 
       }
     ],
     "buttons": [{
         "itemId": "reset"
       }, {
-        "itemId": "submit",
-        "formBind": true,
-        "disabled": true
+        "itemId": "submit"
+      , "formBind": true
+      , "disabled": true
       }
     ]
   }

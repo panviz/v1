@@ -5,6 +5,7 @@ Class.create("Module", {
 
     // Add class to global scope
     if (p.src) p.src.each(function(src){eval(src)})
+    if (p.actions) $act.register(p.actions)
     delete p.src
     this.man = p.man;
   }

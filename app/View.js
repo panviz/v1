@@ -25,19 +25,16 @@ Class.create("View", {
 
   _onContextChanged : function(e){
   },
-
   /**
    * Initialize standards view actions
    */
   initActions : function(){
   },
-
   /**
    * Creates base GUI
    */
   render : function(options){
   },
-
   /**
    * Focus on this widget (focus input)
    */
@@ -47,7 +44,6 @@ Class.create("View", {
       this.hasFocus = true;
     }
   },
-
   /**
    * Blur this widget
    */
@@ -55,14 +51,12 @@ Class.create("View", {
     //this._inputBox.blur();
     this.hasFocus = false;
   },
-
   /**
    * Updates the view title
    * @param title String
    */
   updateTitle : function(title){
   },
-
   /**
    * Open note in new context
    * @param userSelection Collection the data model
@@ -71,7 +65,6 @@ Class.create("View", {
     this.userSelection = userSelection;
     this.clearContent();
   },
-
   /**
    * Change editor status
    * @param isModified Boolean
@@ -80,7 +73,6 @@ Class.create("View", {
     //TODO update title in header
     //TODO update actions state
   },
-
   /**
    * Go to fullscreen mode
    */
@@ -90,20 +82,11 @@ Class.create("View", {
     //TODO update actions
     //TODO change content style (layout, bounding) on resize
   },
-
   /**
    * Exit fullscreen mode
    */
   exitFullScreen : function(){
     this.fullScreen = false;
     //TODO opposite to fullScreen
-  },
-
-  /**
-   * Close the view
-   * @returns Boolean
-   */
-  close : function(){   
-    //TODO exitFullScreen();
   }
 });

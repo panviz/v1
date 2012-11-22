@@ -5,12 +5,13 @@ Class.create("User", {
 
   initialize : function(item){
     this.item = item
+    this.contexts = []
   },
 
   update : function(data, diff){
     var self = this
     var update = data || diff
-    $w('loggedIn lastLogin roles preferences').each(function(attr){
+    $w('loggedIn lastLogin roles preferences context contexts').each(function(attr){
       if (update[attr] != undefined){
         if (diff && Object.isArray(update[attr])){
           self[attr] = self[attr].diffMerge(update[attr])
@@ -23,18 +24,25 @@ Class.create("User", {
     this.roles = this.roles || ['guest'];
     if (update.token){
       SECURE_TOKEN = this.token = update.token;
-      this.login(update.token, update.context)
+      this.login(this.context, this.contexts)
     }
   },
 
   // Current user login
-  login : function(token, context){
+  login : function(context, contexts){
     //TODO remove after debugging
     $user = this;
     document.fire("user:auth", this);
-    // restore last visited item as current root
+    // Select last edited item
     this.context = context ? $app.getItem(context) : this.item;
     document.fire("app:context_changed", this.context);
+    // restore all opened items from last save
+    var items = contexts.map(function(id){
+      var item = $app.getItem(id)
+      item.pinned = true
+      return item
+    })
+    if (items.length > 1) document.fire("app:selection_changed", items);
   },
 
   isAdmin : function(){

@@ -1,4 +1,4 @@
-Class.create("CLogin", {
+Class.create("ControlLogin", {
 
   initialize : function(template){
     this.size = {width: template.width, height: template.height};
@@ -45,5 +45,4 @@ Class.create("CLogin", {
     this.passwordField.on('specialkey', submitOnEnter);
     this.usernameField.on('specialkey', submitOnEnter);
   }
-});
-
+})

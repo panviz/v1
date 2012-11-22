@@ -19,13 +19,23 @@ Class.create("ViewGraphItemMan", {
     var self = this
     var s = this.selection;
     if (!Object.isArray(items)) items = [items];
+    // TODO define which items to add/remove to selection BETTER
     if (items[0] == s[0] && s.length == 1 && items.length == 1){
       return false;
     } else {
+      // Remove highlight for previously selected items
+      this.selection.each(function(item){
+        item.selected = false
+        d3.select('#'+item.id+' circle').style("stroke", "#aaf")
+        self.view._onMouseOut(item)
+      })
       this.selection = items;
 
       items.each(function(item){
+        self.view._onMouseOver(item)
+        item.selected = true
         self.fix(item)
+        d3.select('#'+item.id+' circle').style("stroke", "#f00").style("stroke-width", 2)
       })
 
       // show items from selection if they are not shown
@@ -58,8 +68,6 @@ Class.create("ViewGraphItemMan", {
     var children = item.children();
     if (children){
       item.expanded ? this.collapse(item) : this.expand(item)
-    } else{
-      item.fixed ? this.unfix(item) : this.fix(item)  // toggle floating
     }
   },
   /**
@@ -75,12 +83,11 @@ Class.create("ViewGraphItemMan", {
       self.show(child)
     })
     parent.expanded = true
-    this.fix(parent)
   },
 
   collapse : function(item){
     item.expanded = false
-    this.unfix(item)
+    //this.unfix(item)
     this.hideChildren(item)
     this.view.update()
   },
@@ -128,23 +135,34 @@ Class.create("ViewGraphItemMan", {
     var links = item.links().filter(function(link){
       var target = $app.items.get(link.target)
       if (target) return self.isShown(target)
-      return target
     })
+    // hide all item's links because some could be deleted
+    this.links.hide(item)
     if (!links.isEmpty()) this.links.show(item, links)
     this.view.update()
   },
 
   fix : function(item){
-    d3.select('#'+item.id+' g image').attr("xlink:href", "/client/image/pin.ico")
+    d3.select('#'+item.id+' g image').attr("xlink:href", "/client/image/pinGrey.ico")
     item.fixed = true
     delete item.tempFix
   },
 
-  unfix : function(item){
+  unFix : function(item){
     d3.select('#'+item.id+' g image').attr("xlink:href", "/client/image/no.ico")
     item.fixed = false
   },
+
+  addContext : function(item){
+    d3.select('#'+item.id+' g image').attr("xlink:href", "/client/image/pin.ico")
+    $user.contexts.push(item.id)
+  },
   
+  removeContext : function(item){
+    $user.contexts = $user.contexts.without(item.id)
+    this.unFix(item)
+  },
+
   isShown : function(item){
     return item.index >= 0
   },

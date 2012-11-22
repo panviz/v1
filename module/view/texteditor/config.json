@@ -1,11 +1,5 @@
 {
-  "name": "texteditor",
-  "openable": "true",
-  "order": "10",
-  "text": "51",
-  "title": "162",
-  "mimes": "none",
-  "formId": "edit_box",
-  "label": "Text Editor",
+  "name": "Texteditor",
+  "title": "Text Editor",
   "description": "Very basic text editor"
 }

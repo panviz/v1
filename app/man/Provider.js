@@ -10,8 +10,28 @@ Class.create("Provider", ReactiveProvider, {
     $super(store);
   },
 
+  get : function(got, value, options){
+    options = options || {};
+    var onFind = function(data, err){
+      var result = {}
+      // format array of item ids as relations
+      if (Object.isArray(data)){
+        result.relations = data.map(function(id){
+          var link = {}
+          //link.id = $util.generateId()
+          link.target = id
+          link.direction = 'out'
+          return link
+        })
+      } else {result = data}
+      got(result, err)
+    }
+    var key = options.key || options.name ? 'name' : 'id'
+    if (value == 'ItemSearch') return this.store.findLinked(onFind, key, options.search)
+    this.store.find(onFind, null, key, value)
+  },
   /**
-   * @param p JSON response
+   * @param JSON p response
    */
   parseParams : function(p){
     this._name = p._name;
@@ -27,8 +47,8 @@ Class.create("Provider", ReactiveProvider, {
   /**
    * TODO Rename
    * Finds this item by path if it already exists in arborescence
-   * @param rootItem Item
-   * @param fakeItems Item[]
+   * @param Item rootItem
+   * @param Item[] fakeItems
    */
   findInArbo : function(rootItem, fakeItems){
     if(!this.getPath()) return;
@@ -52,7 +72,7 @@ Class.create("Provider", ReactiveProvider, {
   },
   /**
    * Finds a child item by its path
-   * @param path String
+   * @param String path
    * @returns Item
    */
   findChildByPath : function(path){

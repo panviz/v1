@@ -5,6 +5,6 @@
   "graph": {
     "chargeBase": -200,
     "chargeK": -10,
-    "nodeRadius": 10
+    "nodeRadius": 15
   }
 }

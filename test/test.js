@@ -1,4 +1,4 @@
-ROOT_PATH = 'd:Dropbox/grafiy/'
+ROOT_PATH = 'd:Dropbox/grafiy/src/'
 neo4j = require('neo4j');
 require(ROOT_PATH + 'app/lib/prototypeJS/prototype');
 
