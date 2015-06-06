@@ -8,13 +8,13 @@ Class.create("Item", ReactiveRecord, {
    * @param Json [p] optional params
    */
   initialize : function($super, name, p){
-    //TODO Calculate size base on all/in/out links?
     this.__defineGetter__("label", function(){
       return this._label ? this._label : this.name
     })
     this.__defineSetter__("label", function(label){
       this._label = label
     })
+    //TODO Calculate size based on all/in/out links?
     this.__defineGetter__("size", function(){
       return this._size || (this.relations.isEmpty() ? this.out().length : 1)
     })
@@ -22,14 +22,13 @@ Class.create("Item", ReactiveRecord, {
       this._size = size
     })
     this.__defineGetter__("icon", function(){
-      return '/client/image/item/' + this.type + '.ico'
+      return '/client/image/item/' + this.type + '.png'
     })
-    this.__defineGetter__("changed", function(){
-      return this._changed
+    this.__defineGetter__("iconSize", function(){
+      return this._iconSize || this.size
     })
-    this.__defineSetter__("changed", function(value){
-      this._changed = value
-      if (value) document.fire("app:changed")
+    this.__defineSetter__("iconSize", function(size){
+      this._iconSize = size
     })
 
     this.man = 'item'
@@ -40,7 +39,7 @@ Class.create("Item", ReactiveRecord, {
     // Array of {id: Number, type: String, direction: String, to: Number(Item ID)}
     this.relations = []      // Not loaded item has no links
     this.type = this.__className.toLowerCase()    // Local storage needs type = 'item'
-    this.toStore = this.toStore.concat($w('relations label icon x y fixed expand content'))
+    this.toStore = this.toStore.concat($w('relations label icon x y fixed expand hidden content'))
   },
   /**
    * @param Json [data] new data to update item
@@ -72,8 +71,17 @@ Class.create("Item", ReactiveRecord, {
     this.y = Math.round(this.y)
     this.changed = false
     this.expand = this.expanded
+    var man = this[this.type]
+    if (man) this._content = man.save()
     $super()
   },
+
+  change : function(property, value){
+    if (property) this[property] = value
+    this.changed = true
+    document.fire("app:changed")
+  },
+
   /**
    * if this Item is linked with given item
    * @param Item item
@@ -182,7 +190,7 @@ Class.create("Item", ReactiveRecord, {
     return this.linked(itemType, links)
   },
 
-  // Remove incoming links
+  // Remove incoming links to not save them as properties on server
   _onSave : function($super, idOrName, options, diff){
     if (diff && diff.relations){
       var diffRel = diff.relations
@@ -193,6 +201,6 @@ Class.create("Item", ReactiveRecord, {
       diffRel[1] = diffRel[1].filter(byDirection)
       if (diffRel[0].isEmpty() && diffRel[1].isEmpty()) delete diff.relations
     }
-    if (!$H(diff).isEmpty() || options.name) $super(idOrName, options, diff)
+    if (!$H(diff).isEmpty() || options.name || options.delete) $super(idOrName, options, diff)
   }
 })

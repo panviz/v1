@@ -50,10 +50,15 @@ Class.create("ReactiveRecord", Reactive, {
 
   save : function(){
     var self = this
-    var content = this._content = {}
+    var content = this._content || {}
     this.toStore.each(function(p){
       if (self[p] != undefined) content[p] = self[p]
     })
     this.put()
+  },
+
+  remove : function(){
+    this._content = null
+    this.put({delete: true})
   }
 })

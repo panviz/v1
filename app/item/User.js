@@ -4,6 +4,7 @@
 Class.create("User", {
 
   initialize : function(item){
+    this.toStore = $w('preferences context contexts')
     this.item = item
     this.contexts = []
   },
@@ -11,7 +12,7 @@ Class.create("User", {
   update : function(data, diff){
     var self = this
     var update = data || diff
-    $w('loggedIn lastLogin roles preferences context contexts').each(function(attr){
+    this.toStore.concat($w('loggedIn lastLogin roles')).each(function(attr){
       if (update[attr] != undefined){
         if (diff && Object.isArray(update[attr])){
           self[attr] = self[attr].diffMerge(update[attr])
@@ -39,10 +40,34 @@ Class.create("User", {
     // restore all opened items from last save
     var items = contexts.map(function(id){
       var item = $app.getItem(id)
+      //TODO set pinned in itemman
       item.pinned = true
       return item
     })
     if (items.length > 1) document.fire("app:selection_changed", items);
+  },
+
+  save : function(){
+    var self = this
+    var content = {}
+    this.toStore.each(function(attr){
+      if (attr == 'context') return content[attr] = self.context.id
+      content[attr] = self[attr]
+    })
+    return content
+  },
+
+  addContext : function(item){
+    this.context = item.id
+    if (this.contexts.include(item.id)) return
+    this.contexts.push(item.id)
+    this.item.change()
+  },
+
+  removeContext : function(item){
+    if (!this.contexts.include(item.id)) return
+    this.contexts = $user.contexts.without(item.id)
+    this.item.change()
   },
 
   isAdmin : function(){
@@ -53,6 +78,7 @@ Class.create("User", {
   setRole : function(role){
     this.roles.push(role);
     if (role == "admin") this._isAdmin = true;
+    this.item.change()
   },
   /**
    * Rights to read active item

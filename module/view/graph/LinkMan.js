@@ -5,13 +5,6 @@ Class.create("ViewGraphLinkMan", {
   // Shown links
   links: [],
 
-  initialize : function(){
-    var self = this
-    var onLinked = function(e){
-      self.show(e.memo.item, e.memo.link)
-    }
-    document.observe("item:linked", onLinked)
-  },
   /**
    * Show all or specified links of Item
    * @param Item item source of the links

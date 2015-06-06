@@ -20,11 +20,14 @@ Class.create("Application", {
     document.observe("proxy:connected", function(){
       self.init()
     })
+    document.observe("app:context_changed", this.select.bind(this))
+    document.observe("app:selection_changed", this.select.bind(this))
   },
 
   init : function(){
     var self = this;
     this.items = $H();
+    this.selection = []
     this.man = {};
     $user = null;
     $item = null;
@@ -79,10 +82,13 @@ Class.create("Application", {
       if (array && array[0]){
         var data = array[0]
         SECURE_TOKEN = data.token
-        var user = self.getItem(data.id)
+        var userItem = self.getItemByName(data.id)
+        userItem.id = data.id
+        userItem.name = data.name
         //reestablish authorized connection with remote
-        user.type = data.type   // override default item type
-        user.get(null, data.id, {force: true})
+        userItem.type = data.type   // override default item type
+        userItem.get()
+        userItem.get({force: true})
       }
     }
     this.db.find(onFind, 'user', 'token')
@@ -111,6 +117,7 @@ Class.create("Application", {
       if (special){
         var itemClass = Class.getByName(name);
         item = new itemClass(special)
+        name = special.name || name
       } else {
         item = new Item()
         item.name = name
@@ -143,6 +150,22 @@ Class.create("Application", {
     })
     document.fire("app:saved")
   },
+  /**
+   * Remove links to removed item from parents
+   */
+  remove : function(item){
+    item.inc().each(function(link){
+      var parent = this.items.get(link.target)
+      if (parent){
+        parent.relations = parent.relations.filter(function(rel){
+          return rel.id != link.id
+        })
+      }
+    })
+    this.items.unset(item.id)
+    item.remove()
+  },
+  
   // Search by name among loaded items for now
   search : function(pattern, global){
     //this.items.values().filter
@@ -153,6 +176,12 @@ Class.create("Application", {
     var item = e.memo.item
     this.items.unset(item.name)
     this.items.set(item.id, item)
+  },
+
+  select : function(e){
+    var items = e.memo
+    if (!Object.isArray(items)) items = [items];
+    this.selection = items
   },
   /**
    * Trigger a simple download

@@ -24,7 +24,6 @@ Class.create("ActionFul", {
     
     document.observe('keydown', this._onKeyDown.bind(this));
   },
-
   /**
    * Registers an action to this manager
    * @param action Action

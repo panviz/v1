@@ -100,10 +100,11 @@ Class.create("Store", {
       }
     }
     // Remove
-    else if (update != undefined){
+    else if (update === null){
       for (var i=0; i < s.length; i++){
         if (s[i].id == id){
           this._local[type] = s.without(s[i]);
+          diff = update
         }
       }
     }

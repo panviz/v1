@@ -1,11 +1,10 @@
 Class.create("ActionHide", Action, {
 
   execute : function(){
-    this.saved = $item.selection
-    $item.hide(this.saved)
+    this.saved = $item.hide(null, false, true)
   },
 
   undo : function(){
-    $item.show(this.selection)
+    $item.show(this.saved, true)
   }
 })

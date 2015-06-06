@@ -108,6 +108,7 @@ Class.create("StoreGraph", {
           //TODO handle item created with existing name
           if (diff.relations) self._updateLinks(diff.relations, id)
           delete diff.relations
+          //TODO consider arrays in diff are diffs
           Object.extend(record.data, diff)
           var cb = function(err){
             onSave(diff, err)
@@ -131,7 +132,7 @@ Class.create("StoreGraph", {
         }
       }
               // Remove
-      else if (diff != undefined){
+      else if (diff === null){
         //force links deletion
         //TODO remove
         console.log('DELETE');

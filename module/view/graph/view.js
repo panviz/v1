@@ -44,8 +44,12 @@ Class.create("ViewGraph", View, {
     control.on('resize', this._onResize.bind(this));
     document.observe("app:selection_changed", this._onSelectionChanged.bind(this));
     document.observe("item:updated", this._onItem.bind(this));
+    document.observe("item:linked", this._onLinked.bind(this))
     // Select context if view is loaded after app:context_changed event
-    if ($user) this._onContextChanged({memo: $user.context})
+    if ($user){
+      this._onContextChanged({memo: $user.context})
+      this._onSelectionChanged({memo: $app.selection})
+    }
   },
 
   // update graph accordingly to registries of items and links
@@ -66,13 +70,13 @@ Class.create("ViewGraph", View, {
     // Enter any new links.
     this.edges.enter().insert("line", '.node')
       .attr("class", "link")
-      .attr("id", function(d){return d.id})
+      .attr("id", function(d){ return d.id})
       //.on("mouseover", this._onMouseOverEdge.bind(this))
       //.on("mouseout", this._onMouseOutEdge.bind(this))
-      .attr("x1", function(d){ return d.source.x; })
-      .attr("y1", function(d){ return d.source.y; })
-      .attr("x2", function(d){ return d.target.x; })
-      .attr("y2", function(d){ return d.target.y; })
+      .attr("x1", function(d){ return d.source.x })
+      .attr("y1", function(d){ return d.source.y })
+      .attr("x2", function(d){ return d.target.x })
+      .attr("y2", function(d){ return d.target.y })
       .style("stroke", "#9ecae1")
       .attr("marker-end", "url(#type)")
 
@@ -81,13 +85,13 @@ Class.create("ViewGraph", View, {
 
     // Update the nodes
     this.nodes = this.vis.selectAll(".node")
-      .data(this.itemman.items, function(d){ return d.id; })
+      .data(this.itemman.items, function(d){ return d.id })
 
     //TODO add transition for adding nodes
     // Add new nodes
     var g = this.nodes.enter().append("g")
       .attr("class", 'node')
-      .attr("id", function(d){return d.id})
+      .attr("id", function(d){ return d.id })
       .on("click", this._onClickNode.bind(this))
       .on("dblclick", this._onDblClickNode.bind(this))
       .on("mousedown", this._onMouseDown.bind(this))
@@ -98,21 +102,22 @@ Class.create("ViewGraph", View, {
       .on("mouseout", this._onMouseOut.bind(this))
       .call(this.drag)
     g.append("circle")
-      .attr("r", function(d){ return d.size/2 + self.p.graph.nodeRadius})
-      .style("stroke", "#aaf")
-      .style("fill", function(d){ return d.out().isEmpty() ? "#fff" : "#eee"})
+      .attr("r", function(d){ return d.size/2 + self.p.graph.nodeRadius })
+      .style("stroke", function(d){ return d.selected ? "faa" : "#aaf" })
+      .style("stroke-width", function(d){ return d.selected ? 2 : 1 })
+      .style("fill", function(d){ return d.out().isEmpty() ? "#fff" : "#eee" })
       .style(":hover", "opacity: 0.5")
     g.append("image")
       .attr("xlink:href", function(d){ return d.icon})
-      .attr("x", function(d){ return (d.size/2 + self.p.graph.nodeRadius)/-2})
-      .attr("y", function(d){ return (d.size/2 + self.p.graph.nodeRadius)/-2})
-      .attr("width", function(d){ return d.size/2 + self.p.graph.nodeRadius})
-      .attr("height", function(d){ return d.size/2 + self.p.graph.nodeRadius})
+      .attr("x", function(d){ return (d.iconSize/2 + self.p.graph.nodeRadius)/-2 })
+      .attr("y", function(d){ return (d.iconSize/2 + self.p.graph.nodeRadius)/-2 })
+      .attr("width", function(d){ return d.iconSize/2 + self.p.graph.nodeRadius })
+      .attr("height", function(d){ return d.iconSize/2 + self.p.graph.nodeRadius })
     var stateGroup = g.append("g")
     stateGroup.append("image")
-      .attr("xlink:href", function(d){ return d.fixed ? (d.pinned ? '/client/image/pin.ico' : '/client/image/pinGrey.ico') : '/client/image/no.ico'})
-      .attr("x", function(d){ return (d.size/2 + self.p.graph.nodeRadius)/3})
-      .attr("y", function(d){ return -(d.size/2 + self.p.graph.nodeRadius)})
+      .attr("xlink:href", function(d){ return d.fixed ? (d.pinned ? '/client/image/pin.ico' : '/client/image/pinGrey.ico') : '/client/image/no.ico' })
+      .attr("x", function(d){ return (d.size/2 + self.p.graph.nodeRadius)/3 })
+      .attr("y", function(d){ return -(d.size/2 + self.p.graph.nodeRadius) })
       .attr("width", 10)
       .attr("height", 12)
       .on("click", this._onClickPin.bind(this))
@@ -120,7 +125,8 @@ Class.create("ViewGraph", View, {
     g.append("text")
       .attr("dx", 10)
       .attr("dy", "10pt")
-      .text(function(d){ return d.label || d.id});
+      .attr("font-weight", function(d){ return d.selected ? "bold" : "normal" })
+      .text(function(d){ return d.label || d.id })
 
     // Remove old nodes
     this.nodes.exit()
@@ -132,7 +138,7 @@ Class.create("ViewGraph", View, {
   },
 
   _onContextChanged : function(e){
-    this.itemman.select(e.memo);
+    this.itemman.select([e.memo]);
   },
 
   _onSelectionChanged : function(e){
@@ -150,6 +156,12 @@ Class.create("ViewGraph", View, {
     }
   },
 
+  _onLinked : function(e){
+    var item = e.memo.item
+    var link = e.memo.link
+    if (this.itemman.isShown(item)) this.linkman.show(item, link)
+  },
+
   // Move nodes and lines on layout recalculation
   _onTick : function(e){
     var p = this.p;
@@ -163,19 +175,20 @@ Class.create("ViewGraph", View, {
     })
 
     this.edges
-      .attr("x1", function(d){ return d.source.x; })
-      .attr("y1", function(d){ return d.source.y; })
-      .attr("x2", function(d){ return d.target.x; })
-      .attr("y2", function(d){ return d.target.y; });
+      .attr("x1", function(d){ return d.source.x })
+      .attr("y1", function(d){ return d.source.y })
+      .attr("x2", function(d){ return d.target.x })
+      .attr("y2", function(d){ return d.target.y })
   },
 
   _onClickNode : function(item){
     d3.event.stopPropagation()
     if (d3.event.ctrlKey) this.itemman.hide(item)
     if (d3.event.ctrlKey && d3.event.shiftKey) this.itemman.remove(item)
-    if (item.action) return item.action.execute()
-    // Load on click
-    this.itemman.select(item);
+    if (item.action){
+      item.action.execute()
+      this.itemman.hide(this.contextMenu, true)
+    }
   },
 
   _onDblClickNode : function(item){
@@ -186,13 +199,14 @@ Class.create("ViewGraph", View, {
   _onRightClickNode : function(item){
     d3.event.stopPropagation()
     d3.event.preventDefault()
+    this.itemman.hide(this.contextMenu, true)
     if (item.noContextMenu) return 
     this.contextMenu.show(item)
     this.itemman.show(this.contextMenu)
   },
 
   _onClickBase : function(){
-    this.itemman.hide(this.contextMenu)
+    this.itemman.hide(this.contextMenu, true)
   },
 
   // Show search string
@@ -211,7 +225,7 @@ Class.create("ViewGraph", View, {
   },
 
   _onMouseDown : function(item){
-    // if selection changed by other view do not fire own event
+    if (item.action) return
     if (this.itemman.select(item)) document.fire('app:context_changed', item);
   },
 
@@ -235,8 +249,7 @@ Class.create("ViewGraph", View, {
       return 
     }
     if (item.selected) return
-    d3.select('#'+item.id+' circle').style('stroke-width', 2)
-    d3.select('#'+item.id+' text').style('font-weight', 'bold')
+    this.itemman.highlight(item)
   },
 
   _onMouseOut : function(item){
@@ -246,32 +259,31 @@ Class.create("ViewGraph", View, {
       delete item.tempFix
     }
     if (item.selected) return
-    d3.select('#'+item.id+' circle').style('stroke-width', 1)
-    d3.select('#'+item.id+' text').style('font-weight', 'normal')
+    this.itemman.deHighlight(item)
   },
 
-  _onDragstart : function(d){
+  _onDragstart : function(item){
     // auto positioning is off while dragging
     this.force.stop()
   },
 
-  _onDragmove : function(d){
+  _onDragmove : function(item){
     //TODO do once for all subsequent move events
-    var node = d3.select('#'+d.id)
+    var node = d3.select('#'+item.id)
     node.attr('pointer-events', 'none')
-    d.px += d3.event.dx;
-    d.py += d3.event.dy;
-    d.x += d3.event.dx;
-    d.y += d3.event.dy; 
-    this._onTick(); // this is the key to make it work together with updating both px,py,x,y on d !
+    item.px += d3.event.dx;
+    item.py += d3.event.dy;
+    if (d3.event.dx || d3.event.dy) item.change()
+    item.x += d3.event.dx;
+    item.y += d3.event.dy; 
+    this._onTick(); // this is the key to make it work together with updating both px,py,x,y on item
   },
 
   _onDragend : function(item){
-    if (!item.changed) item.changed = true
     if (this.hover && item != this.hover){
       var link = item.link(this.hover)
       //TODO dragged item should be put to drag start position if link created?
-      item.fixed = false
+      //item.fixed = false
       this.update()
     }
     this.itemman.fix(item)
@@ -300,9 +312,9 @@ Class.create("ViewGraph", View, {
   _onClickPin : function(item){
     d3.event.stopPropagation()
     if (!$user.contexts.include(item.id)){
-      this.itemman.addContext(item)
+      this.itemman.pin(item)
     } else{
-      this.itemman.removeContext(item)
+      this.itemman.unPin(item)
     }
   }
 })

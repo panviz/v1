@@ -4,6 +4,7 @@ Class.create("ViewGraphItemMan", {
   initialize : function(view){
     this.view = view
     this.links = view.linkman
+    // Array of selected items in graph view
     this.selection = []
     $item = this
   },
@@ -11,7 +12,7 @@ Class.create("ViewGraphItemMan", {
    * Change selection to new items
    * Selection may have multiple items on:
    *  Search results
-   *  Grid selection
+   *  other view multiple selection
    * @param {Item|Item[]} items one or many items
    * @return Boolean if selection changed
    */
@@ -19,36 +20,42 @@ Class.create("ViewGraphItemMan", {
     var self = this
     var s = this.selection;
     if (!Object.isArray(items)) items = [items];
-    // TODO define which items to add/remove to selection BETTER
-    if (items[0] == s[0] && s.length == 1 && items.length == 1){
-      return false;
-    } else {
-      // Remove highlight for previously selected items
-      this.selection.each(function(item){
-        item.selected = false
-        d3.select('#'+item.id+' circle').style("stroke", "#aaf")
-        self.view._onMouseOut(item)
-      })
-      this.selection = items;
-
-      items.each(function(item){
-        self.view._onMouseOver(item)
-        item.selected = true
-        self.fix(item)
-        d3.select('#'+item.id+' circle').style("stroke", "#f00").style("stroke-width", 2)
-      })
-
-      // show items from selection if they are not shown
-      var extra = items.substract(this.items)
-      if (extra){
-        extra.each(function(item){
-          self.show(item)
-        })
-      }
-      //TODO remove this udpate as if no items were added selected items will become fixed anyway
-      this.view.update()
-      return true;
+    var add = items.substract(s).filter(function(item){
+      return !item.action
+    })
+    var remove = s.substract(items)
+    // Remove highlight for previously selected items
+    remove.each(function(item){
+      item.selected = false
+      d3.select('#'+item.id+' circle').style("stroke", "#aaf")
+      self.deHighlight(item)
+    })
+    // show items from selection if they are not shown
+    var extra = add.substract(this.items)
+    extra.each(function(item){
+      self.show(item)
+    })
+    add.each(function(item){
+      item.selected = true
+      self.fix(item)
+      self.highlight(item)
+      d3.select('#'+item.id+' circle').style("stroke", "#f00").style("stroke-width", 2)
+    })
+    if (!add.isEmpty() || !remove.isEmpty()){
+     this.selection = items
+     this.view.update()
+     return true
     }
+  },
+
+  highlight : function(item){
+    d3.select('#'+item.id+' circle').style('stroke-width', 2)
+    d3.select('#'+item.id+' text').style('font-weight', 'bold')
+  },
+
+  deHighlight : function(item){
+    d3.select('#'+item.id+' circle').style('stroke-width', 1)
+    d3.select('#'+item.id+' text').style('font-weight', 'normal')
   },
 
   // Add new node
@@ -67,6 +74,7 @@ Class.create("ViewGraphItemMan", {
     var self = this;
     var children = item.children();
     if (children){
+      item.change()
       item.expanded ? this.collapse(item) : this.expand(item)
     }
   },
@@ -74,15 +82,22 @@ Class.create("ViewGraphItemMan", {
    * Show children
    * they will be recursively shown if they are expanded
    * @param Item parent
+   * @param Boolean hidden show hidden children
    */
-  expand : function(parent){
+  expand : function(parents, hidden){
     var self = this
-    var children = parent.children()
-
-    children.each(function(child){
-      self.show(child)
+    if (!parents) parents = this.selection
+    if (!Object.isArray(parents)) parents = [parents]
+    parents.each(function(parent){
+      var children = parent.children()
+      children.each(function(child){
+        if (child.hidden && hidden){
+          child.change('hidden', false)
+        }
+        self.show(child)
+      })
+      parent.expanded = true
     })
-    parent.expanded = true
   },
 
   collapse : function(item){
@@ -100,7 +115,8 @@ Class.create("ViewGraphItemMan", {
     var collection = []
     var collect = function(item){
       item.children().each(function(child){
-        if (self.isShown(child) && !collection.include(child)){
+        // Do not hide pinned items
+        if (!child.pinned && self.isShown(child) && !collection.include(child)){
           collection.push(child)
           collect(child)
         }
@@ -120,16 +136,20 @@ Class.create("ViewGraphItemMan", {
     })
     this.items = this.items.compact()
   },
-
   show : function(item){
+    if (item.hidden){
+      if (this.isShown(item)) this.hide(item)
+      return
+    }
     var self = this
     //TODO make better fix for d3.force.tick()
     item.px = item.x
     item.py = item.y
-    // expand item if it should be but not yet
-    if (!item.relations.isEmpty() && item.expand && !item.expanded) this.expand(item)
 
     if (!this.items.include(item)) this.items.push(item);
+
+    // expand item if it should be but not yet
+    if (!item.relations.isEmpty() && item.expand && !item.expanded) this.expand(item)
 
     // Show links to already rendered items
     var links = item.links().filter(function(link){
@@ -143,6 +163,7 @@ Class.create("ViewGraphItemMan", {
   },
 
   fix : function(item){
+    if (item.fixed) return
     d3.select('#'+item.id+' g image').attr("xlink:href", "/client/image/pinGrey.ico")
     item.fixed = true
     delete item.tempFix
@@ -153,24 +174,48 @@ Class.create("ViewGraphItemMan", {
     item.fixed = false
   },
 
-  addContext : function(item){
+  pin : function(item){
     d3.select('#'+item.id+' g image').attr("xlink:href", "/client/image/pin.ico")
-    $user.contexts.push(item.id)
+    item.pinned = true
+    $user.addContext(item)
   },
   
-  removeContext : function(item){
-    $user.contexts = $user.contexts.without(item.id)
+  unPin : function(item){
+    item.pinned = false
+    $user.removeContext(item)
     this.unFix(item)
   },
 
   isShown : function(item){
     return item.index >= 0
   },
+  /**
+   * Hiding means deleting item and all its links from Man index
+   * @param Boolean deep hide with children
+   * @param Boolean permanent do not show next time
+   */
+  hide : function(items, deep, permanent){
+    var self = this
+    if (!items) items = this.selection
+    if (!Object.isArray(items)) items = [items]
+    items.each(function(item){
+      if (!self.isShown(item)) return
+      if (deep) self.collapse(item)
+      if (permanent) item.change('hidden', false)
+      self.unPin(item)
+      self.items = self.items.without(item)
+      delete item.index;
+      if (!deep) self.links.hide(item.links())
+      self.view.update()
+    })
+    return items
+  },
 
-  // Hiding means deleting item and all its links from Man index
-  hide : function(item){
-    delete this.items[item.index];
-    delete item.index;
-    this.links.hide(item.links())
+  remove : function(){
+    var self = this
+    this.selection.each(function(item){
+      self.hide(item)
+      $app.remove(item)
+    })
   }
 })
